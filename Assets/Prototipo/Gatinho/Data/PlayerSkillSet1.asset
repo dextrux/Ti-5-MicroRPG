@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9f964db80a10243816591ec4a7a90f, type: 3}
   m_Name: PlayerSkillSet1
   m_EditorClassIdentifier: 
+  able: 1
   _skills:
   - {fileID: 6099065515048647355, guid: 74b5df7fd6ca6704cb3cf624b45b9d0b, type: 3}
   - {fileID: 5294385021174554839, guid: fc3c2ba537128de4daafd84be5da159c, type: 3}

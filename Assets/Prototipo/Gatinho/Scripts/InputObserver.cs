@@ -9,13 +9,15 @@ public class InputObserver : SingletonMono<InputObserver>
     public Action OnNum2Down;
     public Action OnNum3Down;
 
-    public Action OnQDown;
-    public Action OnEDown;
     public Action OnCDown;
+    public Action OnEDown;
+    public Action OnQDown;
+    public Action OnVDown;
 
     public Action OnSpaceDown;
 
     public Action OnMouse0Down;
+    public Action OnMouse1Down;
 
     #endregion
 
@@ -28,17 +30,23 @@ public class InputObserver : SingletonMono<InputObserver>
         if (Input.GetKeyDown(KeyCode.Alpha3))
             OnNum3Down?.Invoke();
 
-        if (Input.GetKeyDown(KeyCode.Q))
-            OnQDown?.Invoke();
-        if (Input.GetKeyDown(KeyCode.E))
-            OnEDown?.Invoke();
         if (Input.GetKeyDown(KeyCode.C))
             OnCDown?.Invoke();
+        if (Input.GetKeyDown(KeyCode.E))
+            OnEDown?.Invoke();
+        if (Input.GetKeyDown(KeyCode.Q))
+            OnQDown?.Invoke();
+        if (Input.GetKeyDown(KeyCode.V))
+            OnVDown?.Invoke();
 
         if (Input.GetKeyDown(KeyCode.Space))
             OnSpaceDown?.Invoke();
 
         if (Input.GetMouseButtonDown(0))
             OnMouse0Down?.Invoke();
+
+
+        if (Input.GetMouseButtonDown(1))
+            OnMouse1Down?.Invoke();
     }
 }

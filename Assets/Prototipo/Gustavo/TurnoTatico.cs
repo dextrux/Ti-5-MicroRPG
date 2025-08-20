@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class TurnoTatico : MonoBehaviour
@@ -16,6 +17,11 @@ public class TurnoTatico : MonoBehaviour
 
     public bool turnoPlayer = false;
 
+    [HideInInspector] public bool CanMove = true;
+
+    public Action OnTurnBegin;
+    public Action OnTurnEnd;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -32,7 +38,7 @@ public class TurnoTatico : MonoBehaviour
                 IniciarTurno();
             }
         }
-        else
+        else if (CanMove)
         {
             // Input de movimento
             float inputX = Input.GetAxis("Horizontal");
@@ -92,6 +98,9 @@ public class TurnoTatico : MonoBehaviour
     {
         turnoPlayer = true;
         posicaoInicialTurno = transform.position;
+
+        OnTurnBegin?.Invoke();
+
         Debug.Log("Início do turno. Pontos de ação: " + pontosDeAcao);
     }
 
@@ -101,6 +110,8 @@ public class TurnoTatico : MonoBehaviour
 
         // Recupera pontos de ação
         pontosDeAcao = Mathf.Min(pontosDeAcao + ganhoPorTurno, maxPontos);
+
+        OnTurnEnd?.Invoke();
 
         Debug.Log("Turno terminado. Próximo turno terá " + pontosDeAcao + " pontos.");
     }

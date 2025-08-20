@@ -1,30 +1,39 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCasting : MonoBehaviour
 {
     [SerializeField] private PlayerEchoAction _echoAction;
+    [SerializeField] private TurnoTatico _taticTurn;
     [SerializeField] private List<PlayerSkillSet> _skillSets;
+
+    [Header("VisualAreas")]
+    [SerializeField] private Material _ableToPlaceMaterial;
+    [SerializeField] private Material _nonAbleToPlaceMaterial;
+    [SerializeField] private Material _echoPlacedMaterial;
+
+    [Header("DurationTimes")]
     [SerializeField] private int _skillDuration;
-    [SerializeField] private int _echoDuration;
+    [SerializeField] private int _echoShorterDuration = 1;
+    [SerializeField] private int _echoLongerDuration = 2;
 
     [Space]
 
     [SerializeField, ReadOnly] private int _selectedSetID = 0;
     [SerializeField, ReadOnly] private int _selectedSkillID = 0;
 
-    private void OnEnable()
+    private void Start()
     {
         InputObserver.Instance.OnNum1Down += () => { SetSkillID(0); };
         InputObserver.Instance.OnNum2Down += () => { SetSkillID(1); };
         InputObserver.Instance.OnNum3Down += () => { SetSkillID(2); };
 
-        InputObserver.Instance.OnQDown += RemoveSetID;
         InputObserver.Instance.OnEDown += AddSetID;
+        InputObserver.Instance.OnQDown += RemoveSetID;
 
-        InputObserver.Instance.OnSpaceDown += CastEcho;
-
-        InputObserver.Instance.OnMouse0Down += CastSelectedSkill;
+        InputObserver.Instance.OnMouse0Down += MarkArea;
     }
 
     private void OnDisable()
@@ -33,44 +42,129 @@ public class PlayerCasting : MonoBehaviour
         InputObserver.Instance.OnNum2Down -= () => { SetSkillID(1); };
         InputObserver.Instance.OnNum3Down -= () => { SetSkillID(2); };
 
-        InputObserver.Instance.OnQDown -= RemoveSetID;
         InputObserver.Instance.OnEDown -= AddSetID;
+        InputObserver.Instance.OnQDown -= RemoveSetID;
 
-        InputObserver.Instance.OnSpaceDown -= CastEcho;
-
-        InputObserver.Instance.OnMouse0Down -= CastSelectedSkill;
+        InputObserver.Instance.OnMouse0Down -= MarkArea;
     }
 
-    private void CastEcho()
+    private void MarkArea()
     {
         if (!_skillSets[_selectedSetID].able)
         {
-            Debug.LogWarning("Set dissabled");
+            Debug.LogWarning("Set disabled");
             return;
         }
 
         PlayerSkill selectedSkill = GetSelectedSkill();
-        PlayerSkill skillInstance = Instantiate(selectedSkill.gameObject, transform.position, transform.rotation).GetComponent<PlayerSkill>();
-        skillInstance.Setup(_echoDuration);
 
-        _skillSets[_selectedSetID].able = false;
-        skillInstance.OnCast += () => { _skillSets[_selectedSetID].able = true; };
+        PlayerSkill skill = Instantiate(selectedSkill.gameObject, transform.position, transform.rotation).GetComponent<PlayerSkill>();
 
-        _echoAction.PlaceEcho(skillInstance);
+        InputObserver.Instance.OnMouse0Down -= MarkArea;
+        _taticTurn.CanMove = false;
+
+        if (_taticTurn.pontosDeAcao < selectedSkill.Cost)
+        {
+            skill.VisualArea.material = _nonAbleToPlaceMaterial;
+            StartCoroutine(MarkAreaCoroutine(skill, false));
+        }
+        else
+        {
+            skill.VisualArea.material = _ableToPlaceMaterial;
+            StartCoroutine(MarkAreaCoroutine(skill, true));
+        }
     }
 
-    private void CastSelectedSkill()
+    private IEnumerator MarkAreaCoroutine(PlayerSkill skill, bool canCast)
     {
-        if (!_skillSets[_selectedSetID].able)
+        bool loop = true;
+
+        Action cancelCast = () => { loop = false; Destroy(skill.gameObject); };
+        Action castQuickEcho = null;
+        Action castlaterEcho = null;
+        Action castSelectedSkill = null;
+
+        // Atribui eventos [OnEnable]
+        InputObserver.Instance.OnMouse1Down += cancelCast;
+        if (canCast)
         {
-            Debug.LogWarning("Set dissabled");
-            return;
+            castQuickEcho = () => { loop = false; CastQuickEcho(skill); };
+            castlaterEcho = () => { loop = false; CastLaterEcho(skill); }; ;
+            castSelectedSkill = () => { loop = false; CastSelectedSkill(skill, _skillDuration); };
+
+            InputObserver.Instance.OnCDown += castQuickEcho;
+            InputObserver.Instance.OnVDown += castlaterEcho;
+            InputObserver.Instance.OnMouse0Down += castSelectedSkill;
         }
 
-        PlayerSkill skill = GetSelectedSkill();       
-        PlayerSkill skillInstance = Instantiate(skill.gameObject, transform.position, transform.rotation).GetComponent<PlayerSkill>();
-        skillInstance.Setup(_skillDuration);
+        // Update
+        while (loop)
+        {
+            Vector3 mousePos = GetMouseWorld();
+            Vector3 rot = Quaternion.LookRotation(mousePos).eulerAngles;
+            skill.transform.eulerAngles = new Vector3(0, rot.y, 0);
+
+            yield return null;
+        }
+
+        // Limpa atribuições de eventos [OnDisable]
+        InputObserver.Instance.OnMouse1Down -= cancelCast;
+
+        InputObserver.Instance.OnCDown -= castQuickEcho;
+        InputObserver.Instance.OnVDown -= castlaterEcho;
+        InputObserver.Instance.OnMouse0Down -= castSelectedSkill;
+
+        InputObserver.Instance.OnMouse0Down += MarkArea;
+
+        _taticTurn.CanMove = true;
     }
+
+    private Vector3 GetMouseWorld()
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            return hit.point;
+        }
+
+        return Camera.main.transform.forward * 60;
+    }
+
+    #region // Cast
+
+    private void CastQuickEcho(PlayerSkill skill)
+    {
+        CastEcho(skill, _echoShorterDuration);
+    }
+
+    private void CastLaterEcho(PlayerSkill skill)
+    {
+        CastEcho(skill, _echoLongerDuration);
+    }
+
+    private void CastEcho(PlayerSkill skill, int duration)
+    {
+        _taticTurn.pontosDeAcao -= skill.Cost;
+
+        skill.Setup(_taticTurn, duration);
+
+        _skillSets[_selectedSetID].able = false;
+        skill.OnCast += () => { _skillSets[_selectedSetID].able = true; };
+
+        _echoAction.PlaceEcho(skill);
+
+        skill.VisualArea.material = _echoPlacedMaterial;
+    }
+
+    private void CastSelectedSkill(PlayerSkill skill, int duration)
+    {
+        _taticTurn.pontosDeAcao -= skill.Cost;
+        skill.Setup(_taticTurn, duration);
+    }
+
+    #endregion
 
     #region // Selected ID
 

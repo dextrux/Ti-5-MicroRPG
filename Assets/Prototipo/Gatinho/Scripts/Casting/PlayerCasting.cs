@@ -34,6 +34,8 @@ public class PlayerCasting : MonoBehaviour
         InputObserver.Instance.OnQDown += RemoveSetID;
 
         InputObserver.Instance.OnMouse0Down += MarkArea;
+
+        _taticTurn = FindFirstObjectByType<TurnoTatico>();
     }
 
     private void OnDisable()

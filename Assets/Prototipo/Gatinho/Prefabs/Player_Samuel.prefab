@@ -96,9 +96,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3646368884266991007}
   - component: {fileID: 6158836125056634197}
-  - component: {fileID: 4732556919615381342}
+  - component: {fileID: 3942795860540108246}
   - component: {fileID: 3461609322224242577}
   - component: {fileID: 4871192285366215231}
+  - component: {fileID: 7232019872049752085}
   m_Layer: 0
   m_Name: Player_Samuel
   m_TagString: Untagged
@@ -147,7 +148,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &4732556919615381342
+--- !u!114 &3942795860540108246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,10 +157,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 445910573026705768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a251ad1217244343a21ccb0b8cd9305, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e9230f98b1f66049ab8d44b04017c3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: f54a7e4695fd9174ab57421b9799ad60, type: 2}
+  pontosDeAcao: 4
+  ganhoPorTurno: 2
+  maxPontos: 8
+  distanciaMaxima: 5
+  velocidade: 5
+  turnoPlayer: 0
+  CanMove: 1
+  turnoAtual: 1
+  totalTurnos: 10
 --- !u!114 &3461609322224242577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,11 +182,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _echoAction: {fileID: 4871192285366215231}
+  _taticTurn: {fileID: 0}
   _skillSets:
   - {fileID: 11400000, guid: b393e769903325e49a25fe0b55a11517, type: 2}
   - {fileID: 11400000, guid: e366a3f7c46e4bb409275b7841ead03c, type: 2}
+  _ableToPlaceMaterial: {fileID: 0}
+  _nonAbleToPlaceMaterial: {fileID: 0}
+  _echoPlacedMaterial: {fileID: 0}
   _skillDuration: 3
-  _echoDuration: 5
+  _echoShorterDuration: 1
+  _echoLongerDuration: 2
   _selectedSetID: 0
   _selectedSkillID: 0
 --- !u!114 &4871192285366215231
@@ -193,8 +207,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _echoPrefab: {fileID: 7724760723932268866, guid: b17ab834004e8c0498e36a0fb1d73eb2, type: 3}
-  _echoDuration: 5
   _poolAbsolutePosition: {x: -100, y: -100, z: -100}
+--- !u!114 &7232019872049752085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445910573026705768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 934306bcc3bd48844aceeec25b8e0218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 30
+  startHealth: 30
+  uiHealthBar: {fileID: 0}
 --- !u!1 &3004493170787944536
 GameObject:
   m_ObjectHideFlags: 0

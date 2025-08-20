@@ -15,7 +15,7 @@ public class UIBinder : MonoBehaviour
     {
         if (turnoTatico == null)
         {
-            turnoTatico = FindObjectOfType<TurnoTatico>();
+            turnoTatico = FindFirstObjectByType<TurnoTatico>();
         }
     }
 

@@ -17,6 +17,7 @@ public class HealthSystem : MonoBehaviour
     void Start()
     {
         currentHealth = Mathf.Clamp(startHealth, 0, Mathf.Max(1, maxHealth));
+        Debug.Log("Start Health: " + startHealth);
         if (uiHealthBar != null)
         {
             uiHealthBar.Initialize(currentHealth, maxHealth);

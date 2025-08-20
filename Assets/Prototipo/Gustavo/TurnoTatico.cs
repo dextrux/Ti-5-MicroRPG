@@ -10,8 +10,8 @@ public class TurnoTatico : MonoBehaviour
     public int maxPontos = 8;
 
     [Header("Movimentação")]
-    public float distanciaMaxima = 5f; // distância máxima
-    public float velocidade = 5f; // velocidade de movimento
+    public float distanciaMaxima = 5f;
+    public float velocidade = 5f;
     private Vector3 posicaoInicialTurno;
     private CharacterController controller;
 
@@ -41,20 +41,12 @@ public class TurnoTatico : MonoBehaviour
 
     void Update()
     {
-        if (!turnoPlayer)
-        {
-            // Simula turno do chefe
-            if (Input.GetKeyDown(KeyCode.Space) && !turnoPlayer)
-            {
-                IniciarTurno();
-            }
-        }
-        else if (CanMove)
+        if (turnoPlayer && CanMove)
         {
             // Input de movimento
             float inputX = Input.GetAxis("Horizontal");
             float inputZ = Input.GetAxis("Vertical");
-            Vector3 movimento = new Vector3(inputX, 0, inputZ);
+            Vector3 movimento = new Vector3(inputX * (-1f), 0, inputZ * (-1f));
 
             if (movimento.magnitude > 0.01f)
             {
@@ -65,7 +57,7 @@ public class TurnoTatico : MonoBehaviour
             float distanciaPercorrida = Vector3.Distance(posicaoInicialTurno, transform.position);
             if (distanciaPercorrida > distanciaMaxima)
             {
-                Debug.Log("Distância máxima de movimentação atingida!");
+                //Debug.Log("Distância máxima de movimentação atingida!");
 
                 // Corrige para não ultrapassar o limite
                 Vector3 direcao = (transform.position - posicaoInicialTurno).normalized;
@@ -73,12 +65,6 @@ public class TurnoTatico : MonoBehaviour
                 controller.enabled = false; // desativa momentaneamente para setar posição manualmente
                 transform.position = posicaoCorreta;
                 controller.enabled = true;
-            }
-
-            // Usar habilidade (tecla 1)
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                var usada = UsarHabilidade(3); // habilidade custa 3 pontos
             }
 
             // Pular turno (Espaço)

@@ -28,7 +28,7 @@ public class InputObserver : SingletonMono<InputObserver>
         if (Input.GetKeyDown(KeyCode.Alpha2))
             OnNum2Down?.Invoke();
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            OnNum3Down?.Invoke();
+            //OnNum3Down?.Invoke();
 
         if (Input.GetKeyDown(KeyCode.C))
             OnCDown?.Invoke();

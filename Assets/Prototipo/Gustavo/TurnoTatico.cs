@@ -15,10 +15,14 @@ public class TurnoTatico : MonoBehaviour
     private CharacterController controller;
 
     public bool turnoPlayer = false;
+    private LineRenderer lr;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        lr = GetComponent<LineRenderer>();
+        lr.loop = true;
+        lr.useWorldSpace = true;
         IniciarTurno();
     }
 
@@ -26,10 +30,12 @@ public class TurnoTatico : MonoBehaviour
     {
         if (!turnoPlayer)
         {
+            lr.enabled = false;
             // Simula turno do chefe
             if (Input.GetKeyDown(KeyCode.Space) && !turnoPlayer)
             {
                 IniciarTurno();
+                lr.enabled = true;
             }
         }
         else
@@ -70,7 +76,7 @@ public class TurnoTatico : MonoBehaviour
                 TerminarTurno();
             }
 
-            DesenharCirculo(posicaoInicialTurno, distanciaMaxima, 36, Color.blue);
+            DesenharCirculo(posicaoInicialTurno, distanciaMaxima, 36);
         }
 
         
@@ -107,18 +113,15 @@ public class TurnoTatico : MonoBehaviour
         Debug.Log("Turno terminado. Próximo turno terá " + pontosDeAcao + " pontos.");
     }
 
-    void DesenharCirculo(Vector3 centro, float raio, int segmentos, Color cor)
+    public void DesenharCirculo(Vector3 centro, float raio, int segmentos)
     {
-        float angulo = 0f;
-        Vector3 pontoAnterior = centro + new Vector3(Mathf.Cos(0) * raio, 0, Mathf.Sin(0) * raio);
+        lr.positionCount = segmentos;
 
-        for (int i = 1; i <= segmentos; i++)
+        for (int i = 0; i < segmentos; i++)
         {
-            angulo = i * 2 * Mathf.PI / segmentos;
-            Vector3 pontoNovo = centro + new Vector3(Mathf.Cos(angulo) * raio, 0, Mathf.Sin(angulo) * raio);
-
-            Debug.DrawLine(pontoAnterior, pontoNovo, cor);
-            pontoAnterior = pontoNovo;
+            float ang = (float)i / segmentos * 2 * Mathf.PI;
+            Vector3 pos = centro + new Vector3(Mathf.Cos(ang) * raio, 0, Mathf.Sin(ang) * raio);
+            lr.SetPosition(i, pos);
         }
     }
 }

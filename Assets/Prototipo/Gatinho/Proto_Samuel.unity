@@ -530,6 +530,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfb576b849e387148843253d6405edb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1311682141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 445910573026705768, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+  m_PrefabInstance: {fileID: 4785448720828661031}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1311682147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311682141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e9230f98b1f66049ab8d44b04017c3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pontosDeAcao: 4
+  ganhoPorTurno: 2
+  maxPontos: 8
+  distanciaMaxima: 5
+  velocidade: 5
+  turnoPlayer: 0
+  CanMove: 1
 --- !u!1001 &4785448720828661031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -542,6 +566,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3461609322224242577, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+      propertyPath: _taticTurn
+      value: 
+      objectReference: {fileID: 1311682147}
+    - target: {fileID: 3461609322224242577, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+      propertyPath: _echoLongerDuration
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461609322224242577, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+      propertyPath: _echoPlacedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 513ee7c67cc4d6b41b5c6e8d6d0fc9b1, type: 2}
+    - target: {fileID: 3461609322224242577, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+      propertyPath: _ableToPlaceMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: cea346a9ed327e9499cab984ed02f666, type: 2}
+    - target: {fileID: 3461609322224242577, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+      propertyPath: _echoShorterDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461609322224242577, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+      propertyPath: _nonAbleToPlaceMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 0b71678a9189e224a84015226fd7abad, type: 2}
+    - target: {fileID: 3563837560053474737, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: eae6419ca4deca24f9880c518fa3a635, type: 2}
     - target: {fileID: 3646368884266991007, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -582,10 +634,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4732556919615381342, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 445910573026705768, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1311682147}
   m_SourcePrefab: {fileID: 100100000, guid: 1f2f5c0244165f441b12b04f42696893, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

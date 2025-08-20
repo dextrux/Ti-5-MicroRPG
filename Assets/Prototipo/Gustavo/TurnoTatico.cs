@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class TurnoTatico : MonoBehaviour
@@ -16,6 +17,22 @@ public class TurnoTatico : MonoBehaviour
 
     public bool turnoPlayer = false;
 
+    [HideInInspector] public bool CanMove = true;
+
+    public Action OnTurnBegin;
+    public Action OnTurnEnd;
+
+    [Header("Turnos")]
+    public int turnoAtual = 1;
+    public int totalTurnos = 10;
+
+    // Eventos para UI
+    public event Action<int, int> OnPontosDeAcaoAtualizados; // (atuais, max)
+    public event Action<int, int> OnTurnoIniciado; // (turnoAtual, totalTurnos)
+    public event Action<int, int> OnTurnoTerminado; // (turnoAtual, totalTurnos)
+
+    private bool iniciouJogo = false;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -32,7 +49,7 @@ public class TurnoTatico : MonoBehaviour
                 IniciarTurno();
             }
         }
-        else
+        else if (CanMove)
         {
             // Input de movimento
             float inputX = Input.GetAxis("Horizontal");
@@ -61,7 +78,7 @@ public class TurnoTatico : MonoBehaviour
             // Usar habilidade (tecla 1)
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                UsarHabilidade(3); // habilidade custa 3 pontos
+                var usada = UsarHabilidade(3); // habilidade custa 3 pontos
             }
 
             // Pular turno (Espaço)
@@ -74,17 +91,20 @@ public class TurnoTatico : MonoBehaviour
         
     }
 
-    public void UsarHabilidade(int custo)
+    public bool UsarHabilidade(int custo)
     {
         if (pontosDeAcao >= custo)
         {
             pontosDeAcao -= custo;
             Debug.Log("Habilidade usada. Pontos restantes: " + pontosDeAcao);
             // Aqui entra a logica da habilidade
+            OnPontosDeAcaoAtualizados?.Invoke(pontosDeAcao, maxPontos);
+            return true;
         }
         else
         {
             Debug.Log("Pontos insuficientes");
+            return false;
         }
     }
 
@@ -92,7 +112,18 @@ public class TurnoTatico : MonoBehaviour
     {
         turnoPlayer = true;
         posicaoInicialTurno = transform.position;
+
+        OnTurnBegin?.Invoke();
+
         Debug.Log("Início do turno. Pontos de ação: " + pontosDeAcao);
+        if (iniciouJogo)
+        {
+            // Avança contador de turnos a partir do segundo início
+            turnoAtual = Mathf.Min(turnoAtual + 1, totalTurnos);
+        }
+        iniciouJogo = true;
+        OnTurnoIniciado?.Invoke(turnoAtual, totalTurnos);
+        OnPontosDeAcaoAtualizados?.Invoke(pontosDeAcao, maxPontos);
     }
 
     public void TerminarTurno()
@@ -102,6 +133,10 @@ public class TurnoTatico : MonoBehaviour
         // Recupera pontos de ação
         pontosDeAcao = Mathf.Min(pontosDeAcao + ganhoPorTurno, maxPontos);
 
+        OnTurnEnd?.Invoke();
+
         Debug.Log("Turno terminado. Próximo turno terá " + pontosDeAcao + " pontos.");
+        OnTurnoTerminado?.Invoke(turnoAtual, totalTurnos);
+        OnPontosDeAcaoAtualizados?.Invoke(pontosDeAcao, maxPontos);
     }
 }

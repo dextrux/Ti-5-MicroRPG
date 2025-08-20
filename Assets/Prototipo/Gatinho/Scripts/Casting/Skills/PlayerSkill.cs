@@ -5,22 +5,40 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public abstract class PlayerSkill : MonoBehaviour
 {
+    [SerializeField, Min(1)] private int _cost = 1;
+    [SerializeField] private Renderer _visualArea;
+
     private List<Collider> _collidersInArea = new List<Collider>();
-    private float _duration;
+    private TurnoTatico _taticTurn;
+    private int _duration;
 
     public Action OnCast;
 
-    private void Update()
+    public int Cost { get { return _cost; } }
+    public Renderer VisualArea { get { return _visualArea; } }
+
+    public void DebitDuration()
     {
-        if ((_duration -= Time.deltaTime) <= 0f)
-        {
-            Effect(_collidersInArea);
-            OnCast?.Invoke();
-        }
+        _duration--;
     }
 
-    public void Setup(int duration)
+    public void TryCast()
     {
+        if (_duration > 0) return;
+
+        Effect(_collidersInArea);
+        OnCast?.Invoke();
+
+        _taticTurn.OnTurnBegin -= TryCast;
+        _taticTurn.OnTurnEnd -= DebitDuration;
+    }
+
+    public void Setup(TurnoTatico taticTurn, int duration)
+    {
+        _taticTurn = taticTurn;
+        _taticTurn.OnTurnBegin += TryCast;
+        _taticTurn.OnTurnEnd += DebitDuration;
+
         _duration = duration;
     }
 

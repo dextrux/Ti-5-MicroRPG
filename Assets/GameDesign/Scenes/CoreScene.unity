@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 202204432}
   - component: {fileID: 202204433}
   m_Layer: 0
-  m_Name: CoreIniciator
+  m_Name: CoreInitiator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -365,6 +365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92f5c1e2c8cd2ed4484640d7b8eca9ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SceneToLoad: 0
 --- !u!114 &202204433
 MonoBehaviour:
   m_ObjectHideFlags: 0

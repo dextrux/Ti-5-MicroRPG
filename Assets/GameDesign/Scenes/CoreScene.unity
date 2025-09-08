@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 47809278}
   - component: {fileID: 47809277}
   - component: {fileID: 47809276}
+  - component: {fileID: 47809280}
   m_Layer: 0
   m_Name: UICamera
   m_TagString: MainCamera
@@ -256,6 +257,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &47809280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47809275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 455ecf38520f946f2969b11c856aeea1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Camera>k__BackingField: {fileID: 47809278}
 --- !u!1 &158037312
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +318,8 @@ MonoBehaviour:
       m_Calls: []
   _parentNewObjectsUnderSceneContext: 0
   _contractNames: []
-  _parentContractNames: []
+  _parentContractNames:
+  - CoreScene
 --- !u!4 &158037314
 Transform:
   m_ObjectHideFlags: 0
@@ -382,6 +397,7 @@ MonoBehaviour:
   _updateSubscriptionService: {fileID: 1936081449}
   _audioService: {fileID: 883487226}
   _loadingScreenView: {fileID: 6270316909704306621}
+  _uiCameraView: {fileID: 47809280}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

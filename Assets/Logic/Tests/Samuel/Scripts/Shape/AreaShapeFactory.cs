@@ -7,12 +7,14 @@ public class AreaShapeFactory
     public enum Shape
     {
         None,
+        Concatenated,
+        Intersected,
+        Sectioned,
+        Divergent,
         Circle,
         Cone,
-        Donut,
         Square,
-        Triagle,
-        HalfMoon
+        Triagle
     }
 
     public Shape shape;
@@ -37,43 +39,34 @@ public class AreaShapeFactory
             case Shape.Cone:
                 areaShape = CreateCone();
                 break;
-            case Shape.Donut:
-                areaShape = CreateDonut();
-                break;
             case Shape.Square:
                 areaShape = CreateSquare();
                 break;
             /*case Shape.Triagle:
                 areaShape = CreateSquare();
-                break;*/
-            case Shape.HalfMoon:
-                areaShape = CreateHalfMoon();
-                break;
+                break;*/           
             default:
-                return null;
+                return DefaultExceptionCreate();
         }
 
         return areaShape;
     }
 
+    #region // Shapes
+
     private AreaShape CreateCircle()
     {
-        return new CircleArea(externalRadius);
+        return new CircleArea(externalRadius, pivot);
     }
 
     private AreaShape CreateCone()
     {
-        return new ConeArea(externalRadius, angle);
-    }
-
-    private AreaShape CreateDonut()
-    {
-        return new DonutArea(externalRadius, internalRadius);
+        return new ConeArea(externalRadius, angle, pivot);
     }
 
     private AreaShape CreateSquare()
     {
-        return new SquareArea(height, width);
+        return new SquareArea(height, width, pivot);
     }
 
     /*private AreaShape CreateTriangle()
@@ -81,8 +74,10 @@ public class AreaShapeFactory
 
     }*/
 
-    private AreaShape CreateHalfMoon()
+    #endregion
+
+    protected virtual AreaShape DefaultExceptionCreate()
     {
-        return new HalfMoonArea(externalRadius, internalRadius, pivot);
+        return null;
     }
 }

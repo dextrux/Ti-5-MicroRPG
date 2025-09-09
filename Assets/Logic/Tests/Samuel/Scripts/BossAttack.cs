@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class BossAttack : MonoBehaviour
 {
-    [SerializeField] protected AreaShapeFactory _areaShapeFactory;
+    [SerializeField] protected CompositedAreaShapeFactory _areaShapeFactory;
     protected AreaShape effectArea;
 
     private ArenaPosReference _arena;
@@ -21,7 +21,7 @@ public abstract class BossAttack : MonoBehaviour
 
     public void Execute()
     {
-        if (effectArea.IsInArea(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition()))
+        if (effectArea.IsInArea(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition(), _arena))
         {
             Effect();
         }
@@ -31,7 +31,9 @@ public abstract class BossAttack : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        effectArea.VisualGizmo(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition(), _arena);
+        if (effectArea == null) return;
+
+        effectArea.VisualGizmo(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena);
     }
 
     protected virtual void Setup() { }

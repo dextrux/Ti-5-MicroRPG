@@ -17,50 +17,43 @@ public class AreaShapeFactoryDrawer : PropertyDrawer
             case AreaShapeFactory.Shape.Circle:
 
                 EditorGUILayout.PropertyField(property.FindPropertyRelative("externalRadius"));
+                EditorGUILayout.PropertyField(property.FindPropertyRelative("pivot"));
 
                 break;
             case AreaShapeFactory.Shape.Cone:
 
                 EditorGUILayout.PropertyField(property.FindPropertyRelative("externalRadius"));
                 EditorGUILayout.PropertyField(property.FindPropertyRelative("angle"));
-
-                break;
-            case AreaShapeFactory.Shape.Donut:
-                
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("externalRadius"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("internalRadius"));
+                EditorGUILayout.PropertyField(property.FindPropertyRelative("pivot"));
 
                 break;
             case AreaShapeFactory.Shape.Square:
 
                 EditorGUILayout.PropertyField(property.FindPropertyRelative("height"));
                 EditorGUILayout.PropertyField(property.FindPropertyRelative("width"));
+                EditorGUILayout.PropertyField(property.FindPropertyRelative("pivot"));
 
                 break;
             case AreaShapeFactory.Shape.Triagle:
 
                 GUILayout.Label("Not Implemented");
 
-                break;
-            case AreaShapeFactory.Shape.HalfMoon:
-
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("externalRadius"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("internalRadius"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("pivot"));
-
-                break;
-            default: 
-                
-                EditorGUILayout.Space();
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("externalRadius"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("internalRadius"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("angle"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("height"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("width"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("pivot"));
-
+                break;           
+            default:
+                DefaultExceptionGUI(property);
                 break;
         }
+    }
+
+    protected virtual void DefaultExceptionGUI(SerializedProperty property)
+    {
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("externalRadius"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("internalRadius"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("angle"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("height"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("width"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("pivot"));
     }
 }
 #endif

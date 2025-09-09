@@ -8,7 +8,7 @@ public class ShapeGizmoDisplay : MonoBehaviour
     [SerializeField] private ArenaPosReference _arena;
     public bool Runtime;
 
-    [SerializeField] private AreaShapeFactory _areaShapeFactory;
+    [SerializeField] private CompositedAreaShapeFactory _areaShapeFactory;
     private AreaShape _areaShape;   
 
     public void UpdateShape()
@@ -22,7 +22,7 @@ public class ShapeGizmoDisplay : MonoBehaviour
             UpdateShape();
 
         if (_areaShape != null && _arena != null)
-            _areaShape.VisualGizmo(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition(), _arena);
+            _areaShape.VisualGizmo(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena);
     }
 }
 

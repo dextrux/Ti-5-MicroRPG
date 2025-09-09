@@ -2,18 +2,28 @@ using UnityEngine;
 
 public abstract class AreaShape
 {
-    //protected Vector2 coords;
+    protected Vector2 centerPivot;
 
-    public bool IsInArea(Vector2 center, Vector2 direction, Vector2 target)
+    public AreaShape(Vector2 centerPivot)
     {
-        //coords = center;
+        this.centerPivot = centerPivot;
+    }
 
-        return CalculateArea(center, direction, target);
+    public bool IsInArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    {
+        float angle = GetAngle(direction);
+        Vector2 pivot = RotateArenaPoint(center, center + centerPivot, -angle);
+        return CalculateArea(pivot, direction, target, arena);
     }   
 
-    protected abstract bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target);
+    protected abstract bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena);
 
-    public abstract void VisualGizmo(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena);
+    public virtual void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena)
+    {
+        VisualGizmo(center, direction, arena, Color.yellow);
+    }
+
+    public abstract void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena, Color color);
 
     #region // Utilities
 

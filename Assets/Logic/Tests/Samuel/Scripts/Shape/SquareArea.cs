@@ -5,36 +5,37 @@ public class SquareArea : AreaShape
     private float _height;
     private float _width;
 
-    public SquareArea(float height, float width)
+    public SquareArea(float height, float width, Vector2 pivot) : base(pivot)
     {
         _height = height;
         _width = width;
     }
 
-    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target)
+    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
     {
         float angle = GetAngle(direction);
-
-        Vector2 newTargetPos = RotateArenaPoint(center, target, angle);
+        Vector2 newTargetPos = RotateArenaPoint(center, target, -angle);
 
         return (Mathf.Abs(newTargetPos.x - center.x) <= _width / 2) && (Mathf.Abs(newTargetPos.y - center.y) <= _height / 2);
     }
 
-    public override void VisualGizmo(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    public override void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena, Color color)
     {
-        Vector3 pos = arena.RelativeArenaPositionToRealPosition(center);
+        float angle = GetAngle(direction);
+        Vector2 pivot = RotateArenaPoint(center, center + centerPivot, -angle);
+
+        Vector3 pos = arena.RelativeArenaPositionToRealPosition(pivot);
         Vector3 A = new Vector3(pos.x + _width / 2, pos.y, pos.z + _height / 2);
         Vector3 B = new Vector3(pos.x - _width / 2, pos.y, pos.z + _height / 2);
         Vector3 C = new Vector3(pos.x - _width / 2, pos.y, pos.z - _height / 2);
         Vector3 D = new Vector3(pos.x + _width / 2, pos.y, pos.z - _height / 2);
 
-        float angle = GetAngle(direction);
         A = RotateWorldPoint(pos, A, angle);
         B = RotateWorldPoint(pos, B, angle);
         C = RotateWorldPoint(pos, C, angle);
         D = RotateWorldPoint(pos, D, angle);
 
-        Gizmos.color = Color.yellow;
+        Gizmos.color = color;
 
         Gizmos.DrawLine(A, B);
         Gizmos.DrawLine(B, C);

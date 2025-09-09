@@ -11,25 +11,26 @@ public class BossController : MonoBehaviour
     [ContextMenu("Prepare")]
     public void ContextPrepare()
     {
-        PrepareAttack(_attackList[0], transform.position);
+        PrepareAttack(_attackList[0], transform.position, _arena);
     }
 
     [ContextMenu("Execute")]
     public void ContextExecute()
     {
-        ExecuteAttack(_arena);
+        ExecuteAttack();
     }
 
-    public void PrepareAttack(BossAttack attack, Vector3 position)
+    public void PrepareAttack(BossAttack attack, Vector3 position, ArenaPosReference arena)
     {
-        _currentAttack = Instantiate(attack, position, Quaternion.identity).GetComponent<BossAttack>();
+        _currentAttack = Instantiate(attack, position, transform.rotation).GetComponent<BossAttack>();
+        _currentAttack.Prepare(arena);
     }
 
-    public void ExecuteAttack(ArenaPosReference arena)
+    public void ExecuteAttack()
     {
         if (_currentAttack == null) return;
 
-        _currentAttack.Execute(arena);
+        _currentAttack.Execute();
         _currentAttack = null;
     }
 }

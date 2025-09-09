@@ -6,17 +6,36 @@ using UnityEditor;
 public class ShapeGizmoDisplay : MonoBehaviour
 {
     [SerializeField] private ArenaPosReference _arena;
-    public bool Runtime;
+    //[SerializeField] private Color _mainGizmoColor = Color.yellow;
+    public bool GizmoFullTime;
 
     [SerializeField] private CompositedAreaShapeFactory _areaShapeFactory;
-    private AreaShape _areaShape;   
+    private AreaShape _areaShape;
+
+    [Space]
+
+    public bool Runtime;
 
     public void UpdateShape()
     {
         _areaShape = _areaShapeFactory.CreateAreaShape();
     }
 
+    private void OnDrawGizmos()
+    {
+        if (!GizmoFullTime) return;
+
+        DrawGizmos();
+    }
+
     private void OnDrawGizmosSelected()
+    {
+        if (GizmoFullTime) return;
+
+        DrawGizmos();
+    }
+
+    private void DrawGizmos()
     {
         if (Runtime)
             UpdateShape();

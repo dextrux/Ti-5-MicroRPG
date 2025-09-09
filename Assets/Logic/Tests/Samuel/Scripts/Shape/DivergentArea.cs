@@ -9,7 +9,7 @@ public class DivergentArea : AreaShape
     {
         _areaA = areaA;
         _areaB = areaB;
-    }
+    }    
 
     protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
     {
@@ -21,6 +21,11 @@ public class DivergentArea : AreaShape
         bool validateA = _areaA.IsInArea(pivot, direction, target, arena);
         bool validateB = _areaB.IsInArea(pivot, direction, target, arena);
         return (validateA && !validateB) || (!validateA && validateB);
+    }
+
+    public override void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena)
+    {
+        VisualGizmo(center, direction, arena, Color.magenta);
     }
 
     public override void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena, Color color)

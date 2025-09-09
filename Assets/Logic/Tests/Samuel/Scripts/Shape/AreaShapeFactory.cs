@@ -21,7 +21,7 @@ public class AreaShapeFactory
 
     [Min(0.1f)] public float externalRadius = 1.5f;
     [Min(0.1f)] public float internalRadius = 1f;
-    [Min(0.1f)] public float angle = 1f;
+    [Range(0.1f, 360f)] public float angle = 1f;
 
     [Min(0.1f)] public float height = 1f;
     [Min(0.1f)] public float width = 1f;

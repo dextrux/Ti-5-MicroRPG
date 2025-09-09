@@ -21,6 +21,11 @@ public class IntersectedArea : AreaShape
         return _areaA.IsInArea(pivot, direction, target,arena) && _areaB.IsInArea(pivot, direction, target, arena);
     }
 
+    public override void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena)
+    {
+        VisualGizmo(center, direction, arena, Color.green);
+    }
+
     public override void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena, Color color)
     {
         if (_areaA == null || _areaB == null) return;

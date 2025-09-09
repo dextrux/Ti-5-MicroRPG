@@ -119,6 +119,77 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &144680864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 144680866}
+  - component: {fileID: 144680865}
+  m_Layer: 0
+  m_Name: AreaShowcase (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &144680865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144680864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 2
+    externalRadius: 1.5
+    internalRadius: 1
+    angle: 1
+    height: 20
+    width: 5
+    pivot: {x: 0, y: -10}
+    subFactory1:
+      shape: 7
+      externalRadius: 8
+      internalRadius: 1
+      angle: 35
+      height: 20
+      width: 20
+      pivot: {x: 0, y: 7.3}
+    subFactory2:
+      shape: 6
+      externalRadius: 20
+      internalRadius: 1
+      angle: 60
+      height: 12
+      width: 8
+      pivot: {x: 0, y: 0}
+  Runtime: 1
+--- !u!4 &144680866
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144680864}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 294, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &218609055
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +205,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &218609056
 Transform:
   m_ObjectHideFlags: 0
@@ -196,6 +267,148 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &432849897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 432849899}
+  - component: {fileID: 432849898}
+  m_Layer: 0
+  m_Name: HalfMoonAreaShowcase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &432849898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432849897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 3
+    externalRadius: 1.5
+    internalRadius: 1
+    angle: 1
+    height: 20
+    width: 5
+    pivot: {x: 0, y: 0}
+    subFactory1:
+      shape: 5
+      externalRadius: 30
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+    subFactory2:
+      shape: 7
+      externalRadius: 1.5
+      internalRadius: 1
+      angle: 1
+      height: 30
+      width: 60
+      pivot: {x: 0, y: -15}
+  Runtime: 1
+--- !u!4 &432849899
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432849897}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 182, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &624155970
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 624155972}
+  - component: {fileID: 624155971}
+  m_Layer: 0
+  m_Name: ConeAreaShowcase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &624155971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624155970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 6
+    externalRadius: 20
+    internalRadius: 1
+    angle: 50
+    height: 20
+    width: 5
+    pivot: {x: 0, y: 0}
+    subFactory1:
+      shape: 0
+      externalRadius: 1.5
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+    subFactory2:
+      shape: 0
+      externalRadius: 1.5
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+  Runtime: 1
+--- !u!4 &624155972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624155970}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1206484275
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,12 +420,12 @@ GameObject:
   - component: {fileID: 1206484277}
   - component: {fileID: 1206484276}
   m_Layer: 0
-  m_Name: GizmoTest
+  m_Name: DashAreaShowcase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1206484276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,31 +439,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _arena: {fileID: 294792783}
-  Runtime: 1
+  GizmoFullTime: 1
   _areaShapeFactory:
-    shape: 3
-    externalRadius: 4
-    internalRadius: 4
-    angle: 97.31
-    height: 1
-    width: 1
-    pivot: {x: 0, y: 0}
+    shape: 7
+    externalRadius: 1.5
+    internalRadius: 1
+    angle: 1
+    height: 25
+    width: 8
+    pivot: {x: 0, y: 10}
     subFactory1:
-      shape: 5
-      externalRadius: 6
+      shape: 0
+      externalRadius: 1.5
       internalRadius: 1
       angle: 1
-      height: 4
-      width: 4
+      height: 1
+      width: 1
       pivot: {x: 0, y: 0}
     subFactory2:
-      shape: 7
-      externalRadius: 3
+      shape: 0
+      externalRadius: 1.5
       internalRadius: 1
-      angle: 59.02
-      height: 6
-      width: 12
-      pivot: {x: 0, y: -3}
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+  Runtime: 1
 --- !u!4 &1206484277
 Transform:
   m_ObjectHideFlags: 0
@@ -374,6 +588,290 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1212270831}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1217106483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1217106485}
+  - component: {fileID: 1217106484}
+  m_Layer: 0
+  m_Name: DonutAreaShowcase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1217106484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217106483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 3
+    externalRadius: 1.5
+    internalRadius: 1
+    angle: 1
+    height: 20
+    width: 5
+    pivot: {x: 0, y: 0}
+    subFactory1:
+      shape: 5
+      externalRadius: 10
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+    subFactory2:
+      shape: 5
+      externalRadius: 5
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+  Runtime: 1
+--- !u!4 &1217106485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217106483}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 66, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1298803997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1298803999}
+  - component: {fileID: 1298803998}
+  m_Layer: 0
+  m_Name: AreaShowcase (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1298803998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298803997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 1
+    externalRadius: 1.5
+    internalRadius: 1
+    angle: 1
+    height: 20
+    width: 5
+    pivot: {x: 0, y: 0}
+    subFactory1:
+      shape: 6
+      externalRadius: 15
+      internalRadius: 1
+      angle: 35
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 2}
+    subFactory2:
+      shape: 5
+      externalRadius: 5
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+  Runtime: 1
+--- !u!4 &1298803999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298803997}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 268, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1419075449
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1419075451}
+  - component: {fileID: 1419075450}
+  m_Layer: 0
+  m_Name: LineAreaShowcase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1419075450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419075449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 7
+    externalRadius: 1.5
+    internalRadius: 1
+    angle: 1
+    height: 10
+    width: 60
+    pivot: {x: 0, y: 0}
+    subFactory1:
+      shape: 0
+      externalRadius: 1.5
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+    subFactory2:
+      shape: 0
+      externalRadius: 1.5
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+  Runtime: 1
+--- !u!4 &1419075451
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419075449}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 114, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1520406131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1520406133}
+  - component: {fileID: 1520406132}
+  m_Layer: 0
+  m_Name: CircleAreaShowcase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1520406132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520406131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 5
+    externalRadius: 8
+    internalRadius: 1
+    angle: 1
+    height: 20
+    width: 5
+    pivot: {x: 0, y: 0}
+    subFactory1:
+      shape: 0
+      externalRadius: 1.5
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+    subFactory2:
+      shape: 0
+      externalRadius: 1.5
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+  Runtime: 1
+--- !u!4 &1520406133
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520406131}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 40, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1542827388
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,7 +980,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1587437314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,6 +1132,148 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &1820970835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1820970837}
+  - component: {fileID: 1820970836}
+  m_Layer: 0
+  m_Name: AreaShowcase (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1820970836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820970835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 4
+    externalRadius: 1.5
+    internalRadius: 1
+    angle: 1
+    height: 20
+    width: 5
+    pivot: {x: 0, y: 0}
+    subFactory1:
+      shape: 5
+      externalRadius: 12
+      internalRadius: 1
+      angle: 35
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 5}
+    subFactory2:
+      shape: 5
+      externalRadius: 12
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: -5}
+  Runtime: 1
+--- !u!4 &1820970837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820970835}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 327.1, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1914438466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1914438468}
+  - component: {fileID: 1914438467}
+  m_Layer: 0
+  m_Name: MoonArcAreaShowcase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1914438467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914438466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5712f4cd9911e409c3d2e013da2d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arena: {fileID: 294792783}
+  GizmoFullTime: 1
+  _areaShapeFactory:
+    shape: 3
+    externalRadius: 1.5
+    internalRadius: 1
+    angle: 1
+    height: 20
+    width: 5
+    pivot: {x: 0, y: 0}
+    subFactory1:
+      shape: 5
+      externalRadius: 12
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: 0}
+    subFactory2:
+      shape: 5
+      externalRadius: 18
+      internalRadius: 1
+      angle: 1
+      height: 1
+      width: 1
+      pivot: {x: 0, y: -12}
+  Runtime: 1
+--- !u!4 &1914438468
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914438466}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 236, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -644,3 +1284,12 @@ SceneRoots:
   - {fileID: 218609056}
   - {fileID: 1587437315}
   - {fileID: 1206484277}
+  - {fileID: 624155972}
+  - {fileID: 1520406133}
+  - {fileID: 1217106485}
+  - {fileID: 1419075451}
+  - {fileID: 432849899}
+  - {fileID: 1914438468}
+  - {fileID: 1298803999}
+  - {fileID: 144680866}
+  - {fileID: 1820970837}

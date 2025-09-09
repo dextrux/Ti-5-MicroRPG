@@ -20,7 +20,7 @@ public class ConeArea : AreaShape
 
         float dot = Vector2.Dot(direction, (target - center).normalized);
 
-        return dot > Mathf.Cos(_angle * Mathf.Deg2Rad);
+        return dot > Mathf.Cos((_angle / 2) * Mathf.Deg2Rad);
     }
 
     public override void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena, Color color)
@@ -43,9 +43,6 @@ public class ConeArea : AreaShape
 
         Handles.color = Color.white;
 #endif
-
-        //Gizmos.color = Color.white;      
-        //Gizmos.DrawLine(pos, fowardPoint);
 
         Gizmos.color = color;
 

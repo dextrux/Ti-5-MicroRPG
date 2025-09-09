@@ -47,10 +47,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _areaShapeFactory:
-    shape: 4
+    shape: 6
     externalRadius: 4
     internalRadius: 2.5
-    angle: 45
+    angle: 90
     height: 4
     width: 4
     pivot: {x: 0, y: 0}

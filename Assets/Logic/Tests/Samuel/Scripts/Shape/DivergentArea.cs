@@ -11,15 +11,15 @@ public class DivergentArea : AreaShape
         _areaB = areaB;
     }    
 
-    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target)
     {
         if (_areaA == null || _areaB == null) return false;
 
         float angle = GetAngle(direction);
         Vector2 pivot = RotateArenaPoint(center, center + centerPivot, -angle);
 
-        bool validateA = _areaA.IsInArea(pivot, direction, target, arena);
-        bool validateB = _areaB.IsInArea(pivot, direction, target, arena);
+        bool validateA = _areaA.IsInArea(pivot, direction, target);
+        bool validateB = _areaB.IsInArea(pivot, direction, target);
         return (validateA && !validateB) || (!validateA && validateB);
     }
 

@@ -11,7 +11,7 @@ public class SquareArea : AreaShape
         _width = width;
     }
 
-    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target)
     {
         float angle = GetAngle(direction);
         Vector2 newTargetPos = RotateArenaPoint(center, target, -angle);

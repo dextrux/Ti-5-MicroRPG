@@ -14,7 +14,7 @@ public class ConeArea : AreaShape
         _angle = angle;
     }
 
-    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target)
     {
         if (!(Vector2.Distance(center, target) <= _radius)) return false;
 

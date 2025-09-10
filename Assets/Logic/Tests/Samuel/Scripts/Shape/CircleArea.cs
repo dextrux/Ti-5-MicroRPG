@@ -12,7 +12,7 @@ public class CircleArea : AreaShape
         _radius = radius;
     }
 
-    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target)
     {
         return Vector2.Distance(center, target) <= _radius;
     }

@@ -11,14 +11,14 @@ public class SectionedArea : AreaShape
         _reducerArea = reducerArea;
     }
 
-    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target)
     {
         if (_adderArea == null || _reducerArea == null) return false;
 
         float angle = GetAngle(direction);
         Vector2 pivot = RotateArenaPoint(center, center, -angle);
 
-        return _adderArea.IsInArea(pivot, direction, target, null) && !_reducerArea.IsInArea(pivot, direction, target, null);
+        return _adderArea.IsInArea(pivot, direction, target) && !_reducerArea.IsInArea(pivot, direction, target);
     }
 
     public override void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena, Color color)

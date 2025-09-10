@@ -11,14 +11,14 @@ public class ConcatenatedArea : AreaShape
         _areaB = areaB;
     }
 
-    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    protected override bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target)
     {
         if (_areaA == null || _areaB == null) return false;
 
         float angle = GetAngle(direction);
         Vector2 pivot = RotateArenaPoint(center, center + centerPivot, -angle);
 
-        return _areaA.IsInArea(pivot, direction, target, arena) || _areaB.IsInArea(pivot, direction, target, arena);
+        return _areaA.IsInArea(pivot, direction, target) || _areaB.IsInArea(pivot, direction, target);
     }
 
     public override void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena, Color color)

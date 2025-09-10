@@ -1,17 +1,39 @@
+using System;
 using UnityEngine;
 
-public abstract class BossAttack : MonoBehaviour
+public class BossAttack : MonoBehaviour
 {
-    [SerializeField] protected CompositedAreaShapeFactory _areaShapeFactory;
-    protected AreaShape effectArea;
+    [SerializeField] private SkillEffectFactory[] _skillEffects;
+    private Action<EffectTarget_TEST, EffectParameter_TEST> _effect;
+
+    [SerializeField] private CompositedAreaShapeFactory _areaShape;
+    private AreaShape _effectArea;
 
     private ArenaPosReference _arena;
 
-    protected virtual void Awake()
-    {
-        effectArea = _areaShapeFactory.CreateAreaShape();
-
+    private void Awake()
+    {       
         Setup();
+    }
+
+    private void Setup()
+    {
+        for (int i = 0; i < _skillEffects.Length; i++)
+        {
+            SkillEffect auxEffect = _skillEffects[i].CreateEffect();
+
+            if (auxEffect != null)
+                _effect += auxEffect.Effect;
+            else
+                Debug.LogWarning("Null SkillEffect created. Not allowed!");
+        }
+
+        AreaShape auxShape = _areaShape.CreateAreaShape();
+
+        if (auxShape != null)
+            _effectArea = auxShape;
+        else
+            Debug.LogWarning("Null ShapeArea created. Not allowed!");
     }
 
     public void Prepare(ArenaPosReference arena)
@@ -21,9 +43,15 @@ public abstract class BossAttack : MonoBehaviour
 
     public void Execute()
     {
-        if (effectArea.IsInArea(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition(), _arena))
+        if (_effectArea == null)
         {
-            Effect();
+            Debug.LogWarning("The skill cannot have a null ShapeArea!");
+            return;
+        }
+
+        if (_effectArea.IsInArea(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition()))
+        {
+            _effect?.Invoke(null, new EffectParameter_TEST());
         }
 
         Destroy(gameObject);
@@ -31,12 +59,8 @@ public abstract class BossAttack : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (effectArea == null) return;
+        if (_effectArea == null) return;
 
-        effectArea.VisualGizmo(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena);
+        _effectArea.VisualGizmo(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena);
     }
-
-    protected virtual void Setup() { }
-
-    protected abstract void Effect();
 }

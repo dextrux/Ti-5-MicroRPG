@@ -9,14 +9,14 @@ public abstract class AreaShape
         this.centerPivot = centerPivot;
     }
 
-    public bool IsInArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena)
+    public bool IsInArea(Vector2 center, Vector2 direction, Vector2 target)
     {
         float angle = GetAngle(direction);
         Vector2 pivot = RotateArenaPoint(center, center + centerPivot, -angle);
-        return CalculateArea(pivot, direction, target, arena);
+        return CalculateArea(pivot, direction, target);
     }   
 
-    protected abstract bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target, ArenaPosReference arena);
+    protected abstract bool CalculateArea(Vector2 center, Vector2 direction, Vector2 target);
 
     public virtual void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena)
     {

@@ -165,9 +165,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _parentNewObjectsUnderSceneContext: 0
-  _contractNames: []
-  _parentContractNames:
+  _contractNames:
   - GameScene
+  _parentContractNames:
+  - CoreScene
 --- !u!4 &370611896
 Transform:
   m_ObjectHideFlags: 0

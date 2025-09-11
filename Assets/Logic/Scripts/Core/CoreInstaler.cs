@@ -26,7 +26,7 @@ public class CoreInstaler : MonoInstaller
         Container.BindInterfacesTo<StateMachineService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<UpdateSubscriptionService>().FromInstance(_updateSubscriptionService).AsSingle().NonLazy();
         Container.BindInterfacesTo<AudioService>().FromInstance(_audioService).AsSingle().NonLazy();
-        Container.BindInterfacesTo<ISceneInitiatorsService>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<SceneInitiatorsService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<CommandFactory>().AsSingle().CopyIntoAllSubContainers().NonLazy();
         Container.BindInterfacesTo<LoadingScreenController>().AsSingle().WithArguments(_loadingScreenView).NonLazy();
         Container.BindInterfacesTo<UICameraController>().AsSingle().WithArguments(_uiCameraView).NonLazy();

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Logic.Scripts.Core.Mvc.LoadingScreen {
     public class LoadingScreenView : MonoBehaviour {
         //Inserir LoadingBard
-        [SerializeField] private Canvas _loadingScreenCanvas;
+        //[SerializeField] private Canvas _loadingScreenCanvas;
 
         public void ResetSlider() {
             //Inserir função reset da LoadingBard
@@ -15,11 +15,11 @@ namespace Logic.Scripts.Core.Mvc.LoadingScreen {
         }
 
         public void Show() {
-            _loadingScreenCanvas.enabled = true;
+            //_loadingScreenCanvas.enabled = true;
         }
 
         public void Hide() {
-            _loadingScreenCanvas.enabled = false;
+            //_loadingScreenCanvas.enabled = false;
         }
     }
 }

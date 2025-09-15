@@ -24,6 +24,28 @@ namespace Logic.Scripts.Turns
     public struct EnviromentActionRequestedSignal {}
     public struct EnviromentActionCompletedSignal {}
 
+    public struct BarrierState
+    {
+        public string Id;
+        public bool IsActive;
+    }
+
+    public struct BarrierStateChangedSignal
+    {
+        public System.Collections.Generic.List<BarrierState> Barriers;
+    }
+
+    public struct HazardZoneState
+    {
+        public string Id;
+        public bool IsHazard;
+    }
+
+    public struct HazardZonesChangedSignal
+    {
+        public System.Collections.Generic.List<HazardZoneState> Zones;
+    }
+
     public struct ActionPointsChangedSignal
     {
         public int Current;

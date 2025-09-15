@@ -14,6 +14,9 @@ namespace Logic.Scripts.Turns
             Container.BindInterfacesAndSelfTo<EnviromentActionService>().AsSingle();
             Container.BindInterfacesAndSelfTo<TurnFlowController>().AsSingle();
 
+            Container.BindInterfacesAndSelfTo<BarrierToggleRule>().AsSingle();
+            Container.BindInterfacesAndSelfTo<HazardZoneToggleRule>().AsSingle();
+
         }
     }
 }

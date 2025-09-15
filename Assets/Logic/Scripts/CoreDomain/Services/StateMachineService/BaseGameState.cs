@@ -3,6 +3,7 @@ using Logic.Scripts.Core.CoreInitiator.Base;
 using Logic.Scripts.Services.Logger.Base;
 using Logic.Scripts;
 using UnityEngine;
+using Logic.Scripts.Utils;
 
 namespace Logic.Scripts.Services.StateMachineService
 {
@@ -23,22 +24,19 @@ namespace Logic.Scripts.Services.StateMachineService
         public virtual Awaitable LoadState(CancellationTokenSource cancellationTokenSource)
         {
             LogService.LogTopic($"Load state {GameStateType}", LogTopicType.GameState);
-            //return AwaitableUtils.CompletedTask;
-            return null;
+            return AwaitableUtils.CompletedTask;
         }
         
         public virtual Awaitable StartState(CancellationTokenSource cancellationTokenSource)
         {
             LogService.LogTopic($"Start state {GameStateType}", LogTopicType.GameState);
-            //return AwaitableUtils.CompletedTask;
-            return null;
+            return AwaitableUtils.CompletedTask;
         }
 
         public virtual Awaitable ExitState(CancellationTokenSource cancellationTokenSource)
         {
             _cancellationTokenSource.Cancel();
-            //return AwaitableUtils.CompletedTask;
-            return null;
+            return AwaitableUtils.CompletedTask;
         }
     }
 }

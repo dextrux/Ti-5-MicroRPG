@@ -9,7 +9,6 @@ using Logic.Scripts.Core.Mvc.LoadingScreen;
 using Logic.Scripts.Core.Audio;
 namespace Logic.Scripts.Core.CoreInitiator {
     public class CoreInitiator : MonoBehaviour {
-        public SceneType SceneToLoad;
         private GameInputActions _gameInputActions;
         private ISceneLoaderService _sceneLoaderService;
         private IAudioService _audioService;
@@ -62,7 +61,7 @@ namespace Logic.Scripts.Core.CoreInitiator {
         }
 
         private async Awaitable LoadGameScene(CancellationTokenSource cancellationTokenSource) {
-            await _sceneLoaderService.TryLoadScene(SceneToLoad, new GameInitiatorEnterData(), cancellationTokenSource);
+            await _sceneLoaderService.TryLoadScene(SceneType.GameScene, new GameInitiatorEnterData(), cancellationTokenSource);
         }
     }
 }

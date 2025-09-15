@@ -17,3 +17,7 @@ MonoBehaviour:
     Scene: {fileID: 102900000, guid: 6f4bb3a84202ac3408314bd3ca0b9c57, type: 3}
   - ContractName: GameScene
     Scene: {fileID: 102900000, guid: 5201113c322f934478608ce9bd85cf4a, type: 3}
+  - ContractName: LobbyScene
+    Scene: {fileID: 102900000, guid: 6e194e94e75d8fe42895d3adec8bddda, type: 3}
+  - ContractName: GamePlayScene
+    Scene: {fileID: 102900000, guid: 89d54df087dcd9b44a5daac923adeff5, type: 3}

@@ -1,4 +1,4 @@
-public class CameraModel
+public class CameraData
 {
     public float velocidade = 50f;
     public float horizontalAngle = 0f;

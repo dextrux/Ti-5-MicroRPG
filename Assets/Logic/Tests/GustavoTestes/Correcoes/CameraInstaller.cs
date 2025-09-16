@@ -7,7 +7,7 @@ public class CameraInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.Bind<CameraModel>().AsSingle();
+        Container.Bind<CameraData>().AsSingle();
 
         GameInputActions inputActions = new GameInputActions();
         Container.Bind<GameInputActions>().FromInstance(inputActions).AsSingle();

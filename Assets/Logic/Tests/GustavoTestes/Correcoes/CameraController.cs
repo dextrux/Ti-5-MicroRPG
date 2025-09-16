@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class CameraController
 {
-    private CameraModel model;
+    private CameraData model;
 
     private bool rotateEnabled;
     private Vector2 mouseDelta;
@@ -11,7 +11,7 @@ public class CameraController
     public float HorizontalAngle => model.horizontalAngle;
     public float VerticalAngle => model.verticalAngle;
 
-    public CameraController(CameraModel model, GameInputActions inputActions)
+    public CameraController(CameraData model, GameInputActions inputActions)
     {
         this.model = model;
 

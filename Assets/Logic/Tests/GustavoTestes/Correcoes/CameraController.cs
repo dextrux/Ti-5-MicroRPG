@@ -3,17 +3,19 @@ using UnityEngine.InputSystem;
 
 public class CameraController
 {
-    private CameraData model;
+    private CameraData data;
 
     private bool rotateEnabled;
     private Vector2 mouseDelta;
 
-    public float HorizontalAngle => model.horizontalAngle;
-    public float VerticalAngle => model.verticalAngle;
+    private Transform target;
 
-    public CameraController(CameraData model, GameInputActions inputActions)
+    public float HorizontalAngle => data.horizontalAngle;
+    public float VerticalAngle => data.verticalAngle;
+
+    public CameraController(CameraData data, GameInputActions inputActions)
     {
-        this.model = model;
+        this.data = data;
 
         inputActions.Camera.RotateButton.performed += ctx => rotateEnabled = true;
         inputActions.Camera.RotateButton.canceled += ctx => rotateEnabled = false;
@@ -28,6 +30,17 @@ public class CameraController
     {
         if (!rotateEnabled) return;
 
-        model.horizontalAngle += mouseDelta.x * model.velocidade * deltaTime;
+        data.horizontalAngle += mouseDelta.x * data.velocidade * deltaTime;
+    }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+        
+    }
+
+    public Transform GetTarget()
+    {
+        return target;
     }
 }

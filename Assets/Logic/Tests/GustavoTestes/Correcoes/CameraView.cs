@@ -9,6 +9,8 @@ public class CameraView : MonoBehaviour
     private CinemachineOrbitalFollow orbital;
     private CameraController controller;
 
+    public Transform target;
+
     [Inject]
     public void Construct(CameraController controller)
     {
@@ -19,6 +21,7 @@ public class CameraView : MonoBehaviour
     {
         cineCam = GetComponentInChildren<CinemachineCamera>();
         orbital = cineCam.GetComponent<CinemachineOrbitalFollow>();
+        target = controller.GetTarget();
     }
 
     void Update()
@@ -28,5 +31,7 @@ public class CameraView : MonoBehaviour
         controller.UpdateAngles(Time.deltaTime);
 
         orbital.HorizontalAxis.Value = controller.HorizontalAngle;
+
+        orbital.FollowTarget.position = target.position;
     }
 }

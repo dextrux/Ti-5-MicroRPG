@@ -14,7 +14,7 @@ public class CameraInstaller : MonoInstaller
 
         Container.Bind<CameraController>().AsSingle();
 
-        var prefabInstance = Container.InstantiatePrefab(cameraPrefab);
+        GameObject prefabInstance = Container.InstantiatePrefab(cameraPrefab);
         CameraView view = prefabInstance.GetComponentInChildren<CameraView>();
         Container.Inject(view);
         Container.Bind<CameraView>().FromInstance(view).AsSingle();

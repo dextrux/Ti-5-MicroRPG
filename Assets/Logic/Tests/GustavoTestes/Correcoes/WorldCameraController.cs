@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraController
+public class WorldCameraController
 {
     private CameraData data;
 
@@ -13,7 +13,7 @@ public class CameraController
     public float HorizontalAngle => data.horizontalAngle;
     public float VerticalAngle => data.verticalAngle;
 
-    public CameraController(CameraData data, GameInputActions inputActions)
+    public WorldCameraController(WorldCameraView worldCameraView, CameraData worldCameradata, GameInputActions inputActions)
     {
         this.data = data;
 

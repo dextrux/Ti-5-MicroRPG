@@ -12,11 +12,11 @@ public class CameraInstaller : MonoInstaller
         GameInputActions inputActions = new GameInputActions();
         Container.Bind<GameInputActions>().FromInstance(inputActions).AsSingle();
 
-        Container.Bind<CameraController>().AsSingle();
+        Container.Bind<WorldCameraController>().AsSingle();
 
         GameObject prefabInstance = Container.InstantiatePrefab(cameraPrefab);
-        CameraView view = prefabInstance.GetComponentInChildren<CameraView>();
+        WorldCameraView view = prefabInstance.GetComponentInChildren<WorldCameraView>();
         Container.Inject(view);
-        Container.Bind<CameraView>().FromInstance(view).AsSingle();
+        Container.Bind<WorldCameraView>().FromInstance(view).AsSingle();
     }
 }

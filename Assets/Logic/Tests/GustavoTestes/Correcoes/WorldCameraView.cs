@@ -2,17 +2,17 @@ using UnityEngine;
 using Unity.Cinemachine;
 using Zenject;
 
-public class CameraView : MonoBehaviour
+public class WorldCameraView : MonoBehaviour
 {
     public CinemachineCamera cineCam;
 
     private CinemachineOrbitalFollow orbital;
-    private CameraController controller;
+    private WorldCameraController controller;
 
     public Transform target;
 
     [Inject]
-    public void Construct(CameraController controller)
+    public void Construct(WorldCameraController controller)
     {
         this.controller = controller;
     }

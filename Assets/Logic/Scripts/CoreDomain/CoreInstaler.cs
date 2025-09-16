@@ -18,6 +18,7 @@ public class CoreInstaler : MonoInstaller
     [SerializeField] private AudioService _audioService;
     [SerializeField] private LoadingScreenView _loadingScreenView;
     [SerializeField] private UICameraView _uiCameraView;
+    [SerializeField] private WorldCameraView _worldCameraView;
     
     public override void InstallBindings() {
         Container.BindInterfacesTo<UnityLogger>().AsSingle().NonLazy();
@@ -30,6 +31,7 @@ public class CoreInstaler : MonoInstaller
         Container.BindInterfacesTo<CommandFactory>().AsSingle().CopyIntoAllSubContainers().NonLazy();
         Container.BindInterfacesTo<LoadingScreenController>().AsSingle().WithArguments(_loadingScreenView).NonLazy();
         Container.BindInterfacesTo<UICameraController>().AsSingle().WithArguments(_uiCameraView).NonLazy();
+        Container.BindInterfacesTo<WorldCameraController>().AsSingle().WithArguments(_worldCameraView).NonLazy();
         Container.Bind<CoreAudioClipsScriptableObject>().FromScriptableObject(_coreAudioClipsScriptableObject).AsSingle().NonLazy();
         Container.Bind<GameInputActions>().AsSingle().NonLazy();
     }

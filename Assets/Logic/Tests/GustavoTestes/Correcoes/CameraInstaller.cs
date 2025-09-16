@@ -8,9 +8,15 @@ public class CameraInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.Bind<CameraModel>().AsSingle();
+
+        GameInputActions inputActions = new GameInputActions();
+        Container.Bind<GameInputActions>().FromInstance(inputActions).AsSingle();
+
         Container.Bind<CameraController>().AsSingle();
 
-        CameraView view = Container.InstantiatePrefabForComponent<CameraView>(cameraPrefab);
+        var prefabInstance = Container.InstantiatePrefab(cameraPrefab);
+        CameraView view = prefabInstance.GetComponentInChildren<CameraView>();
+        Container.Inject(view);
         Container.Bind<CameraView>().FromInstance(view).AsSingle();
     }
 }

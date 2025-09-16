@@ -23,11 +23,10 @@ public class CameraView : MonoBehaviour
 
     void Update()
     {
-        if (controller == null) return;
+        if (controller == null || orbital == null) return;
 
         controller.UpdateAngles(Time.deltaTime);
 
         orbital.HorizontalAxis.Value = controller.HorizontalAngle;
-        orbital.VerticalAxis.Value = controller.VerticalAngle;
     }
 }

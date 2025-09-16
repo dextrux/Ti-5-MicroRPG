@@ -17,7 +17,7 @@ public class CharacterController
             data.Health = 0;
             data.IsAlive = false;
         }
-        view.UpdateStats(data);
+        
     }
 
     public void ModifyActionPoints(int value)

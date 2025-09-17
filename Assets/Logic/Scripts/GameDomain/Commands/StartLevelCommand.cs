@@ -1,14 +1,15 @@
+using Logic.Scripts.Core.Mvc.WorldCamera;
 using Logic.Scripts.Services.CommandFactory;
-using System.Threading;
-using System.Threading.Tasks;
-using UnityEngine;
 
-public class StartLevelCommand : BaseCommand, ICommandAsync {
+public class StartLevelCommand : BaseCommand, ICommandVoid {
+    IWorldCameraController _iWorldCameraController;
+    
     public override void ResolveDependencies() {
-        
+        _iWorldCameraController = _diContainer.Resolve<IWorldCameraController>();
     }
 
-    public async Task<Awaitable> Execute(CancellationTokenSource cancellationTokenSource) {
-        await ;
+    public void Execute() {
+        //_iWorldCameraController.StartFollowTarget(); Adicionar o playerController para liberar
     }
+
 }

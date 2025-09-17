@@ -10,6 +10,7 @@ using UnityEngine;
 using Zenject;
 using Logic.Scripts.Services.StateMachineService;
 using Logic.Scripts.Services.ResourcesLoaderService;
+using Logic.Scripts.Core.Mvc.WorldCamera;
 
 public class CoreInstaler : MonoInstaller
 {

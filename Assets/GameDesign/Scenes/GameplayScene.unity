@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 2129559430}
   - component: {fileID: 2129559429}
   m_Layer: 0
-  m_Name: GameplayScene
+  m_Name: GameplayInstaler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

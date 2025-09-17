@@ -4,13 +4,14 @@ using Logic.Scripts.Utils;
 using System.Threading;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using Logic.Scripts.GameDomain.Commands;
 
 namespace Logic.Scripts.GameDomain.GameInputActions {
-    public class GameInputActionsController {
+    public class GameInputActionsController : IGameInputActionsController {
         private readonly global::GameInputActions _gameInputActions;
         private readonly ICommandFactory _commandFactory;
 
-        public GameInputActionsController( global::GameInputActions gameInputActions, ICommandFactory commandFactory) {
+        public GameInputActionsController(global::GameInputActions gameInputActions, ICommandFactory commandFactory) {
             _gameInputActions = gameInputActions;
             _commandFactory = commandFactory;
         }
@@ -27,7 +28,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
         public void RegisterAllInputListeners() {
             LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
-            //_commandFactory.CreateCommandVoid<UnlockCameraInvokedCommand>().Execute();
+            _commandFactory.CreateCommandVoid<UnlockCameraInvokedCommand>().Execute();
         }
 
         public void UnregisterAllInputListeners() {

@@ -665,7 +665,6 @@ MonoBehaviour:
   _target: {fileID: 0}
   _velocidade: 50
   _horizontalAngle: 0
-  _verticalAngle: 25
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

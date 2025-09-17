@@ -5,6 +5,7 @@ using System.Threading;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using Logic.Scripts.GameDomain.Commands;
+using System;
 
 namespace Logic.Scripts.GameDomain.GameInputActions {
     public class GameInputActionsController : IGameInputActionsController {
@@ -28,11 +29,16 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
         public void RegisterAllInputListeners() {
             LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
-            _commandFactory.CreateCommandVoid<UnlockCameraInvokedCommand>().Execute();
+            _gameInputActions.Player.Aim.started += OnAimStarted;
         }
 
         public void UnregisterAllInputListeners() {
             LogService.LogTopic("Unregister all input listeners", LogTopicType.Inputs);
+            _gameInputActions.Player.Aim.started -= OnAimStarted;
+        }
+
+        private void OnAimStarted(InputAction.CallbackContext context) {
+            _commandFactory.CreateCommandVoid<UnlockCameraInvokedCommand>().Execute();
         }
 
         public async Awaitable WaitForAnyKeyPressed(CancellationTokenSource cancellationTokenSource, bool canPressOverGui = false) {
@@ -40,6 +46,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
                 cancellationTokenSource.Token);
         }
 
+        //Substituir por newInput system
         private bool IsAnyInputPressed() {
             return
                 (Keyboard.current?.anyKey.wasPressedThisFrame == true) ||

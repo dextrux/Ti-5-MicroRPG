@@ -18,8 +18,8 @@ public class PlayerInput : MonoBehaviour
 
         gameInputsActions.Player.Move.performed += OnMovePerformed;
         gameInputsActions.Player.Move.canceled += OnMoveCanceled;
-        gameInputsActions.Player.Jump.performed += OnJumpPerformed;
-        gameInputsActions.Player.Jump.canceled += OnJumpCanceled;
+        //gameInputsActions.Player.Jump.performed += OnJumpPerformed;
+        //gameInputsActions.Player.Jump.canceled += OnJumpCanceled;
 
         gameInputsActions.Player.Enable();
     }

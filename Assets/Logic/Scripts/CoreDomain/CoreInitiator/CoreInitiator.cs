@@ -42,7 +42,9 @@ namespace Logic.Scripts.Core.CoreInitiator {
                 LogService.Log("Operation init core was cancelled");
             }
             catch (Exception e) {
-                LogService.LogError(e.Message);
+                //LogService.LogError(e.Message);
+                Debug.Log("Erro que está dando: " + e.Message);
+                Debug.Log("Source do erro que está dando: " + e.Source);
                 throw;
             }
 

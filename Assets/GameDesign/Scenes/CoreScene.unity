@@ -939,6 +939,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CoreLoadingScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 2102072649761250156, guid: 60f0c5c190be30e43956524f545344df, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9170395883434685228, guid: 60f0c5c190be30e43956524f545344df, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

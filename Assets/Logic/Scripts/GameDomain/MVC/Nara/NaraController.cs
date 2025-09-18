@@ -20,7 +20,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
             IResourcesLoaderService resourcesLoaderService, NaraView naraViewPrefab,
-            NaraData naraData, NaraConfigurationSO naraConfiguration) {
+            NaraConfigurationSO naraConfiguration) {
             _naraData = new NaraData(naraConfiguration);
             _updateSubscriptionService = updateSubscriptionService;
             _audioService = audioService;
@@ -34,7 +34,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void ManagedFixedUpdate() {
-            
+
         }
 
         public void DisableCallbacks() {
@@ -60,11 +60,11 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void InitEntryPoint() {
-            
+            CreateNara();
         }
 
         public void ResetController() {
-            
+
         }
 
         public void TakeDamage(int damageAmound) {

@@ -1,4 +1,5 @@
 using Logic.Scripts.Core.CoreInitiator.Base;
+using Logic.Scripts.GameDomain.Commands;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.InitiatorInvokerService;
 using Logic.Scripts.Utils;
@@ -20,7 +21,7 @@ namespace Logic.Scripts.GameDomain.GameplayInitiator {
 
         public async Awaitable LoadEntryPoint(IInitiatorEnterData enterDataObject, CancellationTokenSource cancellationTokenSource) {
             var enterData = (GamePlayInitatorEnterData)enterDataObject;
-            //await _commandFactory.CreateCommandAsync<LoadGamePlayStateCommand>().SetEnterData(enterData).Execute(cancellationTokenSource);
+            await _commandFactory.CreateCommandAsync<LoadGamePlayStateCommand>().SetEnterData(enterData).Execute(cancellationTokenSource);
         }
 
         public async Awaitable StartEntryPoint(IInitiatorEnterData enterDataObject, CancellationTokenSource cancellationTokenSource) {

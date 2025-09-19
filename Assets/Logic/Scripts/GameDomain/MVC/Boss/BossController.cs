@@ -118,13 +118,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 
         private void ExecuteMove(string moveId)
         {
-            var cmd = _commandFactory.CreateCommandVoid<BossMoveCommand>();
+            BossMoveCommand cmd = _commandFactory.CreateCommandVoid<BossMoveCommand>();
             cmd.Execute();
         }
 
         private void ExecuteAbility(AbilityData ability)
         {
-            var cmd = _commandFactory.CreateCommandVoid<BossCastAbilityCommand>();
+            BossCastAbilityCommand cmd = _commandFactory.CreateCommandVoid<BossCastAbilityCommand>();
             cmd.Execute();
         }
     }

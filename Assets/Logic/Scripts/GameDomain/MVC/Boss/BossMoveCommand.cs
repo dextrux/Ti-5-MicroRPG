@@ -1,4 +1,5 @@
 using Logic.Scripts.Services.CommandFactory;
+using Zenject;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss
 {

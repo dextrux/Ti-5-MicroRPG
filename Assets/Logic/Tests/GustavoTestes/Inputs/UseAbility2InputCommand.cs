@@ -2,11 +2,9 @@ using Logic.Scripts.Services.CommandFactory;
 
 public class UseAbility2InputCommand : BaseCommand, ICommandVoid
 {
-    GameInputActions _GameInputAction;
-
     public override void ResolveDependencies()
     {
-        _GameInputAction = _diContainer.Resolve<GameInputActions>();
+        
     }
 
     public void Execute()

@@ -29,12 +29,117 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
         public void RegisterAllInputListeners() {
             LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
-            _gameInputActions.Player.Aim.started += OnAimStarted;
+            //_gameInputActions.Player.Aim.started += OnAimStarted;
+            _gameInputActions.Player.ActivateCam.started += OnActivateCamStarted;
+            _gameInputActions.Player.CreateCopy1.started += OnCreateCopy1Started;
+            _gameInputActions.Player.CreateCopy2.started += OnCreateCopy2Started;
+            _gameInputActions.Player.Inspect.started += OnInspectStarted;
+            _gameInputActions.Player.Interact.started += OnInteractStarted;
+            _gameInputActions.Player.Move.started += OnMoveStarted;
+            _gameInputActions.Player.PassTurn.started += OnPassTurnStarted;
+            _gameInputActions.Player.Pause.started += OnPauseStarted;
+            _gameInputActions.Player.ResetTurn.started += OnResetTurnStarted;
+            _gameInputActions.Player.RotateCam.started += OnRotateCamStarted;
+            _gameInputActions.Player.UseAbility1.started += OnUseAbility1Started;
+            _gameInputActions.Player.UseAbility2.started += OnUseAbility2Started;
+            _gameInputActions.Player.UseAbility3.started += OnUseAbility3Started;
+            _gameInputActions.Player.UsePotion1.started += OnUsePotion1Started;
+            _gameInputActions.Player.UsePotion2.started += OnUsePotion2Started;
+        }
+
+        private void OnUsePotion2Started(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<UsePotion2InputCommand>();
+        }
+
+        private void OnUsePotion1Started(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<UsePotion1InputCommand>();
+        }
+
+        private void OnUseAbility3Started(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<UseAbility3InputCommand>();
+        }
+
+        private void OnUseAbility2Started(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<UseAbility2InputCommand>();
+        }
+
+        private void OnUseAbility1Started(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<UseAbility1InputCommand>();
+        }
+
+        private void OnRotateCamStarted(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<RotateCamInputCommand>();
+        }
+
+        private void OnResetTurnStarted(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<ResetTurnInputCommand>();
+        }
+
+        private void OnPauseStarted(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<PauseInputCommand>();
+        }
+
+        private void OnPassTurnStarted(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<PassTurnInputCommand>();
+        }
+
+        private void OnMoveStarted(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<MoveInputCommand>();
+        }
+
+        private void OnInteractStarted(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<InteractInputCommand>();
+        }
+
+        private void OnInspectStarted(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<InspectInputCommand>();
+        }
+
+        private void OnCreateCopy2Started(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<CreateCopy2InputCommand>();
+        }
+
+        private void OnCreateCopy1Started(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<CreateCopy1InputCommand>();
+        }
+
+        private void OnActivateCamStarted(InputAction.CallbackContext obj)
+        {
+            _commandFactory.CreateCommandVoid<ActivateCamInputCommand>();
         }
 
         public void UnregisterAllInputListeners() {
             LogService.LogTopic("Unregister all input listeners", LogTopicType.Inputs);
-            _gameInputActions.Player.Aim.started -= OnAimStarted;
+            //_gameInputActions.Player.Aim.started -= OnAimStarted;
+            _gameInputActions.Player.ActivateCam.started -= OnActivateCamStarted;
+            _gameInputActions.Player.CreateCopy1.started -= OnCreateCopy1Started;
+            _gameInputActions.Player.CreateCopy2.started -= OnCreateCopy2Started;
+            _gameInputActions.Player.Inspect.started -= OnInspectStarted;
+            _gameInputActions.Player.Interact.started -= OnInteractStarted;
+            _gameInputActions.Player.Move.started -= OnMoveStarted;
+            _gameInputActions.Player.PassTurn.started -= OnPassTurnStarted;
+            _gameInputActions.Player.Pause.started -= OnPauseStarted;
+            _gameInputActions.Player.ResetTurn.started -= OnResetTurnStarted;
+            _gameInputActions.Player.RotateCam.started -= OnRotateCamStarted;
+            _gameInputActions.Player.UseAbility1.started -= OnUseAbility1Started;
+            _gameInputActions.Player.UseAbility2.started -= OnUseAbility2Started;
+            _gameInputActions.Player.UseAbility3.started -= OnUseAbility3Started;
+            _gameInputActions.Player.UsePotion1.started -= OnUsePotion1Started;
+            _gameInputActions.Player.UsePotion2.started -= OnUsePotion2Started;
         }
 
         private void OnAimStarted(InputAction.CallbackContext context) {

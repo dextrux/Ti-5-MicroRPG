@@ -141,27 +141,25 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Aim",
+                    "name": "RotateCam",
                     "type": "Value",
-                    "id": "cfd097e0-1806-43eb-a5dc-4652ddf12958",
-                    "expectedControlType": "Vector2",
+                    "id": "c42b7700-2bd1-4e29-ba10-fd56cbae9b11",
+                    "expectedControlType": "Delta",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ActivateCam",
+                    "type": "Button",
+                    "id": "e2c9b112-5024-4782-bf17-dd9399507f3d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "978bfe49-cc26-4a3d-ab7b-7d7a29327403",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "WASD",
                     "id": "00ca640b-d935-4593-8157-c05846ea39b3",
@@ -263,44 +261,11 @@
                 },
                 {
                     "name": "",
-                    "id": "1635d3fe-58b6-4ba9-a4e2-f4b964f6b5c8",
-                    "path": "<XRController>/{Primary2DAxis}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "XR",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3ea4d645-4504-4529-b061-ab81934c3752",
-                    "path": "<Joystick>/stick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "1c04ea5f-b012-41d1-a6f7-02e963b52893",
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b3f66d0b-7751-423f-908b-a11c5bd95930",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -352,7 +317,7 @@
                 {
                     "name": "",
                     "id": "f3c40748-f2b3-4106-ac6e-fc4c5ff9d5e5",
-                    "path": "",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -363,7 +328,7 @@
                 {
                     "name": "",
                     "id": "8637d1ec-9ce7-437d-9748-5255b96462d3",
-                    "path": "",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -374,7 +339,7 @@
                 {
                     "name": "",
                     "id": "802eb8f6-ee09-40be-8388-b16a26fe5a9e",
-                    "path": "",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -385,7 +350,7 @@
                 {
                     "name": "",
                     "id": "e7c65058-b67b-4cca-b5ca-a87f9cc809a3",
-                    "path": "",
+                    "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -396,7 +361,7 @@
                 {
                     "name": "",
                     "id": "3b1fa812-10d3-4ebf-a28e-c82bc4fa094a",
-                    "path": "",
+                    "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -450,12 +415,23 @@
                 },
                 {
                     "name": "",
-                    "id": "7e7f783a-e664-4422-8959-46bed64ea64e",
-                    "path": "<Mouse>/position",
+                    "id": "174973af-8fa5-41b9-a4b5-7ea0a695c342",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Aim",
+                    "action": "RotateCam",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e4fa993f-5547-4eca-a69c-f80ec575112c",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ActivateCam",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

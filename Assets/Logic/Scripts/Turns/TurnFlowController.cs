@@ -1,4 +1,5 @@
 using Zenject;
+using Logic.Scripts.Services.Logger.Base;
 
 namespace Logic.Scripts.Turns
 {
@@ -90,6 +91,7 @@ namespace Logic.Scripts.Turns
             _turnNumber += 1;
             _phase = TurnPhase.BossAct;
             _eventBus.Publish(new TurnAdvancedSignal { TurnNumber = _turnNumber, Phase = _phase });
+            LogService.Log($"Turno {_turnNumber} - Fase: BossAct");
             _waitingBoss = true;
             _eventBus.Publish(new BossActionRequestedSignal());
             _bossActionService.ExecuteBossTurn();
@@ -107,6 +109,7 @@ namespace Logic.Scripts.Turns
             _actionPointsService.GainTurnPoints();
             _phase = TurnPhase.PlayerAct;
             _eventBus.Publish(new TurnAdvancedSignal { TurnNumber = _turnNumber, Phase = _phase });
+            LogService.Log($"Turno {_turnNumber} - Fase: PlayerAct");
             _waitingPlayer = true;
             _eventBus.Publish(new RequestPlayerActionSignal());
         }
@@ -129,6 +132,7 @@ namespace Logic.Scripts.Turns
         {
             _phase = TurnPhase.EchoesAct;
             _eventBus.Publish(new TurnAdvancedSignal { TurnNumber = _turnNumber, Phase = _phase });
+            LogService.Log($"Turno {_turnNumber} - Fase: EchoesAct");
             _eventBus.Publish(new EchoesResolutionRequestedSignal());
             _echoService.ResolveDueEchoes();
         }
@@ -142,6 +146,7 @@ namespace Logic.Scripts.Turns
         {
             _phase = TurnPhase.EnviromentAct;
             _eventBus.Publish(new TurnAdvancedSignal { TurnNumber = _turnNumber, Phase = _phase });
+            LogService.Log($"Turno {_turnNumber} - Fase: EnviromentAct");
             _eventBus.Publish(new EnviromentActionRequestedSignal());
             _enviromentActionService.ExecuteEnviromentTurn();
         }

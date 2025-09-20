@@ -4,10 +4,11 @@ using Logic.Scripts.Services.ResourcesLoaderService;
 using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.GameDomain.MVC.Skills;
 using UnityEngine;
+using Zenject;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss
 {
-    public class BossController : IBossController, IFixedUpdatable
+    public class BossController : IBossController, IFixedUpdatable, IInitializable
     {
         private readonly IUpdateSubscriptionService _updateSubscriptionService;
         private readonly IAudioService _audioService;

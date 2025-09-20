@@ -12,8 +12,6 @@ namespace Logic.Scripts.Turns
             Container.BindInterfacesAndSelfTo<ActionPointsService>().AsSingle();
             Container.BindInterfacesAndSelfTo<EchoService>().AsSingle();
 
-            Container.BindInterfacesAndSelfTo<BossController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<BossActionService>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<EnviromentActionService>().AsSingle();
             Container.BindInterfacesAndSelfTo<TurnFlowController>().AsSingle();

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossController : MonoBehaviour
+public class BossControlleroLD : MonoBehaviour
 {
     [SerializeField] private ArenaPosReference _arena;
 

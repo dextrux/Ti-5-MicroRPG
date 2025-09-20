@@ -18,12 +18,10 @@ public class ActivateCamInputCommand : BaseCommand, ICommandVoid
         if (_gameInputActions.Player.ActivateCam.IsPressed())
         {
             _iWorldCameraController.UnlockCameraRotate();
-            Debug.Log("Ativou cam"); // so pra teste, tirar
         }
         else
         {
             _iWorldCameraController.LockCameraRotate();
-            Debug.Log("desativou cam"); // so pra teste, tirar
         }
     }
 }

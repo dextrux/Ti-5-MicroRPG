@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 728916082688
-    m_Localized: Bell
+    m_Localized: "\u6B21\u306E\u30BF\u30FC\u30F3"
     m_Metadata:
       m_Items: []
   references:

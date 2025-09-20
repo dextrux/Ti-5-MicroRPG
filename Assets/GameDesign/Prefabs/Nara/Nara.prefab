@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 5824117036771753600}
   _collider: {fileID: 5589792799600363805}
+  _naraConfig: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}
 --- !u!1 &2649895313193573145
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: b20707e21c9ea64418cb0d6a1a2a5962
   m_Entries:
   - m_Id: 728916082688
-    m_Key: ID_BOSSHEALTH
+    m_Key: ID_NEXT_TURN_BTN
     m_Metadata:
       m_Items: []
   m_Metadata:

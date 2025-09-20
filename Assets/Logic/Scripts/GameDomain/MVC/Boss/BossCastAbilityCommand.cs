@@ -24,8 +24,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         public void Execute()
         {
             if (_ability == null || _caster == null) return;
-            var executor = new AbilityExecutor(_ability, _target);
-            executor.ExecuteAll(_caster, _target);
+            //var executor = new AbilityExecutor(_ability, _target);
+            //executor.ExecuteAll(_caster, _target);
         }
     }
 }

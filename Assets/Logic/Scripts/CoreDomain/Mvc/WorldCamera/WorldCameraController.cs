@@ -41,5 +41,10 @@ namespace Logic.Scripts.Core.Mvc.WorldCamera {
         public void ManagedUpdate() {
             UpdateAngles();
         }
+
+        public void SetMouseDelta(Vector2 delta)
+        {
+            _mouseDelta = delta;
+        }
     }
 }

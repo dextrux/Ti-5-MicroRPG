@@ -29,7 +29,6 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
         public void RegisterAllInputListeners() {
             LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
-            //_gameInputActions.Player.Aim.started += OnAimStarted;
             _gameInputActions.Player.ActivateCam.started += OnActivateCamStarted;
             _gameInputActions.Player.CreateCopy1.started += OnCreateCopy1Started;
             _gameInputActions.Player.CreateCopy2.started += OnCreateCopy2Started;
@@ -124,7 +123,6 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
         public void UnregisterAllInputListeners() {
             LogService.LogTopic("Unregister all input listeners", LogTopicType.Inputs);
-            //_gameInputActions.Player.Aim.started -= OnAimStarted;
             _gameInputActions.Player.ActivateCam.started -= OnActivateCamStarted;
             _gameInputActions.Player.CreateCopy1.started -= OnCreateCopy1Started;
             _gameInputActions.Player.CreateCopy2.started -= OnCreateCopy2Started;
@@ -140,10 +138,6 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _gameInputActions.Player.UseAbility3.started -= OnUseAbility3Started;
             _gameInputActions.Player.UsePotion1.started -= OnUsePotion1Started;
             _gameInputActions.Player.UsePotion2.started -= OnUsePotion2Started;
-        }
-
-        private void OnAimStarted(InputAction.CallbackContext context) {
-            _commandFactory.CreateCommandVoid<UnlockCameraInvokedCommand>().Execute();
         }
 
         public async Awaitable WaitForAnyKeyPressed(CancellationTokenSource cancellationTokenSource, bool canPressOverGui = false) {

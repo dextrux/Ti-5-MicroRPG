@@ -13,6 +13,7 @@ public class WorldCameraView : MonoBehaviour
 
     public void SetNewTarget(Transform target) {
         _target = target;
+        _cineCam.Follow = _target;
     }
     
     public void UpdateCameraRotation(float mouseDeltaX, float deltaTime) {

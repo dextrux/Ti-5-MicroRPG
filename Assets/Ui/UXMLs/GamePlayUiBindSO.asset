@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bead58a9cb39d4459f320db359aff58, type: 3}
+  m_Name: GamePlayUiBindSO
+  m_EditorClassIdentifier: 
+  ActualBosshealthPercent: 64.9
+  PreviewBossHealthPercent: 67.5
+  ActualBossLife: 37
+  ActualPlayerLifePercent: 92.9
+  PreviewPlayerLifePercent: 73.7
+  ActualPlayerHealth: 67
+  PlayerActionPoints: 92
+  Skill1Cost: 15
+  Skill2Cost: 40
+  Skill3Cost: 46
+  Skill1Name: qweqw
+  Skill2Name: sad
+  Skill3Name: zxx

@@ -1,20 +1,20 @@
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Skills {
-    class AbilityExecutor : MonoBehaviour {
+    class AbilityExecutor {
         AbilityData _abilityData;
         GameObject _target;
+        GameObject _caster;
 
-        public AbilityExecutor(AbilityData abilityData, GameObject target) {
+        public AbilityExecutor(AbilityData abilityData, GameObject target, GameObject caster) {
             _abilityData = abilityData;
             _target = target;
+            _caster = caster;
         }
 
         public void ExecuteAll(GameObject caster, GameObject target) {
-            if (_abilityData == null || _abilityData.effects == null) return;
-            for (int i = 0; i < _abilityData.effects.Count; i++) {
-                IAbilityEffect effect = _abilityData.effects[i];
-                effect?.Execute(caster, target);
+            foreach (AbilityEffect effect in _abilityData.effects) {
+                effect.Execute(_caster, target);
             }
         }
 

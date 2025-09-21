@@ -1,4 +1,3 @@
-using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Echo {
@@ -9,9 +8,10 @@ namespace Logic.Scripts.GameDomain.MVC.Echo {
             _echoViewPrefab = echoViewPrefab;
         }
 
-        public EchoView CreateEcho(AbilityData abilityData) {
-            EchoView echo = Object.Instantiate(_echoViewPrefab);
-            echo.SetAbilityToCast(abilityData);
+        public EchoView CreateEcho(AbilityView abilityView, int castTime, Transform referenceTransform) {
+            EchoView echo = Object.Instantiate(_echoViewPrefab, referenceTransform.position, referenceTransform.rotation);
+            echo.SetAbilityToCast(abilityView);
+            echo.CastTime(castTime);
             return echo;
         }
     }

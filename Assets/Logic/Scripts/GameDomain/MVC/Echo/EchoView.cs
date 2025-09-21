@@ -1,4 +1,3 @@
-using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Echo {
@@ -6,11 +5,16 @@ namespace Logic.Scripts.GameDomain.MVC.Echo {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private float _rotationSpeed;
         private Vector3 dir;
-        public AbilityData AbilityToCast { get; private set; }
+        public AbilityView AbilityToCast { get; private set; }
         public int TimeToCast { get; private set; }
+        [field: SerializeField] public Transform CastPosition { get; private set; }
 
-        public void SetAbilityToCast(AbilityData ability) {
+        public void SetAbilityToCast(AbilityView ability) {
+            AbilityToCast = ability;
+        }
 
+        public void CastTime(int castTime) {
+            TimeToCast = castTime;
         }
 
         public void LookAt(Vector3 lookpoint) {
@@ -18,7 +22,5 @@ namespace Logic.Scripts.GameDomain.MVC.Echo {
             Quaternion rotate = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotate, Time.fixedDeltaTime * _rotationSpeed);
         }
-
-
     }
 }

@@ -17,7 +17,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private NaraView _naraView;
         private readonly NaraView _naraViewPrefab;
         private readonly NaraData _naraData;
-        //private readonly NaraConfigurationSO _naraConfiguration;
         private readonly NaraMovementController _naraMovementController;
 
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
@@ -39,6 +38,24 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public void ManagedFixedUpdate() {
 
         }
+
+
+
+
+        private Vector3 GetMouseWorld() {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit)) {
+                return hit.point;
+            }
+
+            return Camera.main.transform.forward * 60;
+        }
+
+
+
+
 
         public void DisableCallbacks() {
             _naraView.RemoveAllCallbacks();

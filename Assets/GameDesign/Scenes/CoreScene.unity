@@ -664,7 +664,7 @@ MonoBehaviour:
   _cineCam: {fileID: 330585550}
   _target: {fileID: 0}
   _velocidade: 50
-  _horizontalAngle: 0
+  _orbital: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Core.Mvc.WorldCamera;
-using Logic.Scripts.Services.Logger.Base;
 
 public class DeactivateCamInputCommand : BaseCommand, ICommandVoid
 {
@@ -13,7 +12,6 @@ public class DeactivateCamInputCommand : BaseCommand, ICommandVoid
 
     public void Execute()
     {
-        LogService.Log("Cam released");
         _iWorldCameraController.LockCameraRotate();
     }
 }

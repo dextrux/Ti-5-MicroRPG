@@ -151,72 +151,72 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         
         private void OnUsePotion2Canceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnUsePotion1Canceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnUseAbility3Canceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnUseAbility2Canceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnUseAbility1Canceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnRotateCamCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnResetTurnCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnPauseCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnPassTurnCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnMoveCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnInteractCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnInspectCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnCreateCopy2Canceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnCreateCopy1Canceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void OnActivateCamCanceled(InputAction.CallbackContext context)

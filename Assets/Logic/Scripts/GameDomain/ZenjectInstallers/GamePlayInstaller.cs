@@ -36,7 +36,7 @@ public class GamePlayInstaller : MonoInstaller {
         //Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         //Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
-        Container.BindInterfacesTo<AbilityController>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<AbilityController>().AsSingle().WithArguments(_skillSet1, _skillSet2, _skillSet3).NonLazy();
 
         Container.BindInterfacesTo<BossController>().AsSingle().WithArguments(_bossViewPrefab, _bossConfiguration).NonLazy();
         Container.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();

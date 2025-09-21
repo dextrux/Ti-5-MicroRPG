@@ -1,4 +1,5 @@
 using Logic.Scripts.Services.CommandFactory;
+using System.Linq;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Abilitys {
@@ -16,6 +17,10 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             _abilitySet2 = abilitieSet2;
             _abilitySet3 = abilitieSet3;
             _activeSet = abilitieSet1;
+            foreach(AbilityView view in _activeSet) {
+                Debug.Log(view.name);
+            }
+            if (_activeSet.Count() == 0) Debug.Log("Zerado irmão");
         }
 
         public void ChangeActiveSet(int newIndexToActive) {

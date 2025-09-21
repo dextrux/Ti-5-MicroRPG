@@ -5,7 +5,7 @@ public class UseAbility2InputCommand : BaseCommand, ICommandVoid
 {
     private IAbilityController _abilityController;
     private INaraController _naraController;
-    private const int TWO_INT_CONST = 3;
+    private const int TWO_INT_CONST = 2;
     public override void ResolveDependencies()
     {
         _abilityController = _diContainer.Resolve<IAbilityController>();
@@ -15,5 +15,6 @@ public class UseAbility2InputCommand : BaseCommand, ICommandVoid
     public void Execute()
     {
         _abilityController.CreateAbility(_naraController.NaraSkillSpotTransform, TWO_INT_CONST);
+        return;
     }
 }

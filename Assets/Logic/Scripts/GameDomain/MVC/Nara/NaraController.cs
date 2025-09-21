@@ -5,7 +5,7 @@ using Logic.Scripts.Services.UpdateService;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
-    public class NaraController : INaraController, IFixedUpdatable {
+    public class NaraController : INaraController, IFixedUpdatable, IEffectable {
         private readonly IUpdateSubscriptionService _updateSubscriptionService;
         private readonly IAudioService _audioService;
         private readonly ICommandFactory _commandFactory;
@@ -85,6 +85,54 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public void AddShield(int value) {
             _naraData.AddShield(value);
             //Invocar command de receber escudo
+        }
+
+        public void TakeDamagePerTurn(int damageAmount, int duration) {
+
+        }
+
+        public void HealPerTurn(int healAmount, int duration) {
+
+        }
+
+        public void AddShieldPerTurn(int value, int duration) {
+
+        }
+
+        public void Stun(int value) {
+
+        }
+
+        public void SubtractActionPoints(int value) {
+
+        }
+
+        public void SubtractAllActionPoints(int value) {
+
+        }
+
+        public void ReduceActionPointsGain(int value) {
+
+        }
+
+        public void ReduceActionPointsGainPerTurn(int valueToSubtract, int duration) {
+
+        }
+
+        public void IncreaseActionPointsGainPerTurn(int valueToIncrease, int duration) {
+
+        }
+
+        public void AddActionPoints(int valueToIncrease) {
+
+        }
+
+        public void ReduceMovementPerTurn(int valueToSubtract, int duration) {
+
+        }
+
+        public void LimitActionPointUse(int value, int duration) {
+
         }
     }
 }

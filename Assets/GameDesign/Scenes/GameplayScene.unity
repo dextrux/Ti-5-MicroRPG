@@ -487,6 +487,8 @@ MonoBehaviour:
   _bossBehavior: {fileID: 11400000, guid: 03c0e426f8bb667479348687e2216e30, type: 2}
   _bossAbilityPrefabs:
   - {fileID: 1572582023646480518, guid: 8f5e8a1a0ef71c447b481e0c6621091a, type: 3}
+  - {fileID: 1572582023646480518, guid: 0e9d820ac13ddad45884287f6a67f90a, type: 3}
+  - {fileID: 1572582023646480518, guid: 4fece62e1ac9d3841a372209689b6667, type: 3}
   _gamePlayUiView: {fileID: 703431458}
   _skillSet1:
   - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}

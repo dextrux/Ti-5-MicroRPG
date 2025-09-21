@@ -18,6 +18,10 @@ public class GamePlayInstaller : MonoInstaller {
 
     [SerializeField] private GamePlayUiView _gamePlayUiView;
 
+    [SerializeField] private AbilityView[] _skillSet1;
+    [SerializeField] private AbilityView[] _skillSet2;
+    [SerializeField] private AbilityView[] _skillSet3;
+
     public override void InstallBindings() {
         BindServices();
         BindControllers();

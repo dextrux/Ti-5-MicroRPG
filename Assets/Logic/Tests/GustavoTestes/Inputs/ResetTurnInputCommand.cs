@@ -1,4 +1,5 @@
 using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.Services.Logger.Base;
 
 public class ResetTurnInputCommand : BaseCommand, ICommandVoid
 {
@@ -9,6 +10,6 @@ public class ResetTurnInputCommand : BaseCommand, ICommandVoid
 
     public void Execute()
     {
-        //Executa a ação do input
+        LogService.Log("Reset Turn pressed");
     }
 }

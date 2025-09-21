@@ -1,4 +1,5 @@
 using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.Services.Logger.Base;
 
 public class CreateCopy1InputCommand : BaseCommand, ICommandVoid
 {
@@ -11,6 +12,6 @@ public class CreateCopy1InputCommand : BaseCommand, ICommandVoid
 
     public void Execute()
     {
-        //Executa a ação do input
+        LogService.Log("Copy1 pressed");
     }
 }

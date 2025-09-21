@@ -1,4 +1,5 @@
 using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.Services.Logger.Base;
 
 public class InspectInputCommand : BaseCommand, ICommandVoid
 {
@@ -9,6 +10,6 @@ public class InspectInputCommand : BaseCommand, ICommandVoid
 
     public void Execute()
     {
-        //Executa a ação do input
+        LogService.Log("Inspect pressed");
     }
 }

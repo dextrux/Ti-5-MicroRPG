@@ -4,8 +4,6 @@ using Logic.Scripts.Utils;
 using System.Threading;
 using UnityEngine.InputSystem;
 using UnityEngine;
-using Logic.Scripts.GameDomain.Commands;
-using System;
 
 namespace Logic.Scripts.GameDomain.GameInputActions {
     public class GameInputActionsController : IGameInputActionsController {
@@ -58,7 +56,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
         private void OnUseAbility3Started(InputAction.CallbackContext obj)
         {
-            _commandFactory.CreateCommandVoid<UseAbility3InputCommand>();
+            _commandFactory.CreateCommandVoid<UseAbility3InputCommand>().Execute();
         }
 
         private void OnUseAbility2Started(InputAction.CallbackContext obj)

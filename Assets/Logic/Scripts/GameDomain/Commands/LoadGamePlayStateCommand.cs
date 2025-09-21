@@ -3,6 +3,8 @@ using Logic.Scripts.GameDomain.GameInputActions;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.Services.Logger.Base;
+using Logic.Scripts.Services.UpdateService;
 using System.Threading;
 using UnityEngine;
 
@@ -18,6 +20,7 @@ namespace Logic.Scripts.GameDomain.Commands {
         private ICommandFactory _commandFactory;
         private IWorldCameraController _worldCameraController;
         private IGameInputActionsController _gameInputActionsController;
+        private IUpdateSubscriptionService _updateSubscriptionService;
 
         private GamePlayInitatorEnterData _enterData;
 
@@ -34,11 +37,12 @@ namespace Logic.Scripts.GameDomain.Commands {
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
+            _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
             _naraController.InitEntryPoint();
-            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform);
+            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _gameInputActionsController.EnableInputs();
             _gameInputActionsController.RegisterAllInputListeners();
             return;

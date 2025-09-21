@@ -11,19 +11,23 @@ public class NaraMovementController : MonoBehaviour, IMovement
     private ActionPointsService _actionPointsService;
     private int extraMovementSpaceCost = 2;
 
-    public NaraMovementController(NaraConfigurationSO naraSO, Rigidbody rigidbody)
+    public NaraMovementController(NaraConfigurationSO naraSO)
     {
-        _rigidbody = rigidbody;
-        _rigidbody.useGravity = false;
-        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-        _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         movementRadius = naraSO.InitialMovementDistance;
     }
 
     public void SetNara(NaraView naraView, Vector3 naraPosition)
     {
 
+    }
+
+    public void SetNaraRigidbody(Rigidbody rigidbody)
+    {
+        _rigidbody = rigidbody;
+        _rigidbody.useGravity = false;
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
 
     public void Jump(float jumpForce, float gravity)

@@ -176,7 +176,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
         private void OnRotateCamCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void OnResetTurnCanceled(InputAction.CallbackContext context)
@@ -196,7 +196,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
         private void OnMoveCanceled(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void OnInteractCanceled(InputAction.CallbackContext context)

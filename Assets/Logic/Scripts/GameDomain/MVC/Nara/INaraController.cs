@@ -5,6 +5,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         GameObject NaraViewGO { get; }
 
+        NaraMovementController NaraMove { get; }
+
         void InitEntryPoint();
         void CreateNara();
         void ResetController();

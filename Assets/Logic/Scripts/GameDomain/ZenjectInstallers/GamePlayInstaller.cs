@@ -36,9 +36,7 @@ public class GamePlayInstaller : MonoInstaller {
 
     private void BindControllers() {
         Container.BindInterfacesTo<NaraController>().AsSingle().WithArguments(_naraViewPrefab, _naraConfiguration).NonLazy();
-        //Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
-        //Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
         Container.BindInterfacesTo<AbilityController>().AsSingle().WithArguments(_skillSet1, _skillSet2, _skillSet3).NonLazy();
 
         Container.BindInstance(_bossBehavior);

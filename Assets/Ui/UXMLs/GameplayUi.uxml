@@ -1,5 +1,5 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement name="Main-Container" style="flex-grow: 1;">
+    <engine:VisualElement name="Main-Container" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" style="flex-grow: 1;">
         <engine:VisualElement name="Header-Container" style="flex-grow: 1; height: 15%; flex-direction: row;">
             <engine:Button style="border-top-left-radius: 1493px; border-top-right-radius: 1493px; border-bottom-right-radius: 1493px; border-bottom-left-radius: 1493px; -unity-background-scale-mode: stretch-to-fill; width: 10%; visibility: hidden;" />
             <engine:VisualElement style="flex-grow: 1; width: 15%;" />
@@ -7,8 +7,16 @@
                 <engine:VisualElement name="BossLife-Bar-Continaer" style="flex-grow: 1; height: 80%; padding-top: 16px; padding-right: 16px; padding-bottom: 16px; padding-left: 16px; visibility: visible;">
                     <engine:VisualElement style="flex-grow: 1; background-color: rgb(41, 41, 41); border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; visibility: visible;">
                         <engine:VisualElement style="flex-grow: 1; background-color: rgb(84, 75, 75); width: 100%; height: 100%; border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; overflow: hidden;">
-                            <engine:VisualElement name="Actual-Boss-Life-Bar" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" style="flex-grow: 1; background-color: rgb(118, 35, 35); width: 80%; height: 100%; position: absolute; min-width: 0; max-width: 100%;" />
-                            <engine:VisualElement name="Preview-Boss-Life-Bar" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" style="flex-grow: 1; background-color: rgb(180, 26, 26); width: 72%; height: 100%; position: absolute; min-width: 0; max-width: 100%;" />
+                            <engine:VisualElement name="Actual-Boss-Life-Bar" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" style="flex-grow: 1; background-color: rgb(118, 35, 35); width: 80%; height: 100%; position: absolute; min-width: 0; max-width: 100%;">
+                                <Bindings>
+                                    <engine:DataBinding property="style.width" binding-mode="ToTarget" data-source-path="_actualBosshealthPercent" />
+                                </Bindings>
+                            </engine:VisualElement>
+                            <engine:VisualElement name="Preview-Boss-Life-Bar" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" style="flex-grow: 1; background-color: rgb(180, 26, 26); width: 72%; height: 100%; position: absolute; min-width: 0; max-width: 100%;">
+                                <Bindings>
+                                    <engine:DataBinding property="style.width" binding-mode="ToTarget" data-source-path="_previewBossHealthPercent" />
+                                </Bindings>
+                            </engine:VisualElement>
                         </engine:VisualElement>
                     </engine:VisualElement>
                 </engine:VisualElement>
@@ -25,7 +33,7 @@
                 </engine:VisualElement>
                 <engine:Label name="Boss-Health-label" style="position: absolute; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); right: -9%; top: 9%; background-color: rgb(84, 10, 10); border-top-left-radius: 21%; border-top-right-radius: 21%; border-bottom-right-radius: 21%; border-bottom-left-radius: 21%; border-top-width: 12px; border-right-width: 12px; border-bottom-width: 12px; border-left-width: 12px; width: 15%; height: 54%; -unity-text-align: middle-center; color: rgb(238, 233, 233); font-size: 53%;">
                     <Bindings>
-                        <engine:DataBinding property="text" binding-mode="ToTarget" update-trigger="EveryUpdate" />
+                        <engine:DataBinding property="text" binding-mode="ToTarget" data-source-path="_actualBossLife" />
                     </Bindings>
                 </engine:Label>
             </engine:VisualElement>
@@ -43,34 +51,34 @@
                     <engine:Button text="Button" name="Ability-Slot1-btn" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 80%; width: 30%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 279px; border-top-right-radius: 279px; border-bottom-right-radius: 279px; border-bottom-left-radius: 279px; align-items: center; justify-content: flex-end;">
                         <engine:Label text="1" style="background-color: rgb(60, 60, 60); color: rgb(233, 233, 233); border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; width: 35%;" />
                         <Bindings>
-                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_skill1Name" />
                         </Bindings>
                     </engine:Button>
                     <engine:Button text="Button" name="Ability-Slot2-btn" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 80%; width: 30%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 279px; border-top-right-radius: 279px; border-bottom-right-radius: 279px; border-bottom-left-radius: 279px; justify-content: flex-end; align-items: center;">
                         <engine:Label text="1" style="background-color: rgb(60, 60, 60); color: rgb(233, 233, 233); border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; width: 35%;" />
                         <Bindings>
-                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_skill2Name" />
                         </Bindings>
                     </engine:Button>
                     <engine:Button text="Button" name="Ability-Slot3-btn" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 80%; width: 30%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 279px; border-top-right-radius: 279px; border-bottom-right-radius: 279px; border-bottom-left-radius: 279px; justify-content: flex-end; align-items: center; visibility: hidden; display: none;">
                         <engine:Label text="1" style="background-color: rgb(60, 60, 60); color: rgb(233, 233, 233); border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; width: 35%;" />
                         <Bindings>
-                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_skill3Name" />
                         </Bindings>
                     </engine:Button>
                     <engine:Label text="1" name="Ability-Slot1-Cost-label" style="background-color: rgb(60, 60, 60); color: rgb(233, 233, 233); border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; width: 10%; position: absolute; top: 0; left: 8%; height: 22%; -unity-text-align: middle-center;">
                         <Bindings>
-                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_skill2Cost" />
                         </Bindings>
                     </engine:Label>
                     <engine:Label text="1" name="Ability-Slot2-Cost-label" style="background-color: rgb(60, 60, 60); color: rgb(233, 233, 233); border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; width: 10%; position: absolute; top: 0; left: 60%; height: 22%; -unity-text-align: middle-center;">
                         <Bindings>
-                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_skill2Cost" />
                         </Bindings>
                     </engine:Label>
                     <engine:Label text="1" name="Ability-Slot3-Cost-label" style="background-color: rgb(60, 60, 60); color: rgb(233, 233, 233); border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; width: 10%; position: absolute; top: 0; left: 68%; height: 22%; -unity-text-align: middle-center; display: none;">
                         <Bindings>
-                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                            <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_Skill3Cost" />
                         </Bindings>
                     </engine:Label>
                 </engine:VisualElement>
@@ -97,12 +105,12 @@
                         <engine:VisualElement style="flex-grow: 1; background-color: rgb(84, 75, 75); width: 100%; height: 100%; border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; overflow: hidden;">
                             <engine:VisualElement name="Actual-Player-Life-Bar" style="flex-grow: 1; background-color: rgb(35, 118, 37); width: 80%; height: 100%; position: absolute; min-width: 0; max-width: 100%;">
                                 <Bindings>
-                                    <engine:DataBinding property="style.width" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                                    <engine:DataBinding property="style.width" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_actualPlayerLifePercent" />
                                 </Bindings>
                             </engine:VisualElement>
                             <engine:VisualElement name="Preview-Player-Life-Bar" style="flex-grow: 1; background-color: rgb(30, 180, 26); width: 72%; height: 100%; position: absolute; min-width: 0; max-width: 100%;">
                                 <Bindings>
-                                    <engine:DataBinding property="style.width" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                                    <engine:DataBinding property="style.width" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_previewPlayerLifePercent" />
                                 </Bindings>
                             </engine:VisualElement>
                         </engine:VisualElement>
@@ -110,7 +118,7 @@
                 </engine:VisualElement>
                 <engine:Label text="80&#x9;" name="Player-Health-label" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" style="position: absolute; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); right: -9%; top: 30%; background-color: rgb(10, 84, 43); border-top-left-radius: 21%; border-top-right-radius: 21%; border-bottom-right-radius: 21%; border-bottom-left-radius: 21%; border-top-width: 12px; border-right-width: 12px; border-bottom-width: 12px; border-left-width: 12px; width: 15%; height: 54%; -unity-text-align: middle-center; color: rgb(238, 233, 233); font-size: 53%;">
                     <Bindings>
-                        <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                        <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_actualPlayerHealth" />
                     </Bindings>
                 </engine:Label>
             </engine:VisualElement>
@@ -118,7 +126,7 @@
             <engine:VisualElement style="flex-grow: 1; width: 10%; align-items: flex-end; justify-content: space-around; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
                 <engine:Label text="10" name="Action-Point-Count-label" style="height: 75%; width: 80%; background-color: rgb(154, 154, 154); border-top-left-radius: 350%; border-top-right-radius: 350%; border-bottom-right-radius: 350%; border-bottom-left-radius: 350%; -unity-text-align: middle-center; font-size: 40%;">
                     <Bindings>
-                        <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" />
+                        <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_playerActionPoints" />
                     </Bindings>
                 </engine:Label>
                 <engine:Button name="Next-Turn-btn" text="Next turn" style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; -unity-background-scale-mode: stretch-to-fill; width: 80%; height: 20%;">

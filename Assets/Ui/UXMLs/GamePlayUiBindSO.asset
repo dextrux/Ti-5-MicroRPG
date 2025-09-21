@@ -12,16 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bead58a9cb39d4459f320db359aff58, type: 3}
   m_Name: GamePlayUiBindSO
   m_EditorClassIdentifier: 
-  ActualBosshealthPercent: 64.9
-  PreviewBossHealthPercent: 67.5
-  ActualBossLife: 37
-  ActualPlayerLifePercent: 92.9
-  PreviewPlayerLifePercent: 73.7
-  ActualPlayerHealth: 67
-  PlayerActionPoints: 92
-  Skill1Cost: 15
-  Skill2Cost: 40
-  Skill3Cost: 46
-  Skill1Name: qweqw
-  Skill2Name: sad
-  Skill3Name: zxx
+  _actualBosshealthPercent:
+    m_Value: 71.6
+    m_Unit: 1
+  _previewBossHealthPercent:
+    m_Value: 41.9
+    m_Unit: 1
+  _actualBossLife: 87
+  _actualPlayerLifePercent:
+    m_Value: 87
+    m_Unit: 1
+  _previewPlayerLifePercent:
+    m_Value: 80.38
+    m_Unit: 1
+  _actualPlayerHealth: 4
+  _playerActionPoints: 6
+  _skill1Cost: 45
+  _skill2Cost: 21
+  _skill3Cost: 2
+  _skill1Name: asdas
+  _skill2Name: sadas
+  _skill3Name: sad

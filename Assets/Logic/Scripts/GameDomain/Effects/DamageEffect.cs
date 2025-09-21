@@ -8,7 +8,7 @@ namespace Assets.Logic.Scripts.GameDomain.Effects {
         public int amount;
 
         public override void Execute(IEffectable caster, IEffectable target) {
-            Debug.Log($"{caster} dealt {amount} damage to {target}");
+            target.TakeDamage(amount);
         }
     }
 }

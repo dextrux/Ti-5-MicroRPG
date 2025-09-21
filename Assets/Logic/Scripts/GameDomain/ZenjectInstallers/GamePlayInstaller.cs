@@ -3,6 +3,7 @@ using Logic.Scripts.GameDomain.GameplayInitiator;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Boss;
 using Logic.Scripts.Turns;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Zenject;
 using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Ui;
@@ -15,6 +16,8 @@ public class GamePlayInstaller : MonoInstaller {
 
     [SerializeField] private BossView _bossViewPrefab;
     [SerializeField] private BossConfigurationSO _bossConfiguration;
+    [SerializeField] private BossBehaviorSO _bossBehavior;
+    [SerializeField] private AbilityView[] _bossAbilityPrefabs;
 
     [SerializeField] private GamePlayUiView _gamePlayUiView;
 
@@ -38,7 +41,9 @@ public class GamePlayInstaller : MonoInstaller {
         //Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
         Container.BindInterfacesTo<AbilityController>().AsSingle().NonLazy();
 
-        Container.BindInterfacesTo<BossController>().AsSingle().WithArguments(_bossViewPrefab, _bossConfiguration).NonLazy();
+        Container.BindInstance(_bossBehavior);
+        Container.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments(_bossAbilityPrefabs).NonLazy();
+        Container.BindInterfacesTo<BossController>().AsSingle().WithArguments(_bossViewPrefab, _bossConfiguration, _bossBehavior).NonLazy();
         Container.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();
     }
 }

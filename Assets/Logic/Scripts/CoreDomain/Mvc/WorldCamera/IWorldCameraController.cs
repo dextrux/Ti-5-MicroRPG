@@ -6,5 +6,6 @@ namespace Logic.Scripts.Core.Mvc.WorldCamera {
         public void StopFollowTarget();
         public void UnlockCameraRotate();
         public void LockCameraRotate();
+        public void SetMouseDelta(Vector2 delta);
     }
 }

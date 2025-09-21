@@ -7,6 +7,7 @@ using Logic.Scripts.Services.Logger.Base;
 using Logic.Scripts.Services.UpdateService;
 using System.Threading;
 using UnityEngine;
+using Logic.Scripts.Turns;
 
 namespace Logic.Scripts.GameDomain.Commands {
     public class LoadGamePlayStateCommand : BaseCommand, ICommandAsync {
@@ -16,11 +17,12 @@ namespace Logic.Scripts.GameDomain.Commands {
         //private IGamePlayUiController _gamePlayUiController; Inializar a UI de gameplay
         private IAudioService _audioService;
         private INaraController _naraController;
-        //private GamePlayAudioClipsScriptableObject _gamePlayAudioClipsScriptableObject; Lista de audios específicos do gameplay
+        //private GamePlayAudioClipsScriptableObject _gamePlayAudioClipsScriptableObject; Lista de audios especï¿½ficos do gameplay
         private ICommandFactory _commandFactory;
         private IWorldCameraController _worldCameraController;
         private IGameInputActionsController _gameInputActionsController;
         private IUpdateSubscriptionService _updateSubscriptionService;
+        private ITurnEventBus _turnEventBus;
 
         private GamePlayInitatorEnterData _enterData;
 
@@ -38,6 +40,7 @@ namespace Logic.Scripts.GameDomain.Commands {
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
             _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
+            _turnEventBus = _diContainer.Resolve<ITurnEventBus>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
@@ -45,6 +48,8 @@ namespace Logic.Scripts.GameDomain.Commands {
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _gameInputActionsController.EnableInputs();
             _gameInputActionsController.RegisterAllInputListeners();
+            await Awaitable.NextFrameAsync();
+            _turnEventBus.Publish(new RequestEnterTurnModeSignal());
             return;
         }
     }

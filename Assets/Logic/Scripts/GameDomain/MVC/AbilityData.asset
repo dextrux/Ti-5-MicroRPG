@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: BaseAbility
+  m_Name: AbilityData
   m_EditorClassIdentifier: 
-  Name: Base 1
-  Description: Basic Skill
+  Name: 
+  Description: 
   animationClip: {fileID: 0}
-  castTime: 0.75
+  castTime: 1
   Effects: []
   references:
     version: 2

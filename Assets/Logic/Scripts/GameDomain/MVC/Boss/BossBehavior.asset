@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c0c6085d048acf4fb600bcd04cc02b7, type: 3}
+  m_Name: BossBehavior
+  m_EditorClassIdentifier: 
+  _highHpAbilities:
+  - {fileID: 11400000, guid: 9634ccb787d94444281e9558a9a35bb2, type: 2}
+  - {fileID: 11400000, guid: d03618fbb46ed494982db5982e741524, type: 2}
+  - {fileID: 11400000, guid: 23c4c7bee83059b4aa3714df3c0957ae, type: 2}
+  _highHpDelays: 010000000200000003000000
+  _lowHpAbilities:
+  - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
+  - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
+  - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
+  _lowHpDelays: 010000000200000003000000
+  _movePattern:
+  - Kind: 1
+    Distance: 1
+    Offset: {x: 0, y: 0, z: 0}
+  - Kind: 0
+    Distance: 3
+    Offset: {x: 0, y: 0, z: 0}
+  - Kind: 2
+    Distance: 5
+    Offset: {x: -2, y: 0, z: -1}
+  _fallbackStepDistance: 1
+  _stepDistance: 1

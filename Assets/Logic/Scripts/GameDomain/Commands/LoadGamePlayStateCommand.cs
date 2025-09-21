@@ -35,6 +35,7 @@ namespace Logic.Scripts.GameDomain.Commands {
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
             _naraController.InitEntryPoint();
+            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform);
             return;
         }
     }

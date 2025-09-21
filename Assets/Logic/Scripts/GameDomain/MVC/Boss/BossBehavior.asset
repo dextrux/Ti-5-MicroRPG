@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: BossBehavior
   m_EditorClassIdentifier: 
   _highHpAbilities:
-  - {fileID: 11400000, guid: 9634ccb787d94444281e9558a9a35bb2, type: 2}
-  - {fileID: 11400000, guid: d03618fbb46ed494982db5982e741524, type: 2}
-  - {fileID: 11400000, guid: 23c4c7bee83059b4aa3714df3c0957ae, type: 2}
+  - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
+  - {fileID: 11400000, guid: 9e6df0a25ade6724b8ce5b2bf7fc8c87, type: 2}
+  - {fileID: 11400000, guid: 7e15115e27e715b47a15ec54509cda79, type: 2}
   _highHpDelays: 010000000200000003000000
   _lowHpAbilities:
   - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
-  - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
-  - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
-  _lowHpDelays: 010000000200000003000000
+  - {fileID: 11400000, guid: 9e6df0a25ade6724b8ce5b2bf7fc8c87, type: 2}
+  - {fileID: 11400000, guid: 7e15115e27e715b47a15ec54509cda79, type: 2}
+  _lowHpDelays: 010000000100000001000000
   _movePattern:
   - Kind: 1
     Distance: 1

@@ -1,21 +1,17 @@
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Core.Mvc.WorldCamera;
-using Logic.Scripts.Services.Logger.Base;
 
-public class ActivateCamInputCommand : BaseCommand, ICommandVoid
+public class DeactivateCamInputCommand : BaseCommand, ICommandVoid
 {
     private IWorldCameraController _iWorldCameraController;
-    private GameInputActions _gameInputActions;
 
     public override void ResolveDependencies()
     {
         _iWorldCameraController = _diContainer.Resolve<IWorldCameraController>();
-        _gameInputActions = _diContainer.Resolve<GameInputActions>();
     }
 
     public void Execute()
     {
-        LogService.Log("Cam pressed");
-        _iWorldCameraController.UnlockCameraRotate();
+        _iWorldCameraController.LockCameraRotate();
     }
 }

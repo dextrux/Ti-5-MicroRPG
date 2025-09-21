@@ -30,11 +30,6 @@ namespace Logic.Scripts.Turns.Ui
                 _eventBus.Publish(new RequestExitTurnModeSignal());
             }
 
-            if (Input.GetKeyDown(_playerActionDoneKey))
-            {
-                _eventBus.Publish(new PlayerActionCompletedSignal());
-            }
-
             if (Input.GetKeyDown(_skipTurnKey))
             {
                 _eventBus.Publish(new TurnSkippedSignal());

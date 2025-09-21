@@ -12,6 +12,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private readonly IResourcesLoaderService _resourcesLoaderService;
 
         public GameObject NaraViewGO => _naraView.gameObject;
+        public Transform NaraSkillSpotTransform => _naraView.SkillSpawnSpot;
 
         private NaraView _naraView;
         private readonly NaraView _naraViewPrefab;

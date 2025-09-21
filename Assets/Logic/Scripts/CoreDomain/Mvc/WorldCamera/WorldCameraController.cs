@@ -10,6 +10,8 @@ namespace Logic.Scripts.Core.Mvc.WorldCamera {
         private readonly WorldCameraView _worldCameraView;
         private IUpdateSubscriptionService _updateSubscriptionService;
 
+        public bool IsRotateEnabled => _rotateEnabled;
+
         public WorldCameraController(WorldCameraView worldCameraView) {
             _worldCameraView = worldCameraView;
         }

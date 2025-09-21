@@ -661,7 +661,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd8f7ddb373c8349b8323de91f45973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cineCam: {fileID: 0}
+  _cineCam: {fileID: 330585550}
   _target: {fileID: 0}
   _velocidade: 50
   _horizontalAngle: 0

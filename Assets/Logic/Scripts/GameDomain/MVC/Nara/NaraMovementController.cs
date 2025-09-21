@@ -72,7 +72,7 @@ public class NaraMovementController : MonoBehaviour, IMovement
         Vector3 rotate = new Vector3(_rigidbody.linearVelocity.x, 0f, _rigidbody.linearVelocity.z);
         if (rotate.sqrMagnitude > 0.0001f)
         {
-            Quaternion finalRotation = Quaternion.LookRotation(rot.normalized, Vector3.up);
+            Quaternion finalRotation = Quaternion.LookRotation(rotate.normalized, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.fixedDeltaTime * rotationForce);
         }
     }

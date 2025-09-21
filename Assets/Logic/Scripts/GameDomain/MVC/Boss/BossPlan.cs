@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Logic.Scripts.GameDomain.MVC.Skills;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss
 {

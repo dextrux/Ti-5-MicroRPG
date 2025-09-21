@@ -11,6 +11,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private readonly ICommandFactory _commandFactory;
         private readonly IResourcesLoaderService _resourcesLoaderService;
 
+        public GameObject NaraViewGO => _naraView.gameObject;
+
         private NaraView _naraView;
         private readonly NaraView _naraViewPrefab;
         private readonly NaraData _naraData;
@@ -56,7 +58,9 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         private void OnNaraParticleCollisionEnter(ParticleSystem particleSystem) {
-            //Criar Comando Nara Hit Particula
+            if (particleSystem.gameObject.TryGetComponent<AbilityView>(out AbilityView skillView)) {
+                _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData)).Execute();
+            }
         }
 
         public void InitEntryPoint() {

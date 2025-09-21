@@ -2,7 +2,7 @@ using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.ResourcesLoaderService;
 using Logic.Scripts.Services.UpdateService;
-using Logic.Scripts.GameDomain.MVC.Skills;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 using Zenject;
 

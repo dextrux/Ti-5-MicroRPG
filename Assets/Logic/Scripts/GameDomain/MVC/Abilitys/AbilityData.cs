@@ -2,17 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Logic.Scripts.GameDomain.MVC.Skills {
+namespace Logic.Scripts.GameDomain.MVC.Abilitys {
     [CreateAssetMenu(fileName = "AbilityData", menuName = "ScriptableObjects/AbilityData")]
     public class AbilityData : ScriptableObject {
         public string Name;
         public string Description;
         public AnimationClip animationClip;
         [Range(0.1f, 4f)] public float castTime = 2f;
-        //Adicionar VFXController
-        //Adicionar AbilityModifier
-        //Adicionar ShapeCalculator
+        //To-Do Adicionar VFXController
+        //To-Do Adicionar AbilityModifier
+        //To-Do Adicionar ShapeCalculator
+        //To-Do Adicionar audioClip quando tivermos
 
-        [SerializeReference] public List<AbilityEffect> effects;
+        [SerializeReference] public List<AbilityEffect> Effects;
     }
 }

@@ -1,5 +1,5 @@
 using Logic.Scripts.Services.CommandFactory;
-using Logic.Scripts.GameDomain.MVC.Skills;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 using Zenject;
 

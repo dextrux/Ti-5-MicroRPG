@@ -7,8 +7,8 @@ namespace Assets.Logic.Scripts.GameDomain.Effects {
     public class DamageEffect : AbilityEffect {
         public int amount;
 
-        public override void Execute(GameObject caster, GameObject target) {
-            Debug.Log($"{caster.name} dealt {amount} damage to {target.name}");
+        public override void Execute(IEffectable caster, IEffectable target) {
+            Debug.Log($"{caster} dealt {amount} damage to {target}");
         }
     }
 }

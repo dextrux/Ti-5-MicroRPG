@@ -4,8 +4,8 @@ using UnityEngine;
 public class SkillHitCommandData
 {
     public AbilityData AbilityData;
-    public GameObject Caster;
-    public GameObject Target;
+    public IEffectable Caster;
+    public IEffectable Target;
 
     public SkillHitCommandData(AbilityData abilityData) {
         AbilityData = abilityData;

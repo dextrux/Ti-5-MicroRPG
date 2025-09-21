@@ -25,7 +25,7 @@ public class SkillHitNaraCommand : BaseCommand, ICommandVoid {
     public void Execute() {
         if (_commandData != null) {
             foreach (AbilityEffect effect in _commandData.AbilityData.Effects) {
-                effect.Execute(_commandData.Caster, _naraController.NaraViewGO);
+                effect.Execute(_commandData.Caster, (NaraController)_naraController);
             }
         }
         //To-Do tocar som 

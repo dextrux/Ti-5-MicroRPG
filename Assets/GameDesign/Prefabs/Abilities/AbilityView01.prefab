@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <AbilityData>k__BackingField: {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
+  timeToDestoy: 2

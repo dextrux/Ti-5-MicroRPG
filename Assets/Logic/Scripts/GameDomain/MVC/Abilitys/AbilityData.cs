@@ -7,6 +7,8 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
     public class AbilityData : ScriptableObject {
         public string Name;
         public string Description;
+        public int Cost;
+        public GameObject HitPreviewPrefab;
         public AnimationClip animationClip;
         [Range(0.1f, 4f)] public float castTime = 2f;
         //To-Do Adicionar VFXController

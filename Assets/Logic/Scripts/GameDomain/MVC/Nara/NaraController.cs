@@ -39,24 +39,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         }
 
-
-
-
-        private Vector3 GetMouseWorld() {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit)) {
-                return hit.point;
-            }
-
-            return Camera.main.transform.forward * 60;
-        }
-
-
-
-
-
         public void DisableCallbacks() {
             _naraView.RemoveAllCallbacks();
         }
@@ -91,17 +73,14 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public void TakeDamage(int damageAmound) {
             _naraData.TakeDamage(damageAmound);
-            //Invocar command de tomar dano
         }
 
         public void Heal(int healAmount) {
             _naraData.Heal(healAmount);
-            //Invocar command de curar
         }
 
         public void AddShield(int value) {
             _naraData.AddShield(value);
-            //Invocar command de receber escudo
         }
 
         public void TakeDamagePerTurn(int damageAmount, int duration) {

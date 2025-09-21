@@ -14,7 +14,6 @@ public class UseAbility3InputCommand : BaseCommand, ICommandVoid
 
     public void Execute()
     {
-        _abilityController.CreateAbility(_naraController.NaraSkillSpotTransform, THREE_INT_CONST);
         return;
     }
 }

@@ -7,7 +7,6 @@ using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Zenject;
 using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Ui;
-using Logic.Scripts.GameDomain.MVC.Abilitys;
 
 public class GamePlayInstaller : MonoInstaller {
 
@@ -39,6 +38,7 @@ public class GamePlayInstaller : MonoInstaller {
         //Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         //Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
+        Container.BindInterfacesTo<CastController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<AbilityController>().AsSingle().WithArguments(_skillSet1, _skillSet2, _skillSet3).NonLazy();
 
         Container.BindInstance(_bossBehavior);

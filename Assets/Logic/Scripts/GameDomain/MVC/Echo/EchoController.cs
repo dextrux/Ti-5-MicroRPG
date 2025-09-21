@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Echo {
-    public class EchoController {
+    public class EchoController: IEchoController{
         private readonly List<EchoView> _echoViewList;
         private readonly EchoFactory _echoFactory;
         private readonly CommandFactory _commandFactory;

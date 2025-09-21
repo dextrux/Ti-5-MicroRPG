@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Abilitys {
-    [CreateAssetMenu(fileName = "AbilityData", menuName = "ScriptableObjects/AbilityData")]
+    [CreateAssetMenu(fileName = "AbilityData", menuName = "Scriptable Objects/Ability Data")]
     public class AbilityData : ScriptableObject {
         public string Name;
         public string Description;

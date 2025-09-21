@@ -4,6 +4,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
     public interface INaraController {
 
         GameObject NaraViewGO { get; }
+        Transform NaraSkillSpotTransform { get; }
 
         void InitEntryPoint();
         void CreateNara();

@@ -1,5 +1,6 @@
 using UnityEngine;
 
 public interface IAbilityController {
-    void CreateAbility(Transform referenceTransform, AbilityView abilityViewPrefab);
+    void ChangeActiveSet(int newIndexToActive);
+    void CreateAbility(Transform referenceTransform, int abilitySlotIndex);
 }

@@ -5,6 +5,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
     public class NaraView : MonoBehaviour {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
+        public Transform SkillSpawnSpot;
 
         private Action<Collision> _onCollisionEnter;
         private Action<Collider> _onTriggerEnter;

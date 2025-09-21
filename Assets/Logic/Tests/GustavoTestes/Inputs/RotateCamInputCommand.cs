@@ -1,5 +1,6 @@
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Core.Mvc.WorldCamera;
+using Logic.Scripts.Services.Logger.Base;
 using UnityEngine;
 
 public class RotateCamInputCommand : BaseCommand, ICommandVoid
@@ -15,6 +16,7 @@ public class RotateCamInputCommand : BaseCommand, ICommandVoid
 
     public void Execute()
     {
+        LogService.Log("Rotating Cam");
         Vector2 delta = _gameInputActions.Player.RotateCam.ReadValue<Vector2>();
         _iWorldCameraController.SetMouseDelta(delta);
     }

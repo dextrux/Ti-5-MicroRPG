@@ -5,6 +5,8 @@ using Logic.Scripts.GameDomain.MVC.Boss;
 using Logic.Scripts.Turns;
 using Zenject;
 using UnityEngine;
+using Logic.Scripts.GameDomain.MVC.Ui;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 
 public class GamePlayInstaller : MonoInstaller {
 
@@ -13,6 +15,8 @@ public class GamePlayInstaller : MonoInstaller {
 
     [SerializeField] private BossView _bossViewPrefab;
     [SerializeField] private BossConfigurationSO _bossConfiguration;
+
+    [SerializeField] private GamePlayUiView _gamePlayUiView;
 
     public override void InstallBindings() {
         BindServices();
@@ -27,7 +31,8 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<NaraController>().AsSingle().WithArguments(_naraViewPrefab, _naraConfiguration).NonLazy();
         //Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
-        //Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
+        Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
+        Container.BindInterfacesTo<AbilityController>().AsSingle().NonLazy();
 
         Container.BindInterfacesTo<BossController>().AsSingle().WithArguments(_bossViewPrefab, _bossConfiguration).NonLazy();
         Container.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();

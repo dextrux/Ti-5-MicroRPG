@@ -484,6 +484,7 @@ MonoBehaviour:
   _naraConfiguration: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}
   _bossViewPrefab: {fileID: 7540813036317866533, guid: 1216dee866539db43b72b19de06389b1, type: 3}
   _bossConfiguration: {fileID: 11400000, guid: c53b316a57f027e498cfcd5b31cdc99d, type: 2}
+  _gamePlayUiView: {fileID: 703431458}
 --- !u!4 &2129559430
 Transform:
   m_ObjectHideFlags: 0

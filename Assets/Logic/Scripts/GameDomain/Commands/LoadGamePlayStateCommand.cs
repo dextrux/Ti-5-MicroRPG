@@ -1,4 +1,5 @@
 using Logic.Scripts.Core.Mvc.WorldCamera;
+using Logic.Scripts.GameDomain.GameInputActions;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
@@ -16,6 +17,7 @@ namespace Logic.Scripts.GameDomain.Commands {
         //private GamePlayAudioClipsScriptableObject _gamePlayAudioClipsScriptableObject; Lista de audios específicos do gameplay
         private ICommandFactory _commandFactory;
         private IWorldCameraController _worldCameraController;
+        private IGameInputActionsController _gameInputActionsController;
 
         private GamePlayInitatorEnterData _enterData;
 
@@ -31,11 +33,14 @@ namespace Logic.Scripts.GameDomain.Commands {
             _naraController = _diContainer.Resolve<INaraController>();
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
+            _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
             _naraController.InitEntryPoint();
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform);
+            _gameInputActionsController.EnableInputs();
+            _gameInputActionsController.RegisterAllInputListeners();
             return;
         }
     }

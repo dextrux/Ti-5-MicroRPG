@@ -10,18 +10,19 @@ public class CastController : IUpdatable, ICastController {
     IActionPointsService _actionPointsService;
     AbilityView _currentAbilityView;
     GameObject HitPreviewGO;
+    LayerMask _layerMaskMouse;
 
     public CastController(IUpdateSubscriptionService updateSubscriptionService, ICommandFactory commandFactory,
-        IActionPointsService actionPointsService) {
+        IActionPointsService actionPointsService, LayerMask layerMaskMouse) {
         _updateSubscriptionService = updateSubscriptionService;
         _commandFactory = commandFactory;
         _actionPointsService = actionPointsService;
+        _layerMaskMouse = layerMaskMouse;
     }
 
     public void ManagedUpdate() {
         Vector3 mousePos = GetMouseWorld();
-        Vector3 rot = Quaternion.LookRotation(mousePos).eulerAngles;
-        HitPreviewGO.transform.eulerAngles = new Vector3(0, rot.y, 0);
+        HitPreviewGO.transform.rotation = Quaternion.LookRotation(new Vector3(mousePos.x,0,mousePos.z));
     }
 
     public bool TryUseAbility(AbilityView abilityView, Transform caster) {
@@ -44,10 +45,9 @@ public class CastController : IUpdatable, ICastController {
     }
 
     private Vector3 GetMouseWorld() {
-        RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out hit)) {
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _layerMaskMouse)) {
             return hit.point;
         }
 

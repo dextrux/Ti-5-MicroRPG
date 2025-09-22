@@ -54,7 +54,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         private void OnNaraTriggerEnter(Collider collider) {
-            //Criar Comando Nara Trigger
+            
         }
 
         private void OnNaraParticleCollisionEnter(ParticleSystem particleSystem) {

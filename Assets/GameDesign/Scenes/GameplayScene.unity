@@ -499,6 +499,9 @@ MonoBehaviour:
   _skillSet3:
   - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
   - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
+  _layerMaskMouse:
+    serializedVersion: 2
+    m_Bits: 23
 --- !u!4 &2129559430
 Transform:
   m_ObjectHideFlags: 0

@@ -89,16 +89,18 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
 
         private void DrawCircle()
         {
-            Vector3 center = new Vector3(movementCenter.x, transform.position.y, movementCenter.z);
+            Vector3[] points = new Vector3[segments];
 
-            for (int i = 0; i <= segments; i++)
+            for (int i = 0; i < segments; i++)
             {
                 float angle = (float)i / segments * 2 * Mathf.PI;
-                float x = Mathf.Cos(angle) * movementRadius;
-                float z = Mathf.Sin(angle) * movementRadius;
-                Vector3 pos = new Vector3(center.x + x, center.y, center.z + z);
-                _lineRenderer.SetPosition(i, pos);
+                float x = Mathf.Cos(angle) * movementRadius + movementCenter.x;
+                float z = Mathf.Sin(angle) * movementRadius + movementCenter.z;
+                points[i] = new Vector3(x, movementCenter.y, z);
             }
+
+            _lineRenderer.positionCount = segments;
+            _lineRenderer.SetPositions(points);
 
         }
 

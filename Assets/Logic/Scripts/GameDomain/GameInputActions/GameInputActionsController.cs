@@ -26,7 +26,8 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _gameInputActions.Disable();
         }
 
-        public void RegisterAllInputListeners() {
+        public void RegisterAllInputListeners()
+        {
             LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
             _gameInputActions.Player.ActivateCam.started += OnActivateCamStarted;
             _gameInputActions.Player.ActivateCam.canceled += OnActivateCamCanceled;
@@ -73,6 +74,13 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
             _gameInputActions.Player.UsePotion2.started += OnUsePotion2Started;
             _gameInputActions.Player.UsePotion2.canceled += OnUsePotion2Canceled;
+            
+            _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
+        }
+
+        private void OnMouseClickStarted(InputAction.CallbackContext context)
+        {
+            _commandFactory.CreateCommandVoid<MouseClickInputCommand>().Execute();
         }
 
         private void OnUsePotion2Started(InputAction.CallbackContext obj)
@@ -155,7 +163,8 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         private void OnCreateCopy1Canceled(InputAction.CallbackContext context) { }
         private void OnActivateCamCanceled(InputAction.CallbackContext context) { _commandFactory.CreateCommandVoid<DeactivateCamInputCommand>().Execute(); }
 
-        public void UnregisterAllInputListeners() {
+        public void UnregisterAllInputListeners()
+        {
             LogService.LogTopic("Unregister all input listeners", LogTopicType.Inputs);
             _gameInputActions.Player.ActivateCam.started -= OnActivateCamStarted;
             _gameInputActions.Player.ActivateCam.canceled -= OnActivateCamCanceled;
@@ -202,6 +211,8 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
             _gameInputActions.Player.UsePotion2.started -= OnUsePotion2Started;
             _gameInputActions.Player.UsePotion2.canceled -= OnUsePotion2Canceled;
+
+            _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
         }
 
         public async Awaitable WaitForAnyKeyPressed(CancellationTokenSource cancellationTokenSource, bool canPressOverGui = false) {

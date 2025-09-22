@@ -75,7 +75,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _gameInputActions.Player.UsePotion2.started += OnUsePotion2Started;
             _gameInputActions.Player.UsePotion2.canceled += OnUsePotion2Canceled;
             
-            _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
+            _gameInputActions.Player.MouseClick.started += OnMouseClickStarted;
         }
 
         private void OnMouseClickStarted(InputAction.CallbackContext context)

@@ -683,6 +683,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb71c3598f88264db7ab36c3651bbaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gamePlayUiBindSO: {fileID: 11400000, guid: e8d4fa4f31b9e0d40bd27b86b839d846, type: 2}
+  ActualBosshealthPercent:
+    m_Value: 100
+    m_Unit: 1
+  PreviewBossHealthPercent:
+    m_Value: 100
+    m_Unit: 1
+  ActualBossLife: 100
+  ActualPlayerLifePercent:
+    m_Value: 100
+    m_Unit: 1
+  PreviewPlayerLifePercent:
+    m_Value: 100
+    m_Unit: 1
+  ActualPlayerHealth: 100
+  PlayerActionPoints: 100
+  Skill1Cost: 0
+  Skill2Cost: 0
+  Skill3Cost: 0
+  Skill1Name: 
+  Skill2Name: 
+  Skill3Name: 
 --- !u!1 &767902568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,7 +1073,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192007323}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1817501499
+--- !u!1 &2056979583
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1059,38 +1081,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1817501501}
-  - component: {fileID: 1817501500}
+  - component: {fileID: 2056979585}
+  - component: {fileID: 2056979584}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Gambiarras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1817501500
+  m_IsActive: 1
+--- !u!114 &2056979584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817501499}
-  m_Enabled: 0
+  m_GameObject: {fileID: 2056979583}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f888260cd55892346b72e1ca3d0c3c25, type: 3}
+  m_Script: {fileID: 11500000, guid: 9edcb54c9f4dc4c4ea00dacd9b4d56c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enterTurnKey: 101
-  _exitTurnKey: 120
-  _playerActionDoneKey: 32
-  _skipTurnKey: 115
---- !u!4 &1817501501
+  shape: 0
+  quantidade: 10
+  raio: 5
+  elipse: {x: 5, y: 3}
+  spacing: 2
+  squarePerSide: 4
+  spiralSpacing: 0.5
+  polygonSides: 6
+  olharParaCentro: 0
+  drawGizmos: 1
+  gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  gizmoSize: 0.3
+--- !u!4 &2056979585
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817501499}
+  m_GameObject: {fileID: 2056979583}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -1140,13 +1170,13 @@ MonoBehaviour:
   _gamePlayUiView: {fileID: 703431458}
   _skillSet1:
   - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
-  - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
+  - {fileID: 418736262251077746, guid: c808fc7d388c129429c9d945624b2b71, type: 3}
   _skillSet2:
-  - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
-  - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
+  - {fileID: 418736262251077746, guid: a0fd9d631032c95488a62aac8901ea12, type: 3}
+  - {fileID: 418736262251077746, guid: bbd14110ee0efe14585c5612fe3d88bb, type: 3}
   _skillSet3:
-  - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
-  - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
+  - {fileID: 418736262251077746, guid: 6762f032f69b8d5458b3e6fbdbefbc3f, type: 3}
+  - {fileID: 418736262251077746, guid: 8e6d2a689318aa448b6e79300e5bf276, type: 3}
   _layerMaskMouse:
     serializedVersion: 2
     m_Bits: 23
@@ -1211,5 +1241,5 @@ SceneRoots:
   - {fileID: 792776431}
   - {fileID: 33791921}
   - {fileID: 703431457}
-  - {fileID: 1817501501}
   - {fileID: 2138832484}
+  - {fileID: 2056979585}

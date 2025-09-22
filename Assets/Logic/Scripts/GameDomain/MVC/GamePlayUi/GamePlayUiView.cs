@@ -5,6 +5,53 @@ using UnityEngine.UIElements;
 namespace Logic.Scripts.GameDomain.MVC.Ui {
     public class GamePlayUiView : MonoBehaviour {
 
+        public static GamePlayUiView Instance;
+
+        [SerializeField] GamePlayUiBindSO _gamePlayUiBindSO;
+
+        public Length ActualBosshealthPercent;
+        public Length PreviewBossHealthPercent;
+        public int ActualBossLife;
+
+        public Length ActualPlayerLifePercent;
+        public Length PreviewPlayerLifePercent;
+        public int ActualPlayerHealth;
+        public int PlayerActionPoints;
+
+        public int Skill1Cost;
+        public int Skill2Cost;
+        public int Skill3Cost;
+
+        public string Skill1Name;
+        public string Skill2Name;
+        public string Skill3Name;
+
+        private void Start() {
+            Instance = this;
+        }
+
+        private void Update() {
+            if (_gamePlayUiBindSO == null) return;
+
+            _gamePlayUiBindSO.ActualBosshealthPercent = ActualBosshealthPercent;
+            _gamePlayUiBindSO.PreviewBossHealthPercent = PreviewBossHealthPercent;
+            _gamePlayUiBindSO.ActualBossLife = ActualBossLife;
+
+            _gamePlayUiBindSO.ActualPlayerLifePercent = ActualPlayerLifePercent;
+            _gamePlayUiBindSO.PreviewPlayerLifePercent = PreviewPlayerLifePercent;
+            _gamePlayUiBindSO.ActualPlayerHealth = ActualPlayerHealth;
+            _gamePlayUiBindSO.PlayerActionPoints = PlayerActionPoints;
+
+            _gamePlayUiBindSO.Skill1Cost = Skill1Cost;
+            _gamePlayUiBindSO.Skill2Cost = Skill2Cost;
+            _gamePlayUiBindSO.Skill3Cost = Skill3Cost;
+
+            _gamePlayUiBindSO.Skill1Name = Skill1Name;
+            _gamePlayUiBindSO.Skill2Name = Skill2Name;
+            _gamePlayUiBindSO.Skill3Name = Skill3Name;
+        }
+
+
         private Button _setSkillSet1Btn;
         private Button _setSkillSet2Btn;
         private Button _setSkillSet3Btn;

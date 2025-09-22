@@ -1,3 +1,4 @@
+using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.Services.CommandFactory;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         private readonly AbilityView[] _abilitySet3;
         private AbilityView[] _activeSet;
         public AbilityView[] ActiveAbilities => _activeSet;
+        int Index;
 
         public AbilityController(ICommandFactory commandFactory, AbilityView[] abilitieSet1, AbilityView[] abilitieSet2, AbilityView[] abilitieSet3) {
             _commandFactory = commandFactory;
@@ -18,8 +20,21 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             _abilitySet2 = abilitieSet2;
             _abilitySet3 = abilitieSet3;
             _activeSet = abilitieSet1;
+            Index = 1;
+            UpdateUi();
         }
 
+        public void NextSet() {
+            Index++;
+            if (Index >= 4) Index = 1;
+            ChangeActiveSet(Index);
+        }
+
+        public void PreviousSet() {
+            Index--;
+            if (Index <= 0) Index = 3;
+            ChangeActiveSet(Index);
+        }
 
         public void ChangeActiveSet(int newIndexToActive) {
             switch (newIndexToActive) {
@@ -33,11 +48,19 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
                     _activeSet = _abilitySet3;
                     break;
             }
+            UpdateUi();
+        }
+
+        public void UpdateUi() {
+            GamePlayUiView.Instance.Skill1Cost = _activeSet[0].AbilityData.Cost;
+            GamePlayUiView.Instance.Skill1Name = _activeSet[0].AbilityData.Name;
+
+            GamePlayUiView.Instance.Skill2Cost = _activeSet[0].AbilityData.Cost;
+            GamePlayUiView.Instance.Skill2Name = _activeSet[0].AbilityData.Name;
         }
 
         public void CreateAbility(Transform referenceTransform, int abilitySlotIndex) {
-            AbilityView abilitySpawned = null;
-            abilitySpawned = Object.Instantiate(_activeSet[abilitySlotIndex], referenceTransform.position, referenceTransform.rotation);
+            ShapeSpawner.Instance.Spawn(_activeSet[abilitySlotIndex].gameObject, referenceTransform, _activeSet[abilitySlotIndex].AbilityData.TypeShape);
         }
 
         public int FindIndexAbility(AbilityView abilityViewToSearch) {

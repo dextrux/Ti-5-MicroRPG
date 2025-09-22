@@ -80,8 +80,44 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
             }
         }
 
-        
+        public void SetNaraMovementAreaAgain(int radius, Vector3 moveCenter)
+        {
+            movementCenter = moveCenter;
+            movementRadius = radius;
+            DrawCircle();
+        }
 
+        private void DrawCircle()
+        {
+            Vector3 center = new Vector3(movementCenter.x, transform.position.y, movementCenter.z);
+
+            for (int i = 0; i <= segments; i++)
+            {
+                float angle = (float)i / segments * 2 * Mathf.PI;
+                float x = Mathf.Cos(angle) * movementRadius;
+                float z = Mathf.Sin(angle) * movementRadius;
+                Vector3 pos = new Vector3(center.x + x, center.y, center.z + z);
+                _lineRenderer.SetPosition(i, pos);
+            }
+
+        }
+
+        public void CreateLineRenderer()
+        {
+            _lineRenderer = gameObject.AddComponent<LineRenderer>();
+
+            _lineRenderer.positionCount = segments + 1;
+            _lineRenderer.useWorldSpace = true;
+            _lineRenderer.loop = true;
+
+            _lineRenderer.startWidth = 1f;
+            _lineRenderer.endWidth = 1;
+            _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+            _lineRenderer.startColor = Color.blue;
+            _lineRenderer.endColor = Color.blue;
+
+            DrawCircle();
+        }
         
     }
     

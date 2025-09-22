@@ -16,6 +16,9 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
         private Vector3 movementCenter;
         private int movementRadius;
 
+        private LineRenderer _lineRenderer;
+        private int segments = 100;
+
         public void SetupCallbacks(Action<Collision> onCollisionEnter, Action<Collider> onTriggerEnter,
             Action<ParticleSystem> onParticleCollisionEnter)
         {
@@ -76,5 +79,10 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
                 _rigidbody.MovePosition(new Vector3(radiusLimit.x, transform.position.y, radiusLimit.z));
             }
         }
+
+        
+
+        
     }
+    
 }

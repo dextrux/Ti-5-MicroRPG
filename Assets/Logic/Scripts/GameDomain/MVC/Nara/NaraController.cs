@@ -67,6 +67,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraMovementController.SetMovementRadiusCenter();
             _naraView.SetNaraCenterView(_naraMovementController.GetNaraCenter());
             _naraView.SetNaraRadiusView(_naraMovementController.GetNaraRadius());
+            _naraView.CreateLineRenderer();
         }
 
         private void OnNaraCollisionEnter(Collision collision)

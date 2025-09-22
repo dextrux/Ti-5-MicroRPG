@@ -99,9 +99,9 @@ public class NaraMovementController : IMovement
     {
         float distance = Vector3.Distance(endPosition, movementCenter);
 
-        if(distance < movementRadius)
+        if (distance < movementRadius)
         {
-            if(distance >= movementRadius/2)
+            if (distance >= movementRadius / 2)
             {
                 _actionPointsService.Spend(extraMovementSpaceCost);
             }
@@ -127,6 +127,19 @@ public class NaraMovementController : IMovement
     public void SetMovementRadiusCenter()
     {
         if (_transform != null)
+        {
             movementCenter = _transform.position;
+        }
     }
+
+    public void RecalculateRadiusAfterAbility()
+    {
+        if (_transform != null)
+        {
+            float distance = Vector3.Distance(_transform.position, movementCenter);
+            movementCenter = _transform.position;
+            movementRadius -= (int)distance;
+        }
+    }
+
 }

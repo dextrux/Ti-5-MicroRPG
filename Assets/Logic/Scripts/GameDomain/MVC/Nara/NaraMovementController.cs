@@ -15,6 +15,8 @@ public class NaraMovementController : IMovement
     private ActionPointsService _actionPointsService;
     private int extraMovementSpaceCost = 2;
 
+    private Camera cam;
+
     public NaraMovementController(NaraConfigurationSO naraSO)
     {
         movementRadius = naraSO.InitialMovementDistance;
@@ -75,25 +77,39 @@ public class NaraMovementController : IMovement
     {
         if (_rigidbody == null || _transform == null) return;
 
+        Vector3 camF = cam.transform.forward;
+        camF.y = 0f; camF.Normalize();
+        Vector3 camR = cam.transform.right;
+        camR.y = 0f; camR.Normalize();
+
+        Vector3 worldDir = camF * direction.y + camR * direction.x;
+        if (worldDir.sqrMagnitude > 1e-6f) worldDir.Normalize();
+
         float distance = Vector3.Distance(_transform.position, movementCenter);
 
-        if (distance > movementRadius)
+        if (distance >= movementRadius)
         {
-            Debug.Log("Passou Raio");
-            Vector3 directionFromCenter = (_transform.position - movementCenter).normalized;
-            Vector3 radiusLimit = movementCenter + directionFromCenter * movementRadius;
+            Vector3 fromCenter = _transform.position - movementCenter;
+            fromCenter.y = 0f;
+            Vector3 outward = fromCenter.sqrMagnitude > 1e-6f ? fromCenter.normalized : Vector3.zero;
+
+            if (Vector3.Dot(worldDir, outward) > 0f)
+            {
+                _rigidbody.linearVelocity = new Vector3(0f, _rigidbody.linearVelocity.y, 0f);
+                Rotate(rotation);
+                return;
+            }
+
+            Vector3 radiusLimit = movementCenter + outward * movementRadius;
             _rigidbody.MovePosition(new Vector3(radiusLimit.x, _transform.position.y, radiusLimit.z));
         }
 
-        Debug.Log("Andando");
+        Vector3 vel = worldDir * velocity;
+        _rigidbody.linearVelocity = new Vector3(vel.x, _rigidbody.linearVelocity.y, vel.z);
 
-        Vector3 moveDirection = new Vector3(direction.x, 0f, direction.y);
-        _movement = moveDirection * velocity;
-
-        _rigidbody.linearVelocity = new Vector3(_movement.x, 0f, _movement.z);
         Rotate(rotation);
-        Debug.Log("Rotacionou");
     }
+
 
     public void MoveToPoint(Vector3 endPosition, float velocity, float rotation)
     {
@@ -140,6 +156,11 @@ public class NaraMovementController : IMovement
             movementCenter = _transform.position;
             movementRadius -= (int)distance;
         }
+    }
+
+    public void SetCamera(Camera camera)
+    {
+        cam = camera;
     }
 
 }

@@ -74,8 +74,15 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
 
             _gameInputActions.Player.UsePotion2.started += OnUsePotion2Started;
             _gameInputActions.Player.UsePotion2.canceled += OnUsePotion2Canceled;
-            
-            _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
+
+            _gameInputActions.Player.MouseClick.started += OnMouseClickStarted;
+
+            _gameInputActions.Player.NextAbilitySet.started += OnNextAbilityStarted;
+        }
+
+        private void OnNextAbilityStarted(InputAction.CallbackContext context)
+        {
+            _commandFactory.CreateCommandVoid<NextAbilitySetInputCommand>().Execute();
         }
 
         private void OnMouseClickStarted(InputAction.CallbackContext context)
@@ -213,6 +220,8 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _gameInputActions.Player.UsePotion2.canceled -= OnUsePotion2Canceled;
 
             _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
+
+            _gameInputActions.Player.NextAbilitySet.started -= OnNextAbilityStarted;
         }
 
         public async Awaitable WaitForAnyKeyPressed(CancellationTokenSource cancellationTokenSource, bool canPressOverGui = false) {

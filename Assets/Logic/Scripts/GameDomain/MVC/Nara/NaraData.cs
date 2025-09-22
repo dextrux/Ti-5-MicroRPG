@@ -5,6 +5,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private const int ZERO_INT = 0;
 
         public int ActualHealth { get; private set; }
+        public int PreviewHealth { get; private set; }
         public int ActualShield { get; private set; }
         public int RemainningMovementDistance { get; private set; }
 

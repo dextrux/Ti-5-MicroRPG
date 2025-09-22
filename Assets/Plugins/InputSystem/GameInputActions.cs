@@ -252,6 +252,24 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextAbilitySet"",
+                    ""type"": ""Button"",
+                    ""id"": ""21173eeb-0b49-4238-b9e8-5be132d71c83"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PreviousAbilitySet"",
+                    ""type"": ""Button"",
+                    ""id"": ""212f5e13-f691-49d8-9418-4177a5ee8726"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -538,6 +556,28 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MouseClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe09e1c6-c996-4e5b-8f86-05a887f69903"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextAbilitySet"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f2832e7-0861-4841-b218-1795f7e23f4f"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PreviousAbilitySet"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1143,6 +1183,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Player_RotateCam = m_Player.FindAction("RotateCam", throwIfNotFound: true);
         m_Player_ActivateCam = m_Player.FindAction("ActivateCam", throwIfNotFound: true);
         m_Player_MouseClick = m_Player.FindAction("MouseClick", throwIfNotFound: true);
+        m_Player_NextAbilitySet = m_Player.FindAction("NextAbilitySet", throwIfNotFound: true);
+        m_Player_PreviousAbilitySet = m_Player.FindAction("PreviousAbilitySet", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1254,6 +1296,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RotateCam;
     private readonly InputAction m_Player_ActivateCam;
     private readonly InputAction m_Player_MouseClick;
+    private readonly InputAction m_Player_NextAbilitySet;
+    private readonly InputAction m_Player_PreviousAbilitySet;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1338,6 +1382,14 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @MouseClick => m_Wrapper.m_Player_MouseClick;
         /// <summary>
+        /// Provides access to the underlying input action "Player/NextAbilitySet".
+        /// </summary>
+        public InputAction @NextAbilitySet => m_Wrapper.m_Player_NextAbilitySet;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/PreviousAbilitySet".
+        /// </summary>
+        public InputAction @PreviousAbilitySet => m_Wrapper.m_Player_PreviousAbilitySet;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1417,6 +1469,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @MouseClick.started += instance.OnMouseClick;
             @MouseClick.performed += instance.OnMouseClick;
             @MouseClick.canceled += instance.OnMouseClick;
+            @NextAbilitySet.started += instance.OnNextAbilitySet;
+            @NextAbilitySet.performed += instance.OnNextAbilitySet;
+            @NextAbilitySet.canceled += instance.OnNextAbilitySet;
+            @PreviousAbilitySet.started += instance.OnPreviousAbilitySet;
+            @PreviousAbilitySet.performed += instance.OnPreviousAbilitySet;
+            @PreviousAbilitySet.canceled += instance.OnPreviousAbilitySet;
         }
 
         /// <summary>
@@ -1482,6 +1540,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @MouseClick.started -= instance.OnMouseClick;
             @MouseClick.performed -= instance.OnMouseClick;
             @MouseClick.canceled -= instance.OnMouseClick;
+            @NextAbilitySet.started -= instance.OnNextAbilitySet;
+            @NextAbilitySet.performed -= instance.OnNextAbilitySet;
+            @NextAbilitySet.canceled -= instance.OnNextAbilitySet;
+            @PreviousAbilitySet.started -= instance.OnPreviousAbilitySet;
+            @PreviousAbilitySet.performed -= instance.OnPreviousAbilitySet;
+            @PreviousAbilitySet.canceled -= instance.OnPreviousAbilitySet;
         }
 
         /// <summary>
@@ -1908,6 +1972,20 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMouseClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "NextAbilitySet" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNextAbilitySet(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PreviousAbilitySet" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPreviousAbilitySet(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

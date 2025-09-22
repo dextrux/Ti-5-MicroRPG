@@ -19,6 +19,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
         private LineRenderer _lineRenderer;
         private int segments = 100;
 
+        private Camera _camera;
+
         public void SetupCallbacks(Action<Collision> onCollisionEnter, Action<Collider> onTriggerEnter,
             Action<ParticleSystem> onParticleCollisionEnter)
         {
@@ -63,6 +65,16 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
         public void SetNaraRadiusView(int radius)
         {
             movementRadius = radius;
+        }
+
+        public void SetCamera()
+        {
+            _camera = Camera.main;
+        }
+
+        public Camera GetCamera()
+        {
+            return _camera;
         }
 
         void Update()

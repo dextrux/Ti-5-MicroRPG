@@ -5,6 +5,7 @@ namespace Logic.Scripts.Core.Mvc.LoadingScreen
 {
     public interface ILoadingScreenController
     {
+        void SetupLoadingView();
         void Show();
         void Hide();
         void ResetSlider();

@@ -1,5 +1,4 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
-using UnityEngine;
 
 public class SkillHitCommandData
 {
@@ -7,7 +6,9 @@ public class SkillHitCommandData
     public IEffectable Caster;
     public IEffectable Target;
 
-    public SkillHitCommandData(AbilityData abilityData) {
+    public SkillHitCommandData(AbilityData abilityData, IEffectable caster, IEffectable target) {
         AbilityData = abilityData;
+        Caster = caster;
+        Target = target;
     }
 }

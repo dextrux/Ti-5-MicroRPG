@@ -8,13 +8,14 @@ using Logic.Scripts.Services.UpdateService;
 using System.Threading;
 using UnityEngine;
 using Logic.Scripts.Turns;
+using Logic.Scripts.GameDomain.MVC.Ui;
 
 namespace Logic.Scripts.GameDomain.Commands {
     public class LoadGamePlayStateCommand : BaseCommand, ICommandAsync {
         //To-Do depois criar o instanciamento async das fases
 
 
-        //private IGamePlayUiController _gamePlayUiController; Inializar a UI de gameplay
+        private IGamePlayUiController _gamePlayUiController;
         private IAudioService _audioService;
         private INaraController _naraController;
         //private GamePlayAudioClipsScriptableObject _gamePlayAudioClipsScriptableObject; Lista de audios espec�ficos do gameplay
@@ -34,7 +35,7 @@ namespace Logic.Scripts.GameDomain.Commands {
         public override void ResolveDependencies() {
             _audioService = _diContainer.Resolve<IAudioService>();
             //_gamePlayAudioClipsScriptableObject = _diContainer.Resolve<GamePlayAudioClipsScriptableObject>();
-            //_gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
+            _gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
             _naraController = _diContainer.Resolve<INaraController>();
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();

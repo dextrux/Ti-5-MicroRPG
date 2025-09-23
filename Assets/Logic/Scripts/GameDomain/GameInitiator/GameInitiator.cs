@@ -1,7 +1,6 @@
 using Logic.Scripts.Core.CoreInitiator;
 using Logic.Scripts.Core.CoreInitiator.Base;
 using Logic.Scripts.Core.Mvc.LoadingScreen;
-using Logic.Scripts.GameDomain.States;
 using Logic.Scripts.Services.InitiatorInvokerService;
 using Logic.Scripts.Services.StateMachineService;
 using Logic.Scripts.Utils;

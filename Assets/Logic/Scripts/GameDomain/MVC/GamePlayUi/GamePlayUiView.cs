@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -5,52 +6,8 @@ using UnityEngine.UIElements;
 namespace Logic.Scripts.GameDomain.MVC.Ui {
     public class GamePlayUiView : MonoBehaviour {
 
-        public static GamePlayUiView Instance;
-
-        [SerializeField] GamePlayUiBindSO _gamePlayUiBindSO;
-
-        public Length ActualBosshealthPercent;
-        public Length PreviewBossHealthPercent;
-        public int ActualBossLife;
-
-        public Length ActualPlayerLifePercent;
-        public Length PreviewPlayerLifePercent;
-        public int ActualPlayerHealth;
-        public int PlayerActionPoints;
-
-        public int Skill1Cost;
-        public int Skill2Cost;
-        public int Skill3Cost;
-
-        public string Skill1Name;
-        public string Skill2Name;
-        public string Skill3Name;
-
-        private void Start() {
-            Instance = this;
-        }
-
-        private void Update() {
-            if (_gamePlayUiBindSO == null) return;
-
-            _gamePlayUiBindSO.ActualBosshealthPercent = ActualBosshealthPercent;
-            _gamePlayUiBindSO.PreviewBossHealthPercent = PreviewBossHealthPercent;
-            _gamePlayUiBindSO.ActualBossLife = ActualBossLife;
-
-            _gamePlayUiBindSO.ActualPlayerLifePercent = ActualPlayerLifePercent;
-            _gamePlayUiBindSO.PreviewPlayerLifePercent = PreviewPlayerLifePercent;
-            _gamePlayUiBindSO.ActualPlayerHealth = ActualPlayerHealth;
-            _gamePlayUiBindSO.PlayerActionPoints = PlayerActionPoints;
-
-            _gamePlayUiBindSO.Skill1Cost = Skill1Cost;
-            _gamePlayUiBindSO.Skill2Cost = Skill2Cost;
-            _gamePlayUiBindSO.Skill3Cost = Skill3Cost;
-
-            _gamePlayUiBindSO.Skill1Name = Skill1Name;
-            _gamePlayUiBindSO.Skill2Name = Skill2Name;
-            _gamePlayUiBindSO.Skill3Name = Skill3Name;
-        }
-
+        [SerializeField] private GamePlayUiBindSO _gamePlayUiBindSO;
+        [SerializeField] private float tweenDuration = 0.5f;
 
         private Button _setSkillSet1Btn;
         private Button _setSkillSet2Btn;
@@ -60,6 +17,77 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
         private Button _useSkill3Btn;
 
         private Button _nextTurnBtn;
+
+        #region AuxMethods
+        void TweenLength(System.Func<Length> getter, System.Action<Length> setter, int newValue) {
+            DOTween.To(() => getter().value,
+                       x => setter(new Length(x, getter().unit)),
+                       newValue,
+                       tweenDuration)
+                   .SetOptions(false)
+                   .SetTarget(_gamePlayUiBindSO);
+        }
+
+        void TweenInt(System.Func<int> getter, System.Action<int> setter, int newValue) {
+            DOTween.To(() => (float)getter(),
+                       x => setter(Mathf.RoundToInt(x)),
+                       newValue,
+                       tweenDuration)
+                   .SetTarget(_gamePlayUiBindSO);
+        }
+
+        void TweenString(System.Func<string> getter, System.Action<string> setter, string newValue) {
+            DOTween.To(() => getter(),
+                       x => setter(x),
+                       newValue,
+                       tweenDuration)
+                   .SetTarget(_gamePlayUiBindSO);
+        }
+        #endregion
+
+        #region UpdateUiMethods
+        public void OnActualBossHealthChange(int newValue) =>
+            TweenLength(() => _gamePlayUiBindSO.ActualBosshealthPercent, v => _gamePlayUiBindSO.ActualBosshealthPercent = v, newValue);
+
+        public void OnPreviewBossHealthChange(int newValue) =>
+            TweenLength(() => _gamePlayUiBindSO.PreviewBossHealthPercent, v => _gamePlayUiBindSO.PreviewBossHealthPercent = v, newValue);
+
+        public void OnActualBossLifeChange(int newValue) =>
+            TweenInt(() => _gamePlayUiBindSO.ActualBossLife, v => _gamePlayUiBindSO.ActualBossLife = v, newValue);
+
+
+        public void OnActualPlayerLifePercentChange(int newValue) =>
+            TweenLength(() => _gamePlayUiBindSO.ActualPlayerLifePercent, v => _gamePlayUiBindSO.ActualPlayerLifePercent = v, newValue);
+
+        public void OnPreviewPlayerLifePercentChange(int newValue) =>
+            TweenLength(() => _gamePlayUiBindSO.PreviewPlayerLifePercent, v => _gamePlayUiBindSO.PreviewPlayerLifePercent = v, newValue);
+
+        public void OnActualPlayerHealthChange(int newValue) =>
+            TweenInt(() => _gamePlayUiBindSO.ActualPlayerHealth, v => _gamePlayUiBindSO.ActualPlayerHealth = v, newValue);
+
+        public void OnPlayerActionPointsChange(int newValue) =>
+            TweenInt(() => _gamePlayUiBindSO.PlayerActionPoints, v => _gamePlayUiBindSO.PlayerActionPoints = v, newValue);
+
+
+        public void OnSkill1CostChange(int newValue) =>
+            TweenInt(() => _gamePlayUiBindSO.Skill1Cost, v => _gamePlayUiBindSO.Skill1Cost = v, newValue);
+
+        public void OnSkill2CostChange(int newValue) =>
+            TweenInt(() => _gamePlayUiBindSO.Skill2Cost, v => _gamePlayUiBindSO.Skill2Cost = v, newValue);
+
+        public void OnSkill3CostChange(int newValue) =>
+            TweenInt(() => _gamePlayUiBindSO.Skill3Cost, v => _gamePlayUiBindSO.Skill3Cost = v, newValue);
+
+
+        public void OnSkill1NameChange(string newValue) =>
+            TweenString(() => _gamePlayUiBindSO.Skill1Name, v => _gamePlayUiBindSO.Skill1Name = v, newValue);
+
+        public void OnSkill2NameChange(string newValue) =>
+            TweenString(() => _gamePlayUiBindSO.Skill2Name, v => _gamePlayUiBindSO.Skill2Name = v, newValue);
+
+        public void OnSkill3NameChange(string newValue) =>
+            TweenString(() => _gamePlayUiBindSO.Skill3Name, v => _gamePlayUiBindSO.Skill3Name = v, newValue);
+        #endregion
 
 
         public void InitStartPoint() {
@@ -75,7 +103,7 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
             _nextTurnBtn = root.Q<Button>("Next-Turn-btn");
         }
 
-        public void ShowGameOverPanel(int score, int scoreGoal, bool shouldShowScore, CancellationTokenSource cancellationTokenSource) {
+        public void ShowGameOverPanel(CancellationTokenSource cancellationTokenSource) {
 
         }
 
@@ -83,11 +111,11 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
 
         }
 
-        public void SetStartingValues(int score, CancellationTokenSource cancellationTokenSource) {
+        public void SetStartingValues(CancellationTokenSource cancellationTokenSource) {
 
         }
 
-        public void ShowWinPanel(int winScore, CancellationTokenSource cancellationTokenSource) {
+        public void ShowWinPanel(CancellationTokenSource cancellationTokenSource) {
 
         }
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[CreateAssetMenu(fileName = "GamePlayUiBindSO", menuName = "Scriptable Objects/GamePlayUiBindSO")]
+[CreateAssetMenu(fileName = "GamePlayUiBindSO", menuName = "Scriptable Objects/UI Bindings/GamePlayUiBindSO")]
 public class GamePlayUiBindSO : ScriptableObject {
 
     [SerializeField] private Length _actualBosshealthPercent;

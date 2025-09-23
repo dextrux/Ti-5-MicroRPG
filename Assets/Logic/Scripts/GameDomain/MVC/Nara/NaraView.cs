@@ -43,7 +43,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
 
         private void OnParticleCollision(GameObject particleSystemGO)
         {
-            //Provavelmente sera usado para habilidades
             _onParticleCollisionEnter?.Invoke(particleSystemGO.GetComponent<ParticleSystem>());
         }
 

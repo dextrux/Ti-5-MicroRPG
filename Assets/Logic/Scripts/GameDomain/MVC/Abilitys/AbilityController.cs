@@ -21,7 +21,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             _abilitySet3 = abilitieSet3;
             _activeSet = abilitieSet1;
             Index = 1;
-            UpdateUi();
         }
 
         public void NextSet() {
@@ -48,17 +47,7 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
                     _activeSet = _abilitySet3;
                     break;
             }
-            UpdateUi();
         }
-
-        public void UpdateUi() {
-            GamePlayUiView.Instance.Skill1Cost = _activeSet[0].AbilityData.Cost;
-            GamePlayUiView.Instance.Skill1Name = _activeSet[0].AbilityData.Name;
-
-            GamePlayUiView.Instance.Skill2Cost = _activeSet[0].AbilityData.Cost;
-            GamePlayUiView.Instance.Skill2Name = _activeSet[0].AbilityData.Name;
-        }
-
         public void CreateAbility(Transform referenceTransform, int abilitySlotIndex) {
             ShapeSpawner.Instance.Spawn(_activeSet[abilitySlotIndex].gameObject, referenceTransform, _activeSet[abilitySlotIndex].AbilityData.TypeShape);
         }

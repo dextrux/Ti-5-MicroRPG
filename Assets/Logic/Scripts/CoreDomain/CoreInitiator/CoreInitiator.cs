@@ -32,6 +32,7 @@ namespace Logic.Scripts.Core.CoreInitiator {
         private async Awaitable InitEntryPoint(CancellationTokenSource cancellationTokenSource) {
             try {
                 UpdateApplicationSettings();
+                _loadingScreenController.SetupLoadingView();
                 _loadingScreenController.Show();
                 InitializeServices();
                 _audioService.AddAudioClips(_coreAudioClipsScriptableObject);

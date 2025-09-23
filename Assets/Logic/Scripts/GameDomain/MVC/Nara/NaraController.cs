@@ -1,3 +1,4 @@
+using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.ResourcesLoaderService;
@@ -5,12 +6,13 @@ using Logic.Scripts.Services.UpdateService;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
-    public class NaraController : INaraController, IFixedUpdatable
+    public class NaraController : INaraController, IFixedUpdatable, IEffectable
     {
         private readonly IUpdateSubscriptionService _updateSubscriptionService;
         private readonly IAudioService _audioService;
         private readonly ICommandFactory _commandFactory;
         private readonly IResourcesLoaderService _resourcesLoaderService;
+        private readonly IGamePlayUiController _gamePlayUiController;
 
         public GameObject NaraViewGO => _naraView.gameObject;
         public Transform NaraSkillSpotTransform => _naraView.SkillSpawnSpot;
@@ -28,7 +30,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
-            IResourcesLoaderService resourcesLoaderService, NaraView naraViewPrefab,
+            IResourcesLoaderService resourcesLoaderService, IGamePlayUiController gamePlayUiController, NaraView naraViewPrefab,
             NaraConfigurationSO naraConfiguration)
         {
             _naraData = new NaraData(naraConfiguration);
@@ -37,6 +39,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _commandFactory = commandFactory;
             _resourcesLoaderService = resourcesLoaderService;
             _naraViewPrefab = naraViewPrefab;
+            _gamePlayUiController = gamePlayUiController;
             _naraMovementController = new NaraMovementController(naraConfiguration);
             _gameInputActions = new global::GameInputActions();
             _gameInputActions.Enable();
@@ -84,7 +87,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         {
             if (particleSystem.gameObject.TryGetComponent<AbilityView>(out AbilityView skillView))
             {
-                _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData)).Execute();
+                _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData, this, this)).Execute();
             }
         }
 
@@ -97,14 +100,22 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         {
         }
 
+        #region IEffectable Methods
         public void TakeDamage(int damageAmound)
         {
             _naraData.TakeDamage(damageAmound);
+            _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
+            _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
+            _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
+
         }
 
         public void Heal(int healAmount)
         {
             _naraData.Heal(healAmount);
+            _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
+            _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
+            _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
         }
 
         public void AddShield(int value)
@@ -159,5 +170,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public void LimitActionPointUse(int value, int duration) {
 
         }
+        #endregion
     }
 }

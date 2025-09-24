@@ -107,7 +107,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
                 float angle = (float)i / segments * 2 * Mathf.PI;
                 float x = Mathf.Cos(angle) * movementRadius + movementCenter.x;
                 float z = Mathf.Sin(angle) * movementRadius + movementCenter.z;
-                points[i] = new Vector3(x, movementCenter.y, z);
+                points[i] = new Vector3(x, movementCenter.y + 2f, z);
             }
 
             _lineRenderer.positionCount = segments;

@@ -18,7 +18,7 @@ MonoBehaviour:
   HitPreviewPrefab: {fileID: 5734108818365841331, guid: 625931372d96c784e91f84b3f41ab919, type: 3}
   animationClip: {fileID: 0}
   castTime: 0.75
-  TypeShape: 0
+  TypeShape: 4
   Effects:
   - rid: 7168148884437860454
   references:

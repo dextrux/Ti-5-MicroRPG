@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Skill 1
   Description: 
+  Cost: 0
+  HitPreviewPrefab: {fileID: 0}
   animationClip: {fileID: 0}
   castTime: 1
+  TypeShape: 4
   Effects: []
   references:
     version: 2

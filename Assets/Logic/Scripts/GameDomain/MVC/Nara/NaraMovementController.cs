@@ -2,11 +2,17 @@
 using Logic.Scripts.GameDomain.MVC.Nara;
 using UnityEngine;
 using Logic.Scripts.Turns;
+using Logic.Scripts.Services.UpdateService;
 
-public class NaraMovementController : IMovement
+public class NaraMovementController : IMovement, IFixedUpdatable
 {
+    private readonly IUpdateSubscriptionService _updateSubscriptionService;
+    private const float MoveSpeed = 10f;
+    private const float RotationSpeed = 10f;
+
     private Rigidbody _rigidbody;
     private Transform _transform;
+    private GameInputActions _gameInputActions;
 
     private Vector3 _movement;
     private Vector3 movementCenter;
@@ -17,9 +23,11 @@ public class NaraMovementController : IMovement
 
     private Camera cam;
 
-    public NaraMovementController(NaraConfigurationSO naraSO)
+    public NaraMovementController(NaraConfigurationSO naraSO, GameInputActions inputActions, IUpdateSubscriptionService updateSubscriptionService)
     {
         movementRadius = naraSO.InitialMovementDistance;
+        _gameInputActions = inputActions;
+        _updateSubscriptionService = updateSubscriptionService;
     }
 
     public void SetActionPointsService(ActionPointsService aps)
@@ -163,4 +171,12 @@ public class NaraMovementController : IMovement
         cam = camera;
     }
 
+    public void ManagedFixedUpdate() {
+        Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+        Move(dir, MoveSpeed, RotationSpeed);
+    }
+
+    public void RegisterListeners() {
+        _updateSubscriptionService.RegisterFixedUpdatable(this);
+    }
 }

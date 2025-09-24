@@ -31,7 +31,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
             IResourcesLoaderService resourcesLoaderService, IGamePlayUiController gamePlayUiController, NaraView naraViewPrefab,
-            NaraConfigurationSO naraConfiguration)
+            NaraConfigurationSO naraConfiguration, global::GameInputActions inputActions)
         {
             _naraData = new NaraData(naraConfiguration);
             _updateSubscriptionService = updateSubscriptionService;
@@ -40,7 +40,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _resourcesLoaderService = resourcesLoaderService;
             _naraViewPrefab = naraViewPrefab;
             _gamePlayUiController = gamePlayUiController;
-            _naraMovementController = new NaraMovementController(naraConfiguration);
+            _naraMovementController = new NaraMovementController(naraConfiguration, inputActions, updateSubscriptionService);
             _gameInputActions = new global::GameInputActions();
             _gameInputActions.Enable();
         }

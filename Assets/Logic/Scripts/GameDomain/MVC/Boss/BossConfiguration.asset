@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MaxHealth>k__BackingField: 100
   <InitialMovementDistance>k__BackingField: 8
+  <MoveSpeed>k__BackingField: 8
+  <RotationSpeed>k__BackingField: 20

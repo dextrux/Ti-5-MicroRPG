@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.bazonsamuel.lostmythtoolspackage": {
+      "version": "https://github.com/Samuel1358/com.bazonsamuel.lostmythtoolspackage.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e25bbcaec2e2c52f8dac404d71373763a43f541d"
+    },
     "com.unity.addressables": {
       "version": "2.2.2",
       "depth": 0,

@@ -44,4 +44,23 @@ public class SquareArea : AreaShape
 
         Gizmos.color = Color.white;       
     }
+
+    public override Vector3[] GetPoints(Vector2 center, Vector2 direction, ArenaPosReference arena)
+    {
+        float angle = GetAngle(direction);
+        Vector2 pivot = RotateArenaPoint(center, center + centerPivot, -angle);
+
+        Vector3 pos = arena.RelativeArenaPositionToRealPosition(pivot);
+        Vector3 A = new Vector3(pos.x + _width / 2, pos.y, pos.z + _height / 2);
+        Vector3 B = new Vector3(pos.x - _width / 2, pos.y, pos.z + _height / 2);
+        Vector3 C = new Vector3(pos.x - _width / 2, pos.y, pos.z - _height / 2);
+        Vector3 D = new Vector3(pos.x + _width / 2, pos.y, pos.z - _height / 2);
+
+        A = RotateWorldPoint(pos, A, angle);
+        B = RotateWorldPoint(pos, B, angle);
+        C = RotateWorldPoint(pos, C, angle);
+        D = RotateWorldPoint(pos, D, angle);
+
+        return new Vector3[] {A, B, C, D};
+    }
 }

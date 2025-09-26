@@ -49,6 +49,7 @@ public class NaraMovementController : IMovement, IFixedUpdatable
 
         _rigidbody.useGravity = false;
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        _rigidbody.constraints = RigidbodyConstraints.FreezePositionY;
         _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }

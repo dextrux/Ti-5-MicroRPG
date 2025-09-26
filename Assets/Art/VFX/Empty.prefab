@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 455345620995616299}
   - component: {fileID: 418736262251077746}
   m_Layer: 0
-  m_Name: ColliderProjectile 3
+  m_Name: Empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 8
+      scalar: 15
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -4904,5 +4904,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bf109da30e6f247b280e914f554bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <AbilityData>k__BackingField: {fileID: 11400000, guid: 8502c2e83fa17ef4582cefba783a00d1, type: 2}
+  <AbilityData>k__BackingField: {fileID: 11400000, guid: a773bfc404d97d741907b91f4b486686, type: 2}
   timeToDestoy: 6

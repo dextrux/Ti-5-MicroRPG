@@ -1,3 +1,4 @@
+using Logic.Scripts.GameDomain.MVC.Ui;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {

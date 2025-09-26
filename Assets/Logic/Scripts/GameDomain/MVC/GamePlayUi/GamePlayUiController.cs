@@ -5,7 +5,7 @@ using Logic.Scripts.Services.StateMachineService;
 using System.Threading;
 
 namespace Logic.Scripts.GameDomain.MVC.Ui {
-    public class GamePlayUiController: IGamePlayUiController {
+    public class GamePlayUiController : IGamePlayUiController {
         private readonly IStateMachineService _stateMachineService;
         private readonly LobbyState.Factory _lobbyStateFactory;
         private readonly IUICameraController _uiCameraController;
@@ -22,14 +22,6 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
             _audioService = audioService;
         }
 
-        public void ShowGameOverPanel(int score, int scoreGoal, bool shouldShowScore, CancellationTokenSource cancellationTokenSource) {
-
-        }
-
-        public void UpdateScore(int newScore, CancellationTokenSource cancellationTokenSource) {
-
-        }
-
         public void SwitchToInGameView() {
 
         }
@@ -38,11 +30,59 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
 
         }
 
-        public void SetStartingValues(int score, CancellationTokenSource cancellationTokenSource) {
+        public void SetBossValues(int newValue) {
+            _gamePlayView.OnActualBossHealthChange(newValue);
+
+            _gamePlayView.OnPreviewBossHealthChange(newValue);
+
+            _gamePlayView.OnActualBossLifeChange(newValue);
+        }
+
+        public void SetBossValues(int newPreviewValue, int newActualValue) {
+            _gamePlayView.OnActualBossHealthChange(newActualValue);
+
+            _gamePlayView.OnPreviewBossHealthChange(newPreviewValue);
+
+            _gamePlayView.OnActualBossLifeChange(newActualValue);
+        }
+
+        public void SetPlayerValues(int newValue) {
+            _gamePlayView.OnActualPlayerLifePercentChange(newValue);
+
+            _gamePlayView.OnPreviewPlayerLifePercentChange(newValue);
+
+            _gamePlayView.OnActualPlayerHealthChange(newValue);
+        }
+
+        public void SetPlayerValues(int newPreviewValue, int newActualValue) {
+            _gamePlayView.OnActualPlayerLifePercentChange(newActualValue);
+
+            _gamePlayView.OnPreviewPlayerLifePercentChange(newPreviewValue);
+
+            _gamePlayView.OnActualPlayerHealthChange(newActualValue);
+        }
+
+        public void SetAbilityValues(int ability1Cost, string ability1Name, 
+            int ability2Cost, string ability2Name,
+            int ability3Cost, string ability3Name) {
+            _gamePlayView.OnSkill1CostChange(ability1Cost);
+
+            _gamePlayView.OnSkill2CostChange(ability2Cost);
+
+            _gamePlayView.OnSkill3CostChange(ability3Cost);
+
+            _gamePlayView.OnSkill1NameChange(ability1Name);
+
+            _gamePlayView.OnSkill2NameChange(ability2Name);
+
+            _gamePlayView.OnSkill3NameChange(ability3Name);
+        }
+
+        public void ShowWinPanel(CancellationTokenSource cancellationTokenSource) {
 
         }
 
-        public void ShowWinPanel(int winScore, CancellationTokenSource cancellationTokenSource) {
+        public void ShowGameOverPanel(CancellationTokenSource cancellationTokenSource) {
 
         }
 

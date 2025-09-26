@@ -20,16 +20,16 @@ MonoBehaviour:
     m_Unit: 1
   _actualBossLife: 87
   _actualPlayerLifePercent:
-    m_Value: 87
+    m_Value: 29.5
     m_Unit: 1
   _previewPlayerLifePercent:
-    m_Value: 80.38
+    m_Value: 28.9
     m_Unit: 1
-  _actualPlayerHealth: 4
+  _actualPlayerHealth: 52
   _playerActionPoints: 6
-  _skill1Cost: 45
-  _skill2Cost: 21
-  _skill3Cost: 2
-  _skill1Name: asdas
-  _skill2Name: sadas
-  _skill3Name: sad
+  _skill1Cost: 1
+  _skill2Cost: 3
+  _skill3Cost: 0
+  _skill1Name: BaseAbility
+  _skill2Name: BaseAbility 1
+  _skill3Name: EmptyAbility

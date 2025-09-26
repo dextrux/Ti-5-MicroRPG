@@ -14,7 +14,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public ShapeType TypeShape;
         //To-Do Adicionar VFXController
         //To-Do Adicionar AbilityModifier
-        //To-Do Adicionar ShapeCalculator
         //To-Do Adicionar audioClip quando tivermos
 
         [SerializeReference] public List<AbilityEffect> Effects;

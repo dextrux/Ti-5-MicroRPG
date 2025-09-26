@@ -10,21 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: BaseAbility 3
+  m_Name: EmptyAbility
   m_EditorClassIdentifier: 
-  Name: Basic Premium
-  Description: Basic Skill
-  Cost: 3
+  Name: 
+  Description: 
+  Cost: 0
   HitPreviewPrefab: {fileID: 5734108818365841331, guid: 625931372d96c784e91f84b3f41ab919, type: 3}
   animationClip: {fileID: 0}
   castTime: 0.75
-  TypeShape: 1
-  Effects:
-  - rid: 7168148884437860454
+  TypeShape: 4
+  Effects: []
   references:
     version: 2
-    RefIds:
-    - rid: 7168148884437860454
-      type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
-      data:
-        amount: 7
+    RefIds: []

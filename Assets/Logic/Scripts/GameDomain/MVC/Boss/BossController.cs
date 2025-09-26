@@ -7,7 +7,6 @@ using UnityEngine;
 using Zenject;
 using System;
 using Object = UnityEngine.Object;
-using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Ui;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss {

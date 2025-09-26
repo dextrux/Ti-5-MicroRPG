@@ -94,6 +94,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public void InitEntryPoint()
         {
             CreateNara();
+            _gamePlayUiController.SetPlayerValues(_naraData.ActualHealth, _naraData.PreviewHealth);
         }
 
         public void ResetController()
@@ -101,12 +102,23 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         #region IEffectable Methods
+        public void PreviewDamage(int damageAmound)
+        {
+            _naraData.TakeDamage(damageAmound);
+            _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
+        }
+
+        public void PreviewHeal(int damageAmound)
+        {
+            _naraData.TakeDamage(damageAmound);
+            _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
+        }
+
         public void TakeDamage(int damageAmound)
         {
             _naraData.TakeDamage(damageAmound);
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
-            _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
 
         }
 
@@ -115,7 +127,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraData.Heal(healAmount);
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
-            _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
         }
 
         public void AddShield(int value)

@@ -4904,5 +4904,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bf109da30e6f247b280e914f554bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <AbilityData>k__BackingField: {fileID: 11400000, guid: 9634ccb787d94444281e9558a9a35bb2, type: 2}
+  <AbilityData>k__BackingField: {fileID: 11400000, guid: 5cdcb678a98229d4bb9a522e81b4de0a, type: 2}
   timeToDestoy: 6

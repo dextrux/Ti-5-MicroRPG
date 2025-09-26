@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Logic.Scripts.GameDomain.MVC.Abilitys {
     public class AbilityController : IAbilityController {
         private readonly ICommandFactory _commandFactory;
+        private readonly IGamePlayUiController _gamePlayUiController;
 
         private readonly AbilityView[] _abilitySet1;
         private readonly AbilityView[] _abilitySet2;
@@ -14,13 +15,27 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public AbilityView[] ActiveAbilities => _activeSet;
         int Index;
 
-        public AbilityController(ICommandFactory commandFactory, AbilityView[] abilitieSet1, AbilityView[] abilitieSet2, AbilityView[] abilitieSet3) {
+        public AbilityController(ICommandFactory commandFactory, AbilityView[] abilitieSet1, AbilityView[] abilitieSet2, AbilityView[] abilitieSet3, IGamePlayUiController gamePlayUiController) {
             _commandFactory = commandFactory;
+            _gamePlayUiController = gamePlayUiController;
             _abilitySet1 = abilitieSet1;
             _abilitySet2 = abilitieSet2;
             _abilitySet3 = abilitieSet3;
             _activeSet = abilitieSet1;
+            _activeSet = _abilitySet1;
             Index = 1;
+        }
+
+        public void InitEntryPoint() {
+            UpdateUi();
+        }
+
+        private void UpdateUi() {
+            _gamePlayUiController.SetAbilityValues(
+                            _activeSet[0].AbilityData.Cost, _activeSet[0].AbilityData.name,
+                            _activeSet[1].AbilityData.Cost, _activeSet[1].AbilityData.name,
+                            _activeSet[2].AbilityData.Cost, _activeSet[2].AbilityData.name
+                            );
         }
 
         public void NextSet() {
@@ -47,6 +62,7 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
                     _activeSet = _abilitySet3;
                     break;
             }
+            UpdateUi();
         }
         public void CreateAbility(Transform referenceTransform, int abilitySlotIndex) {
             ShapeSpawner.Instance.Spawn(_activeSet[abilitySlotIndex].gameObject, referenceTransform, _activeSet[abilitySlotIndex].AbilityData.TypeShape);

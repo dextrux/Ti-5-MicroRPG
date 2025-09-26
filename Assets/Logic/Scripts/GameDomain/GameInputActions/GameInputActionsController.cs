@@ -78,6 +78,11 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _gameInputActions.Player.MouseClick.started += OnMouseClickStarted;
 
             _gameInputActions.Player.NextAbilitySet.started += OnNextAbilityStarted;
+            _gameInputActions.Player.PreviousAbilitySet.started += OnPreviousAbilityStarted;
+        }
+
+        private void OnPreviousAbilityStarted(InputAction.CallbackContext context) {
+            _commandFactory.CreateCommandVoid<PreviousAbilitySetInputCommand>().Execute();
         }
 
         private void OnNextAbilityStarted(InputAction.CallbackContext context)
@@ -222,6 +227,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
 
             _gameInputActions.Player.NextAbilitySet.started -= OnNextAbilityStarted;
+            _gameInputActions.Player.PreviousAbilitySet.started -= OnPreviousAbilityStarted;
         }
 
         public async Awaitable WaitForAnyKeyPressed(CancellationTokenSource cancellationTokenSource, bool canPressOverGui = false) {

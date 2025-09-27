@@ -31,4 +31,22 @@ public class SectionedArea : AreaShape
         _adderArea.VisualGizmo(pivot, direction, arena, color);
         _reducerArea.VisualGizmo(pivot, direction, arena, Color.red);
     }
+
+    public override Vector3[] GetPoints(Vector2 center, Vector2 direction, ArenaPosReference arena)
+    {
+        Vector3[] A = _adderArea.GetPoints(center, direction, arena);
+        Vector3[] B = _reducerArea.GetPoints(center, direction, arena);
+
+        Vector3[] points = new Vector3[A.Length + B.Length];
+        for (int i = 0; i < A.Length; i++)
+        {
+            points[i] = A[i];
+        }
+        for (int i = A.Length; i < points.Length; i++)
+        {
+            points[i] = B[i - A.Length];
+        }
+
+        return points;
+    }
 }

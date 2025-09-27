@@ -30,4 +30,22 @@ public class CircleArea : AreaShape
         Handles.color = Color.white;
 #endif
     }
+
+    public override Vector3[] GetPoints(Vector2 center, Vector2 direction, ArenaPosReference arena)
+    {
+        float angle = GetAngle(direction);
+        Vector2 pivot = RotateArenaPoint(center, center + centerPivot, -angle);
+        Vector3 pos = arena.RelativeArenaPositionToRealPosition(pivot);
+
+        int sides = 36;
+        float angleSteps = 360f / sides;
+        Vector3[] points = new Vector3[sides];
+        for (int i = 0; i < sides; i++)
+        {
+            float currentAngle = i * angleSteps * Mathf.Deg2Rad;
+            points[i] = new Vector3(Mathf.Cos(currentAngle) * _radius, 0, Mathf.Sin(currentAngle) * _radius) + pos;
+        }
+
+        return points;
+    }
 }

@@ -1,4 +1,5 @@
 using Logic.Scripts.GameDomain.MVC.Ui;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
@@ -12,5 +13,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void RegisterListeners();
         void DisableCallbacks();
         void ManagedFixedUpdate();
+        public void ExecuteAbility(AbilityData abilityData, IEffectable castter);
     }
 }

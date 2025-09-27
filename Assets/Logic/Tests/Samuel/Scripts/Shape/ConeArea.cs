@@ -51,4 +51,31 @@ public class ConeArea : AreaShape
 
         Gizmos.color = Color.white;
     }
+
+    public override Vector3[] GetPoints(Vector2 center, Vector2 direction, ArenaPosReference arena)
+    {
+        float angle = GetAngle(direction);
+        Vector2 pivot = RotateArenaPoint(center, center + centerPivot, -angle);
+        Vector3 pos = arena.RelativeArenaPositionToRealPosition(pivot);
+
+        Vector3 worldDirection = new Vector3(direction.x, 0f, direction.y);
+
+        Vector3 fowardPoint = pos + (worldDirection.normalized * _radius);
+        Vector3 angledPoint1 = RotateWorldPoint(pos, fowardPoint, -(_angle / 2));
+        Vector3 angledPoint2 = RotateWorldPoint(pos, fowardPoint, (_angle / 2));
+
+        int sides = 36;
+        float angleSteps = _angle / (float)36;
+        Vector3[] points = new Vector3[sides + 2];
+        for (int i = 0; i < sides; i++)
+        {
+            float currentAngle = ((i * angleSteps) + _angle/2) * Mathf.Deg2Rad;
+            points[i] = new Vector3(Mathf.Cos(currentAngle) * _radius, 0, Mathf.Sin(currentAngle) * _radius) + pos;
+        }
+
+        points[sides] = pos;
+        points[sides + 1] = angledPoint2;
+
+        return points;
+    }
 }

@@ -25,6 +25,8 @@ public abstract class AreaShape
 
     public abstract void VisualGizmo(Vector2 center, Vector2 direction, ArenaPosReference arena, Color color);
 
+    public abstract Vector3[] GetPoints(Vector2 center, Vector2 direction, ArenaPosReference arena);
+
     #region // Utilities
 
     protected float GetAngle(Vector2 direction)

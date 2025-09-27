@@ -1,22 +1,25 @@
-using Logic.Scripts.GameDomain.MVC.Abilitys;
-using System;
 using UnityEngine;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
+using Logic.Scripts.Services.CommandFactory;
 
-public class BossAttack : MonoBehaviour
+public class AreaAbilityView : MonoBehaviour
 {
-    [SerializeField] private AbilityData _abilityData;
-
+    [SerializeField] private AbilityData _data;
     [SerializeField] private CompositedAreaShapeFactory _areaShape;
     private AreaShape _effectArea;
 
     private ArenaPosReference _arena;
+
     private IEffectable _castter;
+    private readonly ICommandFactory _commandFactory;
 
-    private void Setup(ArenaPosReference arena, IEffectable castter)
+    private void Awake()
     {
-        _arena = arena;
-        _castter = castter;
+        Setup();
+    }
 
+    private void Setup()
+    {
         AreaShape auxShape = _areaShape.CreateAreaShape();
 
         if (auxShape != null)
@@ -40,7 +43,7 @@ public class BossAttack : MonoBehaviour
 
         if (_effectArea.IsInArea(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition()))
         {
-            _arena.NaraController.ExecuteAbility(_abilityData, _castter);
+            //_commandFactory.CreateCommandVoid<AreaAbilityHitCommand>().SetData(new SkillHitCommandData(_data, _castter));
         }
 
         Destroy(gameObject);

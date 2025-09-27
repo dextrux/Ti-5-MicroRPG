@@ -12,5 +12,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void RegisterListeners();
         void DisableCallbacks();
         void ManagedFixedUpdate();
+        void RecenterMovementAreaAtTurnStart();
     }
 }

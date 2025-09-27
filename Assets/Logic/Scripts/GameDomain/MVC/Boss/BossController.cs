@@ -6,6 +6,7 @@ using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 using Zenject;
 using System;
+using System.Threading.Tasks;
 using Object = UnityEngine.Object;
 using Logic.Scripts.GameDomain.MVC.Ui;
 
@@ -170,6 +171,15 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             ConfigureTurnMovement();
 
             // 3) Preparar ataque deste turno conforme padrão do behavior
+            QueuePreparedAttackFromBehavior();
+            _executedTurnsCount++;
+        }
+
+        public async Task ExecuteTurnAsync() {
+            ResolvePendingCasts();
+            await Task.Delay(1500);
+            ConfigureTurnMovement();
+            await Task.Delay(1500);
             QueuePreparedAttackFromBehavior();
             _executedTurnsCount++;
         }

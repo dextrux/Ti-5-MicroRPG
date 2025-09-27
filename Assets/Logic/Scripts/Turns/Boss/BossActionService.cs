@@ -7,6 +7,7 @@ namespace Logic.Scripts.Turns
     public class BossActionService : IBossActionService
     {
         private readonly IBossController _bossController;
+        private bool _isFirstBossTurn = true;
 
         public BossActionService(IBossController bossController)
         {
@@ -20,9 +21,19 @@ namespace Logic.Scripts.Turns
 
         public async Task ExecuteBossTurnAsync()
         {
+            if (_isFirstBossTurn)
+            {
+                await Task.Delay(5000);
+                _isFirstBossTurn = false;
+            }
+            else
+            {
+                await Task.Delay(1500);
+            }
+
             _bossController.PlanNextTurn();
-            _bossController.ExecuteTurn();
-            await System.Threading.Tasks.Task.Yield();
+            await _bossController.ExecuteTurnAsync();
+            await Task.Yield();
         }
     }
 }

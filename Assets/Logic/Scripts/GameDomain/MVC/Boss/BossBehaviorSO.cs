@@ -14,11 +14,11 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             public TurnMoveMode Mode;
             public Vector3 Direction;
             public float DistanceMultiplier;
-            public int AbilityIndex;
+            public int AttackIndex;
         }
 
-        [Header("Available Abilities")] 
-        [SerializeField] private AbilityData[] _availableAbilities;
+        [Header("Available Attacks")] 
+        [SerializeField] private BossAttack[] _availableAttacks;
 
         [Header("Base Movement Settings")]
         [SerializeField] private float _fallbackStepDistance = 1f;
@@ -29,7 +29,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         [Min(1)][SerializeField] private int _turnPatternLength = 1;
         [SerializeField] private BossTurnConfig[] _turnPattern;
 
-        public AbilityData[] AvailableAbilities => _availableAbilities;
+        public BossAttack[] AvailableAttacks => _availableAttacks;
         public float FallbackStepDistance => _fallbackStepDistance;
         public float StepDistance => _stepDistance;
         public float RandomChangeDirectionSeconds => _randomChangeDirectionSeconds;

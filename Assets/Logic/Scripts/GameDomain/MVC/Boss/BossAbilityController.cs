@@ -5,29 +5,33 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 {
     public class BossAbilityController : IBossAbilityController
     {
-        private readonly AbilityView[] _abilityPrefabs;
+        private readonly BossBehaviorSO _bossBehavior;
         private int _activeIndex;
 
-        public BossAbilityController(AbilityView[] abilityPrefabs)
+        public BossAbilityController(BossBehaviorSO bossBehavior)
         {
-            _abilityPrefabs = abilityPrefabs;
+            _bossBehavior = bossBehavior;
             _activeIndex = 0;
         }
 
-        public void CreateAbility(Transform referenceTransform)
+        public BossAttack CreateAttack(Transform referenceTransform)
         {
-            if (_abilityPrefabs == null || _abilityPrefabs.Length == 0) return;
-            int index = _activeIndex % _abilityPrefabs.Length;
-            AbilityView abilitySpawned = Object.Instantiate(_abilityPrefabs[index], referenceTransform.position, referenceTransform.rotation);
+            BossAttack[] pool = _bossBehavior != null ? _bossBehavior.AvailableAttacks : null;
+            if (pool == null || pool.Length == 0) return null;
+            int index = _activeIndex % pool.Length;
+            BossAttack abilitySpawned = Object.Instantiate(pool[index], referenceTransform.position, referenceTransform.rotation);
             _activeIndex++;
+            return abilitySpawned;
         }
 
-        public void CreateAbilityAtIndex(int index, Transform referenceTransform)
+        public BossAttack CreateAttackAtIndex(int index, Transform referenceTransform)
         {
-            if (_abilityPrefabs == null || _abilityPrefabs.Length == 0) return;
+            BossAttack[] pool = _bossBehavior != null ? _bossBehavior.AvailableAttacks : null;
+            if (pool == null || pool.Length == 0) return null;
             if (index < 0) index = 0;
-            index = index % _abilityPrefabs.Length;
-            AbilityView abilitySpawned = Object.Instantiate(_abilityPrefabs[index], referenceTransform.position, referenceTransform.rotation);
+            index = index % pool.Length;
+            BossAttack abilitySpawned = Object.Instantiate(pool[index], referenceTransform.position, referenceTransform.rotation);
+            return abilitySpawned;
         }
     }
 }

@@ -4,8 +4,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 {
     public interface IBossAbilityController
     {
-        void CreateAbility(Transform referenceTransform);
-        void CreateAbilityAtIndex(int index, Transform referenceTransform);
+        BossAttack CreateAttack(Transform referenceTransform);
+        BossAttack CreateAttackAtIndex(int index, Transform referenceTransform);
     }
 }
 

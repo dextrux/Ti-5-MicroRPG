@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0c6085d048acf4fb600bcd04cc02b7, type: 3}
   m_Name: BossBehavior
   m_EditorClassIdentifier: 
-  _availableAbilities:
-  - {fileID: 11400000, guid: 4bff9cf52afa2d741b614862fe4f1c38, type: 2}
-  - {fileID: 11400000, guid: ecdfbf19b35fadb4794267ed500f3e1a, type: 2}
-  - {fileID: 11400000, guid: 8502c2e83fa17ef4582cefba783a00d1, type: 2}
+  _availableAttacks:
+  - {fileID: 970968493990150109, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
+  - {fileID: 970968493990150109, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
+  - {fileID: 970968493990150109, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
+  - {fileID: 970968493990150109, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
   _fallbackStepDistance: 1
   _stepDistance: 2
   _randomChangeDirectionSeconds: 1.5
@@ -24,16 +25,16 @@ MonoBehaviour:
   - Mode: 0
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 1
-    AbilityIndex: 0
+    AttackIndex: 0
   - Mode: 3
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 3
-    AbilityIndex: 1
+    AttackIndex: 0
   - Mode: 0
     Direction: {x: 90, y: 0, z: 0}
     DistanceMultiplier: 2
-    AbilityIndex: 1
+    AttackIndex: 0
   - Mode: 1
     Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 3
-    AbilityIndex: 2
+    AttackIndex: 0

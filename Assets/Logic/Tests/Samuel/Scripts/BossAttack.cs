@@ -12,7 +12,7 @@ public class BossAttack : MonoBehaviour
     private ArenaPosReference _arena;
     private IEffectable _castter;
 
-    private void Setup(ArenaPosReference arena, IEffectable castter)
+    public void Setup(ArenaPosReference arena, IEffectable castter)
     {
         _arena = arena;
         _castter = castter;
@@ -38,9 +38,15 @@ public class BossAttack : MonoBehaviour
             return;
         }
 
-        if (_effectArea.IsInArea(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition()))
+        bool isHit = _effectArea.IsInArea(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition());
+        if (isHit)
         {
+            Debug.Log($"BossAttack HIT: {_abilityData?.Name ?? "<no ability>"} by {_castter}");
             _arena.NaraController.ExecuteAbility(_abilityData, _castter);
+        }
+        else
+        {
+            Debug.Log($"BossAttack MISS: {_abilityData?.Name ?? "<no ability>"}");
         }
 
         Destroy(gameObject);

@@ -23,6 +23,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         private readonly BossConfigurationSO _bossConfiguration;
         private readonly BossBehaviorSO _bossBehavior;
         private readonly IBossAbilityController _bossAbilityController;
+        private ArenaPosReference _arenaReference;
 
         private Rigidbody _bossRigidbody;
         private Transform _bossTransform;
@@ -42,7 +43,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         private BossPlan _currentPlan;
         private bool _isCasting;
         private int _remainingCastTurns;
-        private struct PendingCast { public AbilityData Ability; public int TurnsRemaining; }
+        private struct PendingCast { public BossAttack Attack; public int TurnsRemaining; }
         private System.Collections.Generic.List<PendingCast> _pendingCasts;
 
         public bool IsCasting => _isCasting;
@@ -71,6 +72,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _pendingCasts = new System.Collections.Generic.List<PendingCast>();
             _updateSubscriptionService.RegisterFixedUpdatable(this);
             CreateBoss();
+            _arenaReference = Object.FindObjectOfType<ArenaPosReference>();
         }
 
         public void ManagedFixedUpdate() {
@@ -156,11 +158,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
         private void OnBossCollisionEnter(Collision collision) { }
         private void OnBossTriggerEnter(Collider collider) { }
-        private void OnBossParticleCollisionEnter(ParticleSystem particleSystem) {
-            if (particleSystem.gameObject.TryGetComponent<AbilityView>(out AbilityView skillView)) {
-                _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData, this, this)).Execute();
-            }
-        }
+        private void OnBossParticleCollisionEnter(ParticleSystem particleSystem) { }
 
         public void PlanNextTurn() { }
 
@@ -171,23 +169,30 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             // 2) Definir movimento deste turno via padrão configurável
             ConfigureTurnMovement();
 
-            // 3) Preparar ability deste turno conforme padrão do behavior
-            QueuePreparedAbilityFromBehavior();
+            // 3) Preparar ataque deste turno conforme padrão do behavior
+            QueuePreparedAttackFromBehavior();
             _executedTurnsCount++;
         }
 
-        private void QueuePreparedAbilityFromBehavior() {
+        private void QueuePreparedAttackFromBehavior() {
             if (_bossBehavior == null) return;
             BossBehaviorSO.BossTurnConfig[] pattern = _bossBehavior.TurnPattern;
-            AbilityData[] pool = _bossBehavior.AvailableAbilities;
+            BossAttack[] pool = _bossBehavior.AvailableAttacks;
             if (pattern == null || pattern.Length == 0 || pool == null || pool.Length == 0) return;
             int indexInPattern = _executedTurnsCount % pattern.Length;
             BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
-            int abilityIndex = Mathf.Clamp(entry.AbilityIndex, 0, pool.Length - 1);
-            AbilityData ability = pool[abilityIndex];
-            if (ability == null) return;
-            _pendingCasts.Add(new PendingCast { Ability = ability, TurnsRemaining = 1 });
-            Debug.Log($"Boss prepared ability: {ability.name} (executes next turn)");
+            int attackIndex = Mathf.Clamp(entry.AttackIndex, 0, pool.Length - 1);
+            BossAttack attackInstance = _bossAbilityController?.CreateAttackAtIndex(attackIndex, _bossView.transform);
+            if (attackInstance == null){
+                Debug.LogWarning("Boss attack instantiated: null");
+                return;
+            }
+            if (_arenaReference != null) {
+                attackInstance.Setup(_arenaReference, this);
+            }
+            Debug.Log($"Boss attack instantiated: {attackInstance.name} | index={attackIndex}");
+            _pendingCasts.Add(new PendingCast { Attack = attackInstance, TurnsRemaining = 1 });
+            Debug.Log($"Boss prepared attack index: {attackIndex} (executes next turn)");
         }
 
         private void ConfigureTurnMovement() {
@@ -251,18 +256,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _moveMode = BossMoveMode.Random;
         }
 
-        private void ExecuteAbility(AbilityData ability, int abilityIndex = 0) {
-            if (ability == null) return;
-            // 1) Spawn a visual AbilityView do Boss
-            _bossAbilityController?.CreateAbilityAtIndex(abilityIndex, _bossView.transform);
-            // 2) Executa efeitos lógicos (enquanto a View for apenas visual)
-            BossCastAbilityCommand cmd = _commandFactory.CreateCommandVoid<BossCastAbilityCommand>();
-            GameObject caster = _bossView.gameObject;
-            GameObject target = FindPlayerTarget();
-            cmd.SetContext(ability, caster, target);
-            cmd.Execute();
-            Debug.Log($"Boss ability cast: {ability.Name}");
-        }
+        
 
         private AbilityData SelectAbilityByHealth(out int selectedIndex) { selectedIndex = 0; return null; }
         private int GetAbilityDefaultDelay(AbilityData ability) { return 0; }
@@ -276,8 +270,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             }
             for (int i = _pendingCasts.Count - 1; i >= 0; i--) {
                 if (_pendingCasts[i].TurnsRemaining <= 0) {
-                    AbilityData castNow = _pendingCasts[i].Ability;
-                    ExecuteAbility(castNow);
+                    BossAttack castNow = _pendingCasts[i].Attack;
+                    if (castNow != null) {
+                        castNow.Execute();
+                    }
                     _pendingCasts.RemoveAt(i);
                 }
             }

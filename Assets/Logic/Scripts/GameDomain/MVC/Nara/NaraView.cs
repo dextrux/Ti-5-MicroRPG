@@ -130,6 +130,13 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
             _lineRenderer.endColor = Color.blue;
 
             DrawCircle();
+            _lineRenderer.enabled = false;
+        }
+
+        public void SetMovementCircleVisible(bool visible)
+        {
+            if (_lineRenderer == null) return;
+            _lineRenderer.enabled = visible;
         }
         
     }

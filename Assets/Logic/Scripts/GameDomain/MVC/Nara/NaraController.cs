@@ -123,6 +123,14 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraView.SetNaraMovementAreaAgain(_naraMovementController.GetNaraRadius(), _naraMovementController.GetNaraCenter());
         }
 
+        public void SetMovementCircleVisible(bool visible)
+        {
+            if (_naraView != null)
+            {
+                _naraView.SetMovementCircleVisible(visible);
+            }
+        }
+
         #region IEffectable Methods
         public void PreviewDamage(int damageAmound)
         {

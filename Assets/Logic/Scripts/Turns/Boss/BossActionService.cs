@@ -23,7 +23,7 @@ namespace Logic.Scripts.Turns
         {
             if (_isFirstBossTurn)
             {
-                await Task.Delay(5000);
+                await Task.Delay(3000);
                 _isFirstBossTurn = false;
             }
             else

@@ -1,6 +1,7 @@
 using Zenject;
 using Logic.Scripts.Services.Logger.Base;
 using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.GameDomain.MVC.Nara;
 
 namespace Logic.Scripts.Turns
 {
@@ -12,6 +13,7 @@ namespace Logic.Scripts.Turns
         private readonly IEnviromentActionService _enviromentActionService;
         private readonly TurnStateService _turnStateService;
         private readonly ICommandFactory _commandFactory;
+        private readonly INaraController _naraController;
 
         private bool _active;
         private int _turnNumber;
@@ -25,7 +27,8 @@ namespace Logic.Scripts.Turns
             IBossActionService bossActionService,
             IEnviromentActionService enviromentActionService,
             TurnStateService turnStateService,
-            ICommandFactory commandFactory)
+            ICommandFactory commandFactory,
+            INaraController naraController)
         {
             _actionPointsService = actionPointsService;
             _echoService = echoService;
@@ -33,6 +36,7 @@ namespace Logic.Scripts.Turns
             _enviromentActionService = enviromentActionService;
             _turnStateService = turnStateService;
             _commandFactory = commandFactory;
+            _naraController = naraController;
         }
 
         public void Initialize()
@@ -74,6 +78,7 @@ namespace Logic.Scripts.Turns
             LogService.Log($"Turno {_turnNumber} - Fase: BossAct");
             _waitingBoss = true;
             await _bossActionService.ExecuteBossTurnAsync();
+            await System.Threading.Tasks.Task.Delay(1500);
             OnBossCompleted();
         }
 
@@ -92,6 +97,7 @@ namespace Logic.Scripts.Turns
             LogService.Log($"Turno {_turnNumber} - Fase: PlayerAct");
             _waitingPlayer = true;
             _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.RecenterNaraMovementOnPlayerTurnCommand>().Execute();
+            _naraController?.SetMovementCircleVisible(true);
             _turnStateService.RequestPlayerAction();
         }
 
@@ -128,6 +134,7 @@ namespace Logic.Scripts.Turns
             _phase = TurnPhase.EnviromentAct;
             _turnStateService.AdvanceTurn(_turnNumber, _phase);
             LogService.Log($"Turno {_turnNumber} - Fase: EnviromentAct");
+            _naraController?.SetMovementCircleVisible(false);
             await _enviromentActionService.ExecuteEnviromentTurnAsync();
             OnEnviromentCompleted();
         }

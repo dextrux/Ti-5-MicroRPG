@@ -1,8 +1,16 @@
 using UnityEngine;
+using Zenject;
+using Logic.Scripts.GameDomain.MVC.Nara;
 
 public class ArenaPosReference : MonoBehaviour
 {
-    [SerializeField] private Transform _player;
+    private INaraController _naraController;
+
+    [Inject]
+    public void Construct(INaraController naraController)
+    {
+        _naraController = naraController;
+    }
 
     public Vector2 RealPositionToRelativeArenaPosition(Transform objTransform)
     {
@@ -16,6 +24,6 @@ public class ArenaPosReference : MonoBehaviour
 
     public Vector2 GetPlayerArenaPosition()
     {
-        return RealPositionToRelativeArenaPosition(_player);
+        return RealPositionToRelativeArenaPosition(_naraController.NaraViewGO.transform);
     }
 }

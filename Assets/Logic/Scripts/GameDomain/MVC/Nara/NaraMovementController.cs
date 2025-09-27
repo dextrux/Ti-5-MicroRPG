@@ -44,14 +44,6 @@ public class NaraMovementController : IMovement, IFixedUpdatable
     {
         _rigidbody = rigidbody;
         _transform = rigidbody != null ? rigidbody.transform : null;
-
-        if (_rigidbody == null) return;
-
-        _rigidbody.useGravity = false;
-        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        _rigidbody.constraints = RigidbodyConstraints.FreezePositionY;
-        _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-        _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
 
     public Vector3 GetNaraCenter()

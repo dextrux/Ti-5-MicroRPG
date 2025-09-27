@@ -54,7 +54,7 @@ namespace Logic.Scripts.GameDomain.Commands {
             _gameInputActionsController.RegisterAllInputListeners();
             _abilityController.InitEntryPoint();
             await Awaitable.NextFrameAsync();
-            _turnEventBus.Publish(new RequestEnterTurnModeSignal());
+            _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute();
             return;
         }
     }

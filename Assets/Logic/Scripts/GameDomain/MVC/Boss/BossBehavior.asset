@@ -12,25 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0c6085d048acf4fb600bcd04cc02b7, type: 3}
   m_Name: BossBehavior
   m_EditorClassIdentifier: 
-  _highHpAbilities:
-  - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
-  - {fileID: 11400000, guid: 9e6df0a25ade6724b8ce5b2bf7fc8c87, type: 2}
-  - {fileID: 11400000, guid: 7e15115e27e715b47a15ec54509cda79, type: 2}
-  _highHpDelays: 010000000200000003000000
-  _lowHpAbilities:
-  - {fileID: 11400000, guid: e9960a2848b9c274896f6d56e7ed1f56, type: 2}
-  - {fileID: 11400000, guid: 9e6df0a25ade6724b8ce5b2bf7fc8c87, type: 2}
-  - {fileID: 11400000, guid: 7e15115e27e715b47a15ec54509cda79, type: 2}
-  _lowHpDelays: 010000000100000001000000
-  _movePattern:
-  - Kind: 1
-    Distance: 1
-    Offset: {x: 0, y: 0, z: 0}
-  - Kind: 0
-    Distance: 3
-    Offset: {x: 0, y: 0, z: 0}
-  - Kind: 2
-    Distance: 5
-    Offset: {x: -2, y: 0, z: -1}
+  _availableAbilities:
+  - {fileID: 11400000, guid: 4bff9cf52afa2d741b614862fe4f1c38, type: 2}
+  - {fileID: 11400000, guid: ecdfbf19b35fadb4794267ed500f3e1a, type: 2}
+  - {fileID: 11400000, guid: 8502c2e83fa17ef4582cefba783a00d1, type: 2}
   _fallbackStepDistance: 1
-  _stepDistance: 1
+  _stepDistance: 2
+  _randomChangeDirectionSeconds: 1.5
+  _turnPatternLength: 4
+  _turnPattern:
+  - Mode: 0
+    Direction: {x: 0, y: 0, z: 0}
+    DistanceMultiplier: 1
+    AbilityIndex: 0
+  - Mode: 3
+    Direction: {x: 0, y: 0, z: 0}
+    DistanceMultiplier: 3
+    AbilityIndex: 1
+  - Mode: 0
+    Direction: {x: 90, y: 0, z: 0}
+    DistanceMultiplier: 2
+    AbilityIndex: 1
+  - Mode: 1
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 3
+    AbilityIndex: 2

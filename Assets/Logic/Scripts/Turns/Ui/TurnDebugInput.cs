@@ -8,31 +8,30 @@ namespace Logic.Scripts.Turns.Ui
         [SerializeField] private KeyCode _enterTurnKey = KeyCode.E;
         [SerializeField] private KeyCode _exitTurnKey = KeyCode.X;
         [SerializeField] private KeyCode _playerActionDoneKey = KeyCode.Space;
-        [SerializeField] private KeyCode _skipTurnKey = KeyCode.S;
 
-        private ITurnEventBus _eventBus;
+        private Logic.Scripts.Services.CommandFactory.ICommandFactory _commandFactory;
 
         [Inject]
-        public void Construct(ITurnEventBus eventBus)
+        public void Construct(Logic.Scripts.Services.CommandFactory.ICommandFactory commandFactory)
         {
-            _eventBus = eventBus;
+            _commandFactory = commandFactory;
         }
 
         private void Update()
         {
             if (Input.GetKeyDown(_enterTurnKey))
             {
-                _eventBus.Publish(new RequestEnterTurnModeSignal());
+                _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.EnterTurnModeCommand>().Execute();
             }
 
             if (Input.GetKeyDown(_exitTurnKey))
             {
-                _eventBus.Publish(new RequestExitTurnModeSignal());
+                _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.ExitTurnModeCommand>().Execute();
             }
 
-            if (Input.GetKeyDown(_skipTurnKey))
+            if (Input.GetKeyDown(_playerActionDoneKey))
             {
-                _eventBus.Publish(new TurnSkippedSignal());
+                _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.CompletePlayerActionCommand>().Execute();
             }
         }
     }

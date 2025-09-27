@@ -4,12 +4,12 @@ namespace Logic.Scripts.Turns
 {
     public class HazardZoneToggleRule : IEnviromentRule
     {
-        private readonly ITurnEventBus _eventBus;
+        private readonly TurnStateService _turnStateService;
         private readonly Dictionary<string, bool> _zoneIdToHazard;
 
-        public HazardZoneToggleRule(ITurnEventBus eventBus)
+        public HazardZoneToggleRule(TurnStateService turnStateService)
         {
-            _eventBus = eventBus;
+            _turnStateService = turnStateService;
             _zoneIdToHazard = new Dictionary<string, bool>();
         }
 
@@ -36,15 +36,12 @@ namespace Logic.Scripts.Turns
 
         private void PublishState()
         {
-            HazardZonesChangedSignal s = new HazardZonesChangedSignal
-            {
-                Zones = new List<HazardZoneState>()
-            };
+            List<HazardZoneState> zones = new List<HazardZoneState>();
             foreach (KeyValuePair<string, bool> kv in _zoneIdToHazard)
             {
-                s.Zones.Add(new HazardZoneState { Id = kv.Key, IsHazard = kv.Value });
+                zones.Add(new HazardZoneState { Id = kv.Key, IsHazard = kv.Value });
             }
-            _eventBus.Publish(s);
+            _turnStateService.PublishHazardZonesChanged(zones);
         }
     }
 }

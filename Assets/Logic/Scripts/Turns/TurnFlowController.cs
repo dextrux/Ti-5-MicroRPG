@@ -1,5 +1,6 @@
 using Zenject;
 using Logic.Scripts.Services.Logger.Base;
+using Logic.Scripts.Services.CommandFactory;
 
 namespace Logic.Scripts.Turns
 {
@@ -10,6 +11,7 @@ namespace Logic.Scripts.Turns
         private readonly IBossActionService _bossActionService;
         private readonly IEnviromentActionService _enviromentActionService;
         private readonly TurnStateService _turnStateService;
+        private readonly ICommandFactory _commandFactory;
 
         private bool _active;
         private int _turnNumber;
@@ -22,13 +24,15 @@ namespace Logic.Scripts.Turns
             IEchoService echoService,
             IBossActionService bossActionService,
             IEnviromentActionService enviromentActionService,
-            TurnStateService turnStateService)
+            TurnStateService turnStateService,
+            ICommandFactory commandFactory)
         {
             _actionPointsService = actionPointsService;
             _echoService = echoService;
             _bossActionService = bossActionService;
             _enviromentActionService = enviromentActionService;
             _turnStateService = turnStateService;
+            _commandFactory = commandFactory;
         }
 
         public void Initialize()
@@ -87,6 +91,7 @@ namespace Logic.Scripts.Turns
             _turnStateService.AdvanceTurn(_turnNumber, _phase);
             LogService.Log($"Turno {_turnNumber} - Fase: PlayerAct");
             _waitingPlayer = true;
+            _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.RecenterNaraMovementOnPlayerTurnCommand>().Execute();
             _turnStateService.RequestPlayerAction();
         }
 

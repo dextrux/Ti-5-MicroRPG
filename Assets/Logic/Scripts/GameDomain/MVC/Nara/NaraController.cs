@@ -5,6 +5,7 @@ using Logic.Scripts.Services.ResourcesLoaderService;
 using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
+using Logic.Scripts.Turns;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
     public class NaraController : INaraController, IFixedUpdatable, IEffectable
@@ -14,6 +15,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private readonly ICommandFactory _commandFactory;
         private readonly IResourcesLoaderService _resourcesLoaderService;
         private readonly IGamePlayUiController _gamePlayUiController;
+        private readonly ITurnStateReader _turnStateReader;
 
         public GameObject NaraViewGO => _naraView.gameObject;
         public Transform NaraSkillSpotTransform => _naraView.SkillSpawnSpot;
@@ -32,7 +34,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
             IResourcesLoaderService resourcesLoaderService, IGamePlayUiController gamePlayUiController, NaraView naraViewPrefab,
-            NaraConfigurationSO naraConfiguration, global::GameInputActions inputActions)
+            NaraConfigurationSO naraConfiguration, global::GameInputActions inputActions, ITurnStateReader turnStateReader)
         {
             _naraData = new NaraData(naraConfiguration);
             _updateSubscriptionService = updateSubscriptionService;
@@ -44,6 +46,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraMovementController = new NaraMovementController(naraConfiguration, inputActions, updateSubscriptionService);
             _gameInputActions = new global::GameInputActions();
             _gameInputActions.Enable();
+            _turnStateReader = turnStateReader;
         }
 
         public void RegisterListeners()
@@ -53,8 +56,15 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public void ManagedFixedUpdate()
         {
-            Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
-            _naraMovementController.Move(dir, MoveSpeed, RotationSpeed);
+            if (_turnStateReader != null && _turnStateReader.Active && _turnStateReader.Phase == TurnPhase.PlayerAct)
+            {
+                Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+                _naraMovementController.Move(dir, MoveSpeed, RotationSpeed);
+            }
+            else
+            {
+                _naraMovementController.Move(Vector2.zero, 0f, 0f);
+            }
         }
 
         public void DisableCallbacks()
@@ -105,6 +115,12 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public void ResetController()
         {
+        }
+
+        public void RecenterMovementAreaAtTurnStart()
+        {
+            _naraMovementController.SetMovementRadiusCenter();
+            _naraView.SetNaraMovementAreaAgain(_naraMovementController.GetNaraRadius(), _naraMovementController.GetNaraCenter());
         }
 
         #region IEffectable Methods

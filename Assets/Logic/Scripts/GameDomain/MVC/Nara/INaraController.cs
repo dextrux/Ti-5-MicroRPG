@@ -14,5 +14,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void DisableCallbacks();
         void ManagedFixedUpdate();
         public void ExecuteAbility(AbilityData abilityData, IEffectable castter);
+        void RecenterMovementAreaAtTurnStart();
     }
 }

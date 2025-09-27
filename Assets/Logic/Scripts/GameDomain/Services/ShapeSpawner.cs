@@ -26,12 +26,13 @@ public class ShapeSpawner : MonoBehaviour {
     }
 
 
-    public void Spawn(GameObject prefab, Transform referemceTransform, ShapeType type) {
+    public void Spawn(GameObject prefab, Transform referenceTransform, ShapeType type) {
         shape = type;
         Vector3[] points = GetPoints();
 
         foreach (var pos in points) {
-            GameObject obj = Instantiate(prefab, referemceTransform.position + pos, Quaternion.identity);
+            Quaternion quat = Quaternion.LookRotation(referenceTransform.position - pos);
+            GameObject obj = Instantiate(prefab, referenceTransform.position + pos, quat);
 
             if (olharParaCentro)
                 obj.transform.LookAt(transform.position);

@@ -24,6 +24,21 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         private readonly BossBehaviorSO _bossBehavior;
         private readonly IBossAbilityController _bossAbilityController;
 
+        private Rigidbody _bossRigidbody;
+        private Transform _bossTransform;
+
+        private enum BossMoveMode { None, Forward, TowardPlayer, Direction, Random }
+        private BossMoveMode _moveMode;
+        private Vector3 _fixedDirection;
+        private float _moveSpeed;
+        private float _rotationSpeed;
+        private float _randomDirTimeRemaining;
+        private float _randomDirDuration;
+        private Vector3 _randomDirection;
+
+        private float _turnMoveDistanceBudget;
+        private int _executedTurnsCount;
+
         private BossPlan _currentPlan;
         private bool _isCasting;
         private int _remainingCastTurns;
@@ -58,7 +73,62 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             CreateBoss();
         }
 
-        public void ManagedFixedUpdate() { }
+        public void ManagedFixedUpdate() {
+            if (_bossRigidbody == null || _bossTransform == null) return;
+            if (_turnMoveDistanceBudget <= 0f) return; // só mover durante o turno (quando há orçamento)
+
+            Vector3 worldDir = Vector3.zero;
+            switch (_moveMode) {
+                case BossMoveMode.Forward: {
+                        worldDir = _bossTransform.forward;
+                        break;
+                    }
+                case BossMoveMode.TowardPlayer: {
+                        GameObject target = FindPlayerTarget();
+                        if (target != null) {
+                            Vector3 toPlayer = target.transform.position - _bossTransform.position;
+                            toPlayer.y = 0f;
+                            if (toPlayer.sqrMagnitude > 0.0001f) worldDir = toPlayer.normalized;
+                        }
+                        break;
+                    }
+                case BossMoveMode.Direction: {
+                        Vector3 dir = _fixedDirection;
+                        dir.y = 0f;
+                        if (dir.sqrMagnitude > 0.0001f) worldDir = dir.normalized;
+                        break;
+                    }
+                case BossMoveMode.Random: {
+                        if (_randomDirTimeRemaining <= 0f || _randomDirection.sqrMagnitude < 0.0001f) {
+                            float angle = UnityEngine.Random.Range(0f, 360f);
+                            float rad = angle * Mathf.Deg2Rad;
+                            _randomDirection = new Vector3(Mathf.Cos(rad), 0f, Mathf.Sin(rad));
+                            _randomDirTimeRemaining = _randomDirDuration;
+                        } else {
+                            _randomDirTimeRemaining -= Time.fixedDeltaTime;
+                        }
+                        worldDir = _randomDirection;
+                        break;
+                    }
+                case BossMoveMode.None:
+                default:
+                    break;
+            }
+
+            if (worldDir.sqrMagnitude > 0.0001f) {
+                float step = _moveSpeed * Time.fixedDeltaTime;
+                if (step > _turnMoveDistanceBudget) step = _turnMoveDistanceBudget;
+                _turnMoveDistanceBudget -= step;
+                Vector3 fromPos = _bossTransform.position;
+                Vector3 toPos = fromPos + worldDir.normalized * step;
+                Vector3 toPlanar = new Vector3(toPos.x, fromPos.y, toPos.z);
+                _bossRigidbody.MovePosition(toPlanar);
+
+                Quaternion targetRot = Quaternion.LookRotation(worldDir.normalized, Vector3.up);
+                Quaternion newRot = Quaternion.Slerp(_bossTransform.rotation, targetRot, Time.fixedDeltaTime * _rotationSpeed);
+                _bossRigidbody.MoveRotation(newRot);
+            }
+        }
 
         public void DisableCallbacks() {
             _bossView.RemoveAllCallbacks();
@@ -68,6 +138,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _bossView = Object.Instantiate(_bossViewPrefab);
             _bossData.ResetData();
             _bossView.SetupCallbacks(OnBossCollisionEnter, OnBossTriggerEnter, OnBossParticleCollisionEnter);
+            _bossRigidbody = _bossView != null ? _bossView.GetRigidbody() : null;
+            _bossTransform = _bossView != null ? _bossView.transform : null;
+
+            if (_bossRigidbody != null) {
+                _bossRigidbody.useGravity = false;
+                _bossRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                _bossRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+                _bossRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            }
+
+            _moveSpeed = _bossConfiguration != null ? _bossConfiguration.MoveSpeed : 5f;
+            _rotationSpeed = _bossConfiguration != null ? _bossConfiguration.RotationSpeed : 5f;
+            _randomDirDuration = _bossBehavior != null ? _bossBehavior.RandomChangeDirectionSeconds : 1.5f;
+            _moveMode = BossMoveMode.TowardPlayer;
         }
 
         private void OnBossCollisionEnter(Collision collision) { }
@@ -78,54 +162,93 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             }
         }
 
-        public void PlanNextTurn() {
-            if (_isCasting && _currentPlan != null) {
-                return;
-            }
-
-            int tmpIndex;
-            AbilityData ability = SelectAbilityByHealth(out tmpIndex);
-
-            _currentPlan = new BossPlan {
-                MoveId = "StepForward",
-                Ability = ability,
-                AbilityCastTurns = 1
-            };
-        }
+        public void PlanNextTurn() { }
 
         public void ExecuteTurn() {
             // 1) Resolver pendências: decrementa e executa as que chegaram a 0
             ResolvePendingCasts();
 
-            // 2) Movimento deste turno
-            if (_currentPlan != null) {
-                ExecuteMove(_currentPlan.MoveId);
-            }
+            // 2) Definir movimento deste turno via padrão configurável
+            ConfigureTurnMovement();
 
-            // 3) Novo cast deste turno: escolher ability e enfileirar com seu delay
-            int abilityIndex;
-            AbilityData abilityNow = SelectAbilityByHealth(out abilityIndex);
-            if (abilityNow != null) {
-                int delay = GetAbilityDefaultDelay(abilityNow);
-                if (delay <= 0) {
-                    ExecuteAbility(abilityNow, abilityIndex);
-                }
-                else {
-                    _pendingCasts.Add(new PendingCast { Ability = abilityNow, TurnsRemaining = delay });
-                    Debug.Log($"Boss queued ability: {abilityNow.name} with delay {delay}");
-                }
+            // 3) Preparar ability deste turno conforme padrão do behavior
+            QueuePreparedAbilityFromBehavior();
+            _executedTurnsCount++;
+        }
+
+        private void QueuePreparedAbilityFromBehavior() {
+            if (_bossBehavior == null) return;
+            BossBehaviorSO.BossTurnConfig[] pattern = _bossBehavior.TurnPattern;
+            AbilityData[] pool = _bossBehavior.AvailableAbilities;
+            if (pattern == null || pattern.Length == 0 || pool == null || pool.Length == 0) return;
+            int indexInPattern = _executedTurnsCount % pattern.Length;
+            BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
+            int abilityIndex = Mathf.Clamp(entry.AbilityIndex, 0, pool.Length - 1);
+            AbilityData ability = pool[abilityIndex];
+            if (ability == null) return;
+            _pendingCasts.Add(new PendingCast { Ability = ability, TurnsRemaining = 1 });
+            Debug.Log($"Boss prepared ability: {ability.name} (executes next turn)");
+        }
+
+        private void ConfigureTurnMovement() {
+            if (_bossBehavior == null) return;
+            BossBehaviorSO.BossTurnConfig[] pattern = _bossBehavior.TurnPattern;
+            float baseStep = _bossBehavior.StepDistance > 0f ? _bossBehavior.StepDistance : (_bossBehavior.FallbackStepDistance > 0f ? _bossBehavior.FallbackStepDistance : 1f);
+            if (pattern == null || pattern.Length == 0) {
+                SetMoveModeTowardPlayer(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
+                _turnMoveDistanceBudget = baseStep;
+                Debug.Log($"Boss turn move: Mode=TowardPlayer | distance={_turnMoveDistanceBudget:0.###}");
+                return;
+            }
+            int indexInPattern = _executedTurnsCount % pattern.Length;
+            BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
+            float multiplier = entry.DistanceMultiplier <= 0f ? 1f : entry.DistanceMultiplier;
+            _turnMoveDistanceBudget = baseStep * multiplier;
+            switch (entry.Mode) {
+                case BossBehaviorSO.TurnMoveMode.Forward:
+                    SetMoveModeForward(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
+                    Debug.Log($"Boss turn move: Mode=Forward | distance={_turnMoveDistanceBudget:0.###}");
+                    break;
+                case BossBehaviorSO.TurnMoveMode.TowardPlayer:
+                    SetMoveModeTowardPlayer(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
+                    Debug.Log($"Boss turn move: Mode=TowardPlayer | distance={_turnMoveDistanceBudget:0.###}");
+                    break;
+                case BossBehaviorSO.TurnMoveMode.Direction:
+                    SetMoveModeDirection(entry.Direction, _bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
+                    Debug.Log($"Boss turn move: Mode=Direction dir=({entry.Direction.x:0.###},{entry.Direction.y:0.###},{entry.Direction.z:0.###}) | distance={_turnMoveDistanceBudget:0.###}");
+                    break;
+                case BossBehaviorSO.TurnMoveMode.Random:
+                    SetMoveModeRandom(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed, _bossBehavior.RandomChangeDirectionSeconds);
+                    Debug.Log($"Boss turn move: Mode=Random | distance={_turnMoveDistanceBudget:0.###}");
+                    break;
             }
         }
 
-        private void ExecuteMove(string moveId) {
-            BossMoveCommand cmd = _commandFactory.CreateCommandVoid<BossMoveCommand>();
-            Vector3 dir;
-            float dist;
-            BossBehaviorSO.MoveKind moveKind;
-            ComputeMove(out dir, out dist, out moveKind);
-            cmd.SetStep(dir, dist);
-            cmd.Execute();
-            Debug.Log($"Boss move executed: {moveKind} | stepDistance={dist}");
+        public void SetMoveModeForward(float moveSpeed, float rotationSpeed) {
+            _moveSpeed = moveSpeed;
+            _rotationSpeed = rotationSpeed;
+            _moveMode = BossMoveMode.Forward;
+        }
+
+        public void SetMoveModeTowardPlayer(float moveSpeed, float rotationSpeed) {
+            _moveSpeed = moveSpeed;
+            _rotationSpeed = rotationSpeed;
+            _moveMode = BossMoveMode.TowardPlayer;
+        }
+
+        public void SetMoveModeDirection(Vector3 worldDirection, float moveSpeed, float rotationSpeed) {
+            _fixedDirection = worldDirection;
+            _moveSpeed = moveSpeed;
+            _rotationSpeed = rotationSpeed;
+            _moveMode = BossMoveMode.Direction;
+        }
+
+        public void SetMoveModeRandom(float moveSpeed, float rotationSpeed, float changeDirectionSeconds = 1.5f) {
+            _moveSpeed = moveSpeed;
+            _rotationSpeed = rotationSpeed;
+            _randomDirDuration = Mathf.Max(0.1f, changeDirectionSeconds);
+            _randomDirTimeRemaining = 0f;
+            _moveMode = BossMoveMode.Random;
         }
 
         private void ExecuteAbility(AbilityData ability, int abilityIndex = 0) {
@@ -141,27 +264,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             Debug.Log($"Boss ability cast: {ability.Name}");
         }
 
-        private AbilityData SelectAbilityByHealth(out int selectedIndex) {
-            selectedIndex = 0;
-            if (_bossBehavior == null) return null;
-            float hpRatio = _bossData.ActualHealth <= 0 ? 0f : (float)_bossData.ActualHealth / _bossConfiguration.MaxHealth;
-            AbilityData[] pool = hpRatio > 0.5f ? _bossBehavior.HighHpAbilities : _bossBehavior.LowHpAbilities;
-            if (pool == null || pool.Length == 0) return null;
-            selectedIndex = UnityEngine.Random.Range(0, pool.Length);
-            return pool[selectedIndex];
-        }
-
-        private int GetAbilityDefaultDelay(AbilityData ability) {
-            if (_bossBehavior == null || ability == null) return 0;
-            float hpRatio = _bossData.ActualHealth <= 0 ? 0f : (float)_bossData.ActualHealth / _bossConfiguration.MaxHealth;
-            AbilityData[] pool = hpRatio > 0.5f ? _bossBehavior.HighHpAbilities : _bossBehavior.LowHpAbilities;
-            int[] delays = hpRatio > 0.5f ? _bossBehavior.HighHpDelays : _bossBehavior.LowHpDelays;
-            if (pool == null || delays == null) return 0;
-            for (int i = 0; i < pool.Length && i < delays.Length; i++) {
-                if (pool[i] == ability) return delays[i];
-            }
-            return 0;
-        }
+        private AbilityData SelectAbilityByHealth(out int selectedIndex) { selectedIndex = 0; return null; }
+        private int GetAbilityDefaultDelay(AbilityData ability) { return 0; }
 
         private void ResolvePendingCasts() {
             if (_pendingCasts == null || _pendingCasts.Count == 0) return;
@@ -185,34 +289,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             return nara != null ? nara.gameObject : null;
         }
 
-        private void ComputeMove(out Vector3 direction, out float distance, out BossBehaviorSO.MoveKind moveKind) {
-            direction = _bossView.transform.forward;
-            distance = _bossBehavior != null ? _bossBehavior.StepDistance : 1f;
-            moveKind = BossBehaviorSO.MoveKind.Forward;
-            BossBehaviorSO.BossMoveEntry[] pattern = _bossBehavior != null ? _bossBehavior.MovePattern : null;
-            if (pattern == null || pattern.Length == 0) return;
-            int index = (_pendingCasts != null ? _pendingCasts.Count : 0) % pattern.Length; // simple cycling
-            BossBehaviorSO.BossMoveEntry entry = pattern[index];
-            moveKind = entry.Kind;
-            if (entry.Distance > 0) distance = entry.Distance;
-            switch (entry.Kind) {
-                case BossBehaviorSO.MoveKind.Forward:
-                    direction = _bossView.transform.forward;
-                    break;
-                case BossBehaviorSO.MoveKind.TowardPlayer: {
-                        GameObject target = FindPlayerTarget();
-                        if (target != null) {
-                            Vector3 toPlayer = target.transform.position - _bossView.transform.position;
-                            toPlayer.y = 0f;
-                            if (toPlayer.sqrMagnitude > 0.0001f) direction = toPlayer.normalized;
-                        }
-                        break;
-                    }
-                case BossBehaviorSO.MoveKind.Offset:
-                    direction = entry.Offset.sqrMagnitude > 0.0001f ? entry.Offset.normalized : _bossView.transform.forward;
-                    break;
-            }
-        }
+        
 
 
 

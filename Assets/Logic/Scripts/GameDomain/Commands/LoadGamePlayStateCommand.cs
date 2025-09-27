@@ -24,7 +24,6 @@ namespace Logic.Scripts.GameDomain.Commands {
         private IWorldCameraController _worldCameraController;
         private IGameInputActionsController _gameInputActionsController;
         private IUpdateSubscriptionService _updateSubscriptionService;
-        private ITurnEventBus _turnEventBus;
         private IAbilityController _abilityController;
 
         private GamePlayInitatorEnterData _enterData;
@@ -43,7 +42,6 @@ namespace Logic.Scripts.GameDomain.Commands {
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
             _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
-            _turnEventBus = _diContainer.Resolve<ITurnEventBus>();
             _abilityController = _diContainer.Resolve<IAbilityController>();
         }
 
@@ -54,7 +52,7 @@ namespace Logic.Scripts.GameDomain.Commands {
             _gameInputActionsController.RegisterAllInputListeners();
             _abilityController.InitEntryPoint();
             await Awaitable.NextFrameAsync();
-            _turnEventBus.Publish(new RequestEnterTurnModeSignal());
+            _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute();
             return;
         }
     }

@@ -2,6 +2,10 @@ using DG.Tweening;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Zenject;
+using Logic.Scripts.Turns;
+using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.GameDomain.Commands;
 
 namespace Logic.Scripts.GameDomain.MVC.Ui {
     public class GamePlayUiView : MonoBehaviour {
@@ -17,6 +21,10 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
         private Button _useSkill3Btn;
 
         private Button _nextTurnBtn;
+
+        private ITurnQuery _turnQuery;
+        private ICommandFactory _commandFactory;
+        private int _cachedAp;
 
         #region AuxMethods
         void TweenLength(System.Func<Length> getter, System.Action<Length> setter, int newValue) {
@@ -101,6 +109,10 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
             _useSkill3Btn = root.Q<Button>("Ability-Slot3-btn");
 
             _nextTurnBtn = root.Q<Button>("Next-Turn-btn");
+
+            if (_nextTurnBtn != null) {
+                _nextTurnBtn.clicked += () => _commandFactory.CreateCommandVoid<CompletePlayerActionCommand>().Execute();
+            }
         }
 
         public void ShowGameOverPanel(CancellationTokenSource cancellationTokenSource) {
@@ -121,6 +133,22 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
 
         public void InitExitPoint() {
 
+        }
+
+        [Inject]
+        public void Construct(ITurnQuery turnQuery, ICommandFactory commandFactory) {
+            _turnQuery = turnQuery;
+            _commandFactory = commandFactory;
+            _cachedAp = -1;
+        }
+
+        private void Update() {
+            if (_turnQuery == null) return;
+            int ap = _turnQuery.ActionPointsCurrent;
+            if (ap != _cachedAp) {
+                _cachedAp = ap;
+                OnPlayerActionPointsChange(ap);
+            }
         }
     }
 

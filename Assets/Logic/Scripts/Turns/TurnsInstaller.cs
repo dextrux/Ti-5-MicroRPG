@@ -7,8 +7,7 @@ namespace Logic.Scripts.Turns
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<TurnEventBus>().AsSingle();
-
+            Container.BindInterfacesAndSelfTo<TurnStateService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ActionPointsService>().AsSingle();
             Container.BindInterfacesAndSelfTo<EchoService>().AsSingle();
 

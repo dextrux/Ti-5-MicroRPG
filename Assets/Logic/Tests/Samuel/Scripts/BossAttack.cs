@@ -12,6 +12,9 @@ public class BossAttack : MonoBehaviour
     private ArenaPosReference _arena;
     private IEffectable _castter;
 
+    [Space]
+    [SerializeField] private LineRenderer _lineRenderer;
+
     public void Setup(ArenaPosReference arena, IEffectable castter)
     {
         _arena = arena;
@@ -20,14 +23,12 @@ public class BossAttack : MonoBehaviour
         AreaShape auxShape = _areaShape.CreateAreaShape();
 
         if (auxShape != null)
+        {
             _effectArea = auxShape;
+            RenderArea(_effectArea);
+        }
         else
             Debug.LogWarning("Null ShapeArea created. Not allowed!");
-    }
-
-    public void Prepare(ArenaPosReference arena)
-    {
-        _arena = arena;
     }
 
     public void Execute()
@@ -50,6 +51,14 @@ public class BossAttack : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    private void RenderArea(AreaShape area)
+    {
+        Vector3[] points = area.GetPoints(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena);
+
+        _lineRenderer.positionCount = points.Length;
+        _lineRenderer.SetPositions(points);
     }
 
     private void OnDrawGizmos()

@@ -23,7 +23,7 @@ public class BossControlleroLD : MonoBehaviour
     public void PrepareAttack(BossAttack attack, Vector3 position, ArenaPosReference arena)
     {
         _currentAttack = Instantiate(attack, position, transform.rotation).GetComponent<BossAttack>();
-        _currentAttack.Prepare(arena);
+        //_currentAttack.Prepare(arena);
     }
 
     public void ExecuteAttack()

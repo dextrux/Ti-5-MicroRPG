@@ -1,32 +1,21 @@
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 using System;
 using UnityEngine;
 
 public class BossAttack : MonoBehaviour
 {
-    [SerializeField] private SkillEffectFactory[] _skillEffects;
-    private Action<EffectTarget_TEST, EffectParameter_TEST> _effect;
+    [SerializeField] private AbilityData _abilityData;
 
     [SerializeField] private CompositedAreaShapeFactory _areaShape;
     private AreaShape _effectArea;
 
     private ArenaPosReference _arena;
+    private IEffectable _castter;
 
-    private void Awake()
-    {       
-        Setup();
-    }
-
-    private void Setup()
+    private void Setup(ArenaPosReference arena, IEffectable castter)
     {
-        for (int i = 0; i < _skillEffects.Length; i++)
-        {
-            SkillEffect auxEffect = _skillEffects[i].CreateEffect();
-
-            if (auxEffect != null)
-                _effect += auxEffect.Effect;
-            else
-                Debug.LogWarning("Null SkillEffect created. Not allowed!");
-        }
+        _arena = arena;
+        _castter = castter;
 
         AreaShape auxShape = _areaShape.CreateAreaShape();
 
@@ -51,7 +40,7 @@ public class BossAttack : MonoBehaviour
 
         if (_effectArea.IsInArea(_arena.RealPositionToRelativeArenaPosition(transform), new Vector2(transform.forward.x, transform.forward.z), _arena.GetPlayerArenaPosition()))
         {
-            _effect?.Invoke(null, new EffectParameter_TEST());
+            _arena.NaraController.ExecuteAbility(_abilityData, _castter);
         }
 
         Destroy(gameObject);

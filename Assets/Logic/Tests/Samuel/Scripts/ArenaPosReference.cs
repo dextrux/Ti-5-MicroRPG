@@ -5,6 +5,7 @@ using Logic.Scripts.GameDomain.MVC.Nara;
 public class ArenaPosReference : MonoBehaviour
 {
     private INaraController _naraController;
+    public INaraController NaraController { get { return _naraController; } }
 
     [Inject]
     public void Construct(INaraController naraController)

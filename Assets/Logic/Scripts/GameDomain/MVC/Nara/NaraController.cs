@@ -3,6 +3,7 @@ using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.ResourcesLoaderService;
 using Logic.Scripts.Services.UpdateService;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
@@ -89,6 +90,11 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             {
                 _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData, this, this)).Execute();
             }
+        }
+
+        public void ExecuteAbility(AbilityData abilityData, IEffectable castter)
+        {
+            _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(abilityData, castter, this)).Execute();
         }
 
         public void InitEntryPoint()

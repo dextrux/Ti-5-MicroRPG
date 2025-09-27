@@ -5,11 +5,11 @@ namespace Logic.Scripts.Turns
 {
     public class TurnFlowController : IInitializable, System.IDisposable
     {
+        private readonly ITurnEventBus _eventBus;
         private readonly IActionPointsService _actionPointsService;
         private readonly IEchoService _echoService;
         private readonly IBossActionService _bossActionService;
         private readonly IEnviromentActionService _enviromentActionService;
-        private readonly TurnStateService _turnStateService;
 
         private bool _active;
         private int _turnNumber;
@@ -18,25 +18,49 @@ namespace Logic.Scripts.Turns
         private TurnPhase _phase;
 
         public TurnFlowController(
+            ITurnEventBus eventBus,
             IActionPointsService actionPointsService,
             IEchoService echoService,
             IBossActionService bossActionService,
-            IEnviromentActionService enviromentActionService,
-            TurnStateService turnStateService)
+            IEnviromentActionService enviromentActionService)
         {
+            _eventBus = eventBus;
             _actionPointsService = actionPointsService;
             _echoService = echoService;
             _bossActionService = bossActionService;
             _enviromentActionService = enviromentActionService;
-            _turnStateService = turnStateService;
         }
 
         public void Initialize()
         {
+            _eventBus.Subscribe<RequestEnterTurnModeSignal>(OnRequestEnter);
+            _eventBus.Subscribe<RequestExitTurnModeSignal>(OnRequestExit);
+            _eventBus.Subscribe<BossActionCompletedSignal>(OnBossCompleted);
+            _eventBus.Subscribe<PlayerActionCompletedSignal>(OnPlayerCompleted);
+            _eventBus.Subscribe<TurnSkippedSignal>(OnTurnSkipped);
+            _eventBus.Subscribe<EchoesResolutionCompletedSignal>(OnEchoesCompleted);
+            _eventBus.Subscribe<EnviromentActionCompletedSignal>(OnEnviromentCompleted);
         }
 
         public void Dispose()
         {
+            _eventBus.Unsubscribe<RequestEnterTurnModeSignal>(OnRequestEnter);
+            _eventBus.Unsubscribe<RequestExitTurnModeSignal>(OnRequestExit);
+            _eventBus.Unsubscribe<BossActionCompletedSignal>(OnBossCompleted);
+            _eventBus.Unsubscribe<PlayerActionCompletedSignal>(OnPlayerCompleted);
+            _eventBus.Unsubscribe<TurnSkippedSignal>(OnTurnSkipped);
+            _eventBus.Unsubscribe<EchoesResolutionCompletedSignal>(OnEchoesCompleted);
+            _eventBus.Unsubscribe<EnviromentActionCompletedSignal>(OnEnviromentCompleted);
+        }
+
+        private void OnRequestEnter(RequestEnterTurnModeSignal _)
+        {
+            StartTurns();
+        }
+
+        private void OnRequestExit(RequestExitTurnModeSignal _)
+        {
+            StopTurns();
         }
 
         public void StartTurns()
@@ -46,8 +70,8 @@ namespace Logic.Scripts.Turns
             _turnNumber = 0;
             _phase = TurnPhase.None;
             _actionPointsService.Reset();
-            _turnStateService.EnterTurnMode();
-            AdvanceTurnAsync();
+            _eventBus.Publish(new EnterTurnModeSignal());
+            AdvanceTurn();
         }
 
         public void StopTurns()
@@ -57,23 +81,23 @@ namespace Logic.Scripts.Turns
             _waitingBoss = false;
             _waitingPlayer = false;
             _phase = TurnPhase.None;
+            _eventBus.Publish(new ExitTurnModeSignal());
             _actionPointsService.Reset();
-            _turnStateService.ExitTurnMode();
         }
 
-        private async void AdvanceTurnAsync()
+        private void AdvanceTurn()
         {
             if (!_active) return;
             _turnNumber += 1;
             _phase = TurnPhase.BossAct;
-            _turnStateService.AdvanceTurn(_turnNumber, _phase);
+            _eventBus.Publish(new TurnAdvancedSignal { TurnNumber = _turnNumber, Phase = _phase });
             LogService.Log($"Turno {_turnNumber} - Fase: BossAct");
             _waitingBoss = true;
-            await _bossActionService.ExecuteBossTurnAsync();
-            OnBossCompleted();
+            _eventBus.Publish(new BossActionRequestedSignal());
+            _bossActionService.ExecuteBossTurn();
         }
 
-        private void OnBossCompleted()
+        private void OnBossCompleted(BossActionCompletedSignal _)
         {
             if (!_active || !_waitingBoss) return;
             _waitingBoss = false;
@@ -84,52 +108,52 @@ namespace Logic.Scripts.Turns
         {
             _actionPointsService.GainTurnPoints();
             _phase = TurnPhase.PlayerAct;
-            _turnStateService.AdvanceTurn(_turnNumber, _phase);
+            _eventBus.Publish(new TurnAdvancedSignal { TurnNumber = _turnNumber, Phase = _phase });
             LogService.Log($"Turno {_turnNumber} - Fase: PlayerAct");
             _waitingPlayer = true;
-            _turnStateService.RequestPlayerAction();
+            _eventBus.Publish(new RequestPlayerActionSignal());
         }
 
-        public void SkipTurn()
+        private void OnTurnSkipped(TurnSkippedSignal _)
         {
             if (!_active || !_waitingPlayer) return;
             _waitingPlayer = false;
-            StartEchoPhaseAsync();
+            StartEchoPhase();
         }
 
-        public void CompletePlayerAction()
+        private void OnPlayerCompleted(PlayerActionCompletedSignal _)
         {
             if (!_active || !_waitingPlayer) return;
             _waitingPlayer = false;
-            StartEchoPhaseAsync();
+            StartEchoPhase();
         }
 
-        private async void StartEchoPhaseAsync()
+        private void StartEchoPhase()
         {
             _phase = TurnPhase.EchoesAct;
-            _turnStateService.AdvanceTurn(_turnNumber, _phase);
+            _eventBus.Publish(new TurnAdvancedSignal { TurnNumber = _turnNumber, Phase = _phase });
             LogService.Log($"Turno {_turnNumber} - Fase: EchoesAct");
-            await _echoService.ResolveDueEchoesAsync();
-            OnEchoesCompleted();
+            _eventBus.Publish(new EchoesResolutionRequestedSignal());
+            _echoService.ResolveDueEchoes();
         }
 
-        private void OnEchoesCompleted()
+        private void OnEchoesCompleted(EchoesResolutionCompletedSignal _)
         {
-            StartEnviromentPhaseAsync();
+            StartEnviromentPhase();
         }
 
-        private async void StartEnviromentPhaseAsync()
+        private void StartEnviromentPhase()
         {
             _phase = TurnPhase.EnviromentAct;
-            _turnStateService.AdvanceTurn(_turnNumber, _phase);
+            _eventBus.Publish(new TurnAdvancedSignal { TurnNumber = _turnNumber, Phase = _phase });
             LogService.Log($"Turno {_turnNumber} - Fase: EnviromentAct");
-            await _enviromentActionService.ExecuteEnviromentTurnAsync();
-            OnEnviromentCompleted();
+            _eventBus.Publish(new EnviromentActionRequestedSignal());
+            _enviromentActionService.ExecuteEnviromentTurn();
         }
 
-        private void OnEnviromentCompleted()
+        private void OnEnviromentCompleted(EnviromentActionCompletedSignal _)
         {
-            AdvanceTurnAsync();
+            AdvanceTurn();
         }
     }
 }

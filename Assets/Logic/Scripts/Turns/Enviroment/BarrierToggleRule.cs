@@ -4,12 +4,12 @@ namespace Logic.Scripts.Turns
 {
     public class BarrierToggleRule : IEnviromentRule
     {
-        private readonly TurnStateService _turnStateService;
+        private readonly ITurnEventBus _eventBus;
         private readonly Dictionary<string, bool> _barrierIdToActive;
 
-        public BarrierToggleRule(TurnStateService turnStateService)
+        public BarrierToggleRule(ITurnEventBus eventBus)
         {
-            _turnStateService = turnStateService;
+            _eventBus = eventBus;
             _barrierIdToActive = new Dictionary<string, bool>();
         }
 
@@ -36,12 +36,15 @@ namespace Logic.Scripts.Turns
 
         private void PublishState()
         {
-            List<BarrierState> barriers = new List<BarrierState>();
+            BarrierStateChangedSignal s = new BarrierStateChangedSignal
+            {
+                Barriers = new List<BarrierState>()
+            };
             foreach (System.Collections.Generic.KeyValuePair<string, bool> kv in _barrierIdToActive)
             {
-                barriers.Add(new BarrierState { Id = kv.Key, IsActive = kv.Value });
+                s.Barriers.Add(new BarrierState { Id = kv.Key, IsActive = kv.Value });
             }
-            _turnStateService.PublishBarrierStateChanged(barriers);
+            _eventBus.Publish(s);
         }
     }
 }

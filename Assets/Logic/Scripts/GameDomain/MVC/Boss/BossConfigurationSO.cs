@@ -7,7 +7,5 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
     {
         [field: SerializeField] public int MaxHealth { get; private set; }
         [field: SerializeField] public int InitialMovementDistance { get; private set; }
-        [field: SerializeField] public float MoveSpeed { get; private set; }
-        [field: SerializeField] public float RotationSpeed { get; private set; }
     }
 }

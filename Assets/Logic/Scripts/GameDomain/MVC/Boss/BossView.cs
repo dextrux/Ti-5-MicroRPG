@@ -28,11 +28,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             _onParticleCollisionEnter = null;
         }
 
-        public Rigidbody GetRigidbody()
-        {
-            return _rigidbody;
-        }
-
         private void OnCollisionEnter(Collision collision)
         {
             _onCollisionEnter?.Invoke(collision);

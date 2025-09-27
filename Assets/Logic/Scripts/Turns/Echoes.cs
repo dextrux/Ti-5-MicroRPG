@@ -5,8 +5,11 @@ namespace Logic.Scripts.Turns
     public class EchoService : IEchoService
     {
         private readonly List<EchoEntry> _entries = new List<EchoEntry>();
-        public EchoService()
+        private readonly ITurnEventBus _bus;
+
+        public EchoService(ITurnEventBus bus)
         {
+            _bus = bus;
         }
 
         public int PendingCount => _entries.Count;
@@ -18,11 +21,6 @@ namespace Logic.Scripts.Turns
         }
 
         public async void ResolveDueEchoes()
-        {
-            await ResolveDueEchoesAsync();
-        }
-
-        public async System.Threading.Tasks.Task ResolveDueEchoesAsync()
         {
             await System.Threading.Tasks.Task.Delay(1000);
 
@@ -41,6 +39,8 @@ namespace Logic.Scripts.Turns
                     _entries.RemoveAt(i);
                 }
             }
+
+            _bus.Publish(new EchoesResolutionCompletedSignal());
         }
 
         private struct EchoEntry

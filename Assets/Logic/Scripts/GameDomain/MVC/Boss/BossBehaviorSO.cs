@@ -6,35 +6,37 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
     [CreateAssetMenu(fileName = "BossBehavior", menuName = "Scriptable Objects/BossBehavior")]
     public class BossBehaviorSO : ScriptableObject
     {
-        public enum TurnMoveMode { Forward, TowardPlayer, Direction, Random }
+        public enum MoveKind { Forward, TowardPlayer, Offset }
 
         [System.Serializable]
-        public struct BossTurnConfig
+        public struct BossMoveEntry
         {
-            public TurnMoveMode Mode;
-            public Vector3 Direction;
-            public float DistanceMultiplier;
-            public int AbilityIndex;
+            public MoveKind Kind;
+            public float Distance;
+            public Vector3 Offset;
         }
 
-        [Header("Available Abilities")] 
-        [SerializeField] private AbilityData[] _availableAbilities;
+        [Header("Abilities when HP > 50%")]
+        [SerializeField] private AbilityData[] _highHpAbilities;
+        [SerializeField] private int[] _highHpDelays; 
 
-        [Header("Base Movement Settings")]
+        [Header("Abilities when HP <= 50%")]
+        [SerializeField] private AbilityData[] _lowHpAbilities;
+        [SerializeField] private int[] _lowHpDelays; 
+
+        [Header("Movement Pattern (cycled per boss turn)")]
+        [SerializeField] private BossMoveEntry[] _movePattern;
         [SerializeField] private float _fallbackStepDistance = 1f;
+        
         [SerializeField] private float _stepDistance = 1f;
-        [SerializeField] private float _randomChangeDirectionSeconds = 1.5f;
 
-        [Header("Turn Pattern")]
-        [Min(1)][SerializeField] private int _turnPatternLength = 1;
-        [SerializeField] private BossTurnConfig[] _turnPattern;
-
-        public AbilityData[] AvailableAbilities => _availableAbilities;
+        public AbilityData[] HighHpAbilities => _highHpAbilities;
+        public int[] HighHpDelays => _highHpDelays;
+        public AbilityData[] LowHpAbilities => _lowHpAbilities;
+        public int[] LowHpDelays => _lowHpDelays;
+        public BossMoveEntry[] MovePattern => _movePattern;
         public float FallbackStepDistance => _fallbackStepDistance;
         public float StepDistance => _stepDistance;
-        public float RandomChangeDirectionSeconds => _randomChangeDirectionSeconds;
-        public int TurnPatternLength => _turnPatternLength;
-        public BossTurnConfig[] TurnPattern => _turnPattern;
     }
 }
 

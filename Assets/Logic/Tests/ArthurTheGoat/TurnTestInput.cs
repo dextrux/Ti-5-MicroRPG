@@ -6,27 +6,27 @@ namespace Logic.Scripts.Turns.Ui
 {
     public class TurnTestInput : MonoBehaviour
     {
-        private TurnFlowController _turnFlowController;
+        private ITurnEventBus _bus;
 
         [Inject]
-        public void Construct(TurnFlowController turnFlowController)
+        public void Construct(ITurnEventBus bus)
         {
-            _turnFlowController = turnFlowController;
+            _bus = bus;
         }
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.E))
-                _turnFlowController.StartTurns();
+                _bus.Publish(new RequestEnterTurnModeSignal());
 
             if (Input.GetKeyDown(KeyCode.X))
-                _turnFlowController.StopTurns();
+                _bus.Publish(new RequestExitTurnModeSignal());
 
             if (Input.GetKeyDown(KeyCode.Space))
-                _turnFlowController.CompletePlayerAction();
+                _bus.Publish(new PlayerActionCompletedSignal());
 
             if (Input.GetKeyDown(KeyCode.S))
-                _turnFlowController.SkipTurn();
+                _bus.Publish(new TurnSkippedSignal());
         }
     }
 }

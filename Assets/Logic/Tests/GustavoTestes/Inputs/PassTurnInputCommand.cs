@@ -3,14 +3,14 @@ using Logic.Scripts.Turns;
 
 public class PassTurnInputCommand : BaseCommand, ICommandVoid
 {
-    private TurnFlowController _turnFlowController;
+    private ITurnEventBus _eventBus;
     public override void ResolveDependencies()
     {
-        _turnFlowController = _diContainer.Resolve<TurnFlowController>();
+        _eventBus = _diContainer.Resolve<ITurnEventBus>();
     }
 
     public void Execute()
     {
-        _turnFlowController.CompletePlayerAction();
+        _eventBus.Publish(new PlayerActionCompletedSignal());
     }
 }

@@ -5,7 +5,7 @@ namespace Logic.Scripts.Turns
 {
     public class ActionPointsService : IActionPointsService
     {
-        private readonly TurnStateService _turnStateService;
+        private readonly ITurnEventBus _eventBus;
 
         private int _current;
         private int _max;
@@ -15,9 +15,9 @@ namespace Logic.Scripts.Turns
         public int Max => _max;
         public int GainPerTurn => _gainPerTurn;
 
-        public ActionPointsService(TurnStateService turnStateService)
+        public ActionPointsService(ITurnEventBus eventBus)
         {
-            _turnStateService = turnStateService;
+            _eventBus = eventBus;
             _max = 10;
             _gainPerTurn = 2;
             _current = 0;
@@ -68,7 +68,7 @@ namespace Logic.Scripts.Turns
 
         private void PublishChange()
         {
-            _turnStateService.UpdateActionPoints(_current, _max);
+            _eventBus.Publish(new ActionPointsChangedSignal { Current = _current, Max = _max });
         }
     }
 }

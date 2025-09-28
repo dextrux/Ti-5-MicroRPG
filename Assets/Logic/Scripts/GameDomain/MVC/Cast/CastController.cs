@@ -65,6 +65,7 @@ public class CastController : IUpdatable, ICastController {
 
     public void UseFastEcho(IEchoController echoController, Transform caster) {
         if (_currentAbilityView == null) return;
+        Debug.Log("Fast EchoCasted");
         echoController.CreateFastEcho(_currentAbilityView, caster);
         _actionPointsService.Spend(_currentAbilityView.AbilityData.Cost);
         CancelAbilityUse();
@@ -72,6 +73,7 @@ public class CastController : IUpdatable, ICastController {
 
     public void UseSlowEcho(IEchoController echoController, Transform caster) {
         if (_currentAbilityView == null) return;
+        Debug.Log("Slow EchoCasted");
         echoController.CreateSlowEcho(_currentAbilityView, caster);
         _actionPointsService.Spend(_currentAbilityView.AbilityData.Cost);
         CancelAbilityUse();

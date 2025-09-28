@@ -7,6 +7,7 @@ using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Zenject;
 using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Ui;
+using Logic.Scripts.GameDomain.MVC.Echo;
 
 public class GamePlayInstaller : MonoInstaller {
 
@@ -22,6 +23,8 @@ public class GamePlayInstaller : MonoInstaller {
     [SerializeField] private AbilityView[] _skillSet1;
     [SerializeField] private AbilityView[] _skillSet2;
     [SerializeField] private AbilityView[] _skillSet3;
+
+    [SerializeField] private EchoView _echoviewPrefab;
 
     [SerializeField] private LayerMask _layerMaskMouse;
 
@@ -41,6 +44,7 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
         Container.BindInterfacesTo<CastController>().AsSingle().WithArguments(_layerMaskMouse).NonLazy();
         Container.BindInterfacesTo<AbilityController>().AsSingle().WithArguments(_skillSet1, _skillSet2, _skillSet3).NonLazy();
+        Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
 
         Container.BindInstance(_bossBehavior);
         Container.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments(_bossBehavior).NonLazy();

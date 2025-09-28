@@ -111,6 +111,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         {
             CreateNara();
             _gamePlayUiController.SetPlayerValues(_naraData.ActualHealth, _naraData.PreviewHealth);
+            Debug.Log("ActualHealth: " + _naraData.ActualHealth);
+            Debug.Log("PreviewHealth: " + _naraData.PreviewHealth);
         }
 
         public void ResetController()

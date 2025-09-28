@@ -1092,6 +1092,7 @@ MonoBehaviour:
   - {fileID: 418736262251077746, guid: 6762f032f69b8d5458b3e6fbdbefbc3f, type: 3}
   - {fileID: 418736262251077746, guid: 8e6d2a689318aa448b6e79300e5bf276, type: 3}
   - {fileID: 418736262251077746, guid: 7cad6fd3f919d6842a98063e66d8064b, type: 3}
+  _echoviewPrefab: {fileID: 5607633760469368399, guid: 570f375e88e89fd4183efba438d2fed4, type: 3}
   _layerMaskMouse:
     serializedVersion: 2
     m_Bits: 23

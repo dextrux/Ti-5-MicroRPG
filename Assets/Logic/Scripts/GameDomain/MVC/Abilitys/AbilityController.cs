@@ -67,6 +67,10 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public void CreateAbility(Transform referenceTransform, int abilitySlotIndex) {
             ShapeSpawner.Instance.Spawn(_activeSet[abilitySlotIndex].gameObject, referenceTransform, _activeSet[abilitySlotIndex].AbilityData.TypeShape);
         }
+        
+        public void CreateAbility(Transform referenceTransform, AbilityView abilityToSpawn) {
+            ShapeSpawner.Instance.Spawn(abilityToSpawn.gameObject, referenceTransform, abilityToSpawn.AbilityData.TypeShape);
+        }
 
         public int FindIndexAbility(AbilityView abilityViewToSearch) {
             int aux = -1;

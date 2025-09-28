@@ -96,10 +96,10 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         private void OnNaraParticleCollisionEnter(ParticleSystem particleSystem)
         {
-            if (particleSystem.gameObject.TryGetComponent<AbilityView>(out AbilityView skillView))
+            /*if (particleSystem.gameObject.TryGetComponent<AbilityView>(out AbilityView skillView))
             {
                 _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData, this, this)).Execute();
-            }
+            }*/
         }
 
         public void ExecuteAbility(AbilityData abilityData, IEffectable castter)

@@ -15,10 +15,11 @@ MonoBehaviour:
   Name: True Premium
   Description: Basic Skill
   Cost: 5
-  HitPreviewPrefab: {fileID: 5734108818365841331, guid: 625931372d96c784e91f84b3f41ab919, type: 3}
+  HitPreviewPrefab: {fileID: 5775354031375676824, guid: 69987f73741d28d478a8c8d75206ec42, type: 3}
   animationClip: {fileID: 0}
   castTime: 0.75
   TypeShape: 0
+  TransformationType: 0
   Effects:
   - rid: 7168148884437860454
   references:

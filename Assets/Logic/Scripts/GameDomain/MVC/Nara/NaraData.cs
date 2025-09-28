@@ -16,6 +16,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public void ResetData() {
             ActualHealth = _naraSO.MaxHealth;
+            PreviewHealth = _naraSO.MaxHealth;
             ActualShield = ZERO_INT;
             RemainningMovementDistance = _naraSO.InitialMovementDistance;
         }

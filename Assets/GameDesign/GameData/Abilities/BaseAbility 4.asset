@@ -15,10 +15,11 @@ MonoBehaviour:
   Name: Premium with Ads
   Description: Basic Skill
   Cost: 5
-  HitPreviewPrefab: {fileID: 5734108818365841331, guid: 625931372d96c784e91f84b3f41ab919, type: 3}
+  HitPreviewPrefab: {fileID: 5775354031375676824, guid: ab53428c59cb025479f82fce481fe071, type: 3}
   animationClip: {fileID: 0}
   castTime: 0.75
   TypeShape: 5
+  TransformationType: 1
   Effects:
   - rid: 7168148884437860454
   references:

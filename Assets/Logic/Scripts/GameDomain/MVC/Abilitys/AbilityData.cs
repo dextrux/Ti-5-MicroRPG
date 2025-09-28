@@ -12,6 +12,7 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public AnimationClip animationClip;
         [Range(0.1f, 4f)] public float castTime = 2f;
         public ShapeType TypeShape;
+        public ShapeTransformType TransformationType;
         //To-Do Adicionar VFXController
         //To-Do Adicionar AbilityModifier
         //To-Do Adicionar audioClip quando tivermos

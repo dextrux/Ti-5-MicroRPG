@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 [ExecuteAlways]
 public class ShapeSpawner : MonoBehaviour {
@@ -26,17 +28,14 @@ public class ShapeSpawner : MonoBehaviour {
     }
 
 
-    public void Spawn(GameObject prefab, Transform referenceTransform, ShapeType type) {
+    public List<GameObject> Spawn(GameObject prefab, Transform referenceTransform, ShapeType type) {
         shape = type;
         Vector3[] points = GetPoints();
-
+        List<GameObject> objects = new List<GameObject>();
         foreach (var pos in points) {
-            Quaternion quat = Quaternion.LookRotation(referenceTransform.position - pos);
-            GameObject obj = Instantiate(prefab, referenceTransform.position + pos, quat);
-
-            if (olharParaCentro)
-                obj.transform.LookAt(transform.position);
+            objects.Add(Instantiate(prefab, referenceTransform.position + pos, referenceTransform.rotation));
         }
+        return objects;
     }
 
     public Vector3[] GetPoints() {

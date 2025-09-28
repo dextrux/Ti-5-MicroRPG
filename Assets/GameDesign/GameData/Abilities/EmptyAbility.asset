@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   Description: 
-  Cost: 0
+  Cost: 30
   HitPreviewPrefab: {fileID: 5734108818365841331, guid: 625931372d96c784e91f84b3f41ab919, type: 3}
   animationClip: {fileID: 0}
   castTime: 0.75
   TypeShape: 4
+  TransformationType: 0
   Effects: []
   references:
     version: 2

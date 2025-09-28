@@ -74,6 +74,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _updateSubscriptionService.RegisterFixedUpdatable(this);
             CreateBoss();
             _arenaReference = Object.FindObjectOfType<ArenaPosReference>();
+            _gamePlayUiController.SetBossValues(_bossData.ActualHealth);
         }
 
         public void ManagedFixedUpdate() {

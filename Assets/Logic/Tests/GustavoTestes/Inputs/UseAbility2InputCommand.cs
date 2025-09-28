@@ -13,8 +13,12 @@ public class UseAbility2InputCommand : BaseCommand, ICommandVoid {
     }
 
     public void Execute() {
-        if (_castController.TryUseAbility(_abilityController.ActiveAbilities[ONE_INT_CONST], _naraController.NaraSkillSpotTransform)) {
-
+        _castController.CancelAbilityUse();
+        if (_abilityController.ActiveAbilities[ONE_INT_CONST].AbilityData.TransformationType == ShapeTransformType.Rotation) {
+        _castController.TryUseAbility(_abilityController.ActiveAbilities[ONE_INT_CONST], _naraController.NaraViewGO.transform);
+        }
+        else {
+        _castController.TryUseAbility(_abilityController.ActiveAbilities[ONE_INT_CONST], _naraController.NaraSkillSpotTransform);
         }
         return;
     }

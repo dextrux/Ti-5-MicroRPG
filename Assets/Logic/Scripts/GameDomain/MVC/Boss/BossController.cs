@@ -305,6 +305,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _gamePlayUiController.OnActualBossHealthChange(_bossData.ActualHealth);
             _gamePlayUiController.OnActualBossLifeChange(_bossData.ActualHealth);
             _gamePlayUiController.OnPreviewBossHealthChange(_bossData.ActualHealth);
+            if (_bossData.ActualHealth <= 0) _gamePlayUiController.TempShowWinScreen();
         }
 
         public void Heal(int amount) {

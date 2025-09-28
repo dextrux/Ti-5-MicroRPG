@@ -19,7 +19,7 @@ MonoBehaviour:
   animationClip: {fileID: 0}
   castTime: 0.75
   TypeShape: 4
-  TransformationType: 1
+  TransformationType: 0
   Effects:
   - rid: 7168148884437860454
   references:

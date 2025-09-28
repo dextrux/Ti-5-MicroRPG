@@ -6,12 +6,16 @@ using Zenject;
 using Logic.Scripts.Turns;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.GameDomain.Commands;
+using Unity.VisualScripting;
 
 namespace Logic.Scripts.GameDomain.MVC.Ui {
     public class GamePlayUiView : MonoBehaviour {
 
         [SerializeField] private GamePlayUiBindSO _gamePlayUiBindSO;
         [SerializeField] private float tweenDuration = 0.5f;
+        [SerializeField] private GameObject _tempHoldScreen;
+        [SerializeField] private GameObject _tempWinScreen;
+        [SerializeField] private GameObject _tempLoseScreen;
 
         private Button _setSkillSet1Btn;
         private Button _setSkillSet2Btn;
@@ -25,6 +29,19 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
         private ITurnQuery _turnQuery;
         private ICommandFactory _commandFactory;
         private int _cachedAp;
+
+        public void TempHoldScreenHide() {
+            _tempHoldScreen.SetActive(false);
+        }
+
+        public void TempShowWinScreen() {
+            _tempWinScreen.SetActive(true);
+        }
+
+        public void TempShowLoseScreen() {
+            _tempLoseScreen.SetActive(true);
+        }
+
 
         #region AuxMethods
         void TweenLength(System.Func<Length> getter, System.Action<Length> setter, int newValue) {

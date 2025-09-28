@@ -46,6 +46,8 @@ namespace Logic.Scripts.GameDomain.Commands {
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
+            await _gameInputActionsController.WaitForAnyKeyPressed(cancellationTokenSource, true);
+            _gamePlayUiController.TempHoldScreenHide();
             _naraController.InitEntryPoint();
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _gameInputActionsController.EnableInputs();

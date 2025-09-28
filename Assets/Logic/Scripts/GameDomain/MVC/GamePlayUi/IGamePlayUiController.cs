@@ -2,6 +2,9 @@ using System.Threading;
 
 namespace Logic.Scripts.GameDomain.MVC.Ui {
     public interface IGamePlayUiController {
+        public void TempHoldScreenHide();
+        public void TempShowWinScreen();
+        public void TempShowLoseScreen();
 
         void SetBossValues(int newValue);
         void SetBossValues(int newPreviewValue, int newActualValue);

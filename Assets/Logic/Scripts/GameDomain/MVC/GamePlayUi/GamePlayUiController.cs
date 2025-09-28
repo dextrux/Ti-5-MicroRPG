@@ -22,6 +22,18 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
             _audioService = audioService;
         }
 
+        public void TempHoldScreenHide() {
+            _gamePlayView.TempHoldScreenHide();
+        }
+
+        public void TempShowWinScreen() {
+            _gamePlayView.TempShowWinScreen();
+        }
+
+        public void TempShowLoseScreen() {
+            _gamePlayView.TempShowLoseScreen();
+        }
+
         public void SwitchToInGameView() {
 
         }

@@ -22,7 +22,7 @@ public class CastController : IUpdatable, ICastController {
 
     public void ManagedUpdate() {
         Vector3 mousePos = GetMouseWorld();
-        HitPreviewGO.transform.rotation = Quaternion.LookRotation(new Vector3(mousePos.x,0,mousePos.z));
+        HitPreviewGO.transform.rotation = Quaternion.LookRotation(new Vector3(mousePos.x, 0, mousePos.z));
     }
 
     public bool TryUseAbility(AbilityView abilityView, Transform caster) {
@@ -66,16 +66,20 @@ public class CastController : IUpdatable, ICastController {
     public void UseFastEcho(IEchoController echoController, Transform caster) {
         if (_currentAbilityView == null) return;
         Debug.Log("Fast EchoCasted");
-        echoController.CreateFastEcho(_currentAbilityView, caster);
-        _actionPointsService.Spend(_currentAbilityView.AbilityData.Cost);
-        CancelAbilityUse();
+        if (_actionPointsService.CanSpend(_currentAbilityView.AbilityData.Cost)) {
+            echoController.CreateFastEcho(_currentAbilityView, caster);
+            _actionPointsService.Spend(_currentAbilityView.AbilityData.Cost);
+            CancelAbilityUse();
+        }
     }
 
     public void UseSlowEcho(IEchoController echoController, Transform caster) {
         if (_currentAbilityView == null) return;
-        Debug.Log("Slow EchoCasted");
-        echoController.CreateSlowEcho(_currentAbilityView, caster);
-        _actionPointsService.Spend(_currentAbilityView.AbilityData.Cost);
-        CancelAbilityUse();
+        if (_actionPointsService.CanSpend(_currentAbilityView.AbilityData.Cost)) {
+            Debug.Log("Slow EchoCasted");
+            echoController.CreateSlowEcho(_currentAbilityView, caster);
+            _actionPointsService.Spend(_currentAbilityView.AbilityData.Cost);
+            CancelAbilityUse();
+        }
     }
 }

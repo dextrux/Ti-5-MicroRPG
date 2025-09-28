@@ -108,7 +108,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                             float rad = angle * Mathf.Deg2Rad;
                             _randomDirection = new Vector3(Mathf.Cos(rad), 0f, Mathf.Sin(rad));
                             _randomDirTimeRemaining = _randomDirDuration;
-                        } else {
+                        }
+                        else {
                             _randomDirTimeRemaining -= Time.fixedDeltaTime;
                         }
                         worldDir = _randomDirection;
@@ -160,7 +161,11 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
         private void OnBossCollisionEnter(Collision collision) { }
         private void OnBossTriggerEnter(Collider collider) { }
-        private void OnBossParticleCollisionEnter(ParticleSystem particleSystem) { }
+        private void OnBossParticleCollisionEnter(ParticleSystem particleSystem) {
+            if (particleSystem.gameObject.TryGetComponent<AbilityView>(out AbilityView skillView)) {
+                _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData, this, this)).Execute();
+            }
+        }
 
         public void PlanNextTurn() { }
 
@@ -194,7 +199,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
             int attackIndex = Mathf.Clamp(entry.AttackIndex, 0, pool.Length - 1);
             BossAttack attackInstance = _bossAbilityController?.CreateAttackAtIndex(attackIndex, _bossView.transform);
-            if (attackInstance == null){
+            if (attackInstance == null) {
                 Debug.LogWarning("Boss attack instantiated: null");
                 return;
             }
@@ -267,7 +272,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _moveMode = BossMoveMode.Random;
         }
 
-        
+
 
         private AbilityData SelectAbilityByHealth(out int selectedIndex) { selectedIndex = 0; return null; }
         private int GetAbilityDefaultDelay(AbilityData ability) { return 0; }
@@ -296,12 +301,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             return nara != null ? nara.gameObject : null;
         }
 
-        
+
 
 
 
         public void TakeDamage(int amount) {
-            _bossData?.TakeDamage(amount);
+            _bossData.TakeDamage(amount);
+            Debug.Log("Tomou dano!!!!!!!!!!!!!!!!");
             _gamePlayUiController.OnActualBossHealthChange(_bossData.ActualHealth);
             _gamePlayUiController.OnActualBossLifeChange(_bossData.ActualHealth);
             _gamePlayUiController.OnPreviewBossHealthChange(_bossData.ActualHealth);

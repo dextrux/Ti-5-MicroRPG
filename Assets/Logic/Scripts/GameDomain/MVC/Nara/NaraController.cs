@@ -151,6 +151,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraData.TakeDamage(damageAmound);
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
+            _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
             if (_naraData.ActualHealth <= 0) _gamePlayUiController.TempShowLoseScreen();
         }
 

@@ -7,7 +7,7 @@ using Logic.Scripts.Services.UpdateService;
 public class NaraMovementController : IMovement, IFixedUpdatable
 {
     private readonly IUpdateSubscriptionService _updateSubscriptionService;
-    private const float MoveSpeed = 10f;
+    private const float MoveSpeed = 30f;
     private const float RotationSpeed = 10f;
 
     private Rigidbody _rigidbody;
@@ -87,23 +87,6 @@ public class NaraMovementController : IMovement, IFixedUpdatable
         if (worldDir.sqrMagnitude > 1e-6f) worldDir.Normalize();
 
         float distance = Vector3.Distance(_transform.position, movementCenter);
-
-        if (distance >= movementRadius)
-        {
-            Vector3 fromCenter = _transform.position - movementCenter;
-            fromCenter.y = 0f;
-            Vector3 outward = fromCenter.sqrMagnitude > 1e-6f ? fromCenter.normalized : Vector3.zero;
-
-            if (Vector3.Dot(worldDir, outward) > 0f)
-            {
-                _rigidbody.linearVelocity = new Vector3(0f, _rigidbody.linearVelocity.y, 0f);
-                Rotate(rotation);
-                return;
-            }
-
-            Vector3 radiusLimit = movementCenter + outward * movementRadius;
-            _rigidbody.MovePosition(new Vector3(radiusLimit.x, _transform.position.y, radiusLimit.z));
-        }
 
         Vector3 vel = worldDir * velocity;
         _rigidbody.linearVelocity = new Vector3(vel.x, _rigidbody.linearVelocity.y, vel.z);

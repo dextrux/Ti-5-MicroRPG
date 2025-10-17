@@ -9,15 +9,19 @@ namespace Logic.Scripts.Core.Mvc.WorldCamera {
         private Transform _target;
         private readonly WorldCameraView _worldCameraView;
         private IUpdateSubscriptionService _updateSubscriptionService;
+        private GameInputActions _gameInputActions;
 
         public bool IsRotateEnabled => _rotateEnabled;
 
-        public WorldCameraController(WorldCameraView worldCameraView) {
+        public WorldCameraController(WorldCameraView worldCameraView, GameInputActions gameInputActions) {
             _worldCameraView = worldCameraView;
+            _gameInputActions = gameInputActions;
         }
 
         public void UpdateAngles() {
             if (!_rotateEnabled) return;
+            Vector2 delta = _gameInputActions.Player.RotateCam.ReadValue<Vector2>();
+            SetMouseDelta(delta);
             _worldCameraView.UpdateCameraRotation(_mouseDelta.x, Time.deltaTime);
         }
 
@@ -43,6 +47,7 @@ namespace Logic.Scripts.Core.Mvc.WorldCamera {
 
         public void ManagedUpdate() {
             UpdateAngles();
+
         }
 
         public void SetMouseDelta(Vector2 delta)

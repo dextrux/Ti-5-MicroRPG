@@ -26,7 +26,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private readonly NaraData _naraData;
         private NaraMovementController _naraMovementController;
 
-        private const float MoveSpeed = 10f;
+        private const float MoveSpeed = 15f;
         private const float RotationSpeed = 10f;
 
         private readonly global::GameInputActions _gameInputActions;

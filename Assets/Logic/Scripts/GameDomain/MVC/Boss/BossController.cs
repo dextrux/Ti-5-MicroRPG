@@ -73,7 +73,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _pendingCasts = new System.Collections.Generic.List<PendingCast>();
             _updateSubscriptionService.RegisterFixedUpdatable(this);
             CreateBoss();
-            _arenaReference = Object.FindObjectOfType<ArenaPosReference>();
+            _arenaReference = Object.FindFirstObjectByType<ArenaPosReference>();
             _gamePlayUiController.SetBossValues(_bossData.ActualHealth);
         }
 
@@ -297,7 +297,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
         private GameObject FindPlayerTarget() {
             // Simplificação: procurar por NaraView na cena
-            Nara.NaraView nara = Object.FindObjectOfType<Nara.NaraView>();
+            Nara.NaraView nara = Object.FindFirstObjectByType<Nara.NaraView>();
             return nara != null ? nara.gameObject : null;
         }
 

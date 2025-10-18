@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: BossBehavior
   m_EditorClassIdentifier: 
   _availableAttacks:
-  - {fileID: 970968493990150109, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
-  - {fileID: 970968493990150109, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
-  - {fileID: 970968493990150109, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
-  - {fileID: 970968493990150109, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
+  - {fileID: -7797698259084971289, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
+  - {fileID: -7797698259084971289, guid: 4aac4fdb37213704db96c2c6c7c07fdd, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
   _fallbackStepDistance: 1
   _stepDistance: 2
   _randomChangeDirectionSeconds: 1.5
@@ -29,7 +29,7 @@ MonoBehaviour:
   - Mode: 3
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 3
-    AttackIndex: 0
+    AttackIndex: 1
   - Mode: 0
     Direction: {x: 90, y: 0, z: 0}
     DistanceMultiplier: 2

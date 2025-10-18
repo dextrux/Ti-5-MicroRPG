@@ -1,4 +1,5 @@
 using UnityEngine;
+using Logic.Scripts.GameDomain.MVC.Boss;
 
 public class BossControlleroLD : MonoBehaviour
 {

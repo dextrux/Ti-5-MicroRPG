@@ -7,11 +7,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
     {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
-        public Transform SkillSpawnSpot;
-
-        private Action<Collision> _onCollisionEnter;
-        private Action<Collider> _onTriggerEnter;
-        private Action<ParticleSystem> _onParticleCollisionEnter;
 
         private Vector3 movementCenter;
         private int movementRadius;
@@ -20,36 +15,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
         private int segments = 100;
 
         private Camera _camera;
-
-        public void SetupCallbacks(Action<Collision> onCollisionEnter, Action<Collider> onTriggerEnter,
-            Action<ParticleSystem> onParticleCollisionEnter)
-        {
-            _onCollisionEnter = onCollisionEnter;
-            _onTriggerEnter = onTriggerEnter;
-            _onParticleCollisionEnter = onParticleCollisionEnter;
-        }
-
-        public void RemoveAllCallbacks()
-        {
-            _onCollisionEnter = null;
-            _onTriggerEnter = null;
-            _onParticleCollisionEnter = null;
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            _onCollisionEnter?.Invoke(collision);
-        }
-
-        private void OnParticleCollision(GameObject particleSystemGO)
-        {
-            _onParticleCollisionEnter?.Invoke(particleSystemGO.GetComponent<ParticleSystem>());
-        }
-
-        private void OnTriggerEnter(Collider otherCollider)
-        {
-            _onTriggerEnter?.Invoke(otherCollider);
-        }
 
         public Rigidbody GetRigidbody()
         {

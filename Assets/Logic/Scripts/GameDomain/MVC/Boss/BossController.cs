@@ -161,11 +161,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
         private void OnBossCollisionEnter(Collision collision) { }
         private void OnBossTriggerEnter(Collider collider) { }
-        private void OnBossParticleCollisionEnter(ParticleSystem particleSystem) {
-            if (particleSystem.gameObject.TryGetComponent<AbilityView>(out AbilityView skillView)) {
-                _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData, this, this)).Execute();
-            }
-        }
+        private void OnBossParticleCollisionEnter(ParticleSystem particleSystem) { }
 
         public void PlanNextTurn() { }
 
@@ -337,44 +333,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             throw new NotImplementedException();
         }
 
-        public void AddShieldPerTurn(int value, int duration) {
-            throw new NotImplementedException();
+        public Transform GetReferenceTransform() {
+            return _bossView.transform;
         }
 
-        public void Stun(int value) {
-            throw new NotImplementedException();
+        public void PreviewHeal(int healAmound) {
+
         }
 
-        public void SubtractActionPoints(int value) {
-            throw new NotImplementedException();
+        public void PreviewDamage(int damageAmound) {
+
         }
 
-        public void SubtractAllActionPoints(int value) {
-            throw new NotImplementedException();
-        }
+        public void ResetPreview() {
 
-        public void ReduceActionPointsGain(int value) {
-            throw new NotImplementedException();
-        }
-
-        public void ReduceActionPointsGainPerTurn(int valueToSubtract, int duration) {
-            throw new NotImplementedException();
-        }
-
-        public void IncreaseActionPointsGainPerTurn(int valueToIncrease, int duration) {
-            throw new NotImplementedException();
-        }
-
-        public void AddActionPoints(int valueToIncrease) {
-            throw new NotImplementedException();
-        }
-
-        public void ReduceMovementPerTurn(int valueToSubtract, int duration) {
-            throw new NotImplementedException();
-        }
-
-        public void LimitActionPointUse(int value, int duration) {
-            throw new NotImplementedException();
         }
     }
 }

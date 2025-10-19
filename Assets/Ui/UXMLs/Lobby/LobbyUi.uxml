@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<engine:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:engine="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
->
-    
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Ui/Styles/LobbyMenuStyle.uss?fileID=7433441132597879392&amp;guid=8c15ef07de17af044bf70c45766414bf&amp;type=3#LobbyMenuStyle" />
+    <engine:VisualElement name="main-container" style="flex-grow: 1; background-color: rgb(42, 115, 103); align-self: auto; align-items: center; justify-content: center;">
+        <engine:Button text="Jogar" name="play-btn" class="simple-button" />
+        <engine:Button text="Customizar" name="customize-btn" class="simple-button" />
+        <engine:Button text="Sair" name="exit-btn" class="simple-button" />
+    </engine:VisualElement>
 </engine:UXML>

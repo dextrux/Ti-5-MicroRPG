@@ -149,7 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: 1891764784}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -214,6 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36415e8efa2e36645a500dbf24fd3a14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lobbyView: {fileID: 2090061991}
 --- !u!4 &1891764785
 Transform:
   m_ObjectHideFlags: 0
@@ -239,7 +241,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2090061990}
   - component: {fileID: 2090061989}
-  m_Layer: 0
+  - component: {fileID: 2090061991}
+  m_Layer: 5
   m_Name: LobbyView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,6 +283,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2090061991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090061988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00d6f24486c6efe47b623b7285e37174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uIDocument: {fileID: 2090061989}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

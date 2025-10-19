@@ -21,20 +21,46 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         private ArenaPosReference _arena;
         private IEffectable _caster;
         private IBossAttackHandler _handler;
+        private bool _executing;
+        private System.Threading.Tasks.TaskCompletionSource<bool> _executeTcs;
 
         public void Setup(ArenaPosReference arena, IEffectable caster)
         {
             _arena = arena;
             _caster = caster;
             SelectAndBuildHandler();
-            _handler?.PrepareTelegraph(_arena != null ? _arena.transform : transform);
+            Transform parentForTelegraph = transform;
+            if (_attackType == AttackType.FeatherLines)
+            {
+                parentForTelegraph = _arena != null ? _arena.transform : transform;
+            }
+            _handler?.PrepareTelegraph(parentForTelegraph);
         }
 
         public void Execute()
         {
             if (_handler == null) { Destroy(gameObject); return; }
+            if (_executeTcs == null) _executeTcs = new System.Threading.Tasks.TaskCompletionSource<bool>();
+            if (_executing) return;
+            _executing = true;
             bool hit = _handler.ComputeHits(_arena, transform, _caster);
             StartCoroutine(ExecuteAndCleanup());
+        }
+
+        public System.Threading.Tasks.Task ExecuteAsync()
+        {
+            if (_handler == null)
+            {
+                return System.Threading.Tasks.Task.CompletedTask;
+            }
+            if (_executeTcs == null) _executeTcs = new System.Threading.Tasks.TaskCompletionSource<bool>();
+            if (!_executing)
+            {
+                _executing = true;
+                bool hit = _handler.ComputeHits(_arena, transform, _caster);
+                StartCoroutine(ExecuteAndCleanup());
+            }
+            return _executeTcs.Task;
         }
 
         private System.Collections.IEnumerator ExecuteAndCleanup()
@@ -45,6 +71,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             }
             _handler.Cleanup();
             Destroy(gameObject);
+            if (_executeTcs != null && !_executeTcs.Task.IsCompleted)
+            {
+                _executeTcs.TrySetResult(true);
+            }
         }
 
         private void SelectAndBuildHandler()

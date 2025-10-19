@@ -55,9 +55,9 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys.Effects
         private static bool TryGetNaraRigidbody(IEffectable target, out Rigidbody rb)
         {
             rb = null;
-            if (target is NaraController naraCtrl)
+            if (target is NaraController naraController)
             {
-                var go = naraCtrl.NaraViewGO;
+                var go = naraController.NaraViewGO;
                 if (go != null)
                 {
                     var view = go.GetComponent<NaraView>();

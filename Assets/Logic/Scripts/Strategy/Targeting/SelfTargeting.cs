@@ -1,11 +1,14 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using Logic.Scripts.Services.UpdateService;
 using System;
 using UnityEngine;
+using Zenject;
 
 [Serializable]
 public class SelfTargeting : TargetingStrategy {
     public GameObject SelfCastPrefab;
     private GameObject previewInstance;
+    [Inject]
     public override void Initialize(AbilityData data, IEffectable caster) {
         base.Initialize(data, caster);
         if (SelfCastPrefab != null) {

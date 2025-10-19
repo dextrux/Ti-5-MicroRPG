@@ -1,4 +1,5 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using Logic.Scripts.Services.UpdateService;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,8 @@ public class AoeTargeting : TargetingStrategy
 
     private GameObject previewInstance;
 
-    public override void Initialize(AbilityData data, IEffectable caster) {
+    public override void Initialize(AbilityData data, IEffectable caster, IUpdateSubscriptionService subscriptionService) {
+        base.Initialize(data, caster, subscriptionService);
         if (AoePrefab != null) {
             previewInstance = GameObject.Instantiate(AoePrefab, new Vector3(0f, 0.1f, 0f), Quaternion.identity);
         }

@@ -31,6 +31,7 @@ public class CastController : ICastController {
     }
 
     public void CancelAbilityUse() {
+        Debug.Log("CancelAbility: " + (_currentAbility == null));
         _currentAbility?.Cancel();
         _currentAbility = null;
     }

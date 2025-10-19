@@ -5,13 +5,12 @@ using Zenject;
 public abstract class TargetingStrategy: IUpdatable {
     protected AbilityData Ability;
     protected IEffectable Caster;
-    [Inject]
     protected IUpdateSubscriptionService SubscriptionService;
-
     public virtual void Initialize(AbilityData data, IEffectable caster) {
         Ability = data;
         Caster = caster;
     }
+
     protected virtual void LockAim(out IEffectable target) {
         target = null;
     }

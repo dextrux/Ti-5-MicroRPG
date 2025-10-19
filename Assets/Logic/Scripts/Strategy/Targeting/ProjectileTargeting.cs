@@ -1,4 +1,5 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using Logic.Scripts.Services.UpdateService;
 using System;
 using UnityEngine;
 
@@ -6,8 +7,8 @@ using UnityEngine;
 public class ProjectileTargeting : TargetingStrategy {
     public ProjectileController ProjectilePrefab;
     public GameObject previewInstance;
-    public override void Initialize(AbilityData data, IEffectable caster) {
-        base.Initialize(data, caster);
+    public override void Initialize(AbilityData data, IEffectable caster, IUpdateSubscriptionService subscriptionService) {
+        base.Initialize(data, caster, subscriptionService);
         if (ProjectilePrefab != null) {
             Vector3 flatForward = (new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)).normalized;
             Quaternion forwardRotation = Quaternion.LookRotation(flatForward);

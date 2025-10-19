@@ -10,27 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: Ability 6
+  m_Name: 05 Fire Totem
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 6
-  <Description>k__BackingField: 6
-  Effects:
-  - rid: 7012276589014548560
+  <Name>k__BackingField: Fire Totem
+  <Description>k__BackingField: Summon a totem at a selected location (range Y (+0)
+    m) that lasts T (+0) turns. Every turn it pulses, dealing X (+0) DMG to enemies
+    within R (+0) m.
+  Effects: []
   TargetingStrategy:
     rid: -2
-  BaseCost: 6
-  BaseCooldown: 6
+  BaseCost: 3
+  BaseCooldown: 5
   BaseRange: 6
-  BaseArea: 6
-  BaseCasts: 6
+  BaseArea: 1
+  BaseCasts: 1
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 7012276589014548560
-      type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
-      data:
-        Name: 6
-        Description: 6
-        amount: 6

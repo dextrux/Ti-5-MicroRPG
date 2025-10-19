@@ -10,19 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: Ability 2
+  m_Name: 02 Skyfall
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 2
-  <Description>k__BackingField: 2
+  <Name>k__BackingField: Skyfall
+  <Description>k__BackingField: Summon a small star that bounces up to 3 times and
+    ignores terrain collisions. When it hits a valid target or completes its final
+    bounce, it explodes, dealing X (+0) DMG to all targets within Y (+0) m.
   Effects:
   - rid: 7012276589014548556
   TargetingStrategy:
     rid: 7012276592317825422
   BaseCost: 2
-  BaseCooldown: 2
-  BaseRange: 2
-  BaseArea: 2
-  BaseCasts: 2
+  BaseCooldown: 1
+  BaseRange: 6
+  BaseArea: 5
+  BaseCasts: 1
   references:
     version: 2
     RefIds:
@@ -31,11 +33,11 @@ MonoBehaviour:
       data:
         Name: 2
         Description: 2
-        amount: 2
+        amount: 5
     - rid: 7012276592317825422
       type: {class: AoeTargeting, ns: , asm: Assembly-CSharp}
       data:
-        AoePrefab: {fileID: 0}
+        AoePrefab: {fileID: 3019752333304840796, guid: 777f38fa60fceda46a417947e9b962cd, type: 3}
         AoeRadius: 5
         GroundLayerMask:
           serializedVersion: 2

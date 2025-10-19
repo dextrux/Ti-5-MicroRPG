@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: Ability 1
+  m_Name: 01 Magic Shot
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 1
-  <Description>k__BackingField: 1
+  <Name>k__BackingField: Magic Shot
+  <Description>k__BackingField: Fire a projectile in a straight line. It collides
+    with terrain. On hit, it deals X (+0) DMG to the target.
   Effects:
   - rid: 7012276589014548555
   TargetingStrategy:
     rid: 7012276592317825428
   BaseCost: 1
   BaseCooldown: 1
-  BaseRange: 1
+  BaseRange: 10
   BaseArea: 1
   BaseCasts: 1
   references:
@@ -31,9 +32,9 @@ MonoBehaviour:
       data:
         Name: 2
         Description: 3
-        amount: 1
+        amount: 10
     - rid: 7012276592317825428
       type: {class: ProjectileTargeting, ns: , asm: Assembly-CSharp}
       data:
-        ProjectilePrefab: {fileID: 0}
-        previewInstance: {fileID: 0}
+        ProjectilePrefab: {fileID: 9085369406770771494, guid: adf9c2772ada42241be618d11db398e2, type: 3}
+        previewInstance: {fileID: 400927624412606130, guid: 68f50b028d26dfe4e9dd7fa04ba3e54b, type: 3}

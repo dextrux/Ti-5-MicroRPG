@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44b64b25db433b84fb9e484e4f18bba9, type: 3}
-  m_Name: AbilityModifierSO
+  m_Name: ModifierCost1
   m_EditorClassIdentifier: 
-  Name: 
-  Description: 
+  Name: Cost -
+  Description: Decrease Cost of skill -1
   Modifications:
-  - Type: 0
-    Value: 0
+  - Type: 3
+    Value: -1

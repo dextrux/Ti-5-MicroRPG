@@ -40,6 +40,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Shared
             float dist = (p - closest).magnitude;
             return dist <= (width * 0.5f);
         }
+
+        public static float DistancePointToSegment(Vector3 start, Vector3 end, Vector3 point)
+        {
+            Vector3 a = new Vector3(start.x, 0f, start.z);
+            Vector3 b = new Vector3(end.x, 0f, end.z);
+            Vector3 p = new Vector3(point.x, 0f, point.z);
+            Vector3 ab = b - a;
+            float abLenSq = ab.sqrMagnitude;
+            if (abLenSq < 1e-6f) return (p - a).magnitude;
+            float t = Vector3.Dot(p - a, ab) / abLenSq;
+            t = Mathf.Clamp01(t);
+            Vector3 closest = a + ab * t;
+            return (p - closest).magnitude;
+        }
     }
 }
 

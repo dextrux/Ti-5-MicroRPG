@@ -1,5 +1,7 @@
 using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Core;
+using System.Collections.Generic;
+using Logic.Scripts.GameDomain.MVC.Abilitys;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
 {
@@ -54,6 +56,31 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
                 if (ConeArea.IsPointInsideCone(origin, forward, _radius, _angleDeg, playerWorld)) return true;
             }
             return false;
+        }
+
+        public System.Collections.IEnumerator ExecuteEffects(List<AbilityEffect> effects, ArenaPosReference arenaReference, Transform originTransform, IEffectable caster)
+        {
+            if (effects == null || effects.Count == 0) yield break;
+            IEffectable target = arenaReference.NaraController as IEffectable;
+            if (target == null) yield break;
+
+            // Apply all effects if any cone hits
+            Vector3 playerWorld = arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition());
+            bool anyHit = false;
+            for (int i = 0; i < _yaws.Length; i++)
+            {
+                Vector3 origin = originTransform.position;
+                Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * originTransform.forward;
+                if (ConeArea.IsPointInsideCone(origin, forward, _radius, _angleDeg, playerWorld)) { anyHit = true; break; }
+            }
+            if (!anyHit) yield break;
+
+            for (int i = 0; i < effects.Count; i++)
+            {
+                AbilityEffect fx = effects[i];
+                fx?.Execute(caster, target);
+            }
+            yield break;
         }
 
         public void Cleanup()

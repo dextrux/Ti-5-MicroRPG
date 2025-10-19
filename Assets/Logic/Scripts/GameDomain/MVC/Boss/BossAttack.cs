@@ -27,22 +27,21 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             _arena = arena;
             _caster = caster;
             SelectAndBuildHandler();
-            _handler?.PrepareTelegraph(transform);
+            _handler?.PrepareTelegraph(_arena != null ? _arena.transform : transform);
         }
 
         public void Execute()
         {
             if (_handler == null) { Destroy(gameObject); return; }
             bool hit = _handler.ComputeHits(_arena, transform, _caster);
-            if (hit && _effects != null)
+            StartCoroutine(ExecuteAndCleanup());
+        }
+
+        private System.Collections.IEnumerator ExecuteAndCleanup()
+        {
+            if (_effects != null)
             {
-                IEffectable target = _arena.NaraController as IEffectable;
-                if (target == null) { _handler.Cleanup(); Destroy(gameObject); return; }
-                for (int i = 0; i < _effects.Count; i++)
-                {
-                    AbilityEffect fx = _effects[i];
-                    if (fx != null) fx.Execute(_caster, target);
-                }
+                yield return _handler.ExecuteEffects(_effects, _arena, transform, _caster);
             }
             _handler.Cleanup();
             Destroy(gameObject);

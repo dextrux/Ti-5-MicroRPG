@@ -187,6 +187,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             ConfigureTurnMovement();
             await Task.Delay(1500);
             QueuePreparedAttackFromBehavior();
+            // Await current prepared casts if any were scheduled to execute immediately
+            // (Our system executes on next turn; here we only await if a handler runs now)
             _executedTurnsCount++;
         }
 

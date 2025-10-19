@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7008708713626683138}
   - component: {fileID: -7797698259084971289}
   m_Layer: 0
-  m_Name: Cones
+  m_Name: FeatherX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,21 +45,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effects:
-  - rid: 2599984782535819372
-  _attackType: 0
+  - rid: 2599984782535819375
+  - rid: 2599984789869297754
+  _attackType: 1
   _protean:
     radius: 6
     angleDeg: 45
     sides: 36
   _feather:
-    featherCount: 3
-    axisMode: 2
+    featherCount: 8
+    axisMode: 0
     width: 2
     margin: 5
   references:
     version: 2
     RefIds:
-    - rid: 2599984782535819372
+    - rid: 2599984782535819375
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
-        amount: 10
+        amount: 15
+    - rid: 2599984789869297754
+      type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
+      data:
+        amount: 5

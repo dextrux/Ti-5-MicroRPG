@@ -15,8 +15,7 @@ MonoBehaviour:
   _availableAttacks:
   - {fileID: -7797698259084971289, guid: 7f95062852bcbbd4b87c305c66dcd511, type: 3}
   - {fileID: -7797698259084971289, guid: 4aac4fdb37213704db96c2c6c7c07fdd, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: -7797698259084971289, guid: c41303b5aa8f5f74fa4b99e312082abf, type: 3}
   _fallbackStepDistance: 1
   _stepDistance: 2
   _randomChangeDirectionSeconds: 1.5
@@ -25,16 +24,16 @@ MonoBehaviour:
   - Mode: 0
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 1
-    AttackIndex: 0
+    AttackIndex: 1
   - Mode: 3
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 3
-    AttackIndex: 1
+    AttackIndex: 2
   - Mode: 0
     Direction: {x: 90, y: 0, z: 0}
     DistanceMultiplier: 2
-    AttackIndex: 0
+    AttackIndex: 1
   - Mode: 1
     Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 3
-    AttackIndex: 0
+    AttackIndex: 2

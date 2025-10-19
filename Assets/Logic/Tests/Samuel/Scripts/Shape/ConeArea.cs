@@ -65,17 +65,61 @@ public class ConeArea : AreaShape
         Vector3 angledPoint2 = RotateWorldPoint(pos, fowardPoint, (_angle / 2));
 
         int sides = 36;
-        float angleSteps = _angle / (float)36;
+        float angleStep = _angle / (float)sides;
+
         Vector3[] points = new Vector3[sides + 2];
-        for (int i = 0; i < sides; i++)
+        points[0] = pos;
+        points[1] = angledPoint1;
+
+        for (int i = 1; i < sides; i++)
         {
-            float currentAngle = ((i * angleSteps) + _angle/2) * Mathf.Deg2Rad;
-            points[i] = new Vector3(Mathf.Cos(currentAngle) * _radius, 0, Mathf.Sin(currentAngle) * _radius) + pos;
+            float currentAngle = -(_angle * 0.5f) + (i * angleStep);
+            points[1 + i] = RotateWorldPoint(pos, fowardPoint, currentAngle);
         }
 
-        points[sides] = pos;
-        points[sides + 1] = angledPoint2;
+        points[sides + 1 - 0] = angledPoint2; // index = sides + 1 - 0 == sides + 1
 
         return points;
+    }
+
+    public static Vector3[] GenerateConeArcVertices(Vector3 origin, Vector3 forward, float radius, float angleDeg, int sides)
+    {
+        int clampedSides = sides < 1 ? 1 : sides;
+        Vector3 planarForward = new Vector3(forward.x, 0f, forward.z);
+        if (planarForward.sqrMagnitude < 1e-6f) planarForward = Vector3.forward;
+        Vector3 basePoint = origin + planarForward.normalized * radius;
+        float step = angleDeg / (float)clampedSides;
+        Vector3[] arc = new Vector3[clampedSides + 1];
+        for (int i = 0; i <= clampedSides; i++)
+        {
+            float currentAngle = -(angleDeg * 0.5f) + (i * step);
+            Quaternion rot = Quaternion.Euler(0f, currentAngle, 0f);
+            arc[i] = origin + (rot * (basePoint - origin));
+        }
+        return arc;
+    }
+
+    public static Vector3[] GenerateConeOutlinePolygon(Vector3 origin, Vector3 forward, float radius, float angleDeg, int sides)
+    {
+        Vector3[] arc = GenerateConeArcVertices(origin, forward, radius, angleDeg, sides);
+        Vector3[] polygon = new Vector3[arc.Length + 1];
+        polygon[0] = origin;
+        for (int i = 0; i < arc.Length; i++)
+        {
+            polygon[i + 1] = arc[i];
+        }
+        return polygon;
+    }
+
+    public static bool IsPointInsideCone(Vector3 origin, Vector3 forward, float radius, float angleDeg, Vector3 point)
+    {
+        Vector3 planarForward = new Vector3(forward.x, 0f, forward.z);
+        if (planarForward.sqrMagnitude < 1e-6f) return false;
+        Vector3 toPoint = new Vector3(point.x - origin.x, 0f, point.z - origin.z);
+        float distance = toPoint.magnitude;
+        if (distance > radius) return false;
+        float cosHalf = Mathf.Cos(0.5f * angleDeg * Mathf.Deg2Rad);
+        float dot = Vector3.Dot(planarForward.normalized, toPoint.normalized);
+        return dot > cosHalf;
     }
 }

@@ -11,7 +11,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         private float _distance;
 
         public void SetObjectResolver(DiContainer diContainer) { }
-        public void ResolveDependencies() { _bossView = UnityEngine.Object.FindObjectOfType<BossView>(); }
+        public void ResolveDependencies() { _bossView = UnityEngine.Object.FindFirstObjectByType<BossView>(); }
 
         public BossMoveCommand SetStep(UnityEngine.Vector3 direction, float distance)
         {

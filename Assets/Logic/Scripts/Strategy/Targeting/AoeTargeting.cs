@@ -29,11 +29,10 @@ public class AoeTargeting : TargetingStrategy
     }
 
     public override void Cancel() {
-        base.Cancel();
         if (previewInstance != null) {
             UnityEngine.Object.Destroy(previewInstance);
         }
-        SubscriptionService.UnregisterUpdatable(this);
+        base.Cancel();
     }
 
     public override void LockAim(out IEffectable[] targets) {

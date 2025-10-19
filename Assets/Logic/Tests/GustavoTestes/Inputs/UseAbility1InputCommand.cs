@@ -1,5 +1,6 @@
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.CommandFactory;
+using UnityEngine;
 
 public class UseAbility1InputCommand : BaseCommand, ICommandVoid {
     private IAbilityController _abilityController;
@@ -15,7 +16,7 @@ public class UseAbility1InputCommand : BaseCommand, ICommandVoid {
     public void Execute() {
         _castController.CancelAbilityUse();
         if (_castController.TryUseAbility(_abilityController.ActiveAbilities[ZERO_INT_CONST], (IEffectable)_naraController)) {
-
+            Debug.Log("Utilizou abilidade slot 1");
         }
         return;
     }

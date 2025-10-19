@@ -1,5 +1,6 @@
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.CommandFactory;
+using UnityEngine;
 
 public class UseAbility2InputCommand : BaseCommand, ICommandVoid {
     private IAbilityController _abilityController;
@@ -14,12 +15,9 @@ public class UseAbility2InputCommand : BaseCommand, ICommandVoid {
 
     public void Execute() {
         _castController.CancelAbilityUse();
-        /*if (_abilityController.ActiveAbilities[ONE_INT_CONST].AbilityData.TransformationType == ShapeTransformType.Rotation) {
-        _castController.TryUseAbility(_abilityController.ActiveAbilities[ONE_INT_CONST], _naraController.NaraViewGO.transform);
+        if (_castController.TryUseAbility(_abilityController.ActiveAbilities[ONE_INT_CONST], (IEffectable)_naraController)) {
+            Debug.Log("Utilizou abilidade slot 2");
         }
-        else {
-        _castController.TryUseAbility(_abilityController.ActiveAbilities[ONE_INT_CONST], _naraController.NaraSkillSpotTransform);
-        }*/
         return;
     }
 }

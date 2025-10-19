@@ -20,9 +20,9 @@ public class GamePlayInstaller : MonoInstaller {
 
     [SerializeField] private GamePlayUiView _gamePlayUiView;
 
-    [SerializeField] private AbilityView[] _skillSet1;
-    [SerializeField] private AbilityView[] _skillSet2;
-    [SerializeField] private AbilityView[] _skillSet3;
+    [SerializeField] private AbilityData[] _skillSet1;
+    [SerializeField] private AbilityData[] _skillSet2;
+    [SerializeField] private AbilityData[] _skillSet3;
 
     [SerializeField] private EchoView _echoviewPrefab;
 
@@ -42,7 +42,7 @@ public class GamePlayInstaller : MonoInstaller {
         //Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
-        Container.BindInterfacesTo<CastController>().AsSingle().WithArguments(_layerMaskMouse).NonLazy();
+        Container.BindInterfacesTo<CastController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<AbilityController>().AsSingle().WithArguments(_skillSet1, _skillSet2, _skillSet3).NonLazy();
         Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
 

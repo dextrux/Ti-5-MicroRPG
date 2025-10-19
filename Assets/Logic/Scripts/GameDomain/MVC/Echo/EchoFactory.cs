@@ -11,11 +11,11 @@ namespace Logic.Scripts.GameDomain.MVC.Echo {
             _echoService = echoService;
         }
 
-        public EchoView CreateEcho(AbilityView abilityView, int castTime, Transform referenceTransform) {
+        /*public EchoView CreateEcho(AbilityView abilityView, int castTime, Transform referenceTransform) {
             EchoView echo = Object.Instantiate(_echoViewPrefab, referenceTransform.position, referenceTransform.rotation);
             echo.SetAbilityToCast(abilityView);
             _echoService.EnqueueEcho(echo, castTime);
             return echo;
-        }
+        }*/
     }
 }

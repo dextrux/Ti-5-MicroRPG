@@ -1023,62 +1023,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896875352}
   m_CullTransparentMesh: 1
---- !u!1 &2056979583
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2056979585}
-  - component: {fileID: 2056979584}
-  m_Layer: 0
-  m_Name: Gambiarras
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2056979584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056979583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9edcb54c9f4dc4c4ea00dacd9b4d56c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shape: 0
-  quantidade: 10
-  raio: 5
-  elipse: {x: 5, y: 3}
-  spacing: 2
-  squarePerSide: 4
-  spiralSpacing: 0.5
-  polygonSides: 6
-  olharParaCentro: 0
-  drawGizmos: 1
-  gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  gizmoSize: 0.3
---- !u!4 &2056979585
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056979583}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2129559428
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,17 +1059,14 @@ MonoBehaviour:
   _bossBehavior: {fileID: 11400000, guid: 03c0e426f8bb667479348687e2216e30, type: 2}
   _gamePlayUiView: {fileID: 703431458}
   _skillSet1:
-  - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
-  - {fileID: 418736262251077746, guid: c808fc7d388c129429c9d945624b2b71, type: 3}
-  - {fileID: 418736262251077746, guid: 7cad6fd3f919d6842a98063e66d8064b, type: 3}
+  - {fileID: 11400000, guid: d9d52de431f81e94c97467c811060a54, type: 2}
+  - {fileID: 11400000, guid: 4c82f2d9bc2cf09418a437c668996e07, type: 2}
   _skillSet2:
-  - {fileID: 418736262251077746, guid: a0fd9d631032c95488a62aac8901ea12, type: 3}
-  - {fileID: 418736262251077746, guid: bbd14110ee0efe14585c5612fe3d88bb, type: 3}
-  - {fileID: 418736262251077746, guid: 7cad6fd3f919d6842a98063e66d8064b, type: 3}
+  - {fileID: 11400000, guid: d774261d7df73ed4fa8f08149dc4b81f, type: 2}
+  - {fileID: 11400000, guid: f05ea23b66e3fa843b6b873050b55e1f, type: 2}
   _skillSet3:
-  - {fileID: 418736262251077746, guid: 6762f032f69b8d5458b3e6fbdbefbc3f, type: 3}
-  - {fileID: 418736262251077746, guid: 8e6d2a689318aa448b6e79300e5bf276, type: 3}
-  - {fileID: 418736262251077746, guid: 7cad6fd3f919d6842a98063e66d8064b, type: 3}
+  - {fileID: 11400000, guid: 72ba9ea640b863144836fdfdc9469bd6, type: 2}
+  - {fileID: 11400000, guid: f4ae99592295ab4438105fcbb1c1ae10, type: 2}
   _echoviewPrefab: {fileID: 5607633760469368399, guid: 570f375e88e89fd4183efba438d2fed4, type: 3}
   _layerMaskMouse:
     serializedVersion: 2
@@ -1212,5 +1153,4 @@ SceneRoots:
   - {fileID: 1486426316}
   - {fileID: 9011166226298273354}
   - {fileID: 703431457}
-  - {fileID: 2056979585}
   - {fileID: 1792176010}

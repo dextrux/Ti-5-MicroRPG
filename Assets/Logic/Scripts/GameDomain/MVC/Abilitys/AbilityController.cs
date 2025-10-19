@@ -1,3 +1,4 @@
+using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.Services.CommandFactory;
 using System.Linq;
@@ -8,34 +9,35 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         private readonly ICommandFactory _commandFactory;
         private readonly IGamePlayUiController _gamePlayUiController;
 
-        private readonly AbilityView[] _abilitySet1;
-        private readonly AbilityView[] _abilitySet2;
-        private readonly AbilityView[] _abilitySet3;
-        private AbilityView[] _activeSet;
-        public AbilityView[] ActiveAbilities => _activeSet;
+        private readonly AbilityData[] _abilitySet1;
+        private readonly AbilityData[] _abilitySet2;
+        private readonly AbilityData[] _abilitySet3;
+        public Transform PlayerTransform;
+
+        private AbilityData[] _activeSet;
+        public AbilityData[] ActiveAbilities => _activeSet;
         int Index;
 
-        public AbilityController(ICommandFactory commandFactory, AbilityView[] abilitieSet1, AbilityView[] abilitieSet2, AbilityView[] abilitieSet3, IGamePlayUiController gamePlayUiController) {
+        public AbilityController(ICommandFactory commandFactory, AbilityData[] abilitieSet1, AbilityData[] abilitieSet2,
+            AbilityData[] abilitieSet3, IGamePlayUiController gamePlayUiController) {
             _commandFactory = commandFactory;
             _gamePlayUiController = gamePlayUiController;
             _abilitySet1 = abilitieSet1;
             _abilitySet2 = abilitieSet2;
             _abilitySet3 = abilitieSet3;
-            _activeSet = abilitieSet1;
             _activeSet = _abilitySet1;
             Index = 1;
         }
 
-        public void InitEntryPoint() {
+        public void InitEntryPoint(INaraController naraController) {
             UpdateUi();
+            PlayerTransform = naraController.NaraViewGO.transform;
         }
 
         private void UpdateUi() {
-            _gamePlayUiController.SetAbilityValues(
-                            _activeSet[0].AbilityData.Cost, _activeSet[0].AbilityData.name,
-                            _activeSet[1].AbilityData.Cost, _activeSet[1].AbilityData.name,
-                            _activeSet[2].AbilityData.Cost, _activeSet[2].AbilityData.name
-                            );
+            _gamePlayUiController?.SetAbilityValues(
+                _activeSet[0].GetCost(), _activeSet[0].Name,
+                _activeSet[1].GetCost(), _activeSet[1].Name);
         }
 
         public void NextSet() {
@@ -65,17 +67,17 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             UpdateUi();
         }
         public void CreateAbility(Transform referenceTransform, int abilitySlotIndex) {
-            ShapeSpawner.Instance.Spawn(_activeSet[abilitySlotIndex].gameObject, referenceTransform, _activeSet[abilitySlotIndex].AbilityData.TypeShape);
-        }
-        
-        public void CreateAbility(Transform referenceTransform, AbilityView abilityToSpawn) {
-            ShapeSpawner.Instance.Spawn(abilityToSpawn.gameObject, referenceTransform, abilityToSpawn.AbilityData.TypeShape);
+            //To-Do Setar habilidades
         }
 
-        public int FindIndexAbility(AbilityView abilityViewToSearch) {
+        public void CreateAbility(Transform referenceTransform, AbilityData abilityToSpawn) {
+            //To-Do Setar habilidades
+        }
+
+        public int FindIndexAbility(AbilityData abilityToSearch) {
             int aux = -1;
             for (int i = 0; i < _activeSet.Count(); i++) {
-                if (_activeSet[i].name == abilityViewToSearch.name) {
+                if (_activeSet[i].name == abilityToSearch.name) {
                     return i;
                 }
             }

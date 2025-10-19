@@ -8,7 +8,7 @@ using UnityEngine;
 using Logic.Scripts.Turns;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
-    public class NaraController : INaraController, IFixedUpdatable, IEffectable
+    public class NaraController : INaraController, IFixedUpdatable, IEffectable, IEffectableAction
     {
         private readonly IUpdateSubscriptionService _updateSubscriptionService;
         private readonly IAudioService _audioService;
@@ -16,9 +16,9 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private readonly IResourcesLoaderService _resourcesLoaderService;
         private readonly IGamePlayUiController _gamePlayUiController;
         private readonly ITurnStateReader _turnStateReader;
-
+        int i = 0;
         public GameObject NaraViewGO => _naraView.gameObject;
-        public Transform NaraSkillSpotTransform => _naraView.SkillSpawnSpot;
+        public Transform NaraSkillSpotTransform => _naraView.transform;
         public NaraMovementController NaraMove => _naraMovementController;
 
         private NaraView _naraView;
@@ -67,16 +67,10 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             }
         }
 
-        public void DisableCallbacks()
-        {
-            _naraView.RemoveAllCallbacks();
-        }
-
         public void CreateNara()
         {
             _naraView = Object.Instantiate(_naraViewPrefab);
             _naraData.ResetData();
-            _naraView.SetupCallbacks(OnNaraCollisionEnter, OnNaraTriggerEnter, OnNaraParticleCollisionEnter);
             _naraMovementController.SetNaraRigidbody(_naraView.GetRigidbody());
             _naraMovementController.SetMovementRadiusCenter();
             _naraView.SetNaraCenterView(_naraMovementController.GetNaraCenter());
@@ -84,22 +78,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraView.CreateLineRenderer();
             _naraView.SetCamera();
             _naraMovementController.SetCamera(_naraView.GetCamera());
-        }
-
-        private void OnNaraCollisionEnter(Collision collision)
-        {
-        }
-
-        private void OnNaraTriggerEnter(Collider collider) {
-            
-        }
-
-        private void OnNaraParticleCollisionEnter(ParticleSystem particleSystem)
-        {
-            /*if (particleSystem.gameObject.TryGetComponent<AbilityView>(out AbilityView skillView))
-            {
-                _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(skillView.AbilityData, this, this)).Execute();
-            }*/
         }
 
         public void ExecuteAbility(AbilityData abilityData, IEffectable castter)
@@ -111,8 +89,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         {
             CreateNara();
             _gamePlayUiController.SetPlayerValues(_naraData.ActualHealth, _naraData.PreviewHealth);
-            Debug.Log("ActualHealth: " + _naraData.ActualHealth);
-            Debug.Log("PreviewHealth: " + _naraData.PreviewHealth);
         }
 
         public void ResetController()
@@ -134,6 +110,14 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         #region IEffectable Methods
+
+        public Transform GetReferenceTransform() {
+            return _naraView.transform;
+        }
+
+        public void ResetPreview() {
+            _naraData.ResetPreview();
+        }
         public void PreviewDamage(int damageAmound)
         {
             _naraData.TakeDamage(damageAmound);
@@ -152,7 +136,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
             _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
-            if (_naraData.ActualHealth <= 0) _gamePlayUiController.TempShowLoseScreen();
+            if (_naraData.IsAlive()) _gamePlayUiController.TempShowLoseScreen();
         }
 
         public void Heal(int healAmount)
@@ -162,20 +146,11 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
         }
 
-        public void AddShield(int value)
-        {
-            _naraData.AddShield(value);
-        }
-
         public void TakeDamagePerTurn(int damageAmount, int duration) {
 
         }
 
         public void HealPerTurn(int healAmount, int duration) {
-
-        }
-
-        public void AddShieldPerTurn(int value, int duration) {
 
         }
 
@@ -188,10 +163,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void SubtractAllActionPoints(int value) {
-
-        }
-
-        public void ReduceActionPointsGain(int value) {
 
         }
 

@@ -61,7 +61,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _FresnelPower: 3
-    - _GradientPower: 0.9
+    - _GradientPower: 2
     - _NoiseScale: 15
     - _Power: 0.6
     - _QueueControl: 0

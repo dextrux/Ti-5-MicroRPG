@@ -12,11 +12,13 @@ namespace Logic.Scripts.GameDomain.Effects
     {
         [Min(0f)] [SerializeField] private float _force = 2f;
         [Min(0f)] [SerializeField] private float _speed = 6f;
-        private int _stacksMul;
+        [SerializeField]private static int _stacksMul = 0;
         private int _distanceMul;
 
         public override void Execute(IEffectable caster, IEffectable target)
         {
+            _stacksMul += 1;
+            Debug.Log($"Knockback foi, Stack = {_stacksMul}");
             if (target == null) return;
             if (!TryGetNaraRigidbody(target, out var rb)) return;
 
@@ -126,7 +128,7 @@ namespace Logic.Scripts.GameDomain.Effects
 
         public void SetForceScalers(int stacksMultiplier, int distanceMultiplier)
         {
-            _stacksMul = stacksMultiplier;
+            //_stacksMul = stacksMultiplier;
             _distanceMul = distanceMultiplier;
         }
 

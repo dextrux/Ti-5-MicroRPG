@@ -92,9 +92,22 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     }
                     case FeatherAxisMode.XZ:
                     {
-                        float offset = (i - (n - 1) * 0.5f) * spacing;
-                        start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                        end = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        int nX = (n + 1) / 2; // even indices
+                        int nZ = n / 2;       // odd indices
+                        if ((i % 2) == 0)
+                        {
+                            int k = i / 2;
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        }
+                        else
+                        {
+                            int k = (i - 1) / 2;
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        }
                         break;
                     }
                     case FeatherAxisMode.Diagonal:
@@ -156,9 +169,22 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     }
                     case FeatherAxisMode.XZ:
                     {
-                        float offset = (i - (n - 1) * 0.5f) * spacing;
-                        start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                        end = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        int nX = (n + 1) / 2;
+                        int nZ = n / 2;
+                        if ((i % 2) == 0)
+                        {
+                            int k = i / 2;
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        }
+                        else
+                        {
+                            int k = (i - 1) / 2;
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        }
                         break;
                     }
                     case FeatherAxisMode.Diagonal:
@@ -252,6 +278,25 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             {
                 sStart = new Vector3(center.x + specialOffset, center.y, center.z - 100f);
                 sEnd = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
+            }
+            else if (_params.axisMode == FeatherAxisMode.XZ)
+            {
+                int nX = (n + 1) / 2;
+                int nZ = n / 2;
+                if ((_specialIndex % 2) == 0)
+                {
+                    int k = _specialIndex / 2;
+                    float offX = (k - (nX - 1) * 0.5f) * spacing;
+                    sStart = new Vector3(center.x - 100f, center.y, center.z + offX);
+                    sEnd = new Vector3(center.x + 100f, center.y, center.z + offX);
+                }
+                else
+                {
+                    int k = (_specialIndex - 1) / 2;
+                    float offZ = (k - (nZ - 1) * 0.5f) * spacing;
+                    sStart = new Vector3(center.x + offZ, center.y, center.z - 100f);
+                    sEnd = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                }
             }
             else if (_params.axisMode == FeatherAxisMode.Diagonal)
             {
@@ -350,9 +395,22 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     }
                     case FeatherAxisMode.XZ:
                     {
-                        float offset = (i - (n - 1) * 0.5f) * spacing;
-                        start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                        end = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        int nX = (n + 1) / 2;
+                        int nZ = n / 2;
+                        if ((i % 2) == 0)
+                        {
+                            int k = i / 2;
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        }
+                        else
+                        {
+                            int k = (i - 1) / 2;
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        }
                         break;
                     }
                     case FeatherAxisMode.Diagonal:

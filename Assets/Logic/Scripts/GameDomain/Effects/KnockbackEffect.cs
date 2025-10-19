@@ -12,7 +12,7 @@ namespace Logic.Scripts.GameDomain.Effects
     {
         [Min(0f)] [SerializeField] private float _force = 2f;
         [Min(0f)] [SerializeField] private float _speed = 6f;
-        [SerializeField]private static int _stacksMul = 0;
+        [SerializeField] private static int _stacksMul = 0;
         private int _distanceMul;
 
         public override void Execute(IEffectable caster, IEffectable target)

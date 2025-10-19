@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7008708713626683138}
   - component: {fileID: -7797698259084971289}
   m_Layer: 0
-  m_Name: FeatherZ
+  m_Name: XFeatherG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _effects:
   - rid: 2599984782535819375
-  - rid: 2599984789869297785
+  - rid: 2599984789869297805
   _attackType: 1
   _protean:
     radius: 6
@@ -54,7 +54,7 @@ MonoBehaviour:
     sides: 36
   _feather:
     featherCount: 8
-    axisMode: 1
+    axisMode: 0
     width: 2
     margin: 5
     forceBase: 2
@@ -67,9 +67,9 @@ MonoBehaviour:
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
         amount: 15
-    - rid: 2599984789869297785
+    - rid: 2599984789869297805
       type: {class: GrappleEffect, ns: Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
-        _force: 3
+        _force: 2
         _stopDistance: 1
         _speed: 6

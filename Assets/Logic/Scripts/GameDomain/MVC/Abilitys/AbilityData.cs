@@ -104,16 +104,20 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         }
 
         public bool HasModification(Modification modifiationToSearch, out int value) {
-            foreach (KeyValuePair<Modification, int> entry in firstAbilityModifier.Modification) {
-                if (entry.Key == modifiationToSearch) {
-                    value = entry.Value;
-                    return true;
+            if (firstAbilityModifier != null) {
+                foreach (KeyValuePair<Modification, int> entry in firstAbilityModifier.Modification) {
+                    if (entry.Key == modifiationToSearch) {
+                        value = entry.Value;
+                        return true;
+                    }
                 }
             }
-            foreach (KeyValuePair<Modification, int> entry in secondAbilityModifier.Modification) {
-                if (entry.Key == modifiationToSearch) {
-                    value = entry.Value;
-                    return true;
+            if (secondAbilityModifier != null) {
+                foreach (KeyValuePair<Modification, int> entry in secondAbilityModifier.Modification) {
+                    if (entry.Key == modifiationToSearch) {
+                        value = entry.Value;
+                        return true;
+                    }
                 }
             }
             value = 0;

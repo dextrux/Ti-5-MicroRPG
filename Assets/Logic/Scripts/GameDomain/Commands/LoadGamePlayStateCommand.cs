@@ -44,11 +44,11 @@ namespace Logic.Scripts.GameDomain.Commands {
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
             await _gameInputActionsController.WaitForAnyKeyPressed(cancellationTokenSource, true);
-            _naraController.InitEntryPoint();
             _gamePlayUiController.TempHoldScreenHide();
-            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _gameInputActionsController.EnableInputs();
             _gameInputActionsController.RegisterAllInputListeners();
+            _naraController.InitEntryPoint();
+            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _abilityController.InitEntryPoint(_naraController);
             await Awaitable.NextFrameAsync();
             _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute();

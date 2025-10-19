@@ -12,18 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
   m_Name: Ability 1
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
-  <Description>k__BackingField: 
-  Effects: []
+  <Name>k__BackingField: 1
+  <Description>k__BackingField: 1
+  Effects:
+  - rid: 7012276589014548555
   TargetingStrategy:
     rid: -2
-  BaseCost: 0
-  BaseCooldown: 0
-  BaseRange: 0
-  BaseArea: 0
-  BaseCasts: 0
+  BaseCost: 1
+  BaseCooldown: 1
+  BaseRange: 1
+  BaseArea: 1
+  BaseCasts: 1
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 7012276589014548555
+      type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
+      data:
+        Name: 2
+        Description: 3
+        amount: 1

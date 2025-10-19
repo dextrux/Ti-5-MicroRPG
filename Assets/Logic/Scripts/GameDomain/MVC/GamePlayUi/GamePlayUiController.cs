@@ -2,7 +2,9 @@ using Logic.Scripts.Core.Mvc.UICamera;
 using Logic.Scripts.GameDomain.States;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.StateMachineService;
+using System.Diagnostics;
 using System.Threading;
+using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Ui {
     public class GamePlayUiController : IGamePlayUiController {
@@ -75,19 +77,15 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
         }
 
         public void SetAbilityValues(int ability1Cost, string ability1Name, 
-            int ability2Cost, string ability2Name,
-            int ability3Cost, string ability3Name) {
+            int ability2Cost, string ability2Name) {
+            UnityEngine.Debug.Log("GameplayView: ");
             _gamePlayView.OnSkill1CostChange(ability1Cost);
 
             _gamePlayView.OnSkill2CostChange(ability2Cost);
 
-            _gamePlayView.OnSkill3CostChange(ability3Cost);
-
             _gamePlayView.OnSkill1NameChange(ability1Name);
 
             _gamePlayView.OnSkill2NameChange(ability2Name);
-
-            _gamePlayView.OnSkill3NameChange(ability3Name);
         }
 
         public void ShowWinPanel(CancellationTokenSource cancellationTokenSource) {
@@ -121,14 +119,9 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
 
         public void OnSkill2CostChange(int newValue) => _gamePlayView.OnSkill2CostChange(newValue);
 
-        public void OnSkill3CostChange(int newValue) => _gamePlayView.OnSkill3CostChange(newValue);
-
-
         public void OnSkill1NameChange(string newValue) => _gamePlayView.OnSkill1NameChange(newValue);
 
         public void OnSkill2NameChange(string newValue) => _gamePlayView.OnSkill2NameChange(newValue);
-
-        public void OnSkill3NameChange(string newValue) => _gamePlayView.OnSkill3NameChange(newValue);
 
     }
 }

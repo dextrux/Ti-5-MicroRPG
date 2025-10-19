@@ -17,13 +17,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private readonly IGamePlayUiController _gamePlayUiController;
         private readonly ITurnStateReader _turnStateReader;
         int i = 0;
-        public GameObject NaraViewGO {
-            get {
-                Debug.Log("count: " + i);
-                i++;
-                return _naraView.gameObject;
-            }
-        }
+        public GameObject NaraViewGO => _naraView.gameObject;
         public Transform NaraSkillSpotTransform => _naraView.transform;
         public NaraMovementController NaraMove => _naraMovementController;
 

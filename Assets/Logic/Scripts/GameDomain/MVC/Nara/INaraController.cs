@@ -1,4 +1,3 @@
-using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 

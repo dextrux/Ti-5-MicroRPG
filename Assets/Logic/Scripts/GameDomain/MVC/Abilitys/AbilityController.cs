@@ -25,7 +25,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             _abilitySet1 = abilitieSet1;
             _abilitySet2 = abilitieSet2;
             _abilitySet3 = abilitieSet3;
-            _activeSet = abilitieSet1;
             _activeSet = _abilitySet1;
             Index = 1;
         }
@@ -36,11 +35,9 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         }
 
         private void UpdateUi() {
-            _gamePlayUiController.SetAbilityValues(
-                            _activeSet[0].GetCost(), _activeSet[0].Name,
-                            _activeSet[1].GetCost(), _activeSet[1].Name,
-                            _activeSet[2].GetCost(), _activeSet[2].Name
-                            );
+            _gamePlayUiController?.SetAbilityValues(
+                _activeSet[0].GetCost(), _activeSet[0].Name,
+                _activeSet[1].GetCost(), _activeSet[1].Name);
         }
 
         public void NextSet() {
@@ -72,10 +69,10 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public void CreateAbility(Transform referenceTransform, int abilitySlotIndex) {
             //To-Do Setar habilidades
         }
-        
+
         public void CreateAbility(Transform referenceTransform, AbilityData abilityToSpawn) {
             //To-Do Setar habilidades
-         }
+        }
 
         public int FindIndexAbility(AbilityData abilityToSearch) {
             int aux = -1;

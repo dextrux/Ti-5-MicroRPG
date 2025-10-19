@@ -10,7 +10,7 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
         void SetBossValues(int newPreviewValue, int newActualValue);
         void SetPlayerValues(int newValue);
         void SetPlayerValues(int newPreviewValue, int newActualValue);
-        void SetAbilityValues(int ability1Cost, string ability1Name, int ability2Cost, string ability2Name, int ability3Cost, string ability3Name);
+        void SetAbilityValues(int ability1Cost, string ability1Name, int ability2Cost, string ability2Name);
 
         void OnActualBossHealthChange(int newValue);
 
@@ -30,12 +30,8 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
 
         void OnSkill2CostChange(int newValue);
 
-        void OnSkill3CostChange(int newValue);
-
         void OnSkill1NameChange(string newValue);
 
         void OnSkill2NameChange(string newValue);
-
-        void OnSkill3NameChange(string newValue);
     }
 }

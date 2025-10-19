@@ -10,22 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: AbilityData
+  m_Name: TesteAtaqueBoss
   m_EditorClassIdentifier: 
-  Name: Skill 1
+  Name: 
   Description: 
   Cost: 0
   HitPreviewPrefab: {fileID: 0}
   animationClip: {fileID: 0}
-  castTime: 1
-  TypeShape: 4
+  castTime: 2
+  TypeShape: 0
   TransformationType: 0
-  Effects:
-  - rid: 8976689351368638550
+  Effects: []
   references:
     version: 2
-    RefIds:
-    - rid: 8976689351368638550
-      type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
-      data:
-        amount: 0
+    RefIds: []

@@ -21,11 +21,11 @@ MonoBehaviour:
   TypeShape: 4
   TransformationType: 0
   Effects:
-  - rid: 7168148884437860454
+  - rid: 8976689351368638552
   references:
     version: 2
     RefIds:
-    - rid: 7168148884437860454
+    - rid: 8976689351368638552
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
-        amount: 5
+        amount: 0

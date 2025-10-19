@@ -21,6 +21,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         private int _specialIndex;
         private static bool _togglePushPull;
         public static System.Func<int> GetPlayerDebuffStacks;
+        public static Vector3 CurrentSpecialStart;
+        public static Vector3 CurrentSpecialEnd;
+        public static Vector3 CurrentSpecialAxis;
+        public static float CurrentStripWidth;
 
         public FeatherLinesHandler(FeatherLinesParams p)
         {
@@ -207,6 +211,18 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             return s > 0 && t > 0 && (s + t) < A;
         }
 
+        private float PerpendicularDistanceToLineXZ(Vector3 point, Vector3 a, Vector3 b)
+        {
+            Vector2 P = new Vector2(point.x, point.z);
+            Vector2 A = new Vector2(a.x, a.z);
+            Vector2 B = new Vector2(b.x, b.z);
+            Vector2 AB = B - A;
+            float len = AB.magnitude;
+            if (len < 1e-6f) return Vector2.Distance(P, A);
+            float area2 = Mathf.Abs((B.x - A.x) * (P.y - A.y) - (B.y - A.y) * (P.x - A.x));
+            return area2 / len;
+        }
+
         public System.Collections.IEnumerator ExecuteEffects(List<AbilityEffect> effects, ArenaPosReference arenaReference, Transform originTransform, IEffectable caster)
         {
             if (effects == null || effects.Count == 0) { Debug.Log("FeatherLinesHandler.ExecuteEffects: no effects"); yield break; }
@@ -248,6 +264,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
             }
 
+            // Expose axis and endpoints for effects to use perpendicular displacement/pull
+            CurrentSpecialStart = sStart;
+            CurrentSpecialEnd = sEnd;
+            CurrentSpecialAxis = (sEnd - sStart).normalized;
+            CurrentStripWidth = _params.width;
+
             // Hide special line and wait
             LineRenderer sLr = (_views != null && _specialIndex >= 0 && _specialIndex < _views.Length) ? _views[_specialIndex].Line : null;
             if (sLr != null) sLr.enabled = false;
@@ -277,9 +299,26 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         // Ignore actual movement for now, but still mark effect as executed
                         disp.baseDistance = 0f;
                     }
+                    if (fx1 is IForceScaledEffect scalable1)
+                    {
+                        int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
+                        // Perpendicular distance from player to the infinite line (sStart->sEnd) on XZ
+                        float distMeters = PerpendicularDistanceToLineXZ(
+                            arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition()),
+                            CurrentSpecialStart, CurrentSpecialEnd);
+                        int distMul = Mathf.RoundToInt(distMeters);
+                        scalable1.SetForceScalers(stacks, distMul);
+                    }
 
                     Debug.Log($"FeatherLinesHandler: applying special Effect[1] push={_togglePushPull}");
-                    fx1.Execute(caster, target);
+                    if (fx1 is IAsyncEffect asyncFx1)
+                    {
+                        yield return asyncFx1.ExecuteRoutine(caster, target);
+                    }
+                    else
+                    {
+                        fx1.Execute(caster, target);
+                    }
                     yield return new WaitForSeconds(0.5f);
                     // Recompute player position after displacement
                     playerWorld = arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition());
@@ -328,6 +367,15 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 if (StripMath.IsPointInsideStrip(start, end, _params.width, playerWorld))
                 {
                     AbilityEffect fx0 = effects[0];
+                    if (fx0 is IForceScaledEffect scalable0)
+                    {
+                        int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
+                        float distMeters = PerpendicularDistanceToLineXZ(
+                            arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition()),
+                            CurrentSpecialStart, CurrentSpecialEnd);
+                        int distMul = Mathf.RoundToInt(distMeters);
+                        scalable0.SetForceScalers(stacks, distMul);
+                    }
                     Debug.Log("FeatherLinesHandler: applying Effect[0] due to hit");
                     fx0?.Execute(caster, target);
                 }

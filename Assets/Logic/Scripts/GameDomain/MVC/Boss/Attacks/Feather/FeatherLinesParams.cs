@@ -11,6 +11,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public FeatherAxisMode axisMode;
         public float width;
         public float margin;
+        public float forceBase;
+        public float forcePerMeter;
+        public float forcePerDebuff;
     }
 }
 

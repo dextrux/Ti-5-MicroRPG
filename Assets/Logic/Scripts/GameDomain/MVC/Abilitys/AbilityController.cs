@@ -35,6 +35,8 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         }
 
         private void UpdateUi() {
+            Debug.Log(_activeSet[0].GetCost());
+            Debug.Log(_activeSet[1].GetCost());
             _gamePlayUiController?.SetAbilityValues(
                 _activeSet[0].GetCost(), _activeSet[0].Name,
                 _activeSet[1].GetCost(), _activeSet[1].Name);

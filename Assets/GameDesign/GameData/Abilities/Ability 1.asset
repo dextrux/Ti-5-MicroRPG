@@ -17,7 +17,7 @@ MonoBehaviour:
   Effects:
   - rid: 7012276589014548555
   TargetingStrategy:
-    rid: -2
+    rid: 7012276592317825428
   BaseCost: 1
   BaseCooldown: 1
   BaseRange: 1
@@ -26,11 +26,14 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 7012276589014548555
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
         Name: 2
         Description: 3
         amount: 1
+    - rid: 7012276592317825428
+      type: {class: ProjectileTargeting, ns: , asm: Assembly-CSharp}
+      data:
+        ProjectilePrefab: {fileID: 0}
+        previewInstance: {fileID: 0}

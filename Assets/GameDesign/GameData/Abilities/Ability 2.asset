@@ -17,7 +17,7 @@ MonoBehaviour:
   Effects:
   - rid: 7012276589014548556
   TargetingStrategy:
-    rid: -2
+    rid: 7012276592317825422
   BaseCost: 2
   BaseCooldown: 2
   BaseRange: 2
@@ -26,11 +26,17 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 7012276589014548556
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
         Name: 2
         Description: 2
         amount: 2
+    - rid: 7012276592317825422
+      type: {class: AoeTargeting, ns: , asm: Assembly-CSharp}
+      data:
+        AoePrefab: {fileID: 0}
+        AoeRadius: 5
+        GroundLayerMask:
+          serializedVersion: 2
+          m_Bits: 0

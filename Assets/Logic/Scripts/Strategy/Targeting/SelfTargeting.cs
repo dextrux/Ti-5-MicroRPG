@@ -1,6 +1,8 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using System;
 using UnityEngine;
 
+[Serializable]
 public class SelfTargeting : TargetingStrategy {
     public GameObject SelfCastPrefab;
     private GameObject previewInstance;

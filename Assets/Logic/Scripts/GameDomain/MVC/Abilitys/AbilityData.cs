@@ -41,37 +41,37 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
 
         public int GetDamage() {
             int value = 0;
-            HasModification(Modification.Damage, out value);
+            HasModification(ModificationType.Damage, out value);
             return value;
         }
 
         public int GetRange() {
             int value = 0;
-            HasModification(Modification.Range, out value);
+            HasModification(ModificationType.Range, out value);
             return BaseRange + value;
         }
 
         public int GetArea() {
             int value = 0;
-            HasModification(Modification.Area, out value);
+            HasModification(ModificationType.Area, out value);
             return BaseArea + value;
         }
 
         public int GetCasts() {
             int value = 0;
-            HasModification(Modification.Cast, out value);
+            HasModification(ModificationType.Cast, out value);
             return BaseCasts + value;
         }
 
         public int GetCost() {
             int value = 0;
-            HasModification(Modification.Cost, out value);
+            HasModification(ModificationType.Cost, out value);
             return BaseCost + value;
         }
 
         public int GetCooldown() {
             int value = 0;
-            HasModification(Modification.CountdownReduction, out value);
+            HasModification(ModificationType.CountdownReduction, out value);
             return BaseCooldown + value;
         }
 
@@ -103,18 +103,18 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             }
         }
 
-        public bool HasModification(Modification modifiationToSearch, out int value) {
+        public bool HasModification(ModificationType modifiationToSearch, out int value) {
             if (firstAbilityModifier != null) {
-                foreach (KeyValuePair<Modification, int> entry in firstAbilityModifier.Modification) {
-                    if (entry.Key == modifiationToSearch) {
+                foreach (Modification entry in firstAbilityModifier.Modifications) {
+                    if (entry.Type == modifiationToSearch) {
                         value = entry.Value;
                         return true;
                     }
                 }
             }
             if (secondAbilityModifier != null) {
-                foreach (KeyValuePair<Modification, int> entry in secondAbilityModifier.Modification) {
-                    if (entry.Key == modifiationToSearch) {
+                foreach (Modification entry in secondAbilityModifier.Modifications) {
+                    if (entry.Type == modifiationToSearch) {
                         value = entry.Value;
                         return true;
                     }

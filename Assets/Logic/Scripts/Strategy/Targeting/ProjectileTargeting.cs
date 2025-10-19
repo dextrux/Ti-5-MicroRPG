@@ -1,6 +1,8 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using System;
 using UnityEngine;
 
+[Serializable]
 public class ProjectileTargeting : TargetingStrategy {
     public ProjectileController ProjectilePrefab;
     public GameObject previewInstance;
@@ -9,7 +11,7 @@ public class ProjectileTargeting : TargetingStrategy {
         if (ProjectilePrefab != null) {
             Vector3 flatForward = (new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)).normalized;
             Quaternion forwardRotation = Quaternion.LookRotation(flatForward);
-            ProjectileController projectile = Object.Instantiate(ProjectilePrefab.gameObject,
+            ProjectileController projectile = UnityEngine.Object.Instantiate(ProjectilePrefab.gameObject,
                 new Vector3(caster.GetReferenceTransform().position.x, (caster.GetReferenceTransform().position.y + 1), caster.GetReferenceTransform().position.z),
                 forwardRotation).GetComponent<ProjectileController>();
         }

@@ -1,8 +1,9 @@
-public enum Modification {
-    Damage,
-    Range,
-    Area,
-    Cost,
-    Cast,
-    CountdownReduction
+using System;
+using UnityEngine;
+
+[Serializable]
+public class Modification
+{
+    [SerializeField] public ModificationType Type;
+    [SerializeField] public int Value;
 }

@@ -6,6 +6,7 @@ using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 using Logic.Scripts.Turns;
+using System.Collections.Generic;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
     public class NaraController : INaraController, IFixedUpdatable, IEffectable, IEffectableAction
@@ -30,6 +31,9 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private const float RotationSpeed = 10f;
 
         private readonly global::GameInputActions _gameInputActions;
+
+        //Teste debuffs
+        private List<StatusSO> debuffs;
 
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,

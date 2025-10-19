@@ -13,11 +13,13 @@ namespace Logic.Scripts.GameDomain.Effects
         [Min(0f)] [SerializeField] private float _force = 2f;
         [Min(0f)] [SerializeField] private float _stopDistance = 1f;
         [Min(0f)] [SerializeField] private float _speed = 6f;
-        private int _stacksMul;
+        [SerializeField] private static int _stacksMul = 0;
         private int _distanceMul;
 
         public override void Execute(IEffectable caster, IEffectable target)
         {
+            _stacksMul += 1;
+            Debug.Log($"Grapple foi, Stack = {_stacksMul}");
             if (target == null) return;
             if (!TryGetNaraRigidbody(target, out var rb)) return;
 
@@ -48,7 +50,7 @@ namespace Logic.Scripts.GameDomain.Effects
 
             Vector3 dir = toLine / dist;
             Vector3 start = rb.position;
-            Vector3 end   = start + dir * step;
+            Vector3 end = start + dir * step;
             end.y = start.y;
 
             float duration = 0.45f; // a little less than the handler's 0.5s wait
@@ -100,11 +102,13 @@ namespace Logic.Scripts.GameDomain.Effects
                 rb.MovePosition(new Vector3(p.x, start.y, p.z));
                 yield return new WaitForFixedUpdate();
             }
+
+            Debug.Log($"Grapple foi, Stack = {_stacksMul}");
         }
 
         public void SetForceScalers(int stacksMultiplier, int distanceMultiplier)
         {
-            _stacksMul = stacksMultiplier;
+            //_stacksMul = stacksMultiplier;
             _distanceMul = distanceMultiplier;
         }
 

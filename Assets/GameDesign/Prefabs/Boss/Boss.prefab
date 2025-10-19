@@ -145,9 +145,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4706452340541456491, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
       propertyPath: m_Name
       value: Hocari
+      objectReference: {fileID: 0}
+    - target: {fileID: 4244659984641607791, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7508395188606930143, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

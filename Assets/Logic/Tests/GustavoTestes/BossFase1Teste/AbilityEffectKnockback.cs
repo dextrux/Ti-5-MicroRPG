@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using DG.Tweening;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Boss;
@@ -10,33 +11,50 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys.Effects
     public sealed class KnockbackEffect : AbilityEffect
     {
         [Min(0f)] [SerializeField] private float _force = 2f;
+        [Min(0f)] [SerializeField] private float _speed = 6f;
 
         public override void Execute(IEffectable caster, IEffectable target)
         {
             if (_force <= 0f || target == null) return;
-
-            // 1) Resolve o Rigidbody da Nara (target)
             if (!TryGetNaraRigidbody(target, out var rb)) return;
 
-            // 2) Resolve a posição do "caster" (boss) para calcular direção radial
             Vector3 casterPos = ResolveCasterPosition(caster);
 
-            // 3) Direção plana (Nara -> longe do boss)
             Vector3 dir = rb.position - casterPos;
             dir.y = 0f;
             if (dir.sqrMagnitude < 1e-6f) return;
             dir.Normalize();
 
-            // 4) Aplica deslocamento via MovePosition (plano XZ)
-            Vector3 targetPos = rb.position + dir * _force;
-            targetPos.y = rb.position.y;
-            rb.MovePosition(targetPos);
+            Vector3 start = rb.position;
+            Vector3 end   = start + dir * _force;
+            end.y = start.y;
+
+            if (_speed <= 0f)
+            {
+                rb.MovePosition(end);
+                return;
+            }
+
+            float duration = _force / _speed;
+
+            DOTween.Kill(rb, complete: false);
+
+            float t = 0f;
+            DOVirtual.Float(0f, 1f, duration, v =>
+            {
+                t = v;
+                Vector3 p = Vector3.Lerp(start, end, t);
+                p.y = start.y;
+                rb.MovePosition(p);
+            })
+            .SetEase(Ease.Linear)
+            .SetUpdate(UpdateType.Fixed)
+            .SetId(rb);
         }
 
         private static bool TryGetNaraRigidbody(IEffectable target, out Rigidbody rb)
         {
             rb = null;
-            // Caminho direto: NaraController -> NaraView -> Rigidbody
             if (target is NaraController naraCtrl)
             {
                 var go = naraCtrl.NaraViewGO;
@@ -46,7 +64,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys.Effects
                     if (view != null) rb = view.GetRigidbody();
                 }
             }
-            // Fallback (caso precise): acha a primeira NaraView na cena
             if (rb == null)
             {
                 var view = UnityEngine.Object.FindObjectOfType<NaraView>();
@@ -57,7 +74,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys.Effects
 
         private static Vector3 ResolveCasterPosition(IEffectable caster)
         {
-            // Melhor esforço: usa BossView se existir na cena; senão tenta NaraView; por último, (0,0,0)
             var bossView = UnityEngine.Object.FindObjectOfType<BossView>();
             if (bossView != null) return bossView.transform.position;
 

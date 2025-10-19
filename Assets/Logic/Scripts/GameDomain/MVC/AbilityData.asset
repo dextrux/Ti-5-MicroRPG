@@ -19,12 +19,13 @@ MonoBehaviour:
   animationClip: {fileID: 0}
   castTime: 1
   TypeShape: 4
+  TransformationType: 0
   Effects:
-  - rid: 7168148967970308169
+  - rid: 8976689351368638550
   references:
     version: 2
     RefIds:
-    - rid: 7168148967970308169
+    - rid: 8976689351368638550
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
         amount: 0

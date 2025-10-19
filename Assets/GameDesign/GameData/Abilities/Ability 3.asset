@@ -10,17 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: EmptyAbility
+  m_Name: Ability 3
   m_EditorClassIdentifier: 
-  Name: 
-  Description: 
-  Cost: 30
-  HitPreviewPrefab: {fileID: 5734108818365841331, guid: 625931372d96c784e91f84b3f41ab919, type: 3}
-  animationClip: {fileID: 0}
-  castTime: 0.75
-  TypeShape: 4
-  TransformationType: 0
+  <Name>k__BackingField: 
+  <Description>k__BackingField: 
   Effects: []
+  TargetingStrategy:
+    rid: -2
+  BaseCost: 0
+  BaseCooldown: 0
+  BaseRange: 0
+  BaseArea: 0
+  BaseCasts: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

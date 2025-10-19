@@ -1059,17 +1059,14 @@ MonoBehaviour:
   _bossBehavior: {fileID: 11400000, guid: 03c0e426f8bb667479348687e2216e30, type: 2}
   _gamePlayUiView: {fileID: 703431458}
   _skillSet1:
-  - {fileID: 418736262251077746, guid: eea1d834e74a08d438133bc8324453a2, type: 3}
-  - {fileID: 418736262251077746, guid: c808fc7d388c129429c9d945624b2b71, type: 3}
-  - {fileID: 418736262251077746, guid: 7cad6fd3f919d6842a98063e66d8064b, type: 3}
+  - {fileID: 11400000, guid: d9d52de431f81e94c97467c811060a54, type: 2}
+  - {fileID: 11400000, guid: 4c82f2d9bc2cf09418a437c668996e07, type: 2}
   _skillSet2:
-  - {fileID: 418736262251077746, guid: a0fd9d631032c95488a62aac8901ea12, type: 3}
-  - {fileID: 418736262251077746, guid: bbd14110ee0efe14585c5612fe3d88bb, type: 3}
-  - {fileID: 418736262251077746, guid: 7cad6fd3f919d6842a98063e66d8064b, type: 3}
+  - {fileID: 11400000, guid: d774261d7df73ed4fa8f08149dc4b81f, type: 2}
+  - {fileID: 11400000, guid: f05ea23b66e3fa843b6b873050b55e1f, type: 2}
   _skillSet3:
-  - {fileID: 418736262251077746, guid: 6762f032f69b8d5458b3e6fbdbefbc3f, type: 3}
-  - {fileID: 418736262251077746, guid: 8e6d2a689318aa448b6e79300e5bf276, type: 3}
-  - {fileID: 418736262251077746, guid: 7cad6fd3f919d6842a98063e66d8064b, type: 3}
+  - {fileID: 11400000, guid: 72ba9ea640b863144836fdfdc9469bd6, type: 2}
+  - {fileID: 11400000, guid: f4ae99592295ab4438105fcbb1c1ae10, type: 2}
   _echoviewPrefab: {fileID: 5607633760469368399, guid: 570f375e88e89fd4183efba438d2fed4, type: 3}
   _layerMaskMouse:
     serializedVersion: 2

@@ -3,13 +3,10 @@ using Logic.Scripts.GameDomain.GameInputActions;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
-using Logic.Scripts.Services.Logger.Base;
 using Logic.Scripts.Services.UpdateService;
 using System.Threading;
 using UnityEngine;
-using Logic.Scripts.Turns;
 using Logic.Scripts.GameDomain.MVC.Ui;
-using Logic.Scripts.GameDomain.MVC.Abilitys;
 
 namespace Logic.Scripts.GameDomain.Commands {
     public class LoadGamePlayStateCommand : BaseCommand, ICommandAsync {
@@ -47,12 +44,12 @@ namespace Logic.Scripts.GameDomain.Commands {
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
             await _gameInputActionsController.WaitForAnyKeyPressed(cancellationTokenSource, true);
-            _gamePlayUiController.TempHoldScreenHide();
             _naraController.InitEntryPoint();
+            _gamePlayUiController.TempHoldScreenHide();
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _gameInputActionsController.EnableInputs();
             _gameInputActionsController.RegisterAllInputListeners();
-            _abilityController.InitEntryPoint();
+            _abilityController.InitEntryPoint(_naraController);
             await Awaitable.NextFrameAsync();
             _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute();
             return;

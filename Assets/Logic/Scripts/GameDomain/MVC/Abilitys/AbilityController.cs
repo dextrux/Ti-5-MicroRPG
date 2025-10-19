@@ -12,14 +12,14 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         private readonly AbilityData[] _abilitySet1;
         private readonly AbilityData[] _abilitySet2;
         private readonly AbilityData[] _abilitySet3;
-        public readonly Transform PlayerTransform;
+        public Transform PlayerTransform;
 
         private AbilityData[] _activeSet;
         public AbilityData[] ActiveAbilities => _activeSet;
         int Index;
 
         public AbilityController(ICommandFactory commandFactory, AbilityData[] abilitieSet1, AbilityData[] abilitieSet2,
-            AbilityData[] abilitieSet3, IGamePlayUiController gamePlayUiController, INaraController naraController) {
+            AbilityData[] abilitieSet3, IGamePlayUiController gamePlayUiController) {
             _commandFactory = commandFactory;
             _gamePlayUiController = gamePlayUiController;
             _abilitySet1 = abilitieSet1;
@@ -28,11 +28,11 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             _activeSet = abilitieSet1;
             _activeSet = _abilitySet1;
             Index = 1;
-            PlayerTransform = naraController.NaraViewGO.transform;
         }
 
-        public void InitEntryPoint() {
+        public void InitEntryPoint(INaraController naraController) {
             UpdateUi();
+            PlayerTransform = naraController.NaraViewGO.transform;
         }
 
         private void UpdateUi() {

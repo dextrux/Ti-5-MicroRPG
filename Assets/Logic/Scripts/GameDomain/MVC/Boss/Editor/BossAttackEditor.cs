@@ -13,6 +13,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Editor
             SerializedProperty attackTypeProp = serializedObject.FindProperty("_attackType");
             SerializedProperty proteanProp = serializedObject.FindProperty("_protean");
             SerializedProperty featherProp = serializedObject.FindProperty("_feather");
+            SerializedProperty orbProp = serializedObject.FindProperty("_orb");
             SerializedProperty effectsProp = serializedObject.FindProperty("_effects");
 
             EditorGUILayout.PropertyField(attackTypeProp);
@@ -29,6 +30,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Editor
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Feather Lines", EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(featherProp, true);
+            }
+            else if (attackTypeIdx == 2)
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField("Orb Spawn", EditorStyles.boldLabel);
+                EditorGUILayout.PropertyField(orbProp, true);
             }
 
             EditorGUILayout.Space();

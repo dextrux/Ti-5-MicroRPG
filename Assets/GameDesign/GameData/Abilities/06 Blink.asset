@@ -10,27 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: Ability 5
+  m_Name: 06 Blink
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 5
-  <Description>k__BackingField: 5
-  Effects:
-  - rid: 7012276589014548559
+  <Name>k__BackingField: Blink
+  <Description>k__BackingField: Teleport instantly within R (+0) m. On arrival, deal
+    X (+0) DMG to enemies within Y (+0) m.
+  Effects: []
   TargetingStrategy:
     rid: -2
-  BaseCost: 5
-  BaseCooldown: 5
-  BaseRange: 5
-  BaseArea: 5
-  BaseCasts: 5
+  BaseCost: 2
+  BaseCooldown: 2
+  BaseRange: 8
+  BaseArea: 1
+  BaseCasts: 1
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 7012276589014548559
-      type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
-      data:
-        Name: 5
-        Description: 5
-        amount: 5

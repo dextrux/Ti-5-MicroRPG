@@ -10,19 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: Ability 3
+  m_Name: 03 Water Pillar
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 3
-  <Description>k__BackingField: 3
+  <Name>k__BackingField: Water Pillar
+  <Description>k__BackingField: Summon a water pool in a selected area of Y (+0)
+    m. After a brief delay, the pool erupts 2 (+0) times in total, each dealing X
+    (+0) DMG within Y (+0) m.
   Effects:
   - rid: 7012276589014548557
   TargetingStrategy:
-    rid: 7012276592317825417
+    rid: 7546693122258370636
   BaseCost: 3
-  BaseCooldown: 3
-  BaseRange: 3
-  BaseArea: 3
-  BaseCasts: 3
+  BaseCooldown: 2
+  BaseRange: 4
+  BaseArea: 6
+  BaseCasts: 1
   references:
     version: 2
     RefIds:
@@ -31,8 +33,12 @@ MonoBehaviour:
       data:
         Name: 3
         Description: 3
-        amount: 3
-    - rid: 7012276592317825417
-      type: {class: SelfTargeting, ns: , asm: Assembly-CSharp}
+        amount: 15
+    - rid: 7546693122258370636
+      type: {class: AoeTargeting, ns: , asm: Assembly-CSharp}
       data:
-        SelfCastPrefab: {fileID: 0}
+        AoePrefab: {fileID: 1945505432758974249, guid: ccb2ab164b2d4f94bbd18cde829780b2, type: 3}
+        AoeRadius: 5
+        GroundLayerMask:
+          serializedVersion: 2
+          m_Bits: 0

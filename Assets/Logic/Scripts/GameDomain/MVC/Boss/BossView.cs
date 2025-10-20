@@ -1,51 +1,62 @@
 using System;
 using UnityEngine;
-using Logic.Scripts.GameDomain.MVC.Common;
-using Logic.Scripts.GameDomain.MVC.Ui;
 
-namespace Logic.Scripts.GameDomain.MVC.Boss
-{
-    public class BossView : MonoBehaviour
-    {
+namespace Logic.Scripts.GameDomain.MVC.Boss {
+    public class BossView : MonoBehaviour, IEffectable {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
 
-        private Action<Collision> _onCollisionEnter;
-        private Action<Collider> _onTriggerEnter;
-        private Action<ParticleSystem> _onParticleCollisionEnter;
+        private Action<int> _onPreviewHeal;
+        private Action<int> _onPreviewDamage;
+        private Action<int> _onTakeDamage;
+        private Action<int> _onHeal;
 
-        public void SetupCallbacks(Action<Collision> onCollisionEnter, Action<Collider> onTriggerEnter, Action<ParticleSystem> onParticleCollisionEnter)
-        {
-            _onCollisionEnter = onCollisionEnter;
-            _onTriggerEnter = onTriggerEnter;
-            _onParticleCollisionEnter = onParticleCollisionEnter;
+        public void SetupCallbacks(Action<int> onPreviewHeal, Action<int> onPreviewDamage,
+            Action<int> onTakeDamage, Action<int> onHeal) {
+            _onPreviewHeal = onPreviewHeal;
+            _onPreviewDamage = onPreviewDamage;
+            _onTakeDamage = onTakeDamage;
+            _onHeal = onHeal;
         }
 
-        public void RemoveAllCallbacks()
-        {
-            _onCollisionEnter = null;
-            _onTriggerEnter = null;
-            _onParticleCollisionEnter = null;
+        public void RemoveAllCallbacks() {
         }
 
-        public Rigidbody GetRigidbody()
-        {
+        public Rigidbody GetRigidbody() {
             return _rigidbody;
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            _onCollisionEnter?.Invoke(collision);
+        public Transform GetReferenceTransform() {
+            return transform;
         }
 
-        private void OnParticleCollision(GameObject particleSystemGO)
-        {
-            _onParticleCollisionEnter?.Invoke(particleSystemGO.GetComponent<ParticleSystem>());
+        public void PreviewHeal(int healAmound) {
+            _onPreviewHeal?.Invoke(healAmound);
         }
 
-        private void OnTriggerEnter(Collider otherCollider)
-        {
-            _onTriggerEnter?.Invoke(otherCollider);
+        public void PreviewDamage(int damageAmound) {
+            _onPreviewDamage?.Invoke(damageAmound);
+        }
+
+        public void ResetPreview() {
+            throw new NotImplementedException();
+        }
+
+        public void TakeDamage(int damageAmount) {
+            Debug.Log("Take damage bossView");
+            _onTakeDamage?.Invoke(damageAmount);
+        }
+
+        public void TakeDamagePerTurn(int damageAmount, int duration) {
+            throw new NotImplementedException();
+        }
+
+        public void Heal(int healAmount) {
+            _onHeal?.Invoke(healAmount);
+        }
+
+        public void HealPerTurn(int healAmount, int duration) {
+            throw new NotImplementedException();
         }
     }
 }

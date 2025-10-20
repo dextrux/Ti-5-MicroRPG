@@ -24,7 +24,7 @@ public abstract class ProjectileController : MonoBehaviour, IFixedUpdatable {
     public abstract void ManagedFixedUpdate();
 
     private void OnTriggerEnter(Collider other) {
-        OnHit();
+        if (other) OnHit();
     }
 
     public void OnHit() {

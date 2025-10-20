@@ -36,7 +36,9 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             Debug.Log("Targets :" + targets.Length);
             if (targets != null) {
                 foreach (IEffectable target in targets) {
+                    Debug.Log("Actual Target :" + target);
                     foreach (AbilityEffect effect in Effects) {
+                        Debug.Log("Actual effect: " + effect + " on " + target);
                         effect.Execute(this, caster, target);
                     }
                 }

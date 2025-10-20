@@ -197,6 +197,7 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
         public void TakeDamage(int amount)
         {
             _hp -= Mathf.Max(0, amount);
+            Debug.Log(_hp);
             if (_hp <= 0)
             {
                 Destroy(gameObject);

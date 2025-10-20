@@ -142,7 +142,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         public void CreateBoss() {
             _bossView = Object.Instantiate(_bossViewPrefab);
             _bossData.ResetData();
-            _bossView.SetupCallbacks(OnBossCollisionEnter, OnBossTriggerEnter, OnBossParticleCollisionEnter);
+            _bossView.SetupCallbacks(PreviewHeal, PreviewDamage, TakeDamage, Heal);
             _bossRigidbody = _bossView != null ? _bossView.GetRigidbody() : null;
             _bossTransform = _bossView != null ? _bossView.transform : null;
 
@@ -158,11 +158,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _randomDirDuration = _bossBehavior != null ? _bossBehavior.RandomChangeDirectionSeconds : 1.5f;
             _moveMode = BossMoveMode.TowardPlayer;
         }
-
-        private void OnBossCollisionEnter(Collision collision) { }
-        private void OnBossTriggerEnter(Collider collider) { }
-        private void OnBossParticleCollisionEnter(ParticleSystem particleSystem) { }
-
         public void PlanNextTurn() { }
 
         public void ExecuteTurn() {
@@ -194,7 +189,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                     if (castNow != null) {
                         try {
                             await castNow.ExecuteAsync();
-                        } catch (Exception) { }
+                        }
+                        catch (Exception) { }
                     }
                 }
             }

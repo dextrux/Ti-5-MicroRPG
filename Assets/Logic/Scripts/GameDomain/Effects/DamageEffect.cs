@@ -13,5 +13,12 @@ namespace Assets.Logic.Scripts.GameDomain.Effects {
             target.TakeDamage(amount);
             Debug.Log("Dano sofrido: " + amount);
         }
+
+        public override void Execute(AbilityData data, IEffectable caster, IEffectable target) {
+            Debug.Log("Caster: " + caster.ToString());
+            Debug.Log("Target: " + target.ToString());
+            target.TakeDamage(amount + data.GetDamage());
+            Debug.Log("Dano sofrido: " + amount);
+        }
     }
 }

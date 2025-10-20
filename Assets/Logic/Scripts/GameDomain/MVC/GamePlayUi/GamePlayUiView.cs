@@ -34,12 +34,16 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
             _tempHoldScreen.SetActive(false);
         }
 
-        public void TempShowWinScreen() {
+        public void TempShowWinScreen()
+        {
             _tempWinScreen.SetActive(true);
+            Time.timeScale = 0f;
         }
 
-        public void TempShowLoseScreen() {
+        public void TempShowLoseScreen()
+        {
             _tempLoseScreen.SetActive(true);
+            Time.timeScale = 0f;
         }
 
 

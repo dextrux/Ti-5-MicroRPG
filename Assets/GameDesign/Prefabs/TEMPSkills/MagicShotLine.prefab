@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 578313022444399484}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MagicShotLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 6135695121208493031}
   - component: {fileID: 557783763380592949}
   - component: {fileID: 4789538927328467477}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MagicShot_Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}

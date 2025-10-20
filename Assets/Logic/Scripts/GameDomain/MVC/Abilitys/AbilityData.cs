@@ -1,3 +1,4 @@
+using Logic.Scripts.Services.UpdateService;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,12 +22,18 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         //To-Do Adicionar VFXController
         //To-Do Adicionar audioClip quando tivermos
 
+        public void SetUp(IUpdateSubscriptionService updateSubscriptionService) {
+            TargetingStrategy.SetUp(updateSubscriptionService);
+        }
+
         public void Aim(IEffectable caster) {
+            Debug.Log("Aiming");
             TargetingStrategy.Initialize(this, caster);
         }
         public void Cast(IEffectable caster) {
             IEffectable[] targets;
             TargetingStrategy.LockAim(out targets);
+            Debug.Log("Targets :" + targets.Length);
             if (targets != null) {
                 foreach (IEffectable target in targets) {
                     foreach (AbilityEffect effect in Effects) {

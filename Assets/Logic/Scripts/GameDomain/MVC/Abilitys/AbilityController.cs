@@ -1,6 +1,7 @@
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.Services.UpdateService;
 using System.Linq;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         private readonly AbilityData[] _abilitySet1;
         private readonly AbilityData[] _abilitySet2;
         private readonly AbilityData[] _abilitySet3;
+        private readonly IUpdateSubscriptionService SubscriptionService;
         public Transform PlayerTransform;
 
         private AbilityData[] _activeSet;
@@ -19,7 +21,7 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         int Index;
 
         public AbilityController(ICommandFactory commandFactory, AbilityData[] abilitieSet1, AbilityData[] abilitieSet2,
-            AbilityData[] abilitieSet3, IGamePlayUiController gamePlayUiController) {
+            AbilityData[] abilitieSet3, IGamePlayUiController gamePlayUiController, IUpdateSubscriptionService updateSubscriptionService) {
             _commandFactory = commandFactory;
             _gamePlayUiController = gamePlayUiController;
             _abilitySet1 = abilitieSet1;
@@ -27,11 +29,25 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             _abilitySet3 = abilitieSet3;
             _activeSet = _abilitySet1;
             Index = 1;
+            SubscriptionService = updateSubscriptionService;
         }
 
         public void InitEntryPoint(INaraController naraController) {
             UpdateUi();
             PlayerTransform = naraController.NaraViewGO.transform;
+            foreach (AbilityData ability in _abilitySet1) {
+                Debug.Log("Ability 1 " + (SubscriptionService == null));
+                ability.SetUp(SubscriptionService);
+            }
+            foreach (AbilityData ability in _abilitySet2) {
+                Debug.Log("Ability 2 " + (SubscriptionService == null));
+                ability.SetUp(SubscriptionService);
+            }
+            foreach (AbilityData ability in _abilitySet3) {
+                Debug.Log("Ability 3 " + (SubscriptionService == null));
+                ability.SetUp(SubscriptionService);
+            }
+            Debug.Log("Teste 2");
         }
 
         private void UpdateUi() {
@@ -68,11 +84,11 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             }
             UpdateUi();
         }
-        public void CreateAbility(Transform referenceTransform, int abilitySlotIndex) {
-            //To-Do Setar habilidades
+        public void CreateAbility(IEffectable caster, int abilitySlotIndex) {
+            _activeSet[abilitySlotIndex].Cast(caster);
         }
 
-        public void CreateAbility(Transform referenceTransform, AbilityData abilityToSpawn) {
+        public void CreateAbility(IEffectable caster, AbilityData abilityToSpawn) {
             //To-Do Setar habilidades
         }
 

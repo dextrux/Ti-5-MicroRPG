@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7309204384938416771}
   - component: {fileID: 9085369406770771494}
   - component: {fileID: 3313468032458606791}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MagicShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

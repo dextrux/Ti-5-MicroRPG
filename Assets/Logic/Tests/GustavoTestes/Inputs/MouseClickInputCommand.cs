@@ -14,6 +14,6 @@ public class MouseClickInputCommand : BaseCommand, ICommandVoid {
 
     public void Execute() {
         LogService.Log("Left Mouse button pressed");
-        _castController.UseAbility(_abilityController, _naraController.NaraSkillSpotTransform);
+        _castController.UseAbility(_abilityController, (IEffectable)_naraController);
     }
 }

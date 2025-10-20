@@ -1,5 +1,4 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
-using Logic.Scripts.Services.UpdateService;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,10 +12,11 @@ public class AoeTargeting : TargetingStrategy
 
     private GameObject previewInstance;
 
-    public override void Initialize(AbilityData data, IEffectable caster, IUpdateSubscriptionService subscriptionService) {
-        base.Initialize(data, caster, subscriptionService);
+    public override void Initialize(AbilityData data, IEffectable caster) {
+        base.Initialize(data, caster);
         if (AoePrefab != null) {
             previewInstance = GameObject.Instantiate(AoePrefab, new Vector3(0f, 0.1f, 0f), Quaternion.identity);
+            previewInstance.transform.localScale = new Vector3(data.GetArea(), data.GetArea(), data.GetArea());
         }
         SubscriptionService.RegisterUpdatable(this);
     }
@@ -41,7 +41,8 @@ public class AoeTargeting : TargetingStrategy
         base.LockAim(out targets);
         //To-Do Alterar para new input system
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, float.MaxValue, GroundLayerMask)) {
-            Collider[] colliders = Physics.OverlapSphere(hit.point, AoeRadius);
+            Collider[] colliders = Physics.OverlapSphere(hit.point, AoeRadius+Ability.GetArea());
+            Debug.Log("Radius: " + AoeRadius+Ability.GetArea());
             List<IEffectable> targetsList = new List<IEffectable>();
             foreach(Collider collider in colliders) {
                 if (collider.TryGetComponent<IEffectable>(out IEffectable effectable)) {

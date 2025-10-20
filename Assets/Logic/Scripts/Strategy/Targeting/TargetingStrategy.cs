@@ -1,6 +1,5 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.Services.UpdateService;
-using Zenject;
 
 public abstract class TargetingStrategy: IUpdatable {
     protected AbilityData Ability;
@@ -9,6 +8,10 @@ public abstract class TargetingStrategy: IUpdatable {
     public virtual void Initialize(AbilityData data, IEffectable caster) {
         Ability = data;
         Caster = caster;
+    }
+
+    public virtual void SetUp(IUpdateSubscriptionService updateSubscriptionService) {
+        SubscriptionService = updateSubscriptionService;
     }
 
     protected virtual void LockAim(out IEffectable target) {

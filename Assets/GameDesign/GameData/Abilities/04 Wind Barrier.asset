@@ -17,7 +17,7 @@ MonoBehaviour:
     absorbs up to X (+0) DMG to all allies within Y (+0) m for T (+0) turns.
   Effects: []
   TargetingStrategy:
-    rid: -2
+    rid: 7012276592317825437
   BaseCost: 3
   BaseCooldown: 5
   BaseRange: 3
@@ -26,5 +26,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 7012276592317825437
+      type: {class: AoeTargeting, ns: , asm: Assembly-CSharp}
+      data:
+        AoePrefab: {fileID: 1945505432758974249, guid: ccb2ab164b2d4f94bbd18cde829780b2, type: 3}
+        AoeRadius: 5
+        GroundLayerMask:
+          serializedVersion: 2
+          m_Bits: 0

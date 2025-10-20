@@ -36,12 +36,12 @@ public class CastController : ICastController {
         _currentAbility = null;
     }
 
-    public void UseAbility(IAbilityController abilityController, Transform caster) {
+    public void UseAbility(IAbilityController abilityController, IEffectable caster) {
         if (_currentAbility == null) return;
         int index = abilityController.FindIndexAbility(_currentAbility);
         if (index < 0) return;
         _actionPointsService.Spend(_currentAbility.GetCost());
-        //abilityController.CreateAbility(_fatherObject, index);
+        abilityController.CreateAbility(caster, index);
         CancelAbilityUse();
     }
 

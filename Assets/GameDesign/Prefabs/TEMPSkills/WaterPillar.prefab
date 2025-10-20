@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 28843760274789498}
   - component: {fileID: 111850636619152872}
   - component: {fileID: 327009756446705867}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WaterPillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

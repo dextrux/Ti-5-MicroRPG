@@ -18,7 +18,6 @@ namespace Logic.Scripts.GameDomain.Effects
         public override void Execute(IEffectable caster, IEffectable target)
         {
             _stacksMul += 1;
-            Debug.Log($"Knockback foi, Stack = {_stacksMul}");
             if (target == null) return;
             if (!TryGetNaraRigidbody(target, out var rb)) return;
 
@@ -48,7 +47,9 @@ namespace Logic.Scripts.GameDomain.Effects
             }
 
             // Scalers: stacks 0..5 -> 1x..2x; distance 0..max -> 0.5x..1.5x
-            float stacksFactor = 1f + Mathf.Clamp(_stacksMul, 0, 5) * 0.2f;
+            int stacks = 0;
+            if (target is NaraController ncExec) stacks = Mathf.Clamp(ncExec.GetDebuffStacks(), 0, 5);
+            float stacksFactor = 1f + stacks * 0.2f;
             // distance multiplier comes as an integer approx in meters; clamp 0..60 (cap)
             float maxMeters = 60f;
             float dMeters = Mathf.Clamp(_distanceMul, 0, maxMeters);
@@ -56,7 +57,7 @@ namespace Logic.Scripts.GameDomain.Effects
             float distanceFactor = 0.5f + 2.5f * (1f - (dMeters / maxMeters));
             distanceFactor = Mathf.Clamp(distanceFactor, 0.5f, 3.0f);
             float scaledForce = Mathf.Max(0f, _force * stacksFactor * distanceFactor);
-            Debug.Log($"KnockbackEffect: base={_force:0.###} stacks={_stacksMul} stacksFactor={stacksFactor:0.00} distMeters={dMeters:0.###}/{maxMeters:0.###} distanceFactor={distanceFactor:0.00} scaledForce={scaledForce:0.###}");
+            Debug.Log($"KnockbackEffect calc -> base={_force:0.###} stacks={stacks} stacksFactor={stacksFactor:0.00} distM={dMeters:0.###}/{maxMeters:0.###} distFactor={distanceFactor:0.00} scaled={scaledForce:0.###}");
             if (scaledForce <= 0f) return;
 
             Vector3 start = rb.position;
@@ -105,7 +106,9 @@ namespace Logic.Scripts.GameDomain.Effects
                 if (dir.sqrMagnitude < 1e-6f) yield break;
                 dir.Normalize();
             }
-            float stacksFactor = 1f + Mathf.Clamp(_stacksMul, 0, 5) * 0.2f;
+            int stacks = 0;
+            if (target is NaraController nc) stacks = Mathf.Clamp(nc.GetDebuffStacks(), 0, 5);
+            float stacksFactor = 1f + stacks * 0.2f;
             float maxMeters = 60f;
             float dMeters = Mathf.Clamp(_distanceMul, 0, maxMeters);
             float distanceFactor = 0.5f + 2.5f * (1f - (dMeters / maxMeters));

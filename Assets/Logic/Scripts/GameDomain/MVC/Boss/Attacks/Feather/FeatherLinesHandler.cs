@@ -322,21 +322,24 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             if (sMr != null) sMr.enabled = false;
             yield return new WaitForSeconds(0.5f);
 
-            // 1.a) Special DAMAGE: Effect[0] if player is inside special strip (based on current playerWorld)
-            if (effects.Count > 0 && StripMath.IsPointInsideStrip(sStart, sEnd, _params.width, playerWorld))
+            // 1.a) Special DAMAGE: all non-last effects apply only if inside special strip
+            int lastIndex = effects.Count - 1;
+            if (lastIndex >= 0 && StripMath.IsPointInsideStrip(sStart, sEnd, _params.width, playerWorld))
             {
-                AbilityEffect fx0 = effects[0];
-                Debug.Log("FeatherLinesHandler: applying Special Effect[0] due to hit");
-                fx0?.Execute(caster, target);
+                for (int ei = 0; ei < lastIndex; ei++)
+                {
+                    AbilityEffect fx = effects[ei];
+                    fx?.Execute(caster, target);
+                }
             }
 
             // Wait before displacement
             yield return new WaitForSeconds(0.5f);
 
-            // 1.b) Special EFFECT[1]: apply across arena (ignore displacement movement for now)
-            if (effects.Count > 1)
+            // 1.b) Special EFFECT[last]: apply across arena (displacement)
+            if (effects.Count > 0)
             {
-                AbilityEffect fx1 = effects[1];
+                AbilityEffect fx1 = effects[lastIndex];
                 if (fx1 != null)
                 {
                     if (fx1 is Assets.Logic.Scripts.GameDomain.Effects.DisplacementEffect disp)
@@ -372,7 +375,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
             // Proceed immediately to normal feathers after the post-displacement wait above
 
-            // 2) Apply Effect[0] for any feather that hit (normal hitbox order)
+            // 2) Apply non-last effects for any feather that hit (normal hitbox order)
             for (int i = 0; i < n && effects.Count > 0; i++)
             {
                 if (i == _specialIndex) continue; // skip special, already processed
@@ -424,18 +427,21 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 }
                 if (StripMath.IsPointInsideStrip(start, end, _params.width, playerWorld))
                 {
-                    AbilityEffect fx0 = effects[0];
-                    if (fx0 is IForceScaledEffect scalable0)
+                    int lastIndex2 = effects.Count - 1;
+                    for (int ei = 0; ei < lastIndex2; ei++)
                     {
-                        int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
-                        float distMeters = PerpendicularDistanceToLineXZ(
-                            arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition()),
-                            CurrentSpecialStart, CurrentSpecialEnd);
-                        int distMul = Mathf.RoundToInt(distMeters);
-                        scalable0.SetForceScalers(stacks, distMul);
+                        AbilityEffect fx = effects[ei];
+                        if (fx is IForceScaledEffect scalable)
+                        {
+                            int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
+                            float distMeters = PerpendicularDistanceToLineXZ(
+                                arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition()),
+                                CurrentSpecialStart, CurrentSpecialEnd);
+                            int distMul = Mathf.RoundToInt(distMeters);
+                            scalable.SetForceScalers(stacks, distMul);
+                        }
+                        fx?.Execute(caster, target);
                     }
-                    Debug.Log("FeatherLinesHandler: applying Effect[0] due to hit");
-                    fx0?.Execute(caster, target);
                 }
                 // No additional delay after normal feather processing
             }

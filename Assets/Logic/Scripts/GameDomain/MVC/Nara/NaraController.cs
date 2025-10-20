@@ -26,6 +26,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private readonly NaraView _naraViewPrefab;
         private readonly NaraData _naraData;
         private NaraMovementController _naraMovementController;
+        private int _debuffStacks;
 
         private const float MoveSpeed = 15f;
         private const float RotationSpeed = 10f;
@@ -190,5 +191,18 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         }
         #endregion
+
+        // Debuff API
+        public void AddDebuffStacks(int amount)
+        {
+            if (amount <= 0) return;
+            _debuffStacks += amount;
+            Debug.Log($"Nara debuff stacks updated: {_debuffStacks} (+{amount})");
+        }
+
+        public int GetDebuffStacks()
+        {
+            return _debuffStacks;
+        }
     }
 }

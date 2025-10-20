@@ -13,11 +13,12 @@ namespace Logic.Scripts.GameDomain.Effects
         [Min(0f)] [SerializeField] private float _force = 2f;
         [Min(0f)] [SerializeField] private float _stopDistance = 1f;
         [Min(0f)] [SerializeField] private float _speed = 6f;
-        private int _stacksMul;
+        [SerializeField] private static int _stacksMul = 0;
         private int _distanceMul;
 
         public override void Execute(IEffectable caster, IEffectable target)
         {
+            _stacksMul += 1;
             if (target == null) return;
             if (!TryGetNaraRigidbody(target, out var rb)) return;
 
@@ -35,20 +36,21 @@ namespace Logic.Scripts.GameDomain.Effects
             float dist = toLine.magnitude;
             if (dist <= _stopDistance + 1e-5f) return;
 
-            // Scalers: stacks 0..5 -> 1x..2x; distance 0..max -> 0.5x..1.5x
-            float stacksFactor = 1f + Mathf.Clamp(_stacksMul, 0, 5) * 0.2f;
+            int stacks = 0;
+            if (target is NaraController nc) stacks = Mathf.Clamp(nc.GetDebuffStacks(), 0, 5);
+            float stacksFactor = 1f + stacks * 0.2f;
             float maxMeters = 60f;
             float dMeters = Mathf.Clamp(_distanceMul, 0, maxMeters);
             float distanceFactor = 0.5f + 2.5f * (1f - (dMeters / maxMeters));
             distanceFactor = Mathf.Clamp(distanceFactor, 0.5f, 3.0f);
             float maxForce = Mathf.Max(0f, _force * stacksFactor * distanceFactor);
             float step = Mathf.Min(maxForce, Mathf.Max(0f, dist - _stopDistance));
-            Debug.Log($"GrappleEffect: base={_force:0.###} stacks={_stacksMul} stacksFactor={stacksFactor:0.00} distMeters={dMeters:0.###}/{maxMeters:0.###} distanceFactor={distanceFactor:0.00} maxForce={maxForce:0.###} step={step:0.###}");
+            Debug.Log($"GrappleEffect calc -> base={_force:0.###} stacks={stacks} stacksFactor={stacksFactor:0.00} distM={dMeters:0.###}/{maxMeters:0.###} distFactor={distanceFactor:0.00} step={step:0.###}");
             if (step <= 1e-6f) return;
 
             Vector3 dir = toLine / dist;
             Vector3 start = rb.position;
-            Vector3 end   = start + dir * step;
+            Vector3 end = start + dir * step;
             end.y = start.y;
 
             float duration = 0.45f; // a little less than the handler's 0.5s wait
@@ -79,7 +81,9 @@ namespace Logic.Scripts.GameDomain.Effects
             Vector3 toLine = closest - player;
             toLine.y = 0f;
             float dist = toLine.magnitude;
-            float stacksFactor = 1f + Mathf.Clamp(_stacksMul, 0, 5) * 0.2f;
+            int stacks = 0;
+            if (target is NaraController nc) stacks = Mathf.Clamp(nc.GetDebuffStacks(), 0, 5);
+            float stacksFactor = 1f + stacks * 0.2f;
             float maxMeters = 60f;
             float dMeters = Mathf.Clamp(_distanceMul, 0, maxMeters);
             float distanceFactor = 0.5f + 2.5f * (1f - (dMeters / maxMeters));
@@ -91,6 +95,7 @@ namespace Logic.Scripts.GameDomain.Effects
             Vector3 start = rb.position;
             Vector3 end = start + dir * step;
             float duration = 0.45f;
+            Debug.Log($"GrappleEffect calc (routine) -> base={_force:0.###} stacks={stacks} stacksFactor={stacksFactor:0.00} distM={dMeters:0.###}/{maxMeters:0.###} distFactor={distanceFactor:0.00} step={step:0.###}");
             float elapsed = 0f;
             while (elapsed < duration)
             {
@@ -100,11 +105,13 @@ namespace Logic.Scripts.GameDomain.Effects
                 rb.MovePosition(new Vector3(p.x, start.y, p.z));
                 yield return new WaitForFixedUpdate();
             }
+
+            
         }
 
         public void SetForceScalers(int stacksMultiplier, int distanceMultiplier)
         {
-            _stacksMul = stacksMultiplier;
+            //_stacksMul = stacksMultiplier;
             _distanceMul = distanceMultiplier;
         }
 

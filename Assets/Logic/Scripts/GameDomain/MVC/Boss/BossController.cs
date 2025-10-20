@@ -179,13 +179,50 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
         public async Task ExecuteTurnAsync() {
             ResolvePendingCasts();
-            await Task.Delay(1500);
-            ConfigureTurnMovement();
-            await Task.Delay(1500);
-            QueuePreparedAttackFromBehavior();
-            // Await current prepared casts if any were scheduled to execute immediately
-            // (Our system executes on next turn; here we only await if a handler runs now)
+            await ExecutePreparedActionAsync();
+            await MoveTurnAsync();
+            PrepareNextAction();
             _executedTurnsCount++;
+        }
+
+        private async Task ExecutePreparedActionAsync() {
+            if (_pendingCasts == null || _pendingCasts.Count == 0) return;
+            for (int i = _pendingCasts.Count - 1; i >= 0; i--) {
+                if (_pendingCasts[i].TurnsRemaining <= 0) {
+                    BossAttack castNow = _pendingCasts[i].Attack;
+                    _pendingCasts.RemoveAt(i);
+                    if (castNow != null) {
+                        try {
+                            await castNow.ExecuteAsync();
+                        } catch (Exception) { }
+                    }
+                }
+            }
+        }
+
+        private async Task MoveTurnAsync() {
+            ConfigureTurnMovement();
+            if (_turnMoveDistanceBudget <= 0f) return;
+            const float stopDistance = 1.2f;
+            while (_turnMoveDistanceBudget > 0f) {
+                if (_moveMode == BossMoveMode.TowardPlayer) {
+                    GameObject target = FindPlayerTarget();
+                    if (target != null && _bossTransform != null) {
+                        Vector3 delta = target.transform.position - _bossTransform.position;
+                        delta.y = 0f;
+                        float dist = delta.magnitude;
+                        if (dist <= stopDistance) {
+                            _turnMoveDistanceBudget = 0f;
+                            break;
+                        }
+                    }
+                }
+                await Task.Yield();
+            }
+        }
+
+        private void PrepareNextAction() {
+            QueuePreparedAttackFromBehavior();
         }
 
         private void QueuePreparedAttackFromBehavior() {
@@ -282,15 +319,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                 pc.TurnsRemaining -= 1;
                 _pendingCasts[i] = pc;
             }
-            for (int i = _pendingCasts.Count - 1; i >= 0; i--) {
-                if (_pendingCasts[i].TurnsRemaining <= 0) {
-                    BossAttack castNow = _pendingCasts[i].Attack;
-                    if (castNow != null) {
-                        castNow.Execute();
-                    }
-                    _pendingCasts.RemoveAt(i);
-                }
-            }
+            // Do not execute here; execution happens in ExecutePreparedActionAsync
         }
 
         private GameObject FindPlayerTarget() {

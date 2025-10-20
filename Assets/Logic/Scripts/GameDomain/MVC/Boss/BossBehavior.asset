@@ -13,43 +13,52 @@ MonoBehaviour:
   m_Name: BossBehavior
   m_EditorClassIdentifier: 
   _availableAttacks:
-  - {fileID: -7797698259084971289, guid: bc47be166bc09994c9f1b645d62be338, type: 3}
+  - {fileID: -7797698259084971289, guid: 33365d6a13b9a3b4d938f40f0697b1e7, type: 3}
   - {fileID: -7797698259084971289, guid: c4a31e5408742194ca0ca3e3c2bd8daa, type: 3}
   - {fileID: -7797698259084971289, guid: 734b914b8e060ad4dba898b6231a3e53, type: 3}
   - {fileID: -7797698259084971289, guid: 81be49511951dd549a8da9ee7950fde1, type: 3}
   - {fileID: -7797698259084971289, guid: e3ebe2321d4723346be2e3e8c2112696, type: 3}
   - {fileID: -7797698259084971289, guid: 45eb329668c03b1469caeda00fc2f38e, type: 3}
   - {fileID: -7797698259084971289, guid: 5c27c97ac0773d14d8b89627224bd5b3, type: 3}
+  - {fileID: -7797698259084971289, guid: 90683a701b66b50428ee05cfbebeaaa2, type: 3}
   _fallbackStepDistance: 1
   _stepDistance: 2
   _randomChangeDirectionSeconds: 1.5
-  _turnPatternLength: 7
+  _turnPatternLength: 9
   _turnPattern:
-  - Mode: 0
+  - Mode: 1
     Direction: {x: 0, y: 0, z: 0}
-    DistanceMultiplier: 1
-    AttackIndex: 1
+    DistanceMultiplier: 2
+    AttackIndex: 0
   - Mode: 3
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 3
     AttackIndex: 2
   - Mode: 0
     Direction: {x: 90, y: 0, z: 0}
-    DistanceMultiplier: 2
-    AttackIndex: 0
-  - Mode: 1
-    Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 3
     AttackIndex: 3
   - Mode: 1
     Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: -8
+    AttackIndex: 7
+  - Mode: 3
+    Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 3
-    AttackIndex: 0
+    AttackIndex: 1
   - Mode: 1
     Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 3
+    AttackIndex: 4
+  - Mode: 0
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 5
     AttackIndex: 5
   - Mode: 1
     Direction: {x: 25, y: 0, z: 0}
-    DistanceMultiplier: 3
+    DistanceMultiplier: 5
     AttackIndex: 0
+  - Mode: 0
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 5
+    AttackIndex: 5

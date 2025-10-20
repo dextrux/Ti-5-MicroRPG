@@ -1,5 +1,6 @@
 using Zenject;
 using Logic.Scripts.GameDomain.MVC.Boss;
+using Logic.Scripts.GameDomain.MVC.Environment.Orb;
 
 namespace Logic.Scripts.Turns
 {
@@ -13,6 +14,7 @@ namespace Logic.Scripts.Turns
 
 
             Container.BindInterfacesAndSelfTo<EnviromentActionService>().AsSingle();
+            Container.BindInterfacesTo<OrbEnvironmentRule>().AsSingle();
             Container.BindInterfacesAndSelfTo<TurnFlowController>().AsSingle();
         }
     }

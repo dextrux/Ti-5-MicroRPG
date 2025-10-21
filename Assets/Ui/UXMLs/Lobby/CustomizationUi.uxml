@@ -1,0 +1,27 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Ui/Styles/LobbyMenuStyle.uss?fileID=7433441132597879392&amp;guid=8c15ef07de17af044bf70c45766414bf&amp;type=3#LobbyMenuStyle" />
+    <engine:VisualElement name="main-container" style="flex-grow: 1; flex-direction: row; background-color: rgb(131, 92, 47);">
+        <engine:VisualElement name="skillList-container" style="flex-grow: 1; width: 30%;">
+            <engine:Label text="SkillList" style="height: 20%; -unity-text-align: middle-center; font-size: 103%;" />
+            <engine:VisualElement style="flex-grow: 1; height: 80%;">
+                <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Ui/Images/SkillDescriptionBackground.png?fileID=2800000&amp;guid=c4b8b35be5ebada418dcefef4b9c8b81&amp;type=3#SkillDescriptionBackground&quot;); -unity-background-scale-mode: scale-to-fit; flex-direction: row; height: 20%;">
+                    <engine:VisualElement style="flex-grow: 1; width: 30%;" />
+                    <engine:VisualElement style="flex-grow: 1; width: 70%;">
+                        <engine:Button text="Button" />
+                        <engine:Button text="Button" />
+                        <engine:Button text="Button" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+                <engine:VisualElement style="flex-grow: 1;" />
+                <engine:VisualElement style="flex-grow: 1;" />
+                <engine:VisualElement style="flex-grow: 1;" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="skill-description-container" style="flex-grow: 1; width: 70%;">
+            <engine:VisualElement style="flex-grow: 1; height: 40%; padding-top: 2%; padding-right: 2%; padding-bottom: 2%; padding-left: 2%;">
+                <engine:VisualElement name="skill-container" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Ui/Images/SkillPanelBackground.png?fileID=2800000&amp;guid=00e8dc8089658a34b82bf0c022075baa&amp;type=3#SkillPanelBackground&quot;); -unity-background-scale-mode: scale-to-fit;" />
+            </engine:VisualElement>
+            <engine:VisualElement style="flex-grow: 1; height: 60%;" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

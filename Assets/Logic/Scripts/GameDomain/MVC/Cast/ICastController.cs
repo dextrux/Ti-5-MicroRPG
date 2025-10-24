@@ -8,4 +8,6 @@ public interface ICastController {
     public void UseFastEcho(IEchoController echoController, Transform caster);
     public void UseSlowEcho(IEchoController echoController, Transform caster);
     public void CancelAbilityUse();
+    public bool GetCanUseAbility();
+    public void SetCanUseAbility(bool b);
 }

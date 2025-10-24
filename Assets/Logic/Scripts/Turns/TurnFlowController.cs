@@ -93,6 +93,8 @@ namespace Logic.Scripts.Turns
         {
             _actionPointsService.GainTurnPoints();
             _phase = TurnPhase.PlayerAct;
+            _naraController.ResetMovementArea();
+            _naraController.RecenterMovementAreaAtTurnStart();
             _turnStateService.AdvanceTurn(_turnNumber, _phase);
             LogService.Log($"Turno {_turnNumber} - Fase: PlayerAct");
             _waitingPlayer = true;

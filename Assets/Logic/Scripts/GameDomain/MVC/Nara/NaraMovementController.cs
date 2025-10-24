@@ -17,6 +17,7 @@ public class NaraMovementController : IMovement, IFixedUpdatable
     private Vector3 _movement;
     private Vector3 movementCenter;
     private int movementRadius;
+    private int initialMovementRadius;
 
     private ActionPointsService _actionPointsService;
     private int extraMovementSpaceCost = 2;
@@ -25,7 +26,8 @@ public class NaraMovementController : IMovement, IFixedUpdatable
 
     public NaraMovementController(NaraConfigurationSO naraSO, GameInputActions inputActions, IUpdateSubscriptionService updateSubscriptionService)
     {
-        movementRadius = naraSO.InitialMovementDistance;
+        initialMovementRadius = naraSO.InitialMovementDistance;
+        movementRadius = initialMovementRadius;
         _gameInputActions = inputActions;
         _updateSubscriptionService = updateSubscriptionService;
     }
@@ -140,6 +142,17 @@ public class NaraMovementController : IMovement, IFixedUpdatable
             movementCenter = _transform.position;
             movementRadius -= (int)distance;
         }
+    }
+
+    public void ResetMovementRadius()
+    {
+        movementRadius = initialMovementRadius;
+        Debug.Log("Resetou Movimento");
+    }
+
+    public void RemoveMovementRadius()
+    {
+        movementRadius = 10000;
     }
 
     public void SetCamera(Camera camera)

@@ -12,7 +12,7 @@ namespace Logic.Scripts.GameDomain.Effects
     {
         [Min(0f)] [SerializeField] private float _force = 2f;
         [Min(0f)] [SerializeField] private float _stopDistance = 1f;
-        [Min(0f)] [SerializeField] private float _speed = 6f;
+        //[Min(0f)] [SerializeField] private float _speed = 6f;
         [SerializeField] private static int _stacksMul = 0;
         private int _distanceMul;
 
@@ -129,7 +129,7 @@ namespace Logic.Scripts.GameDomain.Effects
             }
             if (rb == null)
             {
-                var view = UnityEngine.Object.FindObjectOfType<NaraView>();
+                var view = UnityEngine.Object.FindFirstObjectByType<NaraView>();
                 if (view != null) rb = view.GetRigidbody();
             }
             return rb != null;
@@ -137,10 +137,10 @@ namespace Logic.Scripts.GameDomain.Effects
 
         private static Vector3 ResolveCasterPosition(IEffectable caster)
         {
-            var bossView = UnityEngine.Object.FindObjectOfType<BossView>();
+            var bossView = UnityEngine.Object.FindFirstObjectByType<BossView>();
             if (bossView != null) return bossView.transform.position;
 
-            var naraView = UnityEngine.Object.FindObjectOfType<NaraView>();
+            var naraView = UnityEngine.Object.FindFirstObjectByType<NaraView>();
             if (naraView != null) return naraView.transform.position;
 
             return Vector3.zero;

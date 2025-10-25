@@ -5,6 +5,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
     public class BossView : MonoBehaviour, IEffectable {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
+        [SerializeField] private Animator _animator;
 
         private Action<int> _onPreviewHeal;
         private Action<int> _onPreviewDamage;
@@ -57,6 +58,18 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
         public void HealPerTurn(int healAmount, int duration) {
             throw new NotImplementedException();
+        }
+
+        public void SetMoving(bool isMoving) {
+            if (_animator != null) {
+                _animator.SetBool("Moving", isMoving);
+            }
+        }
+
+        public void PlayPhaseTransition() {
+            if (_animator != null) {
+                _animator.SetTrigger("PhaseTransition");
+            }
         }
     }
 }

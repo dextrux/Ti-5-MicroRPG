@@ -97,6 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 5392954002756818700}
   _collider: {fileID: 1559907657335424906}
+  _animator: {fileID: 8735505841426615340}
 --- !u!1001 &2904916241558139325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1665,6 +1666,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 456faa543fdb78f4d8e3a34ccb73c235, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5876879926764255205, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -2005,5 +2014,10 @@ PrefabInstance:
 --- !u!4 &3448328581731096150 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
+  m_PrefabInstance: {fileID: 2904916241558139325}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8735505841426615340 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 159f75395f24a054e8688d7a39a2ac9c, type: 3}
   m_PrefabInstance: {fileID: 2904916241558139325}
   m_PrefabAsset: {fileID: 0}

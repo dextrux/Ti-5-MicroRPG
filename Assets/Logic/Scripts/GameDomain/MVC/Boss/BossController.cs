@@ -75,11 +75,17 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             CreateBoss();
             _arenaReference = Object.FindFirstObjectByType<ArenaPosReference>();
             _gamePlayUiController.SetBossValues(_bossData.ActualHealth);
+            if (_bossView != null) {
+                _bossView.SetMoving(false);
+            }
         }
 
         public void ManagedFixedUpdate() {
             if (_bossRigidbody == null || _bossTransform == null) return;
-            if (_turnMoveDistanceBudget <= 0f) return; // só mover durante o turno (quando há orçamento)
+            if (_turnMoveDistanceBudget <= 0f) {
+                if (_bossView != null) _bossView.SetMoving(false);
+                return; // só mover durante o turno (quando há orçamento)
+            }
 
             Vector3 worldDir = Vector3.zero;
             switch (_moveMode) {
@@ -121,6 +127,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             }
 
             if (worldDir.sqrMagnitude > 0.0001f) {
+                if (_bossView != null) _bossView.SetMoving(true);
                 float step = _moveSpeed * Time.fixedDeltaTime;
                 if (step > _turnMoveDistanceBudget) step = _turnMoveDistanceBudget;
                 _turnMoveDistanceBudget -= step;
@@ -132,6 +139,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                 Quaternion targetRot = Quaternion.LookRotation(worldDir.normalized, Vector3.up);
                 Quaternion newRot = Quaternion.Slerp(_bossTransform.rotation, targetRot, Time.fixedDeltaTime * _rotationSpeed);
                 _bossRigidbody.MoveRotation(newRot);
+                if (_turnMoveDistanceBudget <= 0f) {
+                    if (_bossView != null) _bossView.SetMoving(false);
+                }
             }
         }
 
@@ -209,12 +219,17 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                         float dist = delta.magnitude;
                         if (dist <= stopDistance) {
                             _turnMoveDistanceBudget = 0f;
+                            if (_bossView != null) _bossView.SetMoving(false);
                             break;
                         }
                     }
                 }
                 await Task.Yield();
             }
+        }
+
+        public void PlayPhaseTransitionAnimation() {
+            _bossView?.PlayPhaseTransition();
         }
 
         private void PrepareNextAction() {

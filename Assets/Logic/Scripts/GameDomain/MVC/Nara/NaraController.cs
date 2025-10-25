@@ -65,10 +65,13 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             {
                 Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
                 _naraMovementController.Move(dir, MoveSpeed, RotationSpeed);
+                bool willMove = dir.sqrMagnitude > 0.0001f && MoveSpeed > 0f;
+                _naraView?.SetMoving(willMove);
             }
             else
             {
                 _naraMovementController.Move(Vector2.zero, 0f, 0f);
+                _naraView?.SetMoving(false);
             }
         }
 
@@ -83,6 +86,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraView.CreateLineRenderer();
             _naraView.SetCamera();
             _naraMovementController.SetCamera(_naraView.GetCamera());
+            _naraView.SetMoving(false);
         }
 
         public void ExecuteAbility(AbilityData abilityData, IEffectable castter)
@@ -141,7 +145,20 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
             _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
-            if (_naraData.IsAlive()) _gamePlayUiController.TempShowLoseScreen();
+            if (_naraData.IsAlive()) {
+                _gamePlayUiController.TempShowLoseScreen();
+                _naraView?.PlayDeath();
+            }
+        }
+
+        public void PlayAttackType(int type)
+        {
+            _naraView?.SetAttackType(type);
+        }
+
+        public void PlayAttackType1()
+        {
+            _naraView?.SetAttackType(1);
         }
 
         public void Heal(int healAmount)
@@ -149,6 +166,16 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraData.Heal(healAmount);
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
+        }
+
+        public void TriggerExecute()
+        {
+            _naraView?.TriggerExecute();
+        }
+
+        public void ResetExecuteTrigger()
+        {
+            _naraView?.ResetExecuteTrigger();
         }
 
         public void TakeDamagePerTurn(int damageAmount, int duration) {

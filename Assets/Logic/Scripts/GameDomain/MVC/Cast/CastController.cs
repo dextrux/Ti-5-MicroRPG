@@ -1,5 +1,6 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.GameDomain.MVC.Echo;
+using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.Turns;
@@ -23,6 +24,9 @@ public class CastController : ICastController {
         if (_actionPointsService.CanSpend(abilityData.GetCost())) {
             abilityData.Aim(caster);
             _currentAbility = abilityData;
+            if (caster is INaraController naraController) {
+                naraController.PlayAttackType1();
+            }
             return true;
         }
         else {
@@ -41,6 +45,9 @@ public class CastController : ICastController {
         int index = abilityController.FindIndexAbility(_currentAbility);
         if (index < 0) return;
         _actionPointsService.Spend(_currentAbility.GetCost());
+        if (caster is INaraController naraController) {
+            naraController.TriggerExecute();
+        }
         abilityController.CreateAbility(caster, index);
         CancelAbilityUse();
     }

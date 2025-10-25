@@ -12,12 +12,14 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
         private int movementRadius;
 
         private LineRenderer _lineRenderer;
-        private LineRenderer _lineRenderer2;
-
         private int segments = 100;
+
         private Camera _camera;
 
-        public Rigidbody GetRigidbody() => _rigidbody;
+        public Rigidbody GetRigidbody()
+        {
+            return _rigidbody;
+        }
 
         public void SetNaraCenterView(Vector3 moveCenter)
         {
@@ -34,7 +36,10 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
             _camera = Camera.main;
         }
 
-        public Camera GetCamera() => _camera;
+        public Camera GetCamera()
+        {
+            return _camera;
+        }
 
         void Update()
         {
@@ -44,26 +49,90 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
 
             if (distance > movementRadius)
             {
+                Debug.Log("Passou Raio");
                 Vector3 directionFromCenter = (transform.position - movementCenter).normalized;
                 Vector3 radiusLimit = movementCenter + directionFromCenter * movementRadius;
                 _rigidbody.MovePosition(new Vector3(radiusLimit.x, transform.position.y, radiusLimit.z));
             }
+
+            if (_lineRenderer != null)
+                DrawCircle();
         }
 
         public void SetNaraMovementAreaAgain(int radius, Vector3 moveCenter)
         {
             movementCenter = moveCenter;
             movementRadius = radius;
+            DrawCircle();
+        }
 
-            if (_lineRenderer != null)
-                DrawCircle(_lineRenderer, movementCenter, movementRadius);
+        private void DrawCircle()
+        {
+            if (_lineRenderer == null) return;
+
+            int perCircle = segments + 1;
+            int totalPoints = perCircle + 1 + perCircle;
+
+            Vector3[] points = new Vector3[totalPoints];
+
+            FillCircle(points, 0, movementCenter, movementRadius);
+            DrawSecondCircle(points, perCircle);
+
+            _lineRenderer.loop = false;
+            _lineRenderer.positionCount = totalPoints;
+            _lineRenderer.SetPositions(points);
+        }
+
+        private void DrawSecondCircle(Vector3[] buffer, int startIndex)
+        {
+            Vector3 playerCenter = transform.position;
+
+            float dist = Vector3.Distance(playerCenter, movementCenter);
+            float r2 = Mathf.Max(0.01f, (float)movementRadius - dist);
+
+            Vector3 first2 = CirclePoint(playerCenter, r2, 0f, movementCenter.y + 0.25f);
+            buffer[startIndex] = first2;
+
+            int start2 = startIndex + 1;
+            for (int i = 0; i <= segments; i++)
+            {
+                float angle = (float)i / segments * 2f * Mathf.PI;
+                buffer[start2 + i] = CirclePoint(playerCenter, r2, angle, movementCenter.y + 0.25f);
+            }
+        }
+
+        private void FillCircle(Vector3[] buffer, int startIndex, Vector3 center, float radius)
+        {
+            float y = center.y + 0.25f;
+            for (int i = 0; i <= segments; i++)
+            {
+                float angle = (float)i / segments * 2f * Mathf.PI;
+                buffer[startIndex + i] = CirclePoint(center, radius, angle, y);
+            }
+        }
+
+        private Vector3 CirclePoint(Vector3 center, float radius, float angle, float y)
+        {
+            float x = Mathf.Cos(angle) * radius + center.x;
+            float z = Mathf.Sin(angle) * radius + center.z;
+            return new Vector3(x, y, z);
         }
 
         public void CreateLineRenderer()
         {
             _lineRenderer = gameObject.AddComponent<LineRenderer>();
-            InitLineRenderer(_lineRenderer, Color.blue);
-            DrawCircle(_lineRenderer, movementCenter, movementRadius);
+
+            _lineRenderer.positionCount = segments + 1;
+            _lineRenderer.useWorldSpace = true;
+            _lineRenderer.loop = false;
+
+            _lineRenderer.startWidth = 1f;
+            _lineRenderer.endWidth = 1;
+            _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+            _lineRenderer.startColor = Color.blue;
+            _lineRenderer.endColor = Color.blue;
+
+            DrawCircle();
             _lineRenderer.enabled = false;
         }
 
@@ -72,53 +141,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
             if (_lineRenderer == null) return;
             _lineRenderer.enabled = visible;
         }
-
-        public void CreateSecondCircleRenderer(int radius, Vector3 center, Color? color = null)
-        {
-            if (_lineRenderer2 == null)
-                _lineRenderer2 = gameObject.AddComponent<LineRenderer>();
-
-            InitLineRenderer(_lineRenderer2, color ?? Color.red);
-            DrawCircle(_lineRenderer2, center, radius);
-            _lineRenderer2.enabled = true;
-        }
-
-        public void SetSecondMovementCircleVisible(bool visible)
-        {
-            if (_lineRenderer2 == null) return;
-            _lineRenderer2.enabled = visible;
-        }
-
-        private void InitLineRenderer(LineRenderer lr, Color color)
-        {
-            lr.positionCount = segments;
-            lr.useWorldSpace = true;
-            lr.loop = true;
-            lr.startWidth = 0.05f;
-            lr.endWidth = 0.05f;
-            lr.material = new Material(Shader.Find("Sprites/Default"));
-            lr.startColor = color;
-            lr.endColor = color;
-        }
-
-        private void DrawCircle(LineRenderer lr, Vector3 center, float radius, float yOffset = 0.25f)
-        {
-            if (lr == null) return;
-
-            if (lr.positionCount != segments)
-                lr.positionCount = segments;
-
-            Vector3[] points = new Vector3[segments];
-
-            for (int i = 0; i < segments; i++)
-            {
-                float angle = (float)i / segments * 2f * Mathf.PI;
-                float x = Mathf.Cos(angle) * radius + center.x;
-                float z = Mathf.Sin(angle) * radius + center.z;
-                points[i] = new Vector3(x, center.y + yOffset, z);
-            }
-
-            lr.SetPositions(points);
-        }
+        
     }
 }

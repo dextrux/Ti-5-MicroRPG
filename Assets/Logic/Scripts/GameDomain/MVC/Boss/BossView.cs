@@ -6,6 +6,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
         [SerializeField] private Animator _animator;
+        [SerializeField] private float _phaseTransitionDuration = 1.0f;
 
         private Action<int> _onPreviewHeal;
         private Action<int> _onPreviewDamage;
@@ -70,6 +71,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             if (_animator != null) {
                 _animator.SetTrigger("PhaseTransition");
             }
+        }
+
+        public float GetPhaseTransitionDuration() {
+            return _phaseTransitionDuration;
         }
     }
 }

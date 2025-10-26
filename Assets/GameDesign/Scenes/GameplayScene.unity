@@ -1056,7 +1056,7 @@ MonoBehaviour:
   _naraConfiguration: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}
   _bossViewPrefab: {fileID: 7540813036317866533, guid: 1216dee866539db43b72b19de06389b1, type: 3}
   _bossConfiguration: {fileID: 11400000, guid: c53b316a57f027e498cfcd5b31cdc99d, type: 2}
-  _bossBehavior: {fileID: 11400000, guid: 03c0e426f8bb667479348687e2216e30, type: 2}
+  _bossPhases: {fileID: 11400000, guid: c0d3c4260663b46418565b63471a4e49, type: 2}
   _gamePlayUiView: {fileID: 703431458}
   _skillSet1:
   - {fileID: 11400000, guid: d9d52de431f81e94c97467c811060a54, type: 2}

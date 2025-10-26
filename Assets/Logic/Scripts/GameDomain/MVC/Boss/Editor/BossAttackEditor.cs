@@ -1,50 +1,47 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Logic.Scripts.GameDomain.MVC.Boss.Editor
+namespace Logic.Scripts.GameDomain.MVC.Boss
 {
     [CustomEditor(typeof(BossAttack))]
-    public class BossAttackEditor : UnityEditor.Editor
+    public class BossAttackEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            SerializedProperty attackTypeProp = serializedObject.FindProperty("_attackType");
-            SerializedProperty proteanProp = serializedObject.FindProperty("_protean");
-            SerializedProperty featherProp = serializedObject.FindProperty("_feather");
-            SerializedProperty orbProp = serializedObject.FindProperty("_orb");
-            SerializedProperty effectsProp = serializedObject.FindProperty("_effects");
+            SerializedProperty effects = serializedObject.FindProperty("_effects");
+            SerializedProperty attackType = serializedObject.FindProperty("_attackType");
+            SerializedProperty protean = serializedObject.FindProperty("_protean");
+            SerializedProperty feather = serializedObject.FindProperty("_feather");
+            SerializedProperty wingSlash = serializedObject.FindProperty("_wingSlash");
+            SerializedProperty orb = serializedObject.FindProperty("_orb");
+            SerializedProperty featherIsPull = serializedObject.FindProperty("_featherIsPull");
 
-            EditorGUILayout.PropertyField(attackTypeProp);
+            EditorGUILayout.PropertyField(effects, true);
+            EditorGUILayout.PropertyField(attackType);
 
-            int attackTypeIdx = attackTypeProp.enumValueIndex;
-            if (attackTypeIdx == 0)
+            // 0 = ProteanCones, 1 = FeatherLines, 2 = WingSlash, 3 = Orb, 4 = HookAwakening
+            switch (attackType.enumValueIndex)
             {
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField("Protean Cones", EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(proteanProp, true);
+                case 0: // ProteanCones
+                    EditorGUILayout.PropertyField(protean, true);
+                    break;
+                case 1: // FeatherLines
+                    EditorGUILayout.PropertyField(feather, true);
+                    EditorGUILayout.PropertyField(featherIsPull, new GUIContent("Feather Is Pull"));
+                    break;
+                case 2: // WingSlash
+                    EditorGUILayout.PropertyField(wingSlash, true);
+                    break;
+                case 3: // Orb
+                    EditorGUILayout.PropertyField(orb, true);
+                    break;
+                default:
+                    break;
             }
-            else if (attackTypeIdx == 1)
-            {
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField("Feather Lines", EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(featherProp, true);
-            }
-            else if (attackTypeIdx == 2)
-            {
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField("Orb Spawn", EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(orbProp, true);
-            }
-
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Effects", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(effectsProp, true);
 
             serializedObject.ApplyModifiedProperties();
         }
     }
 }
-
-

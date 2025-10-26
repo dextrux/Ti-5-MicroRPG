@@ -5,12 +5,18 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 {
     public class BossAbilityController : IBossAbilityController
     {
-        private readonly BossBehaviorSO _bossBehavior;
+        private BossBehaviorSO _bossBehavior;
         private int _activeIndex;
 
         public BossAbilityController(BossBehaviorSO bossBehavior)
         {
             _bossBehavior = bossBehavior;
+            _activeIndex = 0;
+        }
+
+        public void SetBehavior(BossBehaviorSO behavior)
+        {
+            _bossBehavior = behavior;
             _activeIndex = 0;
         }
 

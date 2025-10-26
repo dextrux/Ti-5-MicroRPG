@@ -570,7 +570,7 @@ MonoBehaviour:
       Height: 5
     Center:
       Radius: 11.5
-      Height: 10
+      Height: 14
     Bottom:
       Radius: 2.5
       Height: 0.1

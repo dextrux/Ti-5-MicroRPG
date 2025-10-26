@@ -7,7 +7,7 @@ namespace Logic.Scripts.Turns
     public class BossActionService : IBossActionService
     {
         private readonly IBossController _bossController;
-        private bool _isFirstBossTurn = true;
+        //private bool _isFirstBossTurn = true;
 
         public BossActionService(IBossController bossController)
         {

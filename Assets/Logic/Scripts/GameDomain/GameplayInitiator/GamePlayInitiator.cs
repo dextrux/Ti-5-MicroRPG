@@ -26,7 +26,7 @@ namespace Logic.Scripts.GameDomain.GameplayInitiator {
 
         public async Awaitable StartEntryPoint(IInitiatorEnterData enterDataObject, CancellationTokenSource cancellationTokenSource) {
             var enterData = (GamePlayInitatorEnterData)enterDataObject;
-            //await _commandFactory.CreateCommandAsync<StartGamePlayStateCommand>().SetEnterData(enterData).Execute(cancellationTokenSource);
+            await _commandFactory.CreateCommandAsync<StartGamePlayStateCommand>().SetEnterData(enterData).Execute(cancellationTokenSource);
         }
 
         public Awaitable InitExitPoint(CancellationTokenSource cancellationTokenSource) {

@@ -17,18 +17,18 @@ public class LobbyUiController: ILobbyController{
 
     public void InitEntryPoint() {
         _lobbyView.Initialize();
-        _lobbyView.RegisterCallbacks(OnClickPlay, OnCustomizePlay, OnExtiPlay);
+        _lobbyView.RegisterCallbacks(OnClickPlay, OnCustomizeClicked, OnExtiPlay, OnCustomizeExit);
     }
     public void OnClickPlay() {
-        Debug.Log("Play Clicked");
         _stateMachineService.SwitchState(_gamePlayStateFactory.Create(new GamePlayInitatorEnterData(0)));
     }
-    public void OnCustomizePlay() {
-        Debug.Log("Customize Clicked");
-
+    public void OnCustomizeClicked() {
+        _lobbyView.CustomizationContainer.RemoveFromClassList("close-container");
+    }
+    public void OnCustomizeExit() {
+        _lobbyView.CustomizationContainer.AddToClassList("close-container");
     }
     public void OnExtiPlay() {
-        Debug.Log("Exit Clicked");
         Application.Quit();
     }
 }

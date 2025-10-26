@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
   m_Name: 06 Blink
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Blink
-  <Description>k__BackingField: Teleport instantly within R (+0) m. On arrival, deal
-    X (+0) DMG to enemies within Y (+0) m.
+  Name: 
+  Description: 
+  Icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   Effects: []
   TargetingStrategy:
     rid: 7012276592317825439
+  Damage: 0
+  Cost: 0
+  Cooldown: 0
+  Range: 0
+  Area: 0
+  Casts: 0
   BaseCost: 2
   BaseCooldown: 2
   BaseRange: 8

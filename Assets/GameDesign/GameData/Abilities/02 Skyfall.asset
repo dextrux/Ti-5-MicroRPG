@@ -12,14 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
   m_Name: 02 Skyfall
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Skyfall
-  <Description>k__BackingField: Summon a small star that bounces up to 3 times and
-    ignores terrain collisions. When it hits a valid target or completes its final
-    bounce, it explodes, dealing X (+0) DMG to all targets within Y (+0) m.
+  Name: 
+  Description: 
+  Icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   Effects:
   - rid: 7012276589014548556
   TargetingStrategy:
     rid: 7012276592317825422
+  Damage: 0
+  Cost: 0
+  Cooldown: 0
+  Range: 0
+  Area: 0
+  Casts: 0
   BaseCost: 2
   BaseCooldown: 1
   BaseRange: 6

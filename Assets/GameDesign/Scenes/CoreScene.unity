@@ -555,7 +555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetOffset: {x: 0, y: 14, z: 0}
+  TargetOffset: {x: 0, y: 12, z: -8}
   TrackerSettings:
     BindingMode: 4
     PositionDamping: {x: 0, y: 0, z: 0}

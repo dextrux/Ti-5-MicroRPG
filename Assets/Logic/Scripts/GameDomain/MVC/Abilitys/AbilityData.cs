@@ -11,12 +11,11 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         [SerializeReference] public List<AbilityEffect> Effects;
         [SerializeReference] public TargetingStrategy TargetingStrategy;
         [HideInInspector] public int Damage;
-        [HideInInspector] public int Cost;
         [HideInInspector] public int Cooldown;
+        [HideInInspector] public int Cost;
         [HideInInspector] public int Range;
-        [HideInInspector] public int Area;
         [HideInInspector] public int Casts;
-        public bool HasActivePlot;
+        [HideInInspector] public int Area;
         [SerializeField] private int BaseCost;
         [SerializeField] private int BaseCooldown;
         [SerializeField] private int BaseRange;

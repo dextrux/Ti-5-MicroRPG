@@ -149,7 +149,7 @@ namespace Logic.Scripts.GameDomain.Effects
             }
             if (rb == null)
             {
-                var view = UnityEngine.Object.FindObjectOfType<NaraView>();
+                var view = UnityEngine.Object.FindAnyObjectByType<NaraView>();
                 if (view != null) rb = view.GetRigidbody();
             }
             return rb != null;
@@ -157,10 +157,10 @@ namespace Logic.Scripts.GameDomain.Effects
 
         private static Vector3 ResolveCasterPosition(IEffectable caster)
         {
-            var bossView = UnityEngine.Object.FindObjectOfType<BossView>();
+            var bossView = UnityEngine.Object.FindAnyObjectByType<BossView>();
             if (bossView != null) return bossView.transform.position;
 
-            var naraView = UnityEngine.Object.FindObjectOfType<NaraView>();
+            var naraView = UnityEngine.Object.FindAnyObjectByType<NaraView>();
             if (naraView != null) return naraView.transform.position;
 
             return Vector3.zero;

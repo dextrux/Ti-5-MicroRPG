@@ -114,6 +114,24 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             }
         }
 
+        public void SetNewMovementArea()
+        {
+            _naraMovementController.RecalculateRadiusAfterAbility();
+            RecenterMovementAreaAtTurnStart();
+        }
+
+        public void ResetMovementArea()
+        {
+            _naraMovementController.ResetMovementRadius();
+            RecenterMovementAreaAtTurnStart();
+        }
+
+        public void RemoveMovementAreaLimit()
+        {
+            _naraMovementController.RemoveMovementRadius();
+            RecenterMovementAreaAtTurnStart();
+        }
+
         #region IEffectable Methods
 
         public Transform GetReferenceTransform() {

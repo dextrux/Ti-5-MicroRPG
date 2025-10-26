@@ -1,5 +1,6 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.GameDomain.MVC.Echo;
+using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.Turns;
@@ -11,6 +12,8 @@ public class CastController : ICastController {
     private readonly ICommandFactory _commandFactory;
     private readonly IActionPointsService _actionPointsService;
     private AbilityData _currentAbility;
+
+    private bool _canUseAbility;
 
     public CastController(IUpdateSubscriptionService updateSubscriptionService, ICommandFactory commandFactory,
         IActionPointsService actionPointsService) {
@@ -36,13 +39,29 @@ public class CastController : ICastController {
         _currentAbility = null;
     }
 
-    public void UseAbility(IAbilityController abilityController, IEffectable caster) {
+    public void UseAbility(IAbilityController abilityController, IEffectable caster)
+    {
         if (_currentAbility == null) return;
         int index = abilityController.FindIndexAbility(_currentAbility);
-        if (index < 0) return;
+        if (index < 0)
+        {
+            _canUseAbility = false;
+            return;
+        }
+        _canUseAbility = true;
         _actionPointsService.Spend(_currentAbility.GetCost());
         abilityController.CreateAbility(caster, index);
         CancelAbilityUse();
+    }
+
+    public bool GetCanUseAbility()
+    {
+        return _canUseAbility;
+    }
+
+    public void SetCanUseAbility(bool b)
+    {
+        _canUseAbility = b;
     }
 
     public void UseFastEcho(IEchoController echoController, Transform caster) {

@@ -15,5 +15,10 @@ public class MouseClickInputCommand : BaseCommand, ICommandVoid {
     public void Execute() {
         LogService.Log("Left Mouse button pressed");
         _castController.UseAbility(_abilityController, (IEffectable)_naraController);
+        if (_castController.GetCanUseAbility() == true)
+        {
+            _naraController.SetNewMovementArea();
+            _castController.SetCanUseAbility(false);
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
         private bool _isPushMode = true;
         private bool _hasPushFrozen = false;
+
         private static bool? _nextTelegraphPushMode = null;
         private static bool _globalFallbackPushMode = true;
         private static Func<bool> _isPushProvider = null;
@@ -94,7 +95,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             UpdateTelegraphGeometryAtCenter(parentTransform.position);
         }
 
-
         private bool ResolveInitialPushMode()
         {
             if (_nextTelegraphPushMode.HasValue)
@@ -119,7 +119,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         private bool TryInferPushFromParamsViaReflection(out bool isPush)
         {
             isPush = _isPushMode;
-
             try
             {
                 var t = _params.GetType();
@@ -148,8 +147,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     if (val != null)
                     {
                         string s = val.ToString().ToLowerInvariant();
-                        if (s.Contains("push") || s.Contains("knockback")) { isPush = true; return true; }
-                        if (s.Contains("pull") || s.Contains("grapple")) { isPush = false; return true; }
+                        if (s.Contains("push") || s.Contains("knockback")) { isPush = true;  return true; }
+                        if (s.Contains("pull") || s.Contains("grapple"))   { isPush = false; return true; }
                     }
                 }
             }
@@ -170,47 +169,47 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 switch (_params.axisMode)
                 {
                     case FeatherAxisMode.X:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                            end = new Vector3(center.x + 100f, center.y, center.z + offset);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        break;
+                    }
                     case FeatherAxisMode.Z:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                            end = new Vector3(center.x + offset, center.y, center.z + 100f);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                        end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        break;
+                    }
                     case FeatherAxisMode.XZ:
+                    {
+                        int nX = (n + 1) / 2;
+                        int nZ = n / 2;
+                        if ((i % 2) == 0)
                         {
-                            int nX = (n + 1) / 2;
-                            int nZ = n / 2;
-                            if ((i % 2) == 0)
-                            {
-                                int k = i / 2;
-                                float offset = (k - (nX - 1) * 0.5f) * spacing;
-                                start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                                end = new Vector3(center.x + 100f, center.y, center.z + offset);
-                            }
-                            else
-                            {
-                                int k = (i - 1) / 2;
-                                float offset = (k - (nZ - 1) * 0.5f) * spacing;
-                                start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                                end = new Vector3(center.x + offset, center.y, center.z + 100f);
-                            }
-                            break;
+                            int k = i / 2;
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
                         }
+                        else
+                        {
+                            int k = (i - 1) / 2;
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        }
+                        break;
+                    }
                     case FeatherAxisMode.Diagonal:
                     default:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                            end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        break;
+                    }
                 }
 
                 Vector3[] vertsWorld = StripMath.GenerateStripVertices(start, end, _params.width);
@@ -229,17 +228,18 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 Vector3 v3L = mT.InverseTransformPoint(vertsWorld[3]);
 
                 _views[i].Mesh.Clear();
-                _views[i].Mesh.vertices = new Vector3[] { v0L, v1L, v2L, v3L };
-                _views[i].Mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+                _views[i].Mesh.vertices  = new Vector3[] { v0L, v1L, v2L, v3L };
+                _views[i].Mesh.triangles = new int[]     { 0, 1, 2, 0, 2, 3 };
                 _views[i].Mesh.RecalculateNormals();
                 _views[i].Mesh.RecalculateBounds();
             }
+
             ComputeAndExposeSpecial(center, spacing, n, out var sStart, out var sEnd);
             CurrentSpecialStart = sStart;
-            CurrentSpecialEnd = sEnd;
-            CurrentSpecialAxis = (sEnd - sStart).normalized;
+            CurrentSpecialEnd   = sEnd;
+            CurrentSpecialAxis  = (sEnd - sStart).normalized;
             CurrentSpecialAxis.y = 0f;
-            CurrentStripWidth = _params.width;
+            CurrentStripWidth   = _params.width;
 
             Vector3 playerWorld = ResolvePlayerWorldPosition();
             UpdateSingleArrow(playerWorld, sStart, sEnd);
@@ -252,12 +252,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             if (_params.axisMode == FeatherAxisMode.X)
             {
                 sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
-                sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
+                sEnd   = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
             }
             else if (_params.axisMode == FeatherAxisMode.Z)
             {
                 sStart = new Vector3(center.x + specialOffset, center.y, center.z - 100f);
-                sEnd = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
+                sEnd   = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
             }
             else if (_params.axisMode == FeatherAxisMode.XZ)
             {
@@ -268,20 +268,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     int k = _specialIndex / 2;
                     float offX = (k - (nX - 1) * 0.5f) * spacing;
                     sStart = new Vector3(center.x - 100f, center.y, center.z + offX);
-                    sEnd = new Vector3(center.x + 100f, center.y, center.z + offX);
+                    sEnd   = new Vector3(center.x + 100f, center.y, center.z + offX);
                 }
                 else
                 {
                     int k = (_specialIndex - 1) / 2;
                     float offZ = (k - (nZ - 1) * 0.5f) * spacing;
                     sStart = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                    sEnd = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                    sEnd   = new Vector3(center.x + offZ, center.y, center.z + 100f);
                 }
             }
             else
             {
                 sStart = new Vector3(center.x - 100f, center.y, center.z - 100f + specialOffset);
-                sEnd = new Vector3(center.x + 100f, center.y, center.z + 100f + specialOffset);
+                sEnd   = new Vector3(center.x + 100f, center.y, center.z + 100f + specialOffset);
             }
         }
 
@@ -311,47 +311,47 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 switch (_params.axisMode)
                 {
                     case FeatherAxisMode.X:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                            end = new Vector3(center.x + 100f, center.y, center.z + offset);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        break;
+                    }
                     case FeatherAxisMode.Z:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                            end = new Vector3(center.x + offset, center.y, center.z + 100f);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                        end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        break;
+                    }
                     case FeatherAxisMode.XZ:
+                    {
+                        int nX = (n + 1) / 2;
+                        int nZ = n / 2;
+                        if ((i % 2) == 0)
                         {
-                            int nX = (n + 1) / 2;
-                            int nZ = n / 2;
-                            if ((i % 2) == 0)
-                            {
-                                int k = i / 2;
-                                float offset = (k - (nX - 1) * 0.5f) * spacing;
-                                start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                                end = new Vector3(center.x + 100f, center.y, center.z + offset);
-                            }
-                            else
-                            {
-                                int k = (i - 1) / 2;
-                                float offset = (k - (nZ - 1) * 0.5f) * spacing;
-                                start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                                end = new Vector3(center.x + offset, center.y, center.z + 100f);
-                            }
-                            break;
+                            int k = i / 2;
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
                         }
+                        else
+                        {
+                            int k = (i - 1) / 2;
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        }
+                        break;
+                    }
                     case FeatherAxisMode.Diagonal:
                     default:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                            end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        break;
+                    }
                 }
 
                 Mesh mesh = _views[i].Mesh;
@@ -474,47 +474,47 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 switch (_params.axisMode)
                 {
                     case FeatherAxisMode.X:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                            end = new Vector3(center.x + 100f, center.y, center.z + offset);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        break;
+                    }
                     case FeatherAxisMode.Z:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                            end = new Vector3(center.x + offset, center.y, center.z + 100f);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                        end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        break;
+                    }
                     case FeatherAxisMode.XZ:
+                    {
+                        int nX = (n + 1) / 2;
+                        int nZ = n / 2;
+                        if ((i % 2) == 0)
                         {
-                            int nX = (n + 1) / 2;
-                            int nZ = n / 2;
-                            if ((i % 2) == 0)
-                            {
-                                int k = i / 2;
-                                float offset = (k - (nX - 1) * 0.5f) * spacing;
-                                start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                                end = new Vector3(center.x + 100f, center.y, center.z + offset);
-                            }
-                            else
-                            {
-                                int k = (i - 1) / 2;
-                                float offset = (k - (nZ - 1) * 0.5f) * spacing;
-                                start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                                end = new Vector3(center.x + offset, center.y, center.z + 100f);
-                            }
-                            break;
+                            int k = i / 2;
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
                         }
+                        else
+                        {
+                            int k = (i - 1) / 2;
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        }
+                        break;
+                    }
                     case FeatherAxisMode.Diagonal:
                     default:
-                        {
-                            float offset = (i - (n - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                            end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
-                            break;
-                        }
+                    {
+                        float offset = (i - (n - 1) * 0.5f) * spacing;
+                        start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        break;
+                    }
                 }
 
                 if (StripMath.IsPointInsideStrip(start, end, _params.width, playerWorld))
@@ -544,28 +544,38 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
             Vector3 axis = axisEnd - axisStart; axis.y = 0f;
             if (axis.sqrMagnitude < 1e-6f) { _singleArrow.positionCount = 0; return; }
-            axis.Normalize();
+            Vector3 u = axis.normalized;
 
-            Vector3 normal = new Vector3(-axis.z, 0f, axis.x);
-            Vector3 dir = _isPushMode ? -normal : normal;
+            Vector3 v = playerWorld - axisStart; v.y = 0f;
+            float t = Vector3.Dot(v, u);
+            Vector3 proj = axisStart + u * t; proj.y = playerWorld.y;
+
+            Vector3 perp = proj - new Vector3(playerWorld.x, playerWorld.y, playerWorld.z);
+            perp.y = 0f;
+            if (perp.sqrMagnitude < 1e-6f)
+            {
+                perp = new Vector3(-u.z, 0f, u.x);
+            }
+
+            Vector3 dir = (_isPushMode ? -perp : perp).normalized;
 
             float y = 0.3f;
             float outOffset = Mathf.Max(0.35f, _params.width * 0.5f + 0.15f);
-            float shaftLen = Mathf.Max(0.75f, _params.width * 0.9f);
-            float headLen = shaftLen * 0.35f;
+            float shaftLen  = Mathf.Max(0.75f, _params.width * 0.9f);
+            float headLen   = shaftLen * 0.35f;
             float headHalfW = headLen * 0.6f;
 
             Vector3 origin = new Vector3(playerWorld.x, y, playerWorld.z) + dir * outOffset;
-            Vector3 tip = origin + dir * shaftLen;
-            Vector3 tail = origin - dir * 0.25f;
+            Vector3 tip    = origin + dir * shaftLen;
+            Vector3 tail   = origin - dir * 0.25f;
 
             Vector3 side = new Vector3(-dir.z, 0f, dir.x);
-            Vector3 leftWing = tip - dir * headLen + side * headHalfW;
+            Vector3 leftWing  = tip - dir * headLen + side * headHalfW;
             Vector3 rightWing = tip - dir * headLen - side * headHalfW;
 
             Color c = _isPushMode ? new Color(1f, 0.35f, 0.35f, 1f) : new Color(0.35f, 0.7f, 1f, 1f);
             _singleArrow.startColor = c;
-            _singleArrow.endColor = c;
+            _singleArrow.endColor   = c;
 
             _singleArrow.enabled = true;
             _singleArrow.positionCount = 5;
@@ -575,7 +585,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             _singleArrow.SetPosition(3, tip);
             _singleArrow.SetPosition(4, rightWing);
         }
-
+        
         public void Cleanup()
         {
             if (_views != null)

@@ -61,6 +61,7 @@ MonoBehaviour:
     forceBase: 2
     forcePerMeter: 0.4
     forcePerDebuff: 0.5
+  _featherIsPull: 1
   _orb:
     prefab: {fileID: 0}
     moveStepMeters: 6

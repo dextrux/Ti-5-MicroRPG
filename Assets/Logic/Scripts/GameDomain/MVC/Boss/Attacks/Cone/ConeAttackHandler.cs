@@ -54,7 +54,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
                 v.MeshFilter.sharedMesh = v.Mesh;
 
                 Vector3 origin = parentTransform.position;
-                Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * Vector3.forward;
+                Vector3 parentFwd = new Vector3(parentTransform.forward.x, 0f, parentTransform.forward.z);
+                if (parentFwd.sqrMagnitude < 1e-6f) parentFwd = Vector3.forward;
+                Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * parentFwd;
 
                 Vector3[] outline = ConeArea.GenerateConeOutlinePolygon(origin, forward, _radius, _angleDeg, _sides);
                 for (int p = 0; p < outline.Length; p++) outline[p].y = 0.2f;
@@ -101,7 +103,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
             for (int i = 0; i < _yaws.Length; i++)
             {
                 Vector3 origin = originTransform.position;
-                Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * Vector3.forward;
+                Vector3 baseFwd = new Vector3(originTransform.forward.x, 0f, originTransform.forward.z);
+                if (baseFwd.sqrMagnitude < 1e-6f) baseFwd = Vector3.forward;
+                Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * baseFwd;
                 if (ConeArea.IsPointInsideCone(origin, forward, _radius, _angleDeg, playerWorld)) return true;
             }
             return false;
@@ -119,7 +123,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
             for (int i = 0; i < _yaws.Length; i++)
             {
                 Vector3 origin = originTransform.position;
-                Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * Vector3.forward;
+                Vector3 baseFwd = new Vector3(originTransform.forward.x, 0f, originTransform.forward.z);
+                if (baseFwd.sqrMagnitude < 1e-6f) baseFwd = Vector3.forward;
+                Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * baseFwd;
                 if (ConeArea.IsPointInsideCone(origin, forward, _radius, _angleDeg, playerWorld)) { anyHit = true; break; }
             }
             if (!anyHit) yield break;

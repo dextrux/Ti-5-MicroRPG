@@ -15,12 +15,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
     {
         [SerializeReference] private List<AbilityEffect> _effects;
 
-        private enum AttackType { ProteanCones, FeatherLines, Orb, HookAwakening }
+        private enum AttackType { ProteanCones, FeatherLines, WingSlash, Orb, HookAwakening }
         [SerializeField] private AttackType _attackType = AttackType.ProteanCones;
 
         [SerializeField] private ProteanConesParams _protean = new ProteanConesParams { radius = 3f, angleDeg = 60f, sides = 36 };
+        [SerializeField] private ProteanConesParams _wingSlash = new ProteanConesParams { radius = 4f, angleDeg = 215f, sides = 48 };
 
         [SerializeField] private FeatherLinesParams _feather = new FeatherLinesParams { featherCount = 3, axisMode = FeatherAxisMode.XZ, width = 2f, margin = 5f, forceBase = 2f, forcePerMeter = 0.4f, forcePerDebuff = 0.5f };
+
+        [Header("Feather Visuals")]
+        [SerializeField] private bool _featherIsPull = false; // false = push (azul escuro), true = pull (roxo)
 
         [System.Serializable]
         private struct OrbSpawnParams
@@ -104,7 +108,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         {
             if (_effects != null)
             {
-                yield return _handler.ExecuteEffects(_effects, _arena, transform, _caster);
+                System.Collections.Generic.List<AbilityEffect> effectsToRun = _effects;
+                if (_attackType == AttackType.WingSlash && _effects != null)
+                {
+                    var filtered = new System.Collections.Generic.List<AbilityEffect>(_effects.Count);
+                    foreach (var fx in _effects)
+                    {
+                        if (!(fx is Assets.Logic.Scripts.GameDomain.Effects.DisplacementEffect))
+                        {
+                            filtered.Add(fx);
+                        }
+                    }
+                    effectsToRun = filtered;
+                }
+                yield return _handler.ExecuteEffects(effectsToRun, _arena, transform, _caster);
             }
             CleanupAndComplete();
         }
@@ -177,7 +194,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
                 }
                 case AttackType.FeatherLines:
                 {
-                    _handler = new FeatherLinesHandler(_feather);
+                    _handler = new FeatherLinesHandler(_feather, _featherIsPull);
+                    break;
+                }
+                case AttackType.WingSlash:
+                {
+                    float[] yaws = new float[] { 0f }; // frente do boss
+                    _handler = new ConeAttackHandler(_wingSlash.radius, _wingSlash.angleDeg, _wingSlash.sides, yaws);
                     break;
                 }
                 case AttackType.Orb:

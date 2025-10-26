@@ -13,7 +13,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
     public class FeatherLinesHandler : IBossAttackHandler
     {
         private readonly FeatherLinesParams _params;
-
+        private readonly bool _isPull;
         private class FeatherSubView
         {
             public LineRenderer Line;
@@ -43,9 +43,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static Vector3 CurrentSpecialAxis;
         public static float CurrentStripWidth;
 
-        public FeatherLinesHandler(FeatherLinesParams p)
+        public FeatherLinesHandler(FeatherLinesParams p, bool isPull)
         {
             _params = p;
+            _isPull = isPull;
         }
 
         public void PrepareTelegraph(Transform parentTransform)
@@ -68,16 +69,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 v.Line.useWorldSpace = true;
                 v.Line.loop = true;
                 v.Line.widthMultiplier = 0.1f;
-                v.Line.startColor = (i == _specialIndex) ? Color.red : Color.yellow;
-                v.Line.endColor = v.Line.startColor;
+                bool isSpecial = (i == _specialIndex);
+                // Color scheme per request: pull=purple, push=dark blue
+                Color specialLineColor = _isPull ? new Color(0.5f, 0f, 0.5f, 1f) : new Color(0.1f, 0.1f, 0.5f, 1f);
+                Color lineColor = isSpecial ? specialLineColor : Color.yellow;
+                v.Line.startColor = lineColor;
+                v.Line.endColor = lineColor;
 
                 v.MeshFilter = go.AddComponent<MeshFilter>();
                 v.MeshRenderer = go.AddComponent<MeshRenderer>();
-                v.MeshRenderer.material = new Material(Shader.Find("Sprites/Default"))
-                {
-                    color = (i == _specialIndex) ? new Color(1f, 0f, 0f, 0.2f) : new Color(1f, 1f, 0f, 0.2f)
-                };
-                v.Mesh = new Mesh { name = "FeatherStripMesh" };
+                Color specialFillColor = _isPull ? new Color(0.5f, 0f, 0.5f, 0.2f) : new Color(0.1f, 0.1f, 0.5f, 0.2f);
+                Color fillColor = isSpecial ? specialFillColor : new Color(1f, 1f, 0f, 0.2f);
+                v.MeshRenderer.material = new Material(Shader.Find("Sprites/Default")) { color = fillColor };
+                v.Mesh = new Mesh();
+                v.Mesh.name = "FeatherStripMesh";
                 v.MeshFilter.sharedMesh = v.Mesh;
 
                 _views[i] = v;
@@ -416,6 +421,58 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
         private IEnumerator ExecuteFeatherSequence(List<AbilityEffect> effects, ArenaPosReference arenaReference, Transform originTransform, IEffectable caster, IEffectable target, Vector3 center, float spacing, int n, Vector3 playerWorld)
         {
+            // 1) Special feather sequence: hide line -> wait -> DAMAGE hit-check/apply -> wait -> DISPLACEMENT always -> wait
+            // Refresh special line colors each execution based on current push/pull
+            if (_views != null && _specialIndex >= 0 && _specialIndex < n)
+            {
+                var v = _views[_specialIndex];
+                Color specialLineColor = _isPull ? new Color(0.5f, 0f, 0.5f, 1f) : new Color(0.1f, 0.1f, 0.5f, 1f);
+                Color specialFillColor = _isPull ? new Color(0.5f, 0f, 0.5f, 0.2f) : new Color(0.1f, 0.1f, 0.5f, 0.2f);
+                if (v.Line != null) { v.Line.startColor = v.Line.endColor = specialLineColor; }
+                if (v.MeshRenderer != null && v.MeshRenderer.material != null) { v.MeshRenderer.material.color = specialFillColor; }
+            }
+            // Identify special line geometry once
+            float specialOffset = (_specialIndex - (n - 1) * 0.5f) * spacing;
+            Vector3 sStart, sEnd;
+            if (_params.axisMode == FeatherAxisMode.X)
+            {
+                sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
+                sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
+            }
+            else if (_params.axisMode == FeatherAxisMode.Z)
+            {
+                sStart = new Vector3(center.x + specialOffset, center.y, center.z - 100f);
+                sEnd = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
+            }
+            else if (_params.axisMode == FeatherAxisMode.XZ)
+            {
+                int nX = (n + 1) / 2;
+                int nZ = n / 2;
+                if ((_specialIndex % 2) == 0)
+                {
+                    int k = _specialIndex / 2;
+                    float offX = (k - (nX - 1) * 0.5f) * spacing;
+                    sStart = new Vector3(center.x - 100f, center.y, center.z + offX);
+                    sEnd = new Vector3(center.x + 100f, center.y, center.z + offX);
+                }
+                else
+                {
+                    int k = (_specialIndex - 1) / 2;
+                    float offZ = (k - (nZ - 1) * 0.5f) * spacing;
+                    sStart = new Vector3(center.x + offZ, center.y, center.z - 100f);
+                    sEnd = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                }
+            }
+            else if (_params.axisMode == FeatherAxisMode.Diagonal)
+            {
+                sStart = new Vector3(center.x - 100f, center.y, center.z - 100f + specialOffset);
+                sEnd = new Vector3(center.x + 100f, center.y, center.z + 100f + specialOffset);
+            }
+            else
+            {
+                sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
+                sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
+            }
             ComputeAndExposeSpecial(center, spacing, n, out var sStart, out var sEnd);
 
             UpdateSingleArrow(playerWorld, sStart, sEnd);

@@ -16,7 +16,7 @@ public class GamePlayInstaller : MonoInstaller {
 
     [SerializeField] private BossView _bossViewPrefab;
     [SerializeField] private BossConfigurationSO _bossConfiguration;
-    [SerializeField] private BossBehaviorSO _bossBehavior;
+    [SerializeField] private BossPhasesSO _bossPhases;
 
     [SerializeField] private GamePlayUiView _gamePlayUiView;
 
@@ -46,9 +46,9 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<AbilityController>().AsSingle().WithArguments(_skillSet1, _skillSet2, _skillSet3).NonLazy();
         Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
 
-        Container.BindInstance(_bossBehavior);
-        Container.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments(_bossBehavior).NonLazy();
-        Container.BindInterfacesTo<BossController>().AsSingle().WithArguments(_bossViewPrefab, _bossConfiguration, _bossBehavior).NonLazy();
+        if (_bossPhases != null) Container.BindInstance(_bossPhases);
+        Container.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments((BossBehaviorSO)null).NonLazy();
+        Container.BindInterfacesTo<BossController>().AsSingle().WithArguments(_bossViewPrefab, _bossConfiguration, _bossPhases).NonLazy();
         Container.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();
     }
 }

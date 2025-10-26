@@ -22,9 +22,11 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         private readonly BossView _bossViewPrefab;
         private readonly BossData _bossData;
         private readonly BossConfigurationSO _bossConfiguration;
-        private readonly BossBehaviorSO _bossBehavior;
+        private readonly BossPhasesSO _bossPhases;
         private readonly IBossAbilityController _bossAbilityController;
         private ArenaPosReference _arenaReference;
+        private BossBehaviorSO _activeBehavior;
+        private int _currentPhaseIndex;
 
         private Rigidbody _bossRigidbody;
         private Transform _bossTransform;
@@ -53,7 +55,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         public BossController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
             IResourcesLoaderService resourcesLoaderService, BossView bossViewPrefab,
-            BossConfigurationSO bossConfiguration, BossBehaviorSO bossBehavior,
+            BossConfigurationSO bossConfiguration, BossPhasesSO bossPhases,
             IBossAbilityController bossAbilityController, IGamePlayUiController gamePlayUiController) {
             _updateSubscriptionService = updateSubscriptionService;
             _audioService = audioService;
@@ -61,7 +63,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _resourcesLoaderService = resourcesLoaderService;
             _bossViewPrefab = bossViewPrefab;
             _bossConfiguration = bossConfiguration;
-            _bossBehavior = bossBehavior;
+            _bossPhases = bossPhases;
             _bossAbilityController = bossAbilityController;
             _gamePlayUiController = gamePlayUiController;
             _bossData = new BossData(_bossConfiguration);
@@ -77,6 +79,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _gamePlayUiController.SetBossValues(_bossData.ActualHealth);
             if (_bossView != null) {
                 _bossView.SetMoving(false);
+            }
+            _activeBehavior = GetBehaviorForPhaseIndex(0);
+            _currentPhaseIndex = -1;
+            _ = EvaluateAndMaybeSwitchPhaseAsync();
+            if (_activeBehavior != null) {
+                _bossAbilityController.SetBehavior(_activeBehavior);
             }
         }
 
@@ -155,6 +163,11 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _bossView.SetupCallbacks(PreviewHeal, PreviewDamage, TakeDamage, Heal);
             _bossRigidbody = _bossView != null ? _bossView.GetRigidbody() : null;
             _bossTransform = _bossView != null ? _bossView.transform : null;
+            if (_bossView != null) {
+                var relay = _bossView.gameObject.GetComponent<Assets.Logic.Scripts.GameDomain.Effects.EffectableRelay>();
+                if (relay == null) relay = _bossView.gameObject.AddComponent<Assets.Logic.Scripts.GameDomain.Effects.EffectableRelay>();
+                relay.Init(this);
+            }
 
             if (_bossRigidbody != null) {
                 _bossRigidbody.useGravity = false;
@@ -165,7 +178,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
             _moveSpeed = _bossConfiguration != null ? _bossConfiguration.MoveSpeed : 5f;
             _rotationSpeed = _bossConfiguration != null ? _bossConfiguration.RotationSpeed : 5f;
-            _randomDirDuration = _bossBehavior != null ? _bossBehavior.RandomChangeDirectionSeconds : 1.5f;
+            var behavior = GetCurrentBehavior();
+            _randomDirDuration = behavior != null ? behavior.RandomChangeDirectionSeconds : 1.5f;
             _moveMode = BossMoveMode.TowardPlayer;
         }
         public void PlanNextTurn() { }
@@ -185,6 +199,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         public async Task ExecuteTurnAsync() {
             ResolvePendingCasts();
             await ExecutePreparedActionAsync();
+            // After executing the previously prepared action, evaluate phase change for this turn
+            bool didTransition = await EvaluateAndMaybeSwitchPhaseAsync();
             await MoveTurnAsync();
             PrepareNextAction();
             _executedTurnsCount++;
@@ -237,9 +253,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         }
 
         private void QueuePreparedAttackFromBehavior() {
-            if (_bossBehavior == null) return;
-            BossBehaviorSO.BossTurnConfig[] pattern = _bossBehavior.TurnPattern;
-            BossAttack[] pool = _bossBehavior.AvailableAttacks;
+            var behavior = GetCurrentBehavior();
+            if (behavior == null) return;
+            BossBehaviorSO.BossTurnConfig[] pattern = behavior.TurnPattern;
+            BossAttack[] pool = behavior.AvailableAttacks;
             if (pattern == null || pattern.Length == 0 || pool == null || pool.Length == 0) return;
             int indexInPattern = _executedTurnsCount % pattern.Length;
             BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
@@ -258,9 +275,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         }
 
         private void ConfigureTurnMovement() {
-            if (_bossBehavior == null) return;
-            BossBehaviorSO.BossTurnConfig[] pattern = _bossBehavior.TurnPattern;
-            float baseStep = _bossBehavior.StepDistance > 0f ? _bossBehavior.StepDistance : (_bossBehavior.FallbackStepDistance > 0f ? _bossBehavior.FallbackStepDistance : 1f);
+            var behavior = GetCurrentBehavior();
+            if (behavior == null) return;
+            BossBehaviorSO.BossTurnConfig[] pattern = behavior.TurnPattern;
+            float baseStep = behavior.StepDistance > 0f ? behavior.StepDistance : (behavior.FallbackStepDistance > 0f ? behavior.FallbackStepDistance : 1f);
             if (pattern == null || pattern.Length == 0) {
                 SetMoveModeTowardPlayer(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
                 _turnMoveDistanceBudget = baseStep;
@@ -285,7 +303,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                     Debug.Log($"Boss turn move: Mode=Direction dir=({entry.Direction.x:0.###},{entry.Direction.y:0.###},{entry.Direction.z:0.###}) | distance={_turnMoveDistanceBudget:0.###}");
                     break;
                 case BossBehaviorSO.TurnMoveMode.Random:
-                    SetMoveModeRandom(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed, _bossBehavior.RandomChangeDirectionSeconds);
+                    SetMoveModeRandom(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed, behavior.RandomChangeDirectionSeconds);
                     Debug.Log($"Boss turn move: Mode=Random | distance={_turnMoveDistanceBudget:0.###}");
                     break;
             }
@@ -346,6 +364,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         public void TakeDamage(int amount) {
             _bossData.TakeDamage(amount);
             Debug.Log("Tomou dano!!!!!!!!!!!!!!!!");
+            Debug.Log($"[Boss] Damage: -{amount} -> HP={_bossData.ActualHealth}/{_bossConfiguration.MaxHealth}");
             _gamePlayUiController.OnActualBossHealthChange(_bossData.ActualHealth);
             _gamePlayUiController.OnActualBossLifeChange(_bossData.ActualHealth);
             _gamePlayUiController.OnPreviewBossHealthChange(_bossData.ActualHealth);
@@ -354,6 +373,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
         public void Heal(int amount) {
             _bossData?.Heal(amount);
+            Debug.Log($"[Boss] Heal: +{amount} -> HP={_bossData.ActualHealth}/{_bossConfiguration.MaxHealth}");
             _gamePlayUiController.OnActualBossHealthChange(_bossData.ActualHealth);
             _gamePlayUiController.OnActualBossLifeChange(_bossData.ActualHealth);
             _gamePlayUiController.OnPreviewBossHealthChange(_bossData.ActualHealth);
@@ -389,6 +409,51 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
 
         public void ResetPreview() {
 
+        }
+
+        private BossBehaviorSO GetCurrentBehavior() {
+            return _activeBehavior;
+        }
+
+        private async System.Threading.Tasks.Task<bool> EvaluateAndMaybeSwitchPhaseAsync() {
+            if (_bossPhases == null || _bossConfiguration == null) return false;
+            int newIndex = _bossPhases.GetPhaseIndexByHealth(_bossData.ActualHealth, _bossConfiguration.MaxHealth);
+            if (newIndex == _currentPhaseIndex || newIndex < 0) return false;
+            var phases = _bossPhases.Phases;
+            string prevName = (_currentPhaseIndex >= 0 && phases != null && _currentPhaseIndex < phases.Length) ? phases[_currentPhaseIndex].Name : "(none)";
+            BossBehaviorSO newBehavior = GetBehaviorForPhaseIndex(newIndex);
+            string newName = (phases != null && newIndex < phases.Length) ? phases[newIndex].Name : "(unknown)";
+            Debug.Log($"[Boss] Phase change: {_currentPhaseIndex}:{prevName} -> {newIndex}:{newName} at HP={_bossData.ActualHealth}/{_bossConfiguration.MaxHealth}");
+            if (newBehavior != null && newBehavior != _activeBehavior) {
+                _activeBehavior = newBehavior;
+                _bossAbilityController.SetBehavior(_activeBehavior);
+                _executedTurnsCount = 0;
+                _pendingCasts?.Clear();
+            } else if (newBehavior == null) {
+                Debug.LogWarning($"[Boss] Phase '{newName}' has no Behavior assigned. Keeping current behavior.");
+            }
+            PlayPhaseTransitionAnimation();
+            _currentPhaseIndex = newIndex;
+            // wait for the phase transition animation before continuing turn
+            if (_bossView != null) {
+                float wait = Mathf.Max(0f, _bossView.GetPhaseTransitionDuration());
+                if (wait > 0f) {
+                    float elapsed = 0f;
+                    while (elapsed < wait) {
+                        elapsed += Time.deltaTime;
+                        await System.Threading.Tasks.Task.Yield();
+                    }
+                }
+            }
+            return true;
+        }
+
+        private BossBehaviorSO GetBehaviorForPhaseIndex(int index)
+        {
+            if (_bossPhases == null) return null;
+            var phases = _bossPhases.Phases;
+            if (phases == null || index < 0 || index >= phases.Length) return null;
+            return phases[index].Behavior;
         }
     }
 }

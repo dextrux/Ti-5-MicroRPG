@@ -6,6 +6,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
     {
         BossAttack CreateAttack(Transform referenceTransform);
         BossAttack CreateAttackAtIndex(int index, Transform referenceTransform);
+        void SetBehavior(BossBehaviorSO behavior);
     }
 }
 

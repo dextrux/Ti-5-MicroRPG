@@ -7,6 +7,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
     {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
+        [SerializeField] private Animator _animator;
 
         private Vector3 movementCenter;
         private int movementRadius;
@@ -140,6 +141,54 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
         {
             if (_lineRenderer == null) return;
             _lineRenderer.enabled = visible;
+        }
+        
+        public void SetMoving(bool isMoving)
+        {
+            if (_animator != null)
+            {
+                _animator.SetBool("Moving", isMoving);
+            }
+        }
+
+        public void PlayDeath()
+        {
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Dead");
+            }
+        }
+
+        public void SetAttackType(int type)
+        {
+            if (_animator != null)
+            {
+                _animator.SetInteger("AKY_AttackType", type);
+            }
+        }
+
+        public void ResetAttackType()
+        {
+            if (_animator != null)
+            {
+                _animator.SetInteger("AKY_AttackType", 0);
+            }
+        }
+
+        public void TriggerExecute()
+        {
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Execute");
+            }
+        }
+
+        public void ResetExecuteTrigger()
+        {
+            if (_animator != null)
+            {
+                _animator.ResetTrigger("Execute");
+            }
         }
         
     }

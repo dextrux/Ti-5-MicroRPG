@@ -26,6 +26,9 @@ public class CastController : ICastController {
         if (_actionPointsService.CanSpend(abilityData.GetCost())) {
             abilityData.Aim(caster);
             _currentAbility = abilityData;
+            if (caster is INaraController naraController) {
+                naraController.PlayAttackType1();
+            }
             return true;
         }
         else {
@@ -50,6 +53,9 @@ public class CastController : ICastController {
         }
         _canUseAbility = true;
         _actionPointsService.Spend(_currentAbility.GetCost());
+        if (caster is INaraController naraController) {
+            naraController.TriggerExecute();
+        }
         abilityController.CreateAbility(caster, index);
         CancelAbilityUse();
     }

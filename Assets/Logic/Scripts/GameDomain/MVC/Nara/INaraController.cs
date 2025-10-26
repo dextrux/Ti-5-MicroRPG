@@ -14,6 +14,10 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public void ExecuteAbility(AbilityData abilityData, IEffectable castter);
         void RecenterMovementAreaAtTurnStart();
         void SetMovementCircleVisible(bool visible);
+        void PlayAttackType(int type);
+        void PlayAttackType1();
+        void TriggerExecute();
+        void ResetExecuteTrigger();
         void SetNewMovementArea();
         void ResetMovementArea();
         void RemoveMovementAreaLimit();

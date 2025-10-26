@@ -52,6 +52,16 @@ namespace Assets.Logic.Scripts.GameDomain.Effects
         {
             _target?.HealPerTurn(healAmount, duration);
         }
+
+        public Transform GetTransformCastPoint() {
+            //To-do Criar retorno
+            return transform;
+        }
+
+        public GameObject GetReferenceTargetPrefab() {
+            //To-do Criar retorno
+            return gameObject;
+        }
     }
 }
 

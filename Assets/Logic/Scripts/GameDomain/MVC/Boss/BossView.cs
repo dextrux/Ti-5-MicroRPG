@@ -76,6 +76,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         public float GetPhaseTransitionDuration() {
             return _phaseTransitionDuration;
         }
+
+        public Transform GetTransformCastPoint() {
+            return transform;
+        }
+
+        public GameObject GetReferenceTargetPrefab() {
+            return gameObject;
+        }
     }
 }
 

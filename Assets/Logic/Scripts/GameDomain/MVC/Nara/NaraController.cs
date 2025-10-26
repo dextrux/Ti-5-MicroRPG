@@ -249,5 +249,17 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         {
             return _debuffStacks;
         }
+
+        public Transform GetTransformCastPoint() {
+            return _naraView.CastPoint;
+        }
+
+        public GameObject GetReferenceTargetPrefab() {
+            return _naraView.TargetPrefab;
+        }
+
+        public LineRenderer GetPointLineRenderer() {
+            return _naraView.CastLineRenderer;
+        }
     }
 }

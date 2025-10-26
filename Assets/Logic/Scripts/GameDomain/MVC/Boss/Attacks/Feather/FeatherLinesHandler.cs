@@ -473,7 +473,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
                 sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
             }
-            ComputeAndExposeSpecial(center, spacing, n, out var sStart, out var sEnd);
 
             UpdateSingleArrow(playerWorld, sStart, sEnd);
 

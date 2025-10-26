@@ -21,10 +21,8 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         [SerializeField] private int BaseRange;
         [SerializeField] private int BaseArea;
         [SerializeField] private int BaseCasts;
+        public PlotTwistData PlotData;
 
-        //private PlotData PlotTwistPrefab
-        //To-Do public AnimationClip animationClip;
-        //To-Do [Range(0.1f, 4f)] public float castTime = 2f;
         //To-Do Adicionar VFXController
         //To-Do Adicionar audioClip quando tivermos
 
@@ -39,8 +37,8 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public void Cast(IEffectable caster) {
             IEffectable[] targets;
             TargetingStrategy.LockAim(out targets);
-            Debug.Log("Targets :" + targets.Length);
             if (targets != null) {
+                Debug.Log("Targets :" + targets.Length);
                 foreach (IEffectable target in targets) {
                     Debug.Log("Actual Target :" + target);
                     foreach (AbilityEffect effect in Effects) {

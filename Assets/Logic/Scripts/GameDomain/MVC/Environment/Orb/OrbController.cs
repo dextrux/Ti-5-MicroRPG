@@ -212,6 +212,14 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
         public void PreviewHeal(int healAmound) {}
         public void PreviewDamage(int damageAmound) {}
         public void ResetPreview() {}
+
+        public Transform GetTransformCastPoint() {
+            return transform;
+        }
+
+        public GameObject GetReferenceTargetPrefab() {
+            return gameObject;
+        }
     }
 }
 

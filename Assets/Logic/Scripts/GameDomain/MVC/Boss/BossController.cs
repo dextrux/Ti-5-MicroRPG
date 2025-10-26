@@ -455,5 +455,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             if (phases == null || index < 0 || index >= phases.Length) return null;
             return phases[index].Behavior;
         }
+
+        public Transform GetTransformCastPoint() {
+            return _bossView.GetTransformCastPoint();
+        }
+
+        public GameObject GetReferenceTargetPrefab() {
+            return _bossView.GetReferenceTargetPrefab();
+        }
     }
 }

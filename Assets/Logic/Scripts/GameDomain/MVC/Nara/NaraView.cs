@@ -1,10 +1,12 @@
-using System;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara
 {
     public class NaraView : MonoBehaviour
     {
+        public Transform CastPoint;
+        public LineRenderer CastLineRenderer;
+        public GameObject TargetPrefab;
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
         [SerializeField] private Animator _animator;
@@ -190,6 +192,10 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
                 _animator.ResetTrigger("Execute");
             }
         }
-        
+
+        public LineRenderer GetPointLineRenderer() {
+            return CastLineRenderer;
+        }
+
     }
 }

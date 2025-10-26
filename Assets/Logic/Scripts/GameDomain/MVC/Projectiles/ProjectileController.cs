@@ -3,14 +3,14 @@ using UnityEngine;
 using Zenject;
 
 public abstract class ProjectileController : MonoBehaviour, IFixedUpdatable {
-    [SerializeField] protected float Speed;
-    protected Transform CastTransform;
+    [field: SerializeField] public float InitialSpeed { get; protected set; }
+    [field: SerializeField] public Rigidbody GetRigidbody { get; protected set; }
+    
     [Inject]
     private IUpdateSubscriptionService _subscriptionService;
 
     public virtual void Initialize(Transform castTransform) {
         RegisterOnUpdate();
-        CastTransform = castTransform;
     }
 
     private void RegisterOnUpdate() {

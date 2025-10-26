@@ -36,23 +36,17 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             UpdateUi();
             PlayerTransform = naraController.NaraViewGO.transform;
             foreach (AbilityData ability in _abilitySet1) {
-                Debug.Log("Ability 1 " + (SubscriptionService == null));
                 ability.SetUp(SubscriptionService);
             }
             foreach (AbilityData ability in _abilitySet2) {
-                Debug.Log("Ability 2 " + (SubscriptionService == null));
                 ability.SetUp(SubscriptionService);
             }
             foreach (AbilityData ability in _abilitySet3) {
-                Debug.Log("Ability 3 " + (SubscriptionService == null));
                 ability.SetUp(SubscriptionService);
             }
-            Debug.Log("Teste 2");
         }
 
         private void UpdateUi() {
-            Debug.Log(_activeSet[0].GetCost());
-            Debug.Log(_activeSet[1].GetCost());
             _gamePlayUiController?.SetAbilityValues(
                 _activeSet[0].GetCost(), _activeSet[0].Name,
                 _activeSet[1].GetCost(), _activeSet[1].Name);

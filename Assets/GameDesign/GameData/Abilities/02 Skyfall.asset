@@ -20,7 +20,7 @@ MonoBehaviour:
   Effects:
   - rid: 7012276589014548556
   TargetingStrategy:
-    rid: 7012276592317825422
+    rid: 7012276748036342002
   Damage: 0
   Cooldown: 0
   Cost: 0
@@ -32,6 +32,7 @@ MonoBehaviour:
   BaseRange: 6
   BaseArea: 5
   BaseCasts: 1
+  PlotData: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -41,11 +42,12 @@ MonoBehaviour:
         Name: 2
         Description: 2
         amount: 5
-    - rid: 7012276592317825422
-      type: {class: AoeTargeting, ns: , asm: Assembly-CSharp}
+    - rid: 7012276748036342002
+      type: {class: ProjectileTargeting, ns: , asm: Assembly-CSharp}
       data:
-        AoePrefab: {fileID: 3019752333304840796, guid: 777f38fa60fceda46a417947e9b962cd, type: 3}
-        AoeRadius: 5
-        GroundLayerMask:
-          serializedVersion: 2
-          m_Bits: 128
+        ProjectilePrefab: {fileID: 0}
+        previewInstance: {fileID: 0}
+        hitMarker: {fileID: 0}
+        maxPoints: 50
+        increment: 0.025
+        rayOverlap: 1.1

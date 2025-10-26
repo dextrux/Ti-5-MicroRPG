@@ -3,6 +3,8 @@ using UnityEngine;
 public interface IEffectable
 {
     public Transform GetReferenceTransform();
+    public Transform GetTransformCastPoint();
+    public GameObject GetReferenceTargetPrefab();
     public void PreviewHeal(int healAmound);
     public void PreviewDamage(int damageAmound);
     public void ResetPreview();

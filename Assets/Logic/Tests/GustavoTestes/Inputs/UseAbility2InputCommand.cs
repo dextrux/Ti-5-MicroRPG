@@ -18,6 +18,5 @@ public class UseAbility2InputCommand : BaseCommand, ICommandVoid {
         if (_castController.TryUseAbility(_abilityController.ActiveAbilities[ONE_INT_CONST], (IEffectable)_naraController)) {
             Debug.Log("Utilizou abilidade slot 2");
         }
-        return;
     }
 }

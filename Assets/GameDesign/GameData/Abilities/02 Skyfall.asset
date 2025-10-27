@@ -45,8 +45,7 @@ MonoBehaviour:
     - rid: 7012276748036342002
       type: {class: ProjectileTargeting, ns: , asm: Assembly-CSharp}
       data:
-        ProjectilePrefab: {fileID: 0}
-        previewInstance: {fileID: 0}
+        ProjectilePrefab: {fileID: 1632181508370474111, guid: 8de5e0c6dc2fa10409b292f76bbb02d1, type: 3}
         hitMarker: {fileID: 0}
         maxPoints: 50
         increment: 0.025

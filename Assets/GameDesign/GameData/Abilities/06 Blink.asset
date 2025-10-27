@@ -30,6 +30,7 @@ MonoBehaviour:
   BaseRange: 8
   BaseArea: 1
   BaseCasts: 1
+  PlotData: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -40,4 +41,4 @@ MonoBehaviour:
         AoeRadius: 5
         GroundLayerMask:
           serializedVersion: 2
-          m_Bits: 0
+          m_Bits: 128

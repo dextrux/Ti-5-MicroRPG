@@ -49,7 +49,9 @@ MonoBehaviour:
         maxPoints: 50
         increment: 0.025
         rayOverlap: 1.1
-        clampInDegrees: {x: 360, y: 180}
-        sensitivity: {x: 1, y: 1}
-        smoothing: {x: 1, y: 1}
-        lockCursor: 1
+        aimingMode: 1
+        GroundLayerMask:
+          serializedVersion: 2
+          m_Bits: 128
+        parabolicMaxHeight: 10
+        parabolicMaxRange: 50

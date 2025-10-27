@@ -50,3 +50,9 @@ MonoBehaviour:
         maxPoints: 50
         increment: 0.025
         rayOverlap: 1.1
+        aimingMode: 0
+        GroundLayerMask:
+          serializedVersion: 2
+          m_Bits: 128
+        parabolicMaxHeight: 10
+        parabolicMaxRange: 50

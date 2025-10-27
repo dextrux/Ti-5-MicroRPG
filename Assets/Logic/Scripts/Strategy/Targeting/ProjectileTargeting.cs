@@ -3,6 +3,11 @@ using Logic.Scripts.GameDomain.MVC.Nara;
 using System;
 using UnityEngine;
 
+public enum AimingMode {
+    StraightAim,
+    ParabolicArc
+}
+
 [Serializable]
 public class ProjectileTargeting : TargetingStrategy {
     public ProjectileController ProjectilePrefab;
@@ -11,6 +16,20 @@ public class ProjectileTargeting : TargetingStrategy {
     public float increment = 0.025f;
     public float rayOverlap = 1.1f;
     private LineRenderer trajectoryLine;
+
+    [Header("Aiming Logic")]
+    public AimingMode aimingMode = AimingMode.StraightAim;
+    public LayerMask GroundLayerMask;
+
+    [Header("Parabolic Arc Settings")]
+    [Tooltip("A altura máxima que o arco atingirá na distância máxima.")]
+    public float parabolicMaxHeight = 10f;
+    [Tooltip("A distância máxima para calcular a escala da altura do arco.")]
+    public float parabolicMaxRange = 50f;
+
+    private float currentLaunchSpeed;
+
+
     public override void Initialize(AbilityData data, IEffectable caster) {
         base.Initialize(data, caster);
         if (ProjectilePrefab != null) {
@@ -21,7 +40,7 @@ public class ProjectileTargeting : TargetingStrategy {
             hitMarker = UnityEngine.Object.Instantiate(Caster.GetReferenceTargetPrefab()).transform;
             SetTrajectoryVisible(true);
 
-            targetDirection = Caster.GetTransformCastPoint().localRotation.eulerAngles;
+            currentLaunchSpeed = ProjectilePrefab.InitialSpeed;
 
             SubscriptionService.RegisterUpdatable(this);
         }
@@ -29,24 +48,86 @@ public class ProjectileTargeting : TargetingStrategy {
 
     public override void ManagedUpdate() {
         base.ManagedUpdate();
+
         UpdateNaraViewRotation();
+
         PredictTrajectory();
     }
 
     private void UpdateNaraViewRotation() {
-        if (lockCursor)
-            Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
-        mouseFinal += ScaleAndSmooth(Input.mousePositionDelta);
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, float.MaxValue, GroundLayerMask)) {
+            switch (aimingMode) {
+                case AimingMode.StraightAim:
+                    AimStraight(hit.point);
+                    break;
 
-        ClampValues();
-        AlignToBody();
+                case AimingMode.ParabolicArc:
+                    AimParabolic(hit.point);
+                    break;
+            }
+        }
     }
+
+    private void AimStraight(Vector3 targetPoint) {
+        Vector3 startPos = Caster.GetTransformCastPoint().position;
+        Vector3 direction = targetPoint - startPos;
+
+        Caster.GetTransformCastPoint().rotation = Quaternion.LookRotation(direction);
+
+        currentLaunchSpeed = ProjectilePrefab.InitialSpeed;
+    }
+
+    private void AimParabolic(Vector3 targetPoint) {
+        Vector3 startPos = Caster.GetTransformCastPoint().position;
+        float g = Physics.gravity.y * -1;
+
+        Vector3 deltaXZ_vec = new Vector3(targetPoint.x - startPos.x, 0, targetPoint.z - startPos.z);
+        float deltaX = deltaXZ_vec.magnitude;
+        float deltaY = targetPoint.y - startPos.y;
+
+        float distanceRatio = Mathf.Clamp01(deltaX / parabolicMaxRange);
+        float h = parabolicMaxHeight * distanceRatio;
+        if (h < 0.1f) h = 0.1f;
+
+        float Vy = Mathf.Sqrt(2 * g * h);
+
+        float a = 0.5f * g;
+        float b = -Vy;
+        float c = deltaY;
+
+        float discriminant = (b * b) - (4 * a * c);
+
+        if (discriminant < 0) {
+            AimStraight(targetPoint);
+            return;
+        }
+
+        float t_total = (-b + Mathf.Sqrt(discriminant)) / (2 * a);
+        if (t_total <= 0) {
+            AimStraight(targetPoint);
+            return;
+        }
+
+        float Vx = deltaX / t_total;
+
+        Vector3 launchVelocity = (deltaXZ_vec.normalized * Vx) + (Vector3.up * Vy);
+
+        Caster.GetTransformCastPoint().rotation = Quaternion.LookRotation(launchVelocity.normalized);
+
+        currentLaunchSpeed = launchVelocity.magnitude;
+    }
+
 
     public override void LockAim(out IEffectable[] targets) {
         base.LockAim(out targets);
         Rigidbody thrownObject = UnityEngine.Object.Instantiate(ProjectilePrefab, Caster.GetTransformCastPoint().position, Quaternion.identity).GetComponent<Rigidbody>();
-        thrownObject.AddForce(Caster.GetTransformCastPoint().forward * ProjectilePrefab.InitialSpeed, ForceMode.Impulse);
+        if (thrownObject.TryGetComponent<ProjectileController>(out ProjectileController controller)){
+            controller.Initialize(Caster.GetTransformCastPoint(), Caster, Ability);
+        }
+        thrownObject.AddForce(Caster.GetTransformCastPoint().forward * currentLaunchSpeed, ForceMode.Impulse);
     }
 
     public override void Cancel() {
@@ -55,7 +136,9 @@ public class ProjectileTargeting : TargetingStrategy {
         base.Cancel();
     }
 
+    #region TrajectoryPrediction_Helpers
     private void UpdateLineRender(int count, (int point, Vector3 pos) pointPos) {
+        if (trajectoryLine == null) return;
         trajectoryLine.positionCount = count;
         trajectoryLine.SetPosition(pointPos.point, pointPos.pos);
     }
@@ -67,21 +150,24 @@ public class ProjectileTargeting : TargetingStrategy {
     }
 
     private void MoveHitMarker(RaycastHit hit) {
+        if (hitMarker == null) return;
         hitMarker.gameObject.SetActive(true);
 
         float offset = 0.025f;
         hitMarker.position = hit.point + hit.normal * offset;
-        Debug.Log("Moveu o hit: " + hitMarker.position);
         hitMarker.rotation = Quaternion.LookRotation(hit.normal, Vector3.up);
     }
 
     public void SetTrajectoryVisible(bool visible) {
-        trajectoryLine.enabled = visible;
-        hitMarker.gameObject.SetActive(visible);
+        if (trajectoryLine != null)
+            trajectoryLine.enabled = visible;
+        if (hitMarker != null)
+            hitMarker.gameObject.SetActive(visible);
     }
+    #endregion
 
     public void PredictTrajectory() {
-        Vector3 velocity = Caster.GetTransformCastPoint().forward * (ProjectilePrefab.InitialSpeed / ProjectilePrefab.GetRigidbody.mass);
+        Vector3 velocity = Caster.GetTransformCastPoint().forward * (currentLaunchSpeed / ProjectilePrefab.GetRigidbody.mass);
         Vector3 position = Caster.GetTransformCastPoint().position;
         Vector3 nextPosition;
         float overlap;
@@ -100,55 +186,11 @@ public class ProjectileTargeting : TargetingStrategy {
                 break;
             }
 
-            hitMarker.gameObject.SetActive(false);
+            if (hitMarker != null)
+                hitMarker.gameObject.SetActive(false);
+
             position = nextPosition;
             UpdateLineRender(maxPoints, (i, position));
         }
     }
-
-
-    Vector2 mouseFinal;
-    Vector2 smoothMouse;
-    Vector2 targetDirection;
-    Vector2 targetCharacterDirection;
-
-    public Vector2 clampInDegrees = new Vector2(360f, 180f);
-    public Vector2 sensitivity = new Vector2(0.1f, 0.1f);
-    public Vector2 smoothing = new Vector2(1f, 1f);
-
-    public bool lockCursor;
-
-    Vector2 ScaleAndSmooth(Vector2 delta) {
-        //Apply sensetivity
-        delta = Vector2.Scale(delta, new Vector2(sensitivity.x * smoothing.x, sensitivity.y * smoothing.y));
-
-        //Lerp from last frame
-        smoothMouse.x = Mathf.Lerp(smoothMouse.x, delta.x, 1f / smoothing.x);
-        smoothMouse.y = Mathf.Lerp(smoothMouse.y, delta.y, 1f / smoothing.y);
-
-        return smoothMouse;
-    }
-
-    void ClampValues() {
-        if (clampInDegrees.x < 360)
-            mouseFinal.x = Mathf.Clamp(mouseFinal.x, -clampInDegrees.x * 0.5f, clampInDegrees.x * 0.5f);
-
-        if (clampInDegrees.y < 360)
-            mouseFinal.y = Mathf.Clamp(mouseFinal.y, -clampInDegrees.y * 0.5f, clampInDegrees.y * 0.5f);
-
-        var targetOrientation = Quaternion.Euler(targetDirection);
-        Caster.GetTransformCastPoint().localRotation = Quaternion.AngleAxis(-mouseFinal.y, targetOrientation * Vector3.right) * targetOrientation;
-
-    }
-
-    void AlignToBody() {
-        var targetCharacterOrientation = Quaternion.Euler(targetCharacterDirection);
-        Quaternion yRotation = Quaternion.identity;
-
-        yRotation = Quaternion.AngleAxis(mouseFinal.x, Caster.GetTransformCastPoint().InverseTransformDirection(Vector3.up));
-        Caster.GetTransformCastPoint().localRotation *= yRotation;
-    }
-
-
-
 }

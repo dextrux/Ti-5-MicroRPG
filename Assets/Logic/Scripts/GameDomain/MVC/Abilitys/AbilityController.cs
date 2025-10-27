@@ -54,13 +54,13 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
 
         public void NextSet() {
             Index++;
-            if (Index >= 4) Index = 1;
+            if (Index >= 3) Index = 1;
             ChangeActiveSet(Index);
         }
 
         public void PreviousSet() {
             Index--;
-            if (Index <= 0) Index = 3;
+            if (Index <= 0) Index = 2;
             ChangeActiveSet(Index);
         }
 

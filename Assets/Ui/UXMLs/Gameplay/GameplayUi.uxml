@@ -54,8 +54,8 @@
                             <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/Gameplay/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_skill1Name" />
                         </Bindings>
                     </engine:Button>
-                    <engine:Button text="Button" name="Ability-Slot2-btn" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 80%; width: 30%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 279px; border-top-right-radius: 279px; border-bottom-right-radius: 279px; border-bottom-left-radius: 279px; justify-content: flex-end; align-items: center;">
-                        <engine:Label text="1" style="background-color: rgb(60, 60, 60); color: rgb(233, 233, 233); border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; width: 35%;" />
+                    <engine:Button text="Button" name="Ability-Slot2-btn" focusable="true" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 80%; width: 30%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 279px; border-top-right-radius: 279px; border-bottom-right-radius: 279px; border-bottom-left-radius: 279px; justify-content: flex-end; align-items: center;">
+                        <engine:Label text="2" style="background-color: rgb(60, 60, 60); color: rgb(233, 233, 233); border-left-color: rgb(140, 140, 140); border-right-color: rgb(140, 140, 140); border-top-color: rgb(140, 140, 140); border-bottom-color: rgb(140, 140, 140); border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; width: 35%;" />
                         <Bindings>
                             <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/Gameplay/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_skill2Name" />
                         </Bindings>
@@ -129,7 +129,7 @@
                         <engine:DataBinding property="text" data-source="project://database/Assets/Ui/UXMLs/Gameplay/GamePlayUiBindSO.asset?fileID=11400000&amp;guid=e8d4fa4f31b9e0d40bd27b86b839d846&amp;type=2#GamePlayUiBindSO" binding-mode="ToTarget" data-source-path="_playerActionPoints" />
                     </Bindings>
                 </engine:Label>
-                <engine:Button name="Next-Turn-btn" text="Next turn" style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; -unity-background-scale-mode: stretch-to-fill; width: 80%; height: 20%;">
+                <engine:Button name="Next-Turn-btn" text="Next turn" style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; -unity-background-scale-mode: stretch-to-fill; width: 80%; height: 20%; display: none;">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="GUID:b20707e21c9ea64418cb0d6a1a2a5962" entry="Id(728916082688)" />
                     </Bindings>

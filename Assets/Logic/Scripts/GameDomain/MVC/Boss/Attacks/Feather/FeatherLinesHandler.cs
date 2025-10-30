@@ -1,19 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Core;
 using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Shared;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using Logic.Scripts.Services.UpdateService;
+using Object = UnityEngine.Object;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 {
-    public class FeatherLinesHandler : IBossAttackHandler
+    public class FeatherLinesHandler : IBossAttackHandler, IUpdatable
     {
         private readonly FeatherLinesParams _params;
-        private readonly bool _isPull;
+        private readonly IUpdateSubscriptionService _updateSvc;
+
         private class FeatherSubView
         {
             public LineRenderer Line;
@@ -24,9 +26,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
         private FeatherSubView[] _views;
         private int _specialIndex;
-
         private bool _isPushMode = true;
         private bool _hasPushFrozen = false;
+        private bool? _ctorIsPush = null;
+        private LineRenderer _singleArrow;
+        private Vector3 _sStart, _sEnd, _axisUnit;
+        private float _stripWidth;
+        private Transform _parentTransform;
+        private ArenaPosReference _arenaRef;
 
         private static bool? _nextTelegraphPushMode = null;
         private static bool _globalFallbackPushMode = true;
@@ -35,7 +42,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static void PrimeNextTelegraphPushMode(bool isPush) => _nextTelegraphPushMode = isPush;
         public static void SetGlobalFallbackPushMode(bool isPushAsDefault) => _globalFallbackPushMode = isPushAsDefault;
         public static void ConfigurePushProvider(Func<bool> provider) => _isPushProvider = provider;
-        private LineRenderer _singleArrow;
 
         public static Func<int> GetPlayerDebuffStacks;
         public static Vector3 CurrentSpecialStart;
@@ -43,14 +49,51 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static Vector3 CurrentSpecialAxis;
         public static float CurrentStripWidth;
 
+        public FeatherLinesHandler(FeatherLinesParams p, IUpdateSubscriptionService updateSubscriptionService)
+        {
+            _params = p;
+            _updateSvc = updateSubscriptionService;
+        }
+
+        public FeatherLinesHandler(FeatherLinesParams p)
+        {
+            _params = p;
+            _updateSvc = TryFindUpdateServiceInScene();
+        }
+
+        public FeatherLinesHandler(FeatherLinesParams p, bool isPull, IUpdateSubscriptionService updateSubscriptionService)
+        {
+            _params = p;
+            _updateSvc = updateSubscriptionService;
+            _ctorIsPush = !isPull;
+        }
+
         public FeatherLinesHandler(FeatherLinesParams p, bool isPull)
         {
             _params = p;
-            _isPull = isPull;
+            _updateSvc = TryFindUpdateServiceInScene();
+            _ctorIsPush = !isPull;
+        }
+
+        private IUpdateSubscriptionService TryFindUpdateServiceInScene()
+        {
+            try
+            {
+                var all = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+                foreach (var go in all)
+                {
+                    if (go.TryGetComponent<IUpdateSubscriptionService>(out var svc))
+                        return svc;
+                }
+            }
+            catch { }
+            return null;
         }
 
         public void PrepareTelegraph(Transform parentTransform)
         {
+            _parentTransform = parentTransform;
+            _arenaRef = Object.FindFirstObjectByType<ArenaPosReference>(FindObjectsInactive.Exclude);
             _isPushMode = ResolveInitialPushMode();
             _hasPushFrozen = true;
 
@@ -63,26 +106,25 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 GameObject go = new GameObject("FeatherSubActionView");
                 go.transform.SetParent(parentTransform, false);
 
-                var v = new FeatherSubView();
-                v.Line = go.AddComponent<LineRenderer>();
+                var v = new FeatherSubView
+                {
+                    Line = go.AddComponent<LineRenderer>(),
+                    MeshFilter = go.AddComponent<MeshFilter>(),
+                    MeshRenderer = go.AddComponent<MeshRenderer>(),
+                    Mesh = new Mesh { name = "FeatherStripMesh" }
+                };
+
                 v.Line.material = new Material(Shader.Find("Sprites/Default"));
                 v.Line.useWorldSpace = true;
                 v.Line.loop = true;
                 v.Line.widthMultiplier = 0.1f;
-                bool isSpecial = (i == _specialIndex);
-                // Color scheme per request: pull=purple, push=dark blue
-                Color specialLineColor = _isPull ? new Color(0.5f, 0f, 0.5f, 1f) : new Color(0.1f, 0.1f, 0.5f, 1f);
-                Color lineColor = isSpecial ? specialLineColor : Color.yellow;
-                v.Line.startColor = lineColor;
-                v.Line.endColor = lineColor;
+                v.Line.startColor = (i == _specialIndex) ? Color.red : Color.yellow;
+                v.Line.endColor = v.Line.startColor;
 
-                v.MeshFilter = go.AddComponent<MeshFilter>();
-                v.MeshRenderer = go.AddComponent<MeshRenderer>();
-                Color specialFillColor = _isPull ? new Color(0.5f, 0f, 0.5f, 0.2f) : new Color(0.1f, 0.1f, 0.5f, 0.2f);
-                Color fillColor = isSpecial ? specialFillColor : new Color(1f, 1f, 0f, 0.2f);
-                v.MeshRenderer.material = new Material(Shader.Find("Sprites/Default")) { color = fillColor };
-                v.Mesh = new Mesh();
-                v.Mesh.name = "FeatherStripMesh";
+                v.MeshRenderer.material = new Material(Shader.Find("Sprites/Default"))
+                {
+                    color = (i == _specialIndex) ? new Color(1f, 0f, 0f, 0.2f) : new Color(1f, 1f, 0f, 0.2f)
+                };
                 v.MeshFilter.sharedMesh = v.Mesh;
 
                 _views[i] = v;
@@ -98,26 +140,25 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             _singleArrow.enabled = true;
 
             UpdateTelegraphGeometryAtCenter(parentTransform.position);
+            FreezeSpecialAxis(parentTransform.position);
+            _updateSvc?.RegisterUpdatable(this);
         }
 
         private bool ResolveInitialPushMode()
         {
+            if (_ctorIsPush.HasValue) return _ctorIsPush.Value;
             if (_nextTelegraphPushMode.HasValue)
             {
                 bool v = _nextTelegraphPushMode.Value;
                 _nextTelegraphPushMode = null;
                 return v;
             }
-
             if (_isPushProvider != null)
             {
-                try { return _isPushProvider(); }
-                catch { /**/ }
+                try { return _isPushProvider(); } catch { }
             }
-
             if (TryInferPushFromParamsViaReflection(out bool fromParams))
                 return fromParams;
-
             return _globalFallbackPushMode;
         }
 
@@ -127,7 +168,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             try
             {
                 var t = _params.GetType();
-
                 foreach (var name in new[] { "isPush", "push", "shouldPush", "knockback" })
                 {
                     var f = t.GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -143,7 +183,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         return true;
                     }
                 }
-
                 var enumField = t.GetField("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                               ?? t.GetField("displacementMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 if (enumField != null)
@@ -152,39 +191,37 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     if (val != null)
                     {
                         string s = val.ToString().ToLowerInvariant();
-                        if (s.Contains("push") || s.Contains("knockback")) { isPush = true;  return true; }
-                        if (s.Contains("pull") || s.Contains("grapple"))   { isPush = false; return true; }
+                        if (s.Contains("push") || s.Contains("knockback")) { isPush = true; return true; }
+                        if (s.Contains("pull") || s.Contains("grapple")) { isPush = false; return true; }
                     }
                 }
             }
             catch { }
-
             return false;
         }
 
         private void UpdateTelegraphGeometryAtCenter(Vector3 center)
         {
             float spacing = Mathf.Max(0.1f, _params.margin);
-
             int n = _views.Length;
+
             for (int i = 0; i < n; i++)
             {
                 Vector3 start, end;
-
                 switch (_params.axisMode)
                 {
                     case FeatherAxisMode.X:
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                        end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        end = new Vector3(center.x + 100f, center.y, center.z + offset);
                         break;
                     }
                     case FeatherAxisMode.Z:
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                        end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        end = new Vector3(center.x + offset, center.y, center.z + 100f);
                         break;
                     }
                     case FeatherAxisMode.XZ:
@@ -194,16 +231,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         if ((i % 2) == 0)
                         {
                             int k = i / 2;
-                            float offset = (k - (nX - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                            float offX = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offX);
+                            end = new Vector3(center.x + 100f, center.y, center.z + offX);
                         }
                         else
                         {
                             int k = (i - 1) / 2;
-                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                            float offZ = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offZ, center.y, center.z - 100f);
+                            end = new Vector3(center.x + offZ, center.y, center.z + 100f);
                         }
                         break;
                     }
@@ -212,7 +249,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
                         break;
                     }
                 }
@@ -233,70 +270,73 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 Vector3 v3L = mT.InverseTransformPoint(vertsWorld[3]);
 
                 _views[i].Mesh.Clear();
-                _views[i].Mesh.vertices  = new Vector3[] { v0L, v1L, v2L, v3L };
-                _views[i].Mesh.triangles = new int[]     { 0, 1, 2, 0, 2, 3 };
+                _views[i].Mesh.vertices = new Vector3[] { v0L, v1L, v2L, v3L };
+                _views[i].Mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
                 _views[i].Mesh.RecalculateNormals();
                 _views[i].Mesh.RecalculateBounds();
             }
-
-            ComputeAndExposeSpecial(center, spacing, n, out var sStart, out var sEnd);
-            CurrentSpecialStart = sStart;
-            CurrentSpecialEnd   = sEnd;
-            CurrentSpecialAxis  = (sEnd - sStart).normalized;
-            CurrentSpecialAxis.y = 0f;
-            CurrentStripWidth   = _params.width;
-
-            Vector3 playerWorld = ResolvePlayerWorldPosition();
-            UpdateSingleArrow(playerWorld, sStart, sEnd);
         }
 
-        private void ComputeAndExposeSpecial(Vector3 center, float spacing, int n, out Vector3 sStart, out Vector3 sEnd)
+        private void FreezeSpecialAxis(Vector3 center)
         {
-            float specialOffset = (_specialIndex - (n - 1) * 0.5f) * spacing;
+            float spacing = Mathf.Max(0.1f, _params.margin);
+            float specialOffset = (_specialIndex - (_views.Length - 1) * 0.5f) * spacing;
 
             if (_params.axisMode == FeatherAxisMode.X)
             {
-                sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
-                sEnd   = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
+                _sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
+                _sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
             }
             else if (_params.axisMode == FeatherAxisMode.Z)
             {
-                sStart = new Vector3(center.x + specialOffset, center.y, center.z - 100f);
-                sEnd   = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
+                _sStart = new Vector3(center.x + specialOffset, center.y, center.z - 100f);
+                _sEnd = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
             }
             else if (_params.axisMode == FeatherAxisMode.XZ)
             {
-                int nX = (n + 1) / 2;
-                int nZ = n / 2;
+                int nX = (_views.Length + 1) / 2;
+                int nZ = _views.Length / 2;
                 if ((_specialIndex % 2) == 0)
                 {
                     int k = _specialIndex / 2;
                     float offX = (k - (nX - 1) * 0.5f) * spacing;
-                    sStart = new Vector3(center.x - 100f, center.y, center.z + offX);
-                    sEnd   = new Vector3(center.x + 100f, center.y, center.z + offX);
+                    _sStart = new Vector3(center.x - 100f, center.y, center.z + offX);
+                    _sEnd = new Vector3(center.x + 100f, center.y, center.z + offX);
                 }
                 else
                 {
                     int k = (_specialIndex - 1) / 2;
                     float offZ = (k - (nZ - 1) * 0.5f) * spacing;
-                    sStart = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                    sEnd   = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                    _sStart = new Vector3(center.x + offZ, center.y, center.z - 100f);
+                    _sEnd = new Vector3(center.x + offZ, center.y, center.z + 100f);
                 }
             }
             else
             {
-                sStart = new Vector3(center.x - 100f, center.y, center.z - 100f + specialOffset);
-                sEnd   = new Vector3(center.x + 100f, center.y, center.z + 100f + specialOffset);
+                _sStart = new Vector3(center.x - 100f, center.y, center.z - 100f + specialOffset);
+                _sEnd = new Vector3(center.x + 100f, center.y, center.z + 100f + specialOffset);
             }
+
+            _axisUnit = (_sEnd - _sStart);
+            _axisUnit.y = 0f;
+            if (_axisUnit.sqrMagnitude > 1e-8f) _axisUnit.Normalize();
+            _stripWidth = _params.width;
+
+            CurrentSpecialStart = _sStart;
+            CurrentSpecialEnd = _sEnd;
+            CurrentSpecialAxis = _axisUnit;
+            CurrentStripWidth = _stripWidth;
+
+            var playerWorld = ResolvePlayerWorldPosition();
+            UpdateSingleArrow(playerWorld);
         }
 
         private Vector3 ResolvePlayerWorldPosition()
         {
-            var ar = UnityEngine.Object.FindAnyObjectByType<ArenaPosReference>();
-            if (ar != null)
-                return ar.RelativeArenaPositionToRealPosition(ar.GetPlayerArenaPosition());
+            if (_arenaRef != null)
+                return _arenaRef.RelativeArenaPositionToRealPosition(_arenaRef.GetPlayerArenaPosition());
 
-            var naraView = UnityEngine.Object.FindAnyObjectByType<Nara.NaraView>();
+            var naraView = Object.FindFirstObjectByType<Nara.NaraView>(FindObjectsInactive.Exclude);
             if (naraView != null) return naraView.transform.position;
 
             return Vector3.zero;
@@ -319,14 +359,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                        end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        end = new Vector3(center.x + 100f, center.y, center.z + offset);
                         break;
                     }
                     case FeatherAxisMode.Z:
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                        end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        end = new Vector3(center.x + offset, center.y, center.z + 100f);
                         break;
                     }
                     case FeatherAxisMode.XZ:
@@ -336,16 +376,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         if ((i % 2) == 0)
                         {
                             int k = i / 2;
-                            float offset = (k - (nX - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                            float offX = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offX);
+                            end = new Vector3(center.x + 100f, center.y, center.z + offX);
                         }
                         else
                         {
                             int k = (i - 1) / 2;
-                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                            float offZ = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offZ, center.y, center.z - 100f);
+                            end = new Vector3(center.x + offZ, center.y, center.z + 100f);
                         }
                         break;
                     }
@@ -354,7 +394,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
                         break;
                     }
                 }
@@ -407,84 +447,24 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
         public IEnumerator ExecuteEffects(List<AbilityEffect> effects, ArenaPosReference arenaReference, Transform originTransform, IEffectable caster)
         {
-            if (effects == null || effects.Count == 0) { Debug.Log("FeatherLinesHandler.ExecuteEffects: no effects"); yield break; }
+            if (effects == null || effects.Count == 0) { yield break; }
             IEffectable target = arenaReference.NaraController as IEffectable;
-            if (target == null) { Debug.LogWarning("FeatherLinesHandler.ExecuteEffects: target is null or not IEffectable"); yield break; }
+            if (target == null) { yield break; }
 
             Vector3 center = arenaReference != null ? arenaReference.transform.position : originTransform.position;
-            Vector3 playerWorld = arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition());
             float spacing = Mathf.Max(0.1f, _params.margin);
             int n = _views != null ? _views.Length : 0;
 
-            yield return ExecuteFeatherSequence(effects, arenaReference, originTransform, caster, target, center, spacing, n, playerWorld);
-        }
-
-        private IEnumerator ExecuteFeatherSequence(List<AbilityEffect> effects, ArenaPosReference arenaReference, Transform originTransform, IEffectable caster, IEffectable target, Vector3 center, float spacing, int n, Vector3 playerWorld)
-        {
-            // 1) Special feather sequence: hide line -> wait -> DAMAGE hit-check/apply -> wait -> DISPLACEMENT always -> wait
-            // Refresh special line colors each execution based on current push/pull
-            if (_views != null && _specialIndex >= 0 && _specialIndex < n)
-            {
-                var v = _views[_specialIndex];
-                Color specialLineColor = _isPull ? new Color(0.5f, 0f, 0.5f, 1f) : new Color(0.1f, 0.1f, 0.5f, 1f);
-                Color specialFillColor = _isPull ? new Color(0.5f, 0f, 0.5f, 0.2f) : new Color(0.1f, 0.1f, 0.5f, 0.2f);
-                if (v.Line != null) { v.Line.startColor = v.Line.endColor = specialLineColor; }
-                if (v.MeshRenderer != null && v.MeshRenderer.material != null) { v.MeshRenderer.material.color = specialFillColor; }
-            }
-            // Identify special line geometry once
-            float specialOffset = (_specialIndex - (n - 1) * 0.5f) * spacing;
-            Vector3 sStart, sEnd;
-            if (_params.axisMode == FeatherAxisMode.X)
-            {
-                sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
-                sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
-            }
-            else if (_params.axisMode == FeatherAxisMode.Z)
-            {
-                sStart = new Vector3(center.x + specialOffset, center.y, center.z - 100f);
-                sEnd = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
-            }
-            else if (_params.axisMode == FeatherAxisMode.XZ)
-            {
-                int nX = (n + 1) / 2;
-                int nZ = n / 2;
-                if ((_specialIndex % 2) == 0)
-                {
-                    int k = _specialIndex / 2;
-                    float offX = (k - (nX - 1) * 0.5f) * spacing;
-                    sStart = new Vector3(center.x - 100f, center.y, center.z + offX);
-                    sEnd = new Vector3(center.x + 100f, center.y, center.z + offX);
-                }
-                else
-                {
-                    int k = (_specialIndex - 1) / 2;
-                    float offZ = (k - (nZ - 1) * 0.5f) * spacing;
-                    sStart = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                    sEnd = new Vector3(center.x + offZ, center.y, center.z + 100f);
-                }
-            }
-            else if (_params.axisMode == FeatherAxisMode.Diagonal)
-            {
-                sStart = new Vector3(center.x - 100f, center.y, center.z - 100f + specialOffset);
-                sEnd = new Vector3(center.x + 100f, center.y, center.z + 100f + specialOffset);
-            }
-            else
-            {
-                sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
-                sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
-            }
-
-            UpdateSingleArrow(playerWorld, sStart, sEnd);
-
-            LineRenderer sLr = (_views != null && _specialIndex >= 0 && _specialIndex < _views.Length) ? _views[_specialIndex].Line : null;
+            var sLr = (_views != null && _specialIndex >= 0 && _specialIndex < _views.Length) ? _views[_specialIndex].Line : null;
             if (sLr != null) sLr.enabled = false;
-            MeshRenderer sMr = (_views != null && _specialIndex >= 0 && _specialIndex < _views.Length) ? _views[_specialIndex].MeshRenderer : null;
+            var sMr = (_views != null && _specialIndex >= 0 && _specialIndex < _views.Length) ? _views[_specialIndex].MeshRenderer : null;
             if (sMr != null) sMr.enabled = false;
 
             yield return new WaitForSeconds(0.5f);
 
             int lastIndex = effects.Count - 1;
-            if (lastIndex >= 0 && StripMath.IsPointInsideStrip(sStart, sEnd, _params.width, playerWorld))
+            Vector3 playerWorld = arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition());
+            if (lastIndex >= 0 && StripMath.IsPointInsideStrip(_sStart, _sEnd, _stripWidth, playerWorld))
             {
                 for (int ei = 0; ei < lastIndex; ei++)
                 {
@@ -505,7 +485,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
                         float distMeters = PerpendicularDistanceToLineXZ(
                             arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition()),
-                            CurrentSpecialStart, CurrentSpecialEnd);
+                            _sStart, _sEnd);
                         int distMul = Mathf.RoundToInt(distMeters);
                         scalable1.SetForceScalers(stacks, distMul);
                     }
@@ -516,9 +496,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         fx1.Execute(caster, target);
 
                     yield return new WaitForSeconds(0.5f);
-
-                    playerWorld = arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition());
-                    UpdateSingleArrow(playerWorld, sStart, sEnd);
                 }
             }
 
@@ -533,14 +510,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                        end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        end = new Vector3(center.x + 100f, center.y, center.z + offset);
                         break;
                     }
                     case FeatherAxisMode.Z:
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                        end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        end = new Vector3(center.x + offset, center.y, center.z + 100f);
                         break;
                     }
                     case FeatherAxisMode.XZ:
@@ -550,16 +527,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         if ((i % 2) == 0)
                         {
                             int k = i / 2;
-                            float offset = (k - (nX - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
+                            float offX = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offX);
+                            end = new Vector3(center.x + 100f, center.y, center.z + offX);
                         }
                         else
                         {
                             int k = (i - 1) / 2;
-                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
+                            float offZ = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offZ, center.y, center.z - 100f);
+                            end = new Vector3(center.x + offZ, center.y, center.z + 100f);
                         }
                         break;
                     }
@@ -568,12 +545,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
                         break;
                     }
                 }
 
-                if (StripMath.IsPointInsideStrip(start, end, _params.width, playerWorld))
+                Vector3 playerWorld2 = arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition());
+                if (StripMath.IsPointInsideStrip(start, end, _params.width, playerWorld2))
                 {
                     int lastIndex2 = effects.Count - 1;
                     for (int ei = 0; ei < lastIndex2; ei++)
@@ -584,7 +562,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                             int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
                             float distMeters = PerpendicularDistanceToLineXZ(
                                 arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition()),
-                                CurrentSpecialStart, CurrentSpecialEnd);
+                                _sStart, _sEnd);
                             int distMul = Mathf.RoundToInt(distMeters);
                             scalable.SetForceScalers(stacks, distMul);
                         }
@@ -594,44 +572,48 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             }
         }
 
-        private void UpdateSingleArrow(Vector3 playerWorld, Vector3 axisStart, Vector3 axisEnd)
+        public void ManagedUpdate()
         {
             if (_singleArrow == null) return;
+            if (_views == null || _views.Length == 0) return;
+            if (_axisUnit.sqrMagnitude < 1e-8f) return;
 
-            Vector3 axis = axisEnd - axisStart; axis.y = 0f;
-            if (axis.sqrMagnitude < 1e-6f) { _singleArrow.positionCount = 0; return; }
-            Vector3 u = axis.normalized;
+            var playerWorld = ResolvePlayerWorldPosition();
+            UpdateSingleArrow(playerWorld);
+        }
 
-            Vector3 v = playerWorld - axisStart; v.y = 0f;
-            float t = Vector3.Dot(v, u);
-            Vector3 proj = axisStart + u * t; proj.y = playerWorld.y;
+        private void UpdateSingleArrow(Vector3 playerWorld)
+        {
+            Vector3 v = playerWorld - _sStart; v.y = 0f;
+            float t = Vector3.Dot(v, _axisUnit);
+            Vector3 proj = _sStart + _axisUnit * t; proj.y = playerWorld.y;
 
             Vector3 perp = proj - new Vector3(playerWorld.x, playerWorld.y, playerWorld.z);
             perp.y = 0f;
             if (perp.sqrMagnitude < 1e-6f)
             {
-                perp = new Vector3(-u.z, 0f, u.x);
+                perp = new Vector3(-_axisUnit.z, 0f, _axisUnit.x);
             }
 
             Vector3 dir = (_isPushMode ? -perp : perp).normalized;
 
             float y = 0.3f;
-            float outOffset = Mathf.Max(0.35f, _params.width * 0.5f + 0.15f);
-            float shaftLen  = Mathf.Max(0.75f, _params.width * 0.9f);
-            float headLen   = shaftLen * 0.35f;
+            float outOffset = Mathf.Max(0.35f, _stripWidth * 0.5f + 0.15f);
+            float shaftLen = Mathf.Max(0.75f, _stripWidth * 0.9f);
+            float headLen = shaftLen * 0.35f;
             float headHalfW = headLen * 0.6f;
 
             Vector3 origin = new Vector3(playerWorld.x, y, playerWorld.z) + dir * outOffset;
-            Vector3 tip    = origin + dir * shaftLen;
-            Vector3 tail   = origin - dir * 0.25f;
+            Vector3 tip = origin + dir * shaftLen;
+            Vector3 tail = origin - dir * 0.25f;
 
             Vector3 side = new Vector3(-dir.z, 0f, dir.x);
-            Vector3 leftWing  = tip - dir * headLen + side * headHalfW;
+            Vector3 leftWing = tip - dir * headLen + side * headHalfW;
             Vector3 rightWing = tip - dir * headLen - side * headHalfW;
 
             Color c = _isPushMode ? new Color(1f, 0.35f, 0.35f, 1f) : new Color(0.35f, 0.7f, 1f, 1f);
             _singleArrow.startColor = c;
-            _singleArrow.endColor   = c;
+            _singleArrow.endColor = c;
 
             _singleArrow.enabled = true;
             _singleArrow.positionCount = 5;
@@ -641,21 +623,23 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             _singleArrow.SetPosition(3, tip);
             _singleArrow.SetPosition(4, rightWing);
         }
-        
+
         public void Cleanup()
         {
+            _updateSvc?.UnregisterUpdatable(this);
+
             if (_views != null)
             {
                 for (int i = 0; i < _views.Length; i++)
                 {
                     if (_views[i]?.Line != null)
-                        UnityEngine.Object.Destroy(_views[i].Line.gameObject);
+                        Object.Destroy(_views[i].Line.gameObject);
                 }
             }
 
             if (_singleArrow != null)
             {
-                UnityEngine.Object.Destroy(_singleArrow.gameObject);
+                Object.Destroy(_singleArrow.gameObject);
                 _singleArrow = null;
             }
 

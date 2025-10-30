@@ -193,8 +193,15 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
             }
         }
 
-        public LineRenderer GetPointLineRenderer() {
+        public LineRenderer GetPointLineRenderer()
+        {
             return CastLineRenderer;
+        }
+        
+        public void SetPosition()
+        {
+            _rigidbody.position = movementCenter;
+            Debug.Log($"Nara pos (Set) => x = {transform.position.x} z = {transform.position.z}");
         }
 
     }

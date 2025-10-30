@@ -136,6 +136,11 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             RecenterMovementAreaAtTurnStart();
         }
 
+        public void RecenterNara()
+        {
+            _naraView.SetPosition();
+        }
+
         #region IEffectable Methods
 
         public Transform GetReferenceTransform() {

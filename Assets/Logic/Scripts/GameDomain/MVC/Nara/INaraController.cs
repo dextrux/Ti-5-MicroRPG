@@ -21,5 +21,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void SetNewMovementArea();
         void ResetMovementArea();
         void RemoveMovementAreaLimit();
+        void RecenterNara();
     }
 }

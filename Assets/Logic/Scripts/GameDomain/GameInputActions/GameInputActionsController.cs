@@ -82,12 +82,12 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         }
 
         private void OnPreviousAbilityStarted(InputAction.CallbackContext context) {
-            _commandFactory.CreateCommandVoid<PreviousAbilitySetInputCommand>().Execute();
+            _commandFactory.CreateCommandVoid<UseAbility5InputCommand>().Execute();
         }
 
         private void OnNextAbilityStarted(InputAction.CallbackContext context)
         {
-            _commandFactory.CreateCommandVoid<NextAbilitySetInputCommand>().Execute();
+            _commandFactory.CreateCommandVoid<UseAbility4InputCommand>().Execute();
         }
 
         private void OnMouseClickStarted(InputAction.CallbackContext context)

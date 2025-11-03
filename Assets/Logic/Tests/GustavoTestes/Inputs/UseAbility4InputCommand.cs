@@ -1,8 +1,9 @@
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.CommandFactory;
 
-public class UseAbility1InputCommand : BaseCommand, ICommandVoid {
-    private const int ZERO_INT_CONST = 0;
+public class UseAbility4InputCommand : BaseCommand, ICommandVoid
+{
+    private const int THREE_INT_CONST = 3;
 
     private INaraController _naraController;
     private ICastController _castController;
@@ -13,8 +14,8 @@ public class UseAbility1InputCommand : BaseCommand, ICommandVoid {
 
     public void Execute() {
         _castController.CancelAbilityUse();
-        if (_castController.TryUseAbility(ZERO_INT_CONST, (IEffectable)_naraController)) {
-            
+        if (_castController.TryUseAbility(THREE_INT_CONST, (IEffectable)_naraController)) {
+
         }
         return;
     }

@@ -3,11 +3,6 @@ using System.Collections.Generic;
 namespace Logic.Scripts.Turns {
     public class EchoService : IEchoService {
         private readonly List<EchoEntry> _entries = new List<EchoEntry>();
-        private readonly IAbilityController _abilityController;
-
-        public EchoService(IAbilityController abilityController) {
-            _abilityController = abilityController;
-        }
 
         public int PendingCount => _entries.Count;
 
@@ -31,7 +26,7 @@ namespace Logic.Scripts.Turns {
 
             for (int i = _entries.Count - 1; i >= 0; i--) {
                 if (_entries[i].TurnsRemaining <= 0) {
-                    _entries[i].Action.Execute(_abilityController);
+                    //_entries[i].Action.Execute(_abilityController);
                     _entries.RemoveAt(i);
                 }
             }

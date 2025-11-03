@@ -16,10 +16,6 @@ public abstract class ProjectileController : MonoBehaviour, IFixedUpdatable {
         Data = data;
     }
 
-    private void RegisterOnUpdate() {
-        _subscriptionService.RegisterFixedUpdatable(this);
-    }
-
     private void UnregisterOnUpdate() {
         _subscriptionService.UnregisterFixedUpdatable(this);
     }

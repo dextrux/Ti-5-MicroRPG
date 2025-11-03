@@ -11,7 +11,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void ResetController();
         void RegisterListeners();
         void ManagedFixedUpdate();
-        public void ExecuteAbility(AbilityData abilityData, IEffectable castter);
         void RecenterMovementAreaAtTurnStart();
         void SetMovementCircleVisible(bool visible);
         void PlayAttackType(int type);

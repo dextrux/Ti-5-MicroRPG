@@ -1058,13 +1058,10 @@ MonoBehaviour:
   _bossConfiguration: {fileID: 11400000, guid: c53b316a57f027e498cfcd5b31cdc99d, type: 2}
   _bossPhases: {fileID: 11400000, guid: c0d3c4260663b46418565b63471a4e49, type: 2}
   _gamePlayUiView: {fileID: 703431458}
-  _skillSet1:
+  _skills:
   - {fileID: 11400000, guid: d9d52de431f81e94c97467c811060a54, type: 2}
   - {fileID: 11400000, guid: 4c82f2d9bc2cf09418a437c668996e07, type: 2}
-  _skillSet2:
   - {fileID: 11400000, guid: d774261d7df73ed4fa8f08149dc4b81f, type: 2}
-  - {fileID: 11400000, guid: f05ea23b66e3fa843b6b873050b55e1f, type: 2}
-  _skillSet3:
   - {fileID: 11400000, guid: 72ba9ea640b863144836fdfdc9469bd6, type: 2}
   - {fileID: 11400000, guid: f4ae99592295ab4438105fcbb1c1ae10, type: 2}
   _echoviewPrefab: {fileID: 5607633760469368399, guid: 570f375e88e89fd4183efba438d2fed4, type: 3}

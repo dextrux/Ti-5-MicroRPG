@@ -36,18 +36,19 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         }
         public void Cast(IEffectable caster) {
             IEffectable[] targets;
-            TargetingStrategy.LockAim(out targets);
-            if (targets != null) {
-                Debug.Log("Targets :" + targets.Length);
-                foreach (IEffectable target in targets) {
-                    Debug.Log("Actual Target :" + target);
-                    foreach (AbilityEffect effect in Effects) {
-                        Debug.Log("Actual effect: " + effect + " on " + target);
+            Vector3 castPoint = TargetingStrategy.LockAim(out targets);
+            foreach (AbilityEffect effect in Effects) {
+                effect.SetUp(castPoint);
+                if (effect.IsAutoCast) {
+                    effect.Execute(this, caster);
+                }
+                else if (targets != null) {
+                    foreach (IEffectable target in targets) {
                         effect.Execute(this, caster, target);
                     }
                 }
             }
-        }
+        }        
         public void Cancel() {
             TargetingStrategy.Cancel();
         }

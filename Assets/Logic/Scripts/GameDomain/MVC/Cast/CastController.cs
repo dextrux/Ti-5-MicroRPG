@@ -4,28 +4,36 @@ using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.Turns;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CastController : ICastController {
-    private readonly IUpdateSubscriptionService _updateSubscriptionService;
-    private readonly ICommandFactory _commandFactory;
     private readonly IActionPointsService _actionPointsService;
+    private readonly IUpdateSubscriptionService _subscriptionService;
+
     private AbilityData _currentAbility;
+
+    private readonly AbilityData[] _abilities;
+    public Transform PlayerTransform;
 
     private bool _canUseAbility;
 
     public CastController(IUpdateSubscriptionService updateSubscriptionService, ICommandFactory commandFactory,
-        IActionPointsService actionPointsService) {
-        _updateSubscriptionService = updateSubscriptionService;
-        _commandFactory = commandFactory;
+        IActionPointsService actionPointsService, AbilityData[] abilities) {
+        _subscriptionService = updateSubscriptionService;
         _actionPointsService = actionPointsService;
+        _abilities = abilities;
+    }
+    public void InitEntryPoint(INaraController naraController) {
+        PlayerTransform = naraController.NaraViewGO.transform;
+        foreach (AbilityData ability in _abilities) {
+            ability.SetUp(_subscriptionService);
+        }
     }
 
-    public bool TryUseAbility(AbilityData abilityData, IEffectable caster) {
-        if (_actionPointsService.CanSpend(abilityData.GetCost())) {
-            abilityData.Aim(caster);
-            _currentAbility = abilityData;
+    public bool TryUseAbility(int index, IEffectable caster) {
+        if (_actionPointsService.CanSpend(_abilities[index].GetCost())) {
+            _abilities[index].Aim(caster);
+            _currentAbility = _abilities[index];
             if (caster is INaraController naraController) {
                 naraController.PlayAttackType1();
             }
@@ -37,26 +45,19 @@ public class CastController : ICastController {
     }
 
     public void CancelAbilityUse() {
-        Debug.Log("CancelAbility: " + (_currentAbility == null));
         _currentAbility?.Cancel();
         _currentAbility = null;
     }
 
-    public void UseAbility(IAbilityController abilityController, IEffectable caster)
+    public void UseAbility(IEffectable caster)
     {
         if (_currentAbility == null) return;
-        int index = abilityController.FindIndexAbility(_currentAbility);
-        if (index < 0)
-        {
-            _canUseAbility = false;
-            return;
-        }
         _canUseAbility = true;
         _actionPointsService.Spend(_currentAbility.GetCost());
         if (caster is INaraController naraController) {
             naraController.TriggerExecute();
         }
-        abilityController.CreateAbility(caster, index);
+        _currentAbility.Cast(caster);
         CancelAbilityUse();
     }
 

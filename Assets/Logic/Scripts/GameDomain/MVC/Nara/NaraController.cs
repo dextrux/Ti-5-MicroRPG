@@ -89,11 +89,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraView.SetMoving(false);
         }
 
-        public void ExecuteAbility(AbilityData abilityData, IEffectable castter)
-        {
-            _commandFactory.CreateCommandVoid<SkillHitNaraCommand>().SetData(new SkillHitCommandData(abilityData, castter, this)).Execute();
-        }
-
         public void InitEntryPoint()
         {
             CreateNara();

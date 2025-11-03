@@ -21,7 +21,7 @@ namespace Logic.Scripts.GameDomain.Commands {
         private IWorldCameraController _worldCameraController;
         private IGameInputActionsController _gameInputActionsController;
         private IUpdateSubscriptionService _updateSubscriptionService;
-        private IAbilityController _abilityController;
+        private ICastController _castController;
 
         private GamePlayInitatorEnterData _enterData;
 
@@ -39,7 +39,7 @@ namespace Logic.Scripts.GameDomain.Commands {
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
             _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
-            _abilityController = _diContainer.Resolve<IAbilityController>();
+            _castController = _diContainer.Resolve<ICastController>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
@@ -49,7 +49,7 @@ namespace Logic.Scripts.GameDomain.Commands {
             _gameInputActionsController.RegisterAllInputListeners();
             _naraController.InitEntryPoint();
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
-            _abilityController.InitEntryPoint(_naraController);
+            _castController.InitEntryPoint(_naraController);
             await Awaitable.NextFrameAsync();
             _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute();
             return;

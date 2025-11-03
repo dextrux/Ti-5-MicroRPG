@@ -92,6 +92,9 @@ public class ProjectileTargeting : TargetingStrategy {
         }
 
         currentLaunchSpeed = ProjectilePrefab.InitialSpeed;
+        Vector3 lookPointCaster = finalAimDirection;
+        lookPointCaster.y = 0f;
+        Caster.GetReferenceTransform().rotation = Quaternion.LookRotation(lookPointCaster.normalized);
     }
 
     private void AimParabolic(Vector3 targetPoint) {

@@ -25,15 +25,6 @@ public abstract class TargetingStrategy : IUpdatable {
         SubscriptionService.UnregisterUpdatable(this);
     }
 
-    protected Vector3 GetMousePosition() {
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, float.MaxValue, CastableLayerMask)) {
-            return hit.point;
-        }
-        else {
-            return Vector3.zero;
-        }
-    }
-
     public virtual void ManagedUpdate() {
 
     }

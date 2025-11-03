@@ -19,7 +19,6 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: 99a8ab10847221644aa5574b53ebcd2d, type: 3}
   Effects:
   - rid: 7012276589014548557
-  - rid: 5749217724512337995
   TargetingStrategy:
     rid: 7546693122258370636
   Damage: 0
@@ -30,20 +29,13 @@ MonoBehaviour:
   Area: 0
   BaseCost: 3
   BaseCooldown: 2
-  BaseRange: 4
+  BaseRange: 10
   BaseArea: 6
   BaseCasts: 1
   PlotData: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 5749217724512337995
-      type: {class: TeleportEffect, ns: , asm: Assembly-CSharp}
-      data:
-        Name: pr
-        Description: rr
-        IsAutoCast: 1
-        _destination: {x: 0, y: 0, z: 0}
     - rid: 7012276589014548557
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
@@ -55,7 +47,9 @@ MonoBehaviour:
       type: {class: AoeTargeting, ns: , asm: Assembly-CSharp}
       data:
         AoePrefab: {fileID: 1945505432758974249, guid: ccb2ab164b2d4f94bbd18cde829780b2, type: 3}
-        AoeRadius: 5
         GroundLayerMask:
           serializedVersion: 2
           m_Bits: 128
+        HittableLayerMask:
+          serializedVersion: 2
+          m_Bits: 64

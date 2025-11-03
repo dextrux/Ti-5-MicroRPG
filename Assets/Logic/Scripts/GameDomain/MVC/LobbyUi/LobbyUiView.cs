@@ -21,7 +21,6 @@ public class LobbyUiView : MonoBehaviour {
     private Button _ability3Slot;
     private Button _ability4Slot;
     private Button _ability5Slot;
-    private Button _ability6Slot;
     private Button _damagePlusButton;
     private Button _damageMinusButton;
     private Button _cooldownPlusButton;
@@ -54,7 +53,6 @@ public class LobbyUiView : MonoBehaviour {
         _ability3Slot = _customizationContainer.Q<Button>("ability-slot3-button");
         _ability4Slot = _customizationContainer.Q<Button>("ability-slot4-button");
         _ability5Slot = _customizationContainer.Q<Button>("ability-slot5-button");
-        _ability6Slot = _customizationContainer.Q<Button>("ability-slot6-button");
         _damagePlusButton = _customizationContainer.Q<Button>("damage-plus-button");
         _damageMinusButton = _customizationContainer.Q<Button>("damage-minus-button");
         _cooldownPlusButton = _customizationContainer.Q<Button>("cooldown-plus-button");
@@ -95,7 +93,6 @@ public class LobbyUiView : MonoBehaviour {
         _ability3Slot.clicked += TempSetterButton3;
         _ability4Slot.clicked += TempSetterButton4;
         _ability5Slot.clicked += TempSetterButton5;
-        _ability6Slot.clicked += TempSetterButton6;
         _damagePlusButton.clicked += OnDamagePlusPressed;
         _cooldownPlusButton.clicked += OnCooldownPlusPressed;
         _costPlusButton.clicked += OnCostPlusPressed;
@@ -185,10 +182,5 @@ public class LobbyUiView : MonoBehaviour {
     public void TempSetterButton5() {
         SetAbility(_datas[4]);
         SetAllSign(_datas[4]);
-    }
-
-    public void TempSetterButton6() {
-        SetAbility(_datas[5]);
-        SetAllSign(_datas[5]);
     }
 }

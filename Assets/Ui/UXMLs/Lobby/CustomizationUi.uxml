@@ -27,19 +27,14 @@
                             </engine:Button>
                         </engine:VisualElement>
                         <engine:VisualElement style="flex-grow: 1; flex-direction: row; width: 100%; align-items: center; justify-content: space-around; height: 50%;">
-                            <engine:Button name="ability-slot4-button" class="select-skill-button">
+                            <engine:Button name="ability-slot4-button" class="select-skill-button" style="visibility: visible;">
                                 <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/04%20Wind%20Barrier.asset?fileID=11400000&amp;guid=f05ea23b66e3fa843b6b873050b55e1f&amp;type=2#04 Wind Barrier" binding-mode="ToTarget" />
+                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/04%20Fire%20Totem.asset?fileID=11400000&amp;guid=72ba9ea640b863144836fdfdc9469bd6&amp;type=2#04 Fire Totem" binding-mode="ToTarget" />
                                 </Bindings>
                             </engine:Button>
-                            <engine:Button name="ability-slot5-button" class="select-skill-button" style="visibility: hidden;">
+                            <engine:Button name="ability-slot5-button" class="select-skill-button" style="visibility: visible;">
                                 <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/05%20Fire%20Totem.asset?fileID=11400000&amp;guid=72ba9ea640b863144836fdfdc9469bd6&amp;type=2#05 Fire Totem" binding-mode="ToTarget" />
-                                </Bindings>
-                            </engine:Button>
-                            <engine:Button name="ability-slot6-button" class="select-skill-button" style="visibility: hidden;">
-                                <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/06%20Blink.asset?fileID=11400000&amp;guid=f4ae99592295ab4438105fcbb1c1ae10&amp;type=2#06 Blink" binding-mode="ToTarget" />
+                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/05%20Blink.asset?fileID=11400000&amp;guid=f4ae99592295ab4438105fcbb1c1ae10&amp;type=2#05 Blink" binding-mode="ToTarget" />
                                 </Bindings>
                             </engine:Button>
                         </engine:VisualElement>
@@ -75,13 +70,13 @@
                 </engine:VisualElement>
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement style="flex-grow: 1; height: 5%; flex-direction: row; justify-content: space-between; padding-left: 10%; padding-right: 10%; display: none;">
+        <engine:VisualElement style="flex-grow: 1; height: 5%; flex-direction: row; justify-content: space-between; padding-left: 10%; padding-right: 10%; display: flex;">
             <engine:Label text="Vantagens: 00/00" style="height: 100%; -unity-text-align: middle-right; font-size: 45%;" />
             <engine:Label text="Saldo: 00" style="height: 100%; -unity-text-align: middle-right; font-size: 45%;" />
             <engine:Label text="Desvantagens: 00/00" style="height: 100%; -unity-text-align: middle-right; font-size: 45%;" />
         </engine:VisualElement>
         <engine:VisualElement style="flex-grow: 1; height: 11%;" />
-        <engine:VisualElement style="flex-grow: 1; height: 35%; padding-top: 2%; padding-right: 2%; padding-bottom: 2%; padding-left: 2%; flex-direction: row; display: none;">
+        <engine:VisualElement style="flex-grow: 1; height: 35%; padding-top: 2%; padding-right: 2%; padding-bottom: 2%; padding-left: 2%; flex-direction: row; display: flex;">
             <engine:VisualElement name="point-slot-container" style="flex-grow: 1; background-image: none; flex-direction: row; justify-content: space-between; align-items: center; padding-top: 1%; padding-right: 3%; padding-bottom: 1%; padding-left: 3%; background-color: rgb(76, 0, 109); border-left-color: rgb(254, 238, 205); border-right-color: rgb(254, 238, 205); border-top-color: rgb(254, 238, 205); border-bottom-color: rgb(254, 238, 205); border-top-width: 12px; border-right-width: 12px; border-bottom-width: 12px; border-left-width: 12px; border-top-left-radius: 68px; border-top-right-radius: 68px; border-bottom-right-radius: 68px; border-bottom-left-radius: 68px;">
                 <engine:VisualElement style="background-color: rgb(254, 238, 205); width: 12%; height: 100%; position: relative; margin-top: 0; margin-right: 1%; margin-bottom: 0; margin-left: 1%; border-left-color: rgb(107, 15, 142); border-right-color: rgb(107, 15, 142); border-top-color: rgb(107, 15, 142); border-bottom-color: rgb(107, 15, 142); border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px;">
                     <engine:Label text="DMG" style="-unity-text-align: middle-center; width: 70%; align-items: auto; align-self: center; background-color: rgb(76, 0, 109); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 20%; font-size: 25%; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; color: rgb(254, 238, 205);" />

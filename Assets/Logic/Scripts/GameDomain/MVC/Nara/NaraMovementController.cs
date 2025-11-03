@@ -58,6 +58,11 @@ public class NaraMovementController : IMovement, IFixedUpdatable
         return movementRadius;
     }
 
+    public void SetNaraRadius(int value)
+    {
+        movementRadius = value;
+    }
+
     public void Jump(float jumpForce, float gravity)
     {
         throw new System.NotImplementedException();

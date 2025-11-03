@@ -1,9 +1,10 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 public class PointTargeting : TargetingStrategy {
+    public LayerMask GroundLayerMask;
     [SerializeField] private AbilitySummon _objectToSummon;
-    [SerializeField] private AbilitySummon _needLookPlayer;
     private Transform _previewTransform;
     public override void Initialize(AbilityData data, IEffectable caster) {
         base.Initialize(data, caster);
@@ -13,7 +14,9 @@ public class PointTargeting : TargetingStrategy {
     public override void ManagedUpdate() {
         base.ManagedUpdate();
         if (_previewTransform != null) {
-            _previewTransform.transform.position = GetMousePosition();
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, float.MaxValue, GroundLayerMask)) {
+                _previewTransform.transform.position = hit.point;
+            }
 
             Vector3 directionToLook = _previewTransform.transform.position - Caster.GetReferenceTransform().position;
             Vector3 previewDirectionToLook = Caster.GetReferenceTransform().position - _previewTransform.transform.position;
@@ -33,5 +36,6 @@ public class PointTargeting : TargetingStrategy {
 
     public override void Cancel() {
         base.Cancel();
+        UnityEngine.Object.Destroy(_previewTransform.gameObject);
     }
 }

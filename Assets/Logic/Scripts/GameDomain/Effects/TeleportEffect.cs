@@ -1,4 +1,5 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using Logic.Scripts.GameDomain.MVC.Nara;
 using UnityEngine;
 
 public class TeleportEffect : AbilityEffect {
@@ -10,6 +11,18 @@ public class TeleportEffect : AbilityEffect {
     }
 
     public override void Execute(AbilityData data, IEffectable caster) {
-        caster.GetReferenceTransform().position = _destination;
+        if (caster is INaraController controller) {
+            controller = (INaraController)caster;
+            controller.NaraMove.RecalculateRadiusAfterAbility();
+            int naraRadius = controller.NaraMove.GetNaraRadius();
+            controller.NaraMove.RemoveMovementRadius();
+            caster.GetReferenceTransform().position = _destination;
+            controller.NaraMove.SetNaraRadius(naraRadius);
+            controller.NaraMove.SetMovementRadiusCenter();
+        }
+        else {
+            caster.GetReferenceTransform().position = _destination;
+        }
+
     }
 }

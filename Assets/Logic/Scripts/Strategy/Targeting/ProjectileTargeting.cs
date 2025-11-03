@@ -26,6 +26,7 @@ public class ProjectileTargeting : TargetingStrategy {
     public float parabolicMaxHeight = 10f;
     [Tooltip("A distância máxima para calcular a escala da altura do arco.")]
     public float parabolicMaxRange = 50f;
+    public float parabolicMinRange = 3f;
 
     private float currentLaunchSpeed;
 
@@ -59,23 +60,36 @@ public class ProjectileTargeting : TargetingStrategy {
         Cursor.visible = true;
 
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, float.MaxValue, GroundLayerMask)) {
-            switch (aimingMode) {
-                case AimingMode.StraightAim:
-                    AimStraight(hit.point);
-                    break;
+            if (Vector3.Distance(hit.point, Caster.GetReferenceTransform().position) > parabolicMinRange) {
+                switch (aimingMode) {
+                    case AimingMode.StraightAim:
+                        AimStraight(hit.point);
+                        break;
 
-                case AimingMode.ParabolicArc:
-                    AimParabolic(hit.point);
-                    break;
+                    case AimingMode.ParabolicArc:
+                        AimParabolic(hit.point);
+                        break;
+                }
             }
         }
     }
 
     private void AimStraight(Vector3 targetPoint) {
+        Vector3 casterOrigin = Caster.GetReferenceTransform().position;
         Vector3 startPos = Caster.GetTransformCastPoint().position;
-        Vector3 direction = targetPoint - startPos;
 
-        Caster.GetTransformCastPoint().rotation = Quaternion.LookRotation(direction);
+        float maxRange = Ability.GetRange();
+
+        Vector3 directionFromCasterXZ = new Vector3(targetPoint.x - casterOrigin.x, 0, targetPoint.z - casterOrigin.z);
+
+        float distanceXZ = directionFromCasterXZ.magnitude;
+
+        Vector3 finalAimDirection;
+        finalAimDirection = directionFromCasterXZ.normalized;
+
+        if (finalAimDirection.sqrMagnitude > 0.001f) {
+            Caster.GetTransformCastPoint().rotation = Quaternion.LookRotation(finalAimDirection);
+        }
 
         currentLaunchSpeed = ProjectilePrefab.InitialSpeed;
     }
@@ -84,12 +98,26 @@ public class ProjectileTargeting : TargetingStrategy {
         Vector3 startPos = Caster.GetTransformCastPoint().position;
         float g = Physics.gravity.y * -1;
 
-        Vector3 deltaXZ_vec = new Vector3(targetPoint.x - startPos.x, 0, targetPoint.z - startPos.z);
+        Vector3 casterOrigin = Caster.GetReferenceTransform().position;
+        Vector3 directionFromCaster = targetPoint - casterOrigin;
+        float distance = directionFromCaster.magnitude;
+
+        Vector3 clampedTargetPoint;
+        if (distance > Ability.GetRange()) {
+            clampedTargetPoint = casterOrigin + (directionFromCaster.normalized * Ability.GetRange());
+        }
+        else {
+            clampedTargetPoint = targetPoint;
+        }
+
+        Vector3 deltaXZ_vec = new Vector3(clampedTargetPoint.x - startPos.x, 0, clampedTargetPoint.z - startPos.z);
         float deltaX = deltaXZ_vec.magnitude;
-        float deltaY = targetPoint.y - startPos.y;
+        float deltaY = clampedTargetPoint.y - startPos.y;
 
         float distanceRatio = Mathf.Clamp01(deltaX / parabolicMaxRange);
-        float h = parabolicMaxHeight * distanceRatio;
+        float h;
+        if (Vector3.Distance(clampedTargetPoint, startPos) < parabolicMinRange) h = parabolicMaxHeight * distanceRatio;
+        else h = parabolicMaxHeight;
         if (h < 0.1f) h = 0.1f;
 
         float Vy = Mathf.Sqrt(2 * g * h);
@@ -101,33 +129,36 @@ public class ProjectileTargeting : TargetingStrategy {
         float discriminant = (b * b) - (4 * a * c);
 
         if (discriminant < 0) {
-            AimStraight(targetPoint);
+            AimStraight(clampedTargetPoint);
             return;
         }
 
         float t_total = (-b + Mathf.Sqrt(discriminant)) / (2 * a);
         if (t_total <= 0) {
-            AimStraight(targetPoint);
+            AimStraight(clampedTargetPoint);
             return;
         }
 
         float Vx = deltaX / t_total;
 
         Vector3 launchVelocity = (deltaXZ_vec.normalized * Vx) + (Vector3.up * Vy);
+        Vector3 CasterLook = launchVelocity;
+        CasterLook.y = 0f;
 
+        Caster.GetReferenceTransform().rotation = Quaternion.LookRotation(CasterLook.normalized);
         Caster.GetTransformCastPoint().rotation = Quaternion.LookRotation(launchVelocity.normalized);
 
         currentLaunchSpeed = launchVelocity.magnitude;
     }
 
-
-    public override void LockAim(out IEffectable[] targets) {
+    public override Vector3 LockAim(out IEffectable[] targets) {
         base.LockAim(out targets);
         Rigidbody thrownObject = UnityEngine.Object.Instantiate(ProjectilePrefab, Caster.GetTransformCastPoint().position, Quaternion.identity).GetComponent<Rigidbody>();
-        if (thrownObject.TryGetComponent<ProjectileController>(out ProjectileController controller)){
+        if (thrownObject.TryGetComponent<ProjectileController>(out ProjectileController controller)) {
             controller.Initialize(Caster.GetTransformCastPoint(), Caster, Ability);
         }
         thrownObject.AddForce(Caster.GetTransformCastPoint().forward * currentLaunchSpeed, ForceMode.Impulse);
+        return Caster.GetTransformCastPoint().position;
     }
 
     public override void Cancel() {
@@ -173,24 +204,45 @@ public class ProjectileTargeting : TargetingStrategy {
         float overlap;
 
         UpdateLineRender(maxPoints, (0, position));
+        if (aimingMode == AimingMode.ParabolicArc) {
+            for (int i = 1; i < maxPoints; i++) {
+                velocity = CalculateNewVelocity(velocity, ProjectilePrefab.GetRigidbody.linearDamping, increment);
+                nextPosition = position + velocity * increment;
 
-        for (int i = 1; i < maxPoints; i++) {
-            velocity = CalculateNewVelocity(velocity, ProjectilePrefab.GetRigidbody.linearDamping, increment);
-            nextPosition = position + velocity * increment;
+                overlap = Vector3.Distance(position, nextPosition) * rayOverlap;
 
-            overlap = Vector3.Distance(position, nextPosition) * rayOverlap;
+                if (Physics.Raycast(position, velocity.normalized, out RaycastHit hit, overlap)) {
+                    UpdateLineRender(i, (i - 1, hit.point));
+                    MoveHitMarker(hit);
+                    break;
+                }
 
-            if (Physics.Raycast(position, velocity.normalized, out RaycastHit hit, overlap)) {
-                UpdateLineRender(i, (i - 1, hit.point));
-                MoveHitMarker(hit);
-                break;
+                if (hitMarker != null)
+                    hitMarker.gameObject.SetActive(false);
+
+                position = nextPosition;
+                UpdateLineRender(maxPoints, (i, position));
             }
+        }
+        else if (aimingMode == AimingMode.StraightAim) {
+            velocity = velocity = Caster.GetTransformCastPoint().forward * currentLaunchSpeed;
+            for (int i = 1; i < maxPoints; i++) {
+                nextPosition = position + velocity * increment;
 
-            if (hitMarker != null)
-                hitMarker.gameObject.SetActive(false);
+                overlap = Vector3.Distance(position, nextPosition) * rayOverlap;
 
-            position = nextPosition;
-            UpdateLineRender(maxPoints, (i, position));
+                if (Physics.Raycast(position, velocity.normalized, out RaycastHit hit, overlap)) {
+                    UpdateLineRender(i, (i - 1, hit.point));
+                    MoveHitMarker(hit);
+                    break;
+                }
+
+                if (hitMarker != null)
+                    hitMarker.gameObject.SetActive(false);
+
+                position = nextPosition;
+                UpdateLineRender(maxPoints, (i, position));
+            }
         }
     }
 }

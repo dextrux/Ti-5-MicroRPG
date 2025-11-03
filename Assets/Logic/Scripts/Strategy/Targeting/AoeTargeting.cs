@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class AoeTargeting : TargetingStrategy
-{
+public class AoeTargeting : TargetingStrategy {
     public GameObject AoePrefab;
     public float AoeRadius = 5f;
     public LayerMask GroundLayerMask;
@@ -37,20 +36,23 @@ public class AoeTargeting : TargetingStrategy
         base.Cancel();
     }
 
-    public override void LockAim(out IEffectable[] targets) {
-        base.LockAim(out targets);
+    public override Vector3 LockAim(out IEffectable[] targets) {
         //To-Do Alterar para new input system
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, float.MaxValue, GroundLayerMask)) {
-            Collider[] colliders = Physics.OverlapSphere(hit.point, AoeRadius+Ability.GetArea());
-            Debug.Log("Radius: " + AoeRadius+Ability.GetArea());
+            Collider[] colliders = Physics.OverlapSphere(hit.point, AoeRadius + Ability.GetArea());
             List<IEffectable> targetsList = new List<IEffectable>();
-            foreach(Collider collider in colliders) {
+            foreach (Collider collider in colliders) {
                 if (collider.TryGetComponent<IEffectable>(out IEffectable effectable)) {
                     targetsList.Add(effectable);
                 }
             }
             targets = targetsList.ToArray();
+            Cancel();
+            return hit.point;
         }
-        Cancel();
+        else {
+            Cancel();
+            return base.LockAim(out targets);
+        }
     }
 }

@@ -46,12 +46,13 @@ MonoBehaviour:
       data:
         ProjectilePrefab: {fileID: 1632181508370474111, guid: f12d3b56a5ec6744ba1d7a78a6ec4a6b, type: 3}
         hitMarker: {fileID: 0}
-        maxPoints: 50
+        maxPoints: 200
         increment: 0.025
         rayOverlap: 1.1
         aimingMode: 1
         GroundLayerMask:
           serializedVersion: 2
           m_Bits: 128
-        parabolicMaxHeight: 10
-        parabolicMaxRange: 50
+        parabolicMaxHeight: 5
+        parabolicMaxRange: 200
+        parabolicMinRange: 1

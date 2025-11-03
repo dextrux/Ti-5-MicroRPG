@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c50bb42492c943b2c585ec15072c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <InitialSpeed>k__BackingField: 10
+  <InitialSpeed>k__BackingField: 20
   <GetRigidbody>k__BackingField: {fileID: 3371577083627142401}
 --- !u!54 &3371577083627142401
 Rigidbody:
@@ -178,7 +178,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0

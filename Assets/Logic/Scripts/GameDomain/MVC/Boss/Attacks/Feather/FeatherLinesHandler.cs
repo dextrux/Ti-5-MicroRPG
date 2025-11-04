@@ -44,6 +44,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static void ConfigurePushProvider(Func<bool> provider) => _isPushProvider = provider;
 
         public static Func<int> GetPlayerDebuffStacks;
+        public static Func<int> GetMaxDebuffStacks;
         public static Vector3 CurrentSpecialStart;
         public static Vector3 CurrentSpecialEnd;
         public static Vector3 CurrentSpecialAxis;
@@ -376,16 +377,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         if ((i % 2) == 0)
                         {
                             int k = i / 2;
-                            float offX = (k - (nX - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offX);
-                            end = new Vector3(center.x + 100f, center.y, center.z + offX);
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end = new Vector3(center.x + 100f, center.y, center.z + offset);
                         }
                         else
                         {
                             int k = (i - 1) / 2;
-                            float offZ = (k - (nZ - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                            end = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end = new Vector3(center.x + offset, center.y, center.z + 100f);
                         }
                         break;
                     }
@@ -447,9 +448,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
         public IEnumerator ExecuteEffects(List<AbilityEffect> effects, ArenaPosReference arenaReference, Transform originTransform, IEffectable caster)
         {
-            if (effects == null || effects.Count == 0) { yield break; }
+            if (effects == null || effects.Count == 0) yield break;
             IEffectable target = arenaReference.NaraController as IEffectable;
-            if (target == null) { yield break; }
+            if (target == null) yield break;
 
             Vector3 center = arenaReference != null ? arenaReference.transform.position : originTransform.position;
             float spacing = Mathf.Max(0.1f, _params.margin);
@@ -527,16 +528,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         if ((i % 2) == 0)
                         {
                             int k = i / 2;
-                            float offX = (k - (nX - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offX);
-                            end = new Vector3(center.x + 100f, center.y, center.z + offX);
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end = new Vector3(center.x + 100f, center.y, center.z + offset);
                         }
                         else
                         {
                             int k = (i - 1) / 2;
-                            float offZ = (k - (nZ - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                            end = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end = new Vector3(center.x + offset, center.y, center.z + 100f);
                         }
                         break;
                     }
@@ -590,10 +591,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
             Vector3 perp = proj - new Vector3(playerWorld.x, playerWorld.y, playerWorld.z);
             perp.y = 0f;
-            if (perp.sqrMagnitude < 1e-6f)
-            {
-                perp = new Vector3(-_axisUnit.z, 0f, _axisUnit.x);
-            }
+            if (perp.sqrMagnitude < 1e-6f) perp = new Vector3(-_axisUnit.z, 0f, _axisUnit.x);
 
             Vector3 dir = (_isPushMode ? -perp : perp).normalized;
 
@@ -611,7 +609,11 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             Vector3 leftWing = tip - dir * headLen + side * headHalfW;
             Vector3 rightWing = tip - dir * headLen - side * headHalfW;
 
-            Color c = _isPushMode ? new Color(1f, 0.35f, 0.35f, 1f) : new Color(0.35f, 0.7f, 1f, 1f);
+            int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
+            int maxStacks = GetMaxDebuffStacks != null ? GetMaxDebuffStacks() : 5;
+            float tColor = Mathf.Clamp01(stacks / Mathf.Max(1f, (float)maxStacks));
+            Color c = Color.Lerp(Color.green, Color.red, tColor);
+
             _singleArrow.startColor = c;
             _singleArrow.endColor = c;
 

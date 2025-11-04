@@ -17,21 +17,23 @@ MonoBehaviour:
     delay, the pool erupts 2 (+0) times in total, each dealing X (+0) DMG within
     Y (+0) m.
   Icon: {fileID: 21300000, guid: 99a8ab10847221644aa5574b53ebcd2d, type: 3}
-  Effects:
-  - rid: 7012276589014548557
-  TargetingStrategy:
-    rid: 7546693122258370636
+  _sfx: {fileID: 0}
   Damage: 0
   Cooldown: 0
   Cost: 0
   Range: 0
   Casts: 0
   Area: 0
-  BaseCost: 3
-  BaseCooldown: 2
-  BaseRange: 10
-  BaseArea: 6
-  BaseCasts: 1
+  _baseDamage: 3
+  _baseCost: 4
+  _baseCooldown: 3
+  _baseRange: 4
+  _baseArea: 2
+  _baseCasts: 4
+  Effects:
+  - rid: 7012276589014548557
+  TargetingStrategy:
+    rid: 7546693122258370636
   PlotData: {fileID: 0}
   references:
     version: 2

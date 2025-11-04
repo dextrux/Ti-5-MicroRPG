@@ -6,16 +6,26 @@ using UnityEngine.UIElements;
 
 public class LobbyUiView : MonoBehaviour {
     [SerializeField] private UIDocument _uIDocument;
-    [SerializeField] private AbilityData[] _datas;
     private VisualElement _root;
     private Button _playButton;
     private Button _customizeButton;
     private Button _exitButton;
-    //Customization Infos
+
+    private Label _balanceLabel;
+    private Label _disadvantageLabel;
+
+    private Label _damageLabel;
+    private Label _cooldownLabel;
+    private Label _costLabel;
+    private Label _rangeLabel;
+    private Label _castsLabel;
+    private Label _areaLabel;
+
     private TemplateContainer _customizationContainer;
     private VisualElement _skillContainer;
     private VisualElement _pointsContainer;
     private Button _customizeExitButton;
+    private Button _resetSkillsButton;
     private Button _ability1Slot;
     private Button _ability2Slot;
     private Button _ability3Slot;
@@ -38,15 +48,26 @@ public class LobbyUiView : MonoBehaviour {
     public TemplateContainer CustomizationContainer => _customizationContainer;
     #endregion
 
-    public void Initialize() {
+    public void Initialize(AbilityData data) {
         _root = _uIDocument.rootVisualElement;
         _playButton = _root.Q<Button>("play-btn");
         _exitButton = _root.Q<Button>("exit-btn");
         _customizeButton = _root.Q<Button>("customize-btn");
         _customizationContainer = _root.Q<TemplateContainer>("customization-container");
         _customizeExitButton = _customizationContainer.Q<Button>("exit-customization-button");
+        _resetSkillsButton = _customizationContainer.Q<Button>("reset-button");
         _skillContainer = _customizationContainer.Q<VisualElement>("skill-container");
         _pointsContainer = _customizationContainer.Q<VisualElement>("point-slot-container");
+
+        _balanceLabel = _customizationContainer.Q<Label>("balance-txt");
+        _disadvantageLabel = _customizationContainer.Q<Label>("disadvantage-txt");
+
+        _damageLabel = _customizationContainer.Q<Label>("damage-txt");
+        _cooldownLabel = _customizationContainer.Q<Label>("cooldown-txt");
+        _costLabel = _customizationContainer.Q<Label>("cost-txt");
+        _rangeLabel = _customizationContainer.Q<Label>("range-txt");
+        _castsLabel = _customizationContainer.Q<Label>("casts-txt");
+        _areaLabel = _customizationContainer.Q<Label>("area-txt");
 
         _ability1Slot = _customizationContainer.Q<Button>("ability-slot1-button");
         _ability2Slot = _customizationContainer.Q<Button>("ability-slot2-button");
@@ -66,33 +87,24 @@ public class LobbyUiView : MonoBehaviour {
         _areaPlusButton = _customizationContainer.Q<Button>("area-plus-button");
         _areaMinusButton = _customizationContainer.Q<Button>("area-minus-button");
 
-
-        SetAbility(_datas[0]);
+        SetAbility(data);
     }
 
     public void RegisterCallbacks(Action OnPlayButtonPressed, Action OnCustomizeButtonPressed, Action OnExitButtonPressed,
         Action OnCustomizeExitButtonPressed, Action OnDamagePlusPressed, Action OnDamageMinusPressed, Action OnCooldownPlusPressed,
         Action OnCooldownMinusPressed, Action OnCostPlusPressed, Action OnCostMinusPressed, Action OnRangePlusPressed,
         Action OnRangeMinusPressed, Action OnCastsPlusPressed, Action OnCastsMinusPressed, Action OnAreaPlusPressed,
-        Action OnAreaMinusPressed) {
+        Action OnAreaMinusPressed, Action OnSetAbility1Pressed, Action OnSetAbility2Pressed, Action OnSetAbility3Pressed,
+        Action OnSetAbility4Pressed, Action OnSetAbility5Pressed, Action OnResetSkillPressed) {
         _playButton.clicked += OnPlayButtonPressed;
         _customizeButton.clicked += OnCustomizeButtonPressed;
         _customizeExitButton.clicked += OnCustomizeExitButtonPressed;
         _exitButton.clicked += OnExitButtonPressed;
-        /*, Action OnSetAbility1Pressed, Action OnSetAbility2Pressed, Action OnSetAbility3Pressed,
-        Action OnSetAbility4Pressed, Action OnSetAbility5Pressed, Action OnSetAbility6Pressed
-         * 
-         * _ability1Slot.clicked += OnSetAbility1Pressed;
+        _ability1Slot.clicked += OnSetAbility1Pressed;
         _ability2Slot.clicked += OnSetAbility2Pressed;
         _ability3Slot.clicked += OnSetAbility3Pressed;
         _ability4Slot.clicked += OnSetAbility4Pressed;
         _ability5Slot.clicked += OnSetAbility5Pressed;
-        _ability6Slot.clicked += OnSetAbility6Pressed;*/
-        _ability1Slot.clicked += TempSetterButton1;
-        _ability2Slot.clicked += TempSetterButton2;
-        _ability3Slot.clicked += TempSetterButton3;
-        _ability4Slot.clicked += TempSetterButton4;
-        _ability5Slot.clicked += TempSetterButton5;
         _damagePlusButton.clicked += OnDamagePlusPressed;
         _cooldownPlusButton.clicked += OnCooldownPlusPressed;
         _costPlusButton.clicked += OnCostPlusPressed;
@@ -105,6 +117,7 @@ public class LobbyUiView : MonoBehaviour {
         _rangeMinusButton.clicked += OnRangeMinusPressed;
         _castsMinusButton.clicked += OnCastsMinusPressed;
         _areaMinusButton.clicked += OnAreaMinusPressed;
+        _resetSkillsButton.clicked += OnResetSkillPressed;
     }
 
     public void UnregisterCallbacks() {
@@ -115,72 +128,99 @@ public class LobbyUiView : MonoBehaviour {
         _pointsContainer.dataSource = data;
     }
 
-    public void SetSignOff(AbilityAtributeType type, bool IsMinus) {
+    public void SetSignOnOff(AbilityAtributeType type, bool isMinus, bool newState) {
         switch (type) {
             case AbilityAtributeType.Damage:
-                if (IsMinus) _damageMinusButton.SetEnabled(false);
-                else _damagePlusButton.SetEnabled(false);
+                if (isMinus) _damageMinusButton.SetEnabled(newState);
+                else _damagePlusButton.SetEnabled(newState);
                 break;
             case AbilityAtributeType.Cooldown:
-                if (IsMinus) _cooldownMinusButton.SetEnabled(false);
-                else _cooldownPlusButton.SetEnabled(false);
+                if (isMinus) _cooldownMinusButton.SetEnabled(newState);
+                else _cooldownPlusButton.SetEnabled(newState);
                 break;
             case AbilityAtributeType.Cost:
-                if (IsMinus) _costMinusButton.SetEnabled(false);
-                else _costPlusButton.SetEnabled(false);
+                if (isMinus) _costMinusButton.SetEnabled(newState);
+                else _costPlusButton.SetEnabled(newState);
                 break;
             case AbilityAtributeType.Range:
-                if (IsMinus) _rangeMinusButton.SetEnabled(false);
-                else _rangePlusButton.SetEnabled(false);
+                if (isMinus) _rangeMinusButton.SetEnabled(newState);
+                else _rangePlusButton.SetEnabled(newState);
                 break;
             case AbilityAtributeType.Casts:
-                if (IsMinus) _castsMinusButton.SetEnabled(false);
-                else _castsPlusButton.SetEnabled(false);
+                if (isMinus) _castsMinusButton.SetEnabled(newState);
+                else _castsPlusButton.SetEnabled(newState);
                 break;
             case AbilityAtributeType.Area:
-                if (IsMinus) _areaMinusButton.SetEnabled(false);
-                else _areaPlusButton.SetEnabled(false);
+                if (isMinus) _areaMinusButton.SetEnabled(newState);
+                else _areaPlusButton.SetEnabled(newState);
                 break;
         }
     }
 
-    public void SetAllSign(AbilityData data) {
-        if (data.Damage > 0) _damageMinusButton.SetEnabled(true);
+    public void SetAllMinusSign(AbilityData data) {
+        if (data.GetModifierStatValue(AbilityStat.Damage) > 1) _damageMinusButton.SetEnabled(true);
         else _damageMinusButton.SetEnabled(false);
-        if (data.Cooldown > 0) _cooldownMinusButton.SetEnabled(true);
+        if (data.GetModifierStatValue(AbilityStat.Cooldown) > 1) _cooldownMinusButton.SetEnabled(true);
         else _cooldownMinusButton.SetEnabled(false);
-        if (data.Cost > 0) _costMinusButton.SetEnabled(true);
+        if (data.GetModifierStatValue(AbilityStat.Cost) > 1) _costMinusButton.SetEnabled(true);
         else _costMinusButton.SetEnabled(false);
-        if (data.Range > 0) _rangeMinusButton.SetEnabled(true);
+        if (data.GetModifierStatValue(AbilityStat.Range) > 1) _rangeMinusButton.SetEnabled(true);
         else _rangeMinusButton.SetEnabled(false);
-        if (data.Casts > 0) _castsMinusButton.SetEnabled(true);
+        if (data.GetModifierStatValue(AbilityStat.Casts) > 1) _castsMinusButton.SetEnabled(true);
         else _castsMinusButton.SetEnabled(false);
-        if (data.Area > 0) _areaMinusButton.SetEnabled(true);
+        if (data.GetModifierStatValue(AbilityStat.Area) > 1) _areaMinusButton.SetEnabled(true);
         else _areaMinusButton.SetEnabled(false);
     }
 
-    public void TempSetterButton1() {
-        SetAbility(_datas[0]);
-        SetAllSign(_datas[0]);
+    public void SetUpText(AbilityStat type, int newValue) {
+        switch (type) {
+            case AbilityStat.Damage:
+                Debug.Log("Damage: " + newValue.ToString("00"));
+                _damageLabel.text = newValue.ToString("00");
+                break;
+            case AbilityStat.Cooldown:
+                Debug.Log("Cooldown: " + newValue.ToString("00"));
+                _cooldownLabel.text = newValue.ToString("00");
+                break;
+            case AbilityStat.Cost:
+                Debug.Log("Cost: " + newValue.ToString("00"));
+                _costLabel.text = newValue.ToString("00");
+                break;
+            case AbilityStat.Range:
+                Debug.Log("Range: " + newValue.ToString("00"));
+                _rangeLabel.text = newValue.ToString("00");
+                break;
+            case AbilityStat.Casts:
+                Debug.Log("Casts: " + newValue.ToString("00"));
+                _castsLabel.text = newValue.ToString("00");
+                break;
+            case AbilityStat.Area:
+                Debug.Log("Area: " + newValue.ToString("00"));
+                _areaLabel.text = newValue.ToString("00");
+                break;
+        }
     }
 
-    public void TempSetterButton2() {
-        SetAbility(_datas[1]);
-        SetAllSign(_datas[1]);
+    public void SetAllMinusSign(bool newState) {
+        _damageMinusButton.SetEnabled(newState);
+        _cooldownMinusButton.SetEnabled(newState);
+        _costMinusButton.SetEnabled(newState);
+        _rangeMinusButton.SetEnabled(newState);
+        _castsMinusButton.SetEnabled(newState);
+        _areaMinusButton.SetEnabled(newState);
     }
 
-    public void TempSetterButton3() {
-        SetAbility(_datas[2]);
-        SetAllSign(_datas[2]);
+    public void SetAllPlusSign(bool newState) {
+        _damagePlusButton.SetEnabled(newState);
+        _cooldownPlusButton.SetEnabled(newState);
+        _costPlusButton.SetEnabled(newState);
+        _rangePlusButton.SetEnabled(newState);
+        _castsPlusButton.SetEnabled(newState);
+        _areaPlusButton.SetEnabled(newState);
     }
 
-    public void TempSetterButton4() {
-        SetAbility(_datas[3]);
-        SetAllSign(_datas[3]);
-    }
-
-    public void TempSetterButton5() {
-        SetAbility(_datas[4]);
-        SetAllSign(_datas[4]);
+    public void SetUpBalanceText(string balanceText, string disadvantageText) {
+        _balanceLabel.text = balanceText;
+        _disadvantageLabel.text = disadvantageText;
     }
 }

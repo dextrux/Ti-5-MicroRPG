@@ -141,6 +141,11 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraView.SetPosition();
         }
 
+        public int GetNumberDebuffs()
+        {
+            return _debuffStacks;
+        }
+
         #region IEffectable Methods
 
         public Transform GetReferenceTransform() {
@@ -266,5 +271,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public LineRenderer GetPointLineRenderer() {
             return _naraView.CastLineRenderer;
         }
+
+        
     }
 }

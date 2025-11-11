@@ -1,0 +1,71 @@
+Guia rápido - Sistema de Atores de Turno (Enviroment e Echoes)
+==============================================================
+
+Resumo
+------
+- Cada fase do turno (Boss, Player, Echoes, Enviroment) executa uma lista de atores (ITurnActor).
+- A execução de um ator deve aguardar TODAS as animações/efeitos antes de concluir.
+- O TurnActorBase já garante que, ao final, esperamos o rastreador ficar ocioso.
+- O provider (ITurnActorProvider) retorna um snapshot dos atores no INÍCIO de cada fase.
+  Itens criados durante a fase só atuam na próxima vez que a fase ocorrer.
+
+Arquivos principais
+-------------------
+- Actors base:
+  - Logic/Scripts/Turns/Actors/ITurnActor.cs
+  - Logic/Scripts/Turns/Actors/ITurnContext.cs
+  - Logic/Scripts/Turns/Actors/ITurnActivityTracker.cs
+  - Logic/Scripts/Turns/Actors/TurnActivityTracker.cs
+  - Logic/Scripts/Turns/Actors/TurnActorBase.cs
+- Gate do jogador:
+  - Logic/Scripts/Turns/Actors/IPlayerTurnGate.cs
+  - Logic/Scripts/Turns/Actors/PlayerTurnGate.cs
+- Atores prontos:
+  - Logic/Scripts/Turns/Actors/BossActor.cs
+  - Logic/Scripts/Turns/Actors/PlayerActor.cs
+  - Logic/Scripts/Turns/Actors/EchoesAggregatorActor.cs
+  - Logic/Scripts/Turns/Actors/OrbEnvironmentActor.cs
+- Provider:
+  - Logic/Scripts/Turns/Actors/ITurnActorProvider.cs
+  - Logic/Scripts/Turns/Actors/DefaultTurnActorProvider.cs
+
+Como adicionar uma ação de Environment (passo-a-passo)
+-----------------------------------------------------
+1) Crie o seu controller de cenário (ex.: TowerController) com um padrão assíncrono claro:
+   - Exponha StartTickAsync() e CurrentTickTask (Task) que conclui quando a ação do turno terminar.
+   - Se usar coroutines/DOTween, garanta que CurrentTickTask complete ao final de tudo.
+
+2) Crie um Actor adapter (ex.: TowerEnvironmentActor) herdando de TurnActorBase:
+   - No OnExecuteTurnAsync:
+     - Inicie a ação (StartTickAsync) e aguarde CurrentTickTask.
+     - Opcional: envolva em using (ctx.Activity.Begin(\"Environment/SeuAtor\")) para rastrear efeitos extra.
+
+3) Inclua o novo ator no snapshot do provider da fase Enviroment:
+   - Em DefaultTurnActorProvider.GetActorsForPhase(TurnPhase.EnviromentAct):
+     - Colete suas instâncias (ex.: TowerController.Instances) e \"wrap\" em atores (new TowerEnvironmentActor(...)).
+     - Retorne a lista (isso é a foto da fase).
+
+4) Spawn:
+   - Ao criar o objeto no jogo (ex.: durante o turno do Player), garanta que ele entre em uma lista acessível (ex.: Instances static).
+   - Objetos criados após o snapshot só atuarão no próximo EnviromentAct (política intencional).
+
+Como adicionar ações de Echoes (passo-a-passo)
+----------------------------------------------
+Opção A (agregador simples - atual):
+1) Use o EchoesAggregatorActor (já incluso) que chama IEchoService.ResolveDueEchoesAsync().
+2) Adicione suas ações diferidas no IEchoService (EnqueueEcho com delays por turno).
+
+Opção B (unidades de Echo - recomendado a longo prazo):
+1) Defina um \"EchoUnitController\" que saiba executar seu \"turno\" como Task (ex.: ExecuteTurnAsync()).
+2) Crie EchoUnitActor herdando de TurnActorBase que chama ExecuteTurnAsync da unidade.
+3) No provider (fase Echoes), retorne 1 EchoUnitActor por unidade viva (snapshot no início da fase).
+4) Unidades criadas durante a fase atuarão somente no próximo EchoesAct.
+
+Boas práticas
+-------------
+- Sempre garantir que a Task do ator conclua quando TUDO estiver finalizado (efeitos/anim).
+- Use ITurnActivityTracker para efeitos que não estejam acoplados à Task principal.
+- Mantenha a política de snapshot para evitar cascatas/loops durante a fase.
+- Se precisar de ordem determinística, mantenha um índice de criação e ordene no provider.
+
+

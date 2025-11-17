@@ -1,4 +1,3 @@
-using Logic.Scripts.GameDomain.MVC.Abilitys;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
@@ -8,19 +7,12 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         NaraMovementController NaraMove { get; }
         void InitEntryPoint();
         void CreateNara();
-        void ResetController();
         void RegisterListeners();
         void ManagedFixedUpdate();
-        void RecenterMovementAreaAtTurnStart();
-        void SetMovementCircleVisible(bool visible);
         void PlayAttackType(int type);
         void PlayAttackType1();
         void TriggerExecute();
         void ResetExecuteTrigger();
-        void SetNewMovementArea();
-        void ResetMovementArea();
-        void RemoveMovementAreaLimit();
-        void RecenterNara();
-        void CancelMovement();
+        void SetPosition(Vector3 movementCenter);
     }
 }

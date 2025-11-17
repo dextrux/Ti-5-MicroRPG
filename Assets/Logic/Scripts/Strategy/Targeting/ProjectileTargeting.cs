@@ -22,9 +22,7 @@ public class ProjectileTargeting : TargetingStrategy {
     public LayerMask GroundLayerMask;
 
     [Header("Parabolic Arc Settings")]
-    [Tooltip("A altura máxima que o arco atingirá na distância máxima.")]
     public float parabolicMaxHeight = 10f;
-    [Tooltip("A distância máxima para calcular a escala da altura do arco.")]
     public float parabolicMaxRange = 50f;
     public float parabolicMinRange = 3f;
 

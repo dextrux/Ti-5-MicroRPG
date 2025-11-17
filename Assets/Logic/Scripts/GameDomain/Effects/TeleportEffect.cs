@@ -12,13 +12,14 @@ public class TeleportEffect : AbilityEffect {
 
     public override void Execute(AbilityData data, IEffectable caster) {
         if (caster is INaraController controller) {
-            controller = (INaraController)caster;
-            controller.NaraMove.RecalculateRadiusAfterAbility();
-            int naraRadius = controller.NaraMove.GetNaraRadius();
-            controller.NaraMove.RemoveMovementRadius();
-            caster.GetReferenceTransform().position = _destination;
-            controller.NaraMove.SetNaraRadius(naraRadius);
-            controller.NaraMove.SetMovementRadiusCenter();
+            if (controller.NaraMove is NaraTurnMovementController turnMovement) {
+                turnMovement.RecalculateRadiusAfterAbility();
+                int naraRadius = turnMovement.GetNaraRadius();
+                turnMovement.RemoveMovementRadius();
+                caster.GetReferenceTransform().position = _destination;
+                turnMovement.SetNaraRadius(naraRadius);
+                turnMovement.SetMovementRadiusCenter();
+            }
         }
         else {
             caster.GetReferenceTransform().position = _destination;

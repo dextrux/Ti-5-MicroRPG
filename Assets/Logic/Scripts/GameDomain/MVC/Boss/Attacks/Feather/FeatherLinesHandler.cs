@@ -28,7 +28,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         private FeatherSubView[] _views;
         private int _specialIndex;
         private bool _isPushMode = true;
-        private bool _hasPushFrozen = false;
         private bool? _ctorIsPush = null;
 
         private LineRenderer _singleArrow;
@@ -98,7 +97,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             _parentTransform = parentTransform;
             _arenaRef = Object.FindFirstObjectByType<ArenaPosReference>(FindObjectsInactive.Exclude);
             _isPushMode = ResolveInitialPushMode();
-            _hasPushFrozen = true;
 
             _naraController = _arenaRef != null ? _arenaRef.NaraController : null;
 

@@ -13,6 +13,7 @@ namespace Logic.Scripts.Turns
             Container.BindInterfacesAndSelfTo<EchoService>().AsSingle();
 
 
+			Container.BindInterfacesAndSelfTo<EnvironmentActorsRegistry>().AsSingle();
             Container.BindInterfacesAndSelfTo<EnviromentActionService>().AsSingle();
             Container.BindInterfacesTo<OrbEnvironmentRule>().AsSingle();
             Container.BindInterfacesAndSelfTo<TurnFlowController>().AsSingle();

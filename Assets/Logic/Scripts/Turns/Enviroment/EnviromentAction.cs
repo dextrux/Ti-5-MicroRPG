@@ -53,6 +53,17 @@ namespace Logic.Scripts.Turns
 			System.Collections.Generic.IReadOnlyList<IEnvironmentTurnActor> snapshot = _actorsRegistry != null ? _actorsRegistry.Snapshot() : null;
 			if (snapshot != null && snapshot.Count > 0)
             {
+				// Log dos atores enfileirados para este turno
+				System.Text.StringBuilder namesBuilder = new System.Text.StringBuilder(256);
+				for (int i = 0; i < snapshot.Count; i++)
+				{
+					IEnvironmentTurnActor actor = snapshot[i];
+					string n = actor != null ? actor.GetType().Name : "null";
+					if (i > 0) namesBuilder.Append(", ");
+					namesBuilder.Append(n);
+				}
+				UnityEngine.Debug.Log($"[Environment] Actors queued this turn ({snapshot.Count}): {namesBuilder.ToString()}");
+
 				System.Collections.Generic.List<IEnvironmentTurnActor> toRemove = new System.Collections.Generic.List<IEnvironmentTurnActor>();
 				for (int i = 0; i < snapshot.Count; i++)
                 {

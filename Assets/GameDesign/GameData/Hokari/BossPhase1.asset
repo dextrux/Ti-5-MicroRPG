@@ -27,21 +27,16 @@ MonoBehaviour:
   _randomChangeDirectionSeconds: 1.5
   _turnPatternLength: 8
   _turnPattern:
-  - Mode: 1
-    Direction: {x: 0, y: 0, z: 0}
-    DistanceMultiplier: 3
-    AttackIndex: 6
-    AttackIndices: 07000000
-  - Mode: 0
-    Direction: {x: 25, y: 0, z: 0}
-    DistanceMultiplier: 2
-    AttackIndex: 1
-    AttackIndices: 08000000
   - Mode: 3
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 0
     AttackIndex: 0
     AttackIndices: 
+  - Mode: 1
+    Direction: {x: 0, y: 0, z: 0}
+    DistanceMultiplier: 3
+    AttackIndex: 6
+    AttackIndices: 07000000
   - Mode: 0
     Direction: {x: 90, y: 0, z: 0}
     DistanceMultiplier: 3
@@ -52,11 +47,16 @@ MonoBehaviour:
     DistanceMultiplier: 0
     AttackIndex: 2
     AttackIndices: 
+  - Mode: 0
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 2
+    AttackIndex: 1
+    AttackIndices: 0100000008000000
   - Mode: 1
     Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 5
     AttackIndex: 7
-    AttackIndices: 
+    AttackIndices: 0100000007000000
   - Mode: 1
     Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 0

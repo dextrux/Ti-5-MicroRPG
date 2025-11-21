@@ -206,21 +206,51 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _executedTurnsCount++;
         }
 
-        private async Task ExecutePreparedActionAsync() {
-            if (_pendingCasts == null || _pendingCasts.Count == 0) return;
-            for (int i = _pendingCasts.Count - 1; i >= 0; i--) {
-                if (_pendingCasts[i].TurnsRemaining <= 0) {
-                    BossAttack castNow = _pendingCasts[i].Attack;
-                    _pendingCasts.RemoveAt(i);
-                    if (castNow != null) {
-                        try {
-                            await castNow.ExecuteAsync();
-                        }
-                        catch (Exception) { }
-                    }
-                }
-            }
-        }
+		private async Task ExecutePreparedActionAsync() {
+			if (_pendingCasts == null || _pendingCasts.Count == 0) return;
+
+			// Coleta todos os ataques devidos neste turno
+			System.Collections.Generic.List<BossAttack> toExecute = new System.Collections.Generic.List<BossAttack>();
+			for (int i = _pendingCasts.Count - 1; i >= 0; i--) {
+				if (_pendingCasts[i].TurnsRemaining <= 0) {
+					BossAttack castNow = _pendingCasts[i].Attack;
+					_pendingCasts.RemoveAt(i);
+					if (castNow != null) {
+						toExecute.Add(castNow);
+					}
+				}
+			}
+			if (toExecute.Count == 0) return;
+
+			// Exclusividade de deslocamento (push/pull): escolher 1 vencedor por prioridade
+			BossAttack winner = null;
+			int best = int.MinValue;
+			for (int k = 0; k < toExecute.Count; k++) {
+				BossAttack a = toExecute[k];
+				if (a != null && a.HasDisplacementEffect()) {
+					int pri = a.GetDisplacementPriority();
+					if (pri > best) { best = pri; winner = a; }
+				}
+			}
+			for (int k = 0; k < toExecute.Count; k++) {
+				BossAttack a = toExecute[k];
+				if (a == null) continue;
+				if (winner != null && !object.ReferenceEquals(a, winner) && a.HasDisplacementEffect()) {
+					a.SetDisplacementEnabled(false);
+				}
+			}
+
+			// Executa todos simultaneamente
+			System.Collections.Generic.List<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>(toExecute.Count);
+			for (int k = 0; k < toExecute.Count; k++) {
+				try {
+					tasks.Add(toExecute[k].ExecuteAsync());
+				} catch (Exception) { }
+			}
+			try {
+				await System.Threading.Tasks.Task.WhenAll(tasks);
+			} catch (Exception) { }
+		}
 
         private async Task MoveTurnAsync() {
             ConfigureTurnMovement();
@@ -252,7 +282,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             QueuePreparedAttackFromBehavior();
         }
 
-        private void QueuePreparedAttackFromBehavior() {
+		private void QueuePreparedAttackFromBehavior() {
             var behavior = GetCurrentBehavior();
             if (behavior == null) return;
             BossBehaviorSO.BossTurnConfig[] pattern = behavior.TurnPattern;
@@ -260,18 +290,57 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             if (pattern == null || pattern.Length == 0 || pool == null || pool.Length == 0) return;
             int indexInPattern = _executedTurnsCount % pattern.Length;
             BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
-            int attackIndex = Mathf.Clamp(entry.AttackIndex, 0, pool.Length - 1);
-            BossAttack attackInstance = _bossAbilityController?.CreateAttackAtIndex(attackIndex, _bossView.transform);
-            if (attackInstance == null) {
-                Debug.LogWarning("Boss attack instantiated: null");
-                return;
-            }
-            if (_arenaReference != null) {
-                attackInstance.Setup(_arenaReference, this);
-            }
-            Debug.Log($"Boss attack instantiated: {attackInstance.name} | index={attackIndex}");
-            _pendingCasts.Add(new PendingCast { Attack = attackInstance, TurnsRemaining = 1 });
-            Debug.Log($"Boss prepared attack index: {attackIndex} (executes next turn)");
+
+			// Coleta múltiplos índices quando configurados; caso contrário usa o índice legado
+			int[] indices = (entry.AttackIndices != null && entry.AttackIndices.Length > 0)
+				? entry.AttackIndices
+				: new int[] { entry.AttackIndex };
+
+			// Primeiro criamos todos, depois escolhemos um vencedor de movimento por prioridade e configuramos telegraph/efeitos
+			var created = new System.Collections.Generic.List<(BossAttack atk, int idx, bool hasMove, int pri)>(indices.Length);
+			for (int n = 0; n < indices.Length; n++) {
+				int attackIndex = Mathf.Clamp(indices[n], 0, pool.Length - 1);
+				BossAttack inst = _bossAbilityController?.CreateAttackAtIndex(attackIndex, _bossView.transform);
+				if (inst == null) { Debug.LogWarning("Boss attack instantiated: null"); continue; }
+				bool hasMove = inst.HasDisplacementEffect();
+				int pri = hasMove ? inst.GetDisplacementPriority() : int.MinValue;
+				created.Add((inst, attackIndex, hasMove, pri));
+			}
+
+			// Seleciona vencedor por maior prioridade entre os que movem
+			BossAttack winner = null;
+			int bestPri = int.MinValue;
+			for (int i = 0; i < created.Count; i++) {
+				if (created[i].hasMove && created[i].pri > bestPri) {
+					bestPri = created[i].pri;
+					winner = created[i].atk;
+				}
+			}
+
+			for (int i = 0; i < created.Count; i++) {
+				BossAttack attackInstance = created[i].atk;
+				int attackIndex = created[i].idx;
+
+				if (created[i].hasMove) {
+					if (winner != null && !object.ReferenceEquals(attackInstance, winner)) {
+						// Não-vencedores: remover efeitos de movimento e ocultar indicação de deslocamento
+						attackInstance.StripDisplacementForTelegraph();
+						attackInstance.ConfigureTelegraphDisplacementEnabled(false);
+					} else {
+						// Vencedor mantém indicação
+						attackInstance.ConfigureTelegraphDisplacementEnabled(true);
+					}
+				} else {
+					attackInstance.ConfigureTelegraphDisplacementEnabled(false);
+				}
+
+				if (_arenaReference != null) {
+					attackInstance.Setup(_arenaReference, this);
+				}
+				Debug.Log($"Boss attack instantiated: {attackInstance.name} | index={attackIndex}");
+				_pendingCasts.Add(new PendingCast { Attack = attackInstance, TurnsRemaining = 1 });
+				Debug.Log($"Boss prepared attack index: {attackIndex} (executes next turn)");
+			}
         }
 
         private void ConfigureTurnMovement() {

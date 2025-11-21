@@ -20,6 +20,8 @@ MonoBehaviour:
   - {fileID: -7797698259084971289, guid: e3ebe2321d4723346be2e3e8c2112696, type: 3}
   - {fileID: -7797698259084971289, guid: 90683a701b66b50428ee05cfbebeaaa2, type: 3}
   - {fileID: -7797698259084971289, guid: 040e6941640cde54d858dcd096fa46ee, type: 3}
+  - {fileID: -7797698259084971289, guid: b991501c847a0cd4db465576ae6d88f4, type: 3}
+  - {fileID: -7797698259084971289, guid: 738468fd4415b44408d5ad2868dbff5d, type: 3}
   _fallbackStepDistance: 1
   _stepDistance: 2
   _randomChangeDirectionSeconds: 1.5
@@ -29,31 +31,49 @@ MonoBehaviour:
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 3
     AttackIndex: 6
-  - Mode: 3
-    Direction: {x: 0, y: 0, z: 0}
-    DistanceMultiplier: 0
-    AttackIndex: 0
-  - Mode: 0
-    Direction: {x: 90, y: 0, z: 0}
-    DistanceMultiplier: 3
-    AttackIndex: 3
-  - Mode: 0
-    Direction: {x: 25, y: 0, z: 0}
-    DistanceMultiplier: 0
-    AttackIndex: 2
-  - Mode: 1
-    Direction: {x: 25, y: 0, z: 0}
-    DistanceMultiplier: 5
-    AttackIndex: 7
-  - Mode: 1
-    Direction: {x: 25, y: 0, z: 0}
-    DistanceMultiplier: 0
-    AttackIndex: 0
-  - Mode: 3
-    Direction: {x: 25, y: 0, z: 0}
-    DistanceMultiplier: 3
-    AttackIndex: 4
+    AttackIndices: 07000000
   - Mode: 0
     Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 2
     AttackIndex: 1
+    AttackIndices: 08000000
+  - Mode: 3
+    Direction: {x: 0, y: 0, z: 0}
+    DistanceMultiplier: 0
+    AttackIndex: 0
+    AttackIndices: 
+  - Mode: 0
+    Direction: {x: 90, y: 0, z: 0}
+    DistanceMultiplier: 3
+    AttackIndex: 3
+    AttackIndices: 
+  - Mode: 0
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 0
+    AttackIndex: 2
+    AttackIndices: 
+  - Mode: 1
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 5
+    AttackIndex: 7
+    AttackIndices: 
+  - Mode: 1
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 0
+    AttackIndex: 0
+    AttackIndices: 
+  - Mode: 0
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 2
+    AttackIndex: 5
+    AttackIndices: 
+  - Mode: 3
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 3
+    AttackIndex: 4
+    AttackIndices: 
+  - Mode: 0
+    Direction: {x: 25, y: 0, z: 0}
+    DistanceMultiplier: 2
+    AttackIndex: 1
+    AttackIndices: 

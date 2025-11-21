@@ -39,10 +39,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         private ArenaPosReference _arenaRef;
         private INaraController _naraController;
 
+		private static bool? _nextTelegraphDisplacementEnabled = null;
+		private bool _telegraphDisplacementEnabled = true;
+
         private static bool? _nextTelegraphPushMode = null;
         private static bool _globalFallbackPushMode = true;
         private static Func<bool> _isPushProvider = null;
 
+		public static void PrimeNextTelegraphDisplacementEnabled(bool enabled) => _nextTelegraphDisplacementEnabled = enabled;
         public static void PrimeNextTelegraphPushMode(bool isPush) => _nextTelegraphPushMode = isPush;
         public static void SetGlobalFallbackPushMode(bool isPushAsDefault) => _globalFallbackPushMode = isPushAsDefault;
         public static void ConfigurePushProvider(Func<bool> provider) => _isPushProvider = provider;
@@ -97,14 +101,21 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         {
             _parentTransform = parentTransform;
             _arenaRef = Object.FindFirstObjectByType<ArenaPosReference>(FindObjectsInactive.Exclude);
+
+			if (_nextTelegraphDisplacementEnabled.HasValue)
+			{
+				_telegraphDisplacementEnabled = _nextTelegraphDisplacementEnabled.Value;
+				_nextTelegraphDisplacementEnabled = null;
+			}
+
             _isPushMode = ResolveInitialPushMode();
             _hasPushFrozen = true;
 
             _naraController = _arenaRef != null ? _arenaRef.NaraController : null;
 
             int n = Mathf.Max(1, _params.featherCount);
-            _views = new FeatherSubView[n];
-            _specialIndex = UnityEngine.Random.Range(0, n);
+			_views = new FeatherSubView[n];
+			_specialIndex = _telegraphDisplacementEnabled ? UnityEngine.Random.Range(0, n) : -1;
 
             for (int i = 0; i < n; i++)
             {
@@ -123,29 +134,36 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 v.Line.useWorldSpace = true;
                 v.Line.loop = true;
                 v.Line.widthMultiplier = 0.1f;
-                v.Line.startColor = (i == _specialIndex) ? Color.red : Color.yellow;
+				v.Line.startColor = (i == _specialIndex) ? Color.red : Color.yellow;
                 v.Line.endColor = v.Line.startColor;
 
                 v.MeshRenderer.material = new Material(Shader.Find("Sprites/Default"))
                 {
-                    color = (i == _specialIndex) ? new Color(1f, 0f, 0f, 0.2f) : new Color(1f, 1f, 0f, 0.2f)
+					color = (i == _specialIndex) ? new Color(1f, 0f, 0f, 0.2f) : new Color(1f, 1f, 0f, 0.2f)
                 };
                 v.MeshFilter.sharedMesh = v.Mesh;
 
                 _views[i] = v;
             }
 
-            var arrowGO = new GameObject("FeatherDirectionArrow_Global");
-            arrowGO.transform.SetParent(parentTransform, false);
-            _singleArrow = arrowGO.AddComponent<LineRenderer>();
-            _singleArrow.material = new Material(Shader.Find("Sprites/Default"));
-            _singleArrow.useWorldSpace = true;
-            _singleArrow.loop = false;
-            _singleArrow.widthMultiplier = 0.08f;
-            _singleArrow.enabled = true;
+			if (_telegraphDisplacementEnabled)
+			{
+				var arrowGO = new GameObject("FeatherDirectionArrow_Global");
+				arrowGO.transform.SetParent(parentTransform, false);
+				_singleArrow = arrowGO.AddComponent<LineRenderer>();
+				_singleArrow.material = new Material(Shader.Find("Sprites/Default"));
+				_singleArrow.useWorldSpace = true;
+				_singleArrow.loop = false;
+				_singleArrow.widthMultiplier = 0.08f;
+				_singleArrow.enabled = true;
+			}
 
-            UpdateTelegraphGeometryAtCenter(parentTransform.position);
-            FreezeSpecialAxis(parentTransform.position);
+			UpdateTelegraphGeometryAtCenter(parentTransform.position);
+			// Apenas o ataque habilitado para deslocamento deve fixar eixo/posições globais
+			if (_telegraphDisplacementEnabled)
+			{
+				FreezeSpecialAxis(parentTransform.position);
+			}
             _updateSvc?.RegisterUpdatable(this);
         }
 
@@ -282,8 +300,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             }
         }
 
-        private void FreezeSpecialAxis(Vector3 center)
+		private void FreezeSpecialAxis(Vector3 center)
         {
+			// Se o telegraph de deslocamento estiver desabilitado ou não há faixa especial, não fixe eixo global
+			if (!_telegraphDisplacementEnabled) return;
+			if (_views == null || _views.Length == 0) return;
+			if (_specialIndex < 0 || _specialIndex >= _views.Length) return;
+
             float spacing = Mathf.Max(0.1f, _params.margin);
             float specialOffset = (_specialIndex - (_views.Length - 1) * 0.5f) * spacing;
 
@@ -332,8 +355,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             CurrentSpecialAxis = _axisUnit;
             CurrentStripWidth = _stripWidth;
 
-            var playerWorld = ResolvePlayerWorldPosition();
-            UpdateSingleArrow(playerWorld);
+			var playerWorld = ResolvePlayerWorldPosition();
+			if (_telegraphDisplacementEnabled && _singleArrow != null) UpdateSingleArrow(playerWorld);
         }
 
         private Vector3 ResolvePlayerWorldPosition()
@@ -579,12 +602,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
         public void ManagedUpdate()
         {
-            if (_singleArrow == null) return;
+			if (_singleArrow == null) return;
             if (_views == null || _views.Length == 0) return;
             if (_axisUnit.sqrMagnitude < 1e-8f) return;
 
             var playerWorld = ResolvePlayerWorldPosition();
-            UpdateSingleArrow(playerWorld);
+			if (_telegraphDisplacementEnabled) UpdateSingleArrow(playerWorld);
         }
 
         private int GetDebuffStacks()
@@ -595,8 +618,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             return 0;
         }
 
-        private void UpdateSingleArrow(Vector3 playerWorld)
+		private void UpdateSingleArrow(Vector3 playerWorld)
         {
+			if (_singleArrow == null) return;
             Vector3 v = playerWorld - _sStart; v.y = 0f;
             float t = Vector3.Dot(v, _axisUnit);
             Vector3 proj = _sStart + _axisUnit * t; proj.y = playerWorld.y;

@@ -14,7 +14,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             public TurnMoveMode Mode;
             public Vector3 Direction;
             public float DistanceMultiplier;
-            public int AttackIndex;
+			public int AttackIndex; // legado: usado se AttackIndices estiver vazio
+			public int[] AttackIndices; // novo: múltiplos ataques preparados para o mesmo ciclo
         }
 
         [Header("Available Attacks")] 

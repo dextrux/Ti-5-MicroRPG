@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8405276298576576047}
   - component: {fileID: 7593087776394567474}
   m_Layer: 0
-  m_Name: MKL_FenceLarge
+  m_Name: MKL_StairFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3116314345859208727}
-  m_Mesh: {fileID: 5902333426847604988, guid: dc883cbac24c7e84d82571c2b3e34362, type: 3}
+  m_Mesh: {fileID: -2469584576701489841, guid: b2ee4b3f3b9bf8a409a8bf681486e701, type: 3}
 --- !u!23 &7593087776394567474
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 5080099541740896360}
   - component: {fileID: 6751507263024888012}
   m_Layer: 0
-  m_Name: MKL_FenceLarge
+  m_Name: MKL_StairFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,5 +139,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.0000005, y: 1.2375282, z: 0.2797718}
-  m_Center: {x: 0.023644269, y: 0.6221444, z: 0.001960434}
+  m_Size: {x: 0.14435136, y: 1.614633, z: 2.0030885}
+  m_Center: {x: -0.0010799766, y: 0.81514996, z: -0.8638077}

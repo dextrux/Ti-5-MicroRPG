@@ -136,6 +136,18 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraView.SetPosition();
         }
 
+        //Funcao pra setar o raio para zero. Isso zera a movimentacao
+        public void CancelMovement()
+        {
+            _naraMovementController.SetRadiusToZero();
+            _naraView.SetNaraRadiusView(0);
+        }
+
+        public int GetNumberDebuffs()
+        {
+            return _debuffStacks;
+        }
+
         #region IEffectable Methods
 
         public Transform GetReferenceTransform() {
@@ -261,5 +273,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public LineRenderer GetPointLineRenderer() {
             return _naraView.CastLineRenderer;
         }
+
+        
     }
 }

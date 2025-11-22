@@ -7,6 +7,7 @@ using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Core;
 using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Shared;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.Services.UpdateService;
+using Logic.Scripts.GameDomain.MVC.Nara;
 using Object = UnityEngine.Object;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
@@ -29,11 +30,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         private bool _isPushMode = true;
         private bool _hasPushFrozen = false;
         private bool? _ctorIsPush = null;
+
         private LineRenderer _singleArrow;
         private Vector3 _sStart, _sEnd, _axisUnit;
         private float _stripWidth;
+
         private Transform _parentTransform;
         private ArenaPosReference _arenaRef;
+        private INaraController _naraController;
 
         private static bool? _nextTelegraphPushMode = null;
         private static bool _globalFallbackPushMode = true;
@@ -43,7 +47,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static void SetGlobalFallbackPushMode(bool isPushAsDefault) => _globalFallbackPushMode = isPushAsDefault;
         public static void ConfigurePushProvider(Func<bool> provider) => _isPushProvider = provider;
 
-        public static Func<int> GetPlayerDebuffStacks;
         public static Vector3 CurrentSpecialStart;
         public static Vector3 CurrentSpecialEnd;
         public static Vector3 CurrentSpecialAxis;
@@ -96,6 +99,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             _arenaRef = Object.FindFirstObjectByType<ArenaPosReference>(FindObjectsInactive.Exclude);
             _isPushMode = ResolveInitialPushMode();
             _hasPushFrozen = true;
+
+            _naraController = _arenaRef != null ? _arenaRef.NaraController : null;
 
             int n = Mathf.Max(1, _params.featherCount);
             _views = new FeatherSubView[n];
@@ -233,14 +238,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                             int k = i / 2;
                             float offX = (k - (nX - 1) * 0.5f) * spacing;
                             start = new Vector3(center.x - 100f, center.y, center.z + offX);
-                            end = new Vector3(center.x + 100f, center.y, center.z + offX);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offX);
                         }
                         else
                         {
                             int k = (i - 1) / 2;
                             float offZ = (k - (nZ - 1) * 0.5f) * spacing;
                             start = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                            end = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                            end   = new Vector3(center.x + offZ, center.y, center.z + 100f);
                         }
                         break;
                     }
@@ -249,7 +254,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                        end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
                         break;
                     }
                 }
@@ -285,12 +290,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             if (_params.axisMode == FeatherAxisMode.X)
             {
                 _sStart = new Vector3(center.x - 100f, center.y, center.z + specialOffset);
-                _sEnd = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
+                _sEnd   = new Vector3(center.x + 100f, center.y, center.z + specialOffset);
             }
             else if (_params.axisMode == FeatherAxisMode.Z)
             {
                 _sStart = new Vector3(center.x + specialOffset, center.y, center.z - 100f);
-                _sEnd = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
+                _sEnd   = new Vector3(center.x + specialOffset, center.y, center.z + 100f);
             }
             else if (_params.axisMode == FeatherAxisMode.XZ)
             {
@@ -301,20 +306,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     int k = _specialIndex / 2;
                     float offX = (k - (nX - 1) * 0.5f) * spacing;
                     _sStart = new Vector3(center.x - 100f, center.y, center.z + offX);
-                    _sEnd = new Vector3(center.x + 100f, center.y, center.z + offX);
+                    _sEnd   = new Vector3(center.x + 100f, center.y, center.z + offX);
                 }
                 else
                 {
                     int k = (_specialIndex - 1) / 2;
                     float offZ = (k - (nZ - 1) * 0.5f) * spacing;
                     _sStart = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                    _sEnd = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                    _sEnd   = new Vector3(center.x + offZ, center.y, center.z + 100f);
                 }
             }
             else
             {
                 _sStart = new Vector3(center.x - 100f, center.y, center.z - 100f + specialOffset);
-                _sEnd = new Vector3(center.x + 100f, center.y, center.z + 100f + specialOffset);
+                _sEnd   = new Vector3(center.x + 100f, center.y, center.z + 100f + specialOffset);
             }
 
             _axisUnit = (_sEnd - _sStart);
@@ -359,14 +364,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                        end = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + offset);
                         break;
                     }
                     case FeatherAxisMode.Z:
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                        end = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        end   = new Vector3(center.x + offset, center.y, center.z + 100f);
                         break;
                     }
                     case FeatherAxisMode.XZ:
@@ -376,16 +381,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         if ((i % 2) == 0)
                         {
                             int k = i / 2;
-                            float offX = (k - (nX - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offX);
-                            end = new Vector3(center.x + 100f, center.y, center.z + offX);
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
                         }
                         else
                         {
                             int k = (i - 1) / 2;
-                            float offZ = (k - (nZ - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                            end = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
                         }
                         break;
                     }
@@ -394,7 +399,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                        end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
                         break;
                     }
                 }
@@ -447,9 +452,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
         public IEnumerator ExecuteEffects(List<AbilityEffect> effects, ArenaPosReference arenaReference, Transform originTransform, IEffectable caster)
         {
-            if (effects == null || effects.Count == 0) { yield break; }
+            if (effects == null || effects.Count == 0) yield break;
             IEffectable target = arenaReference.NaraController as IEffectable;
-            if (target == null) { yield break; }
+            if (target == null) yield break;
 
             Vector3 center = arenaReference != null ? arenaReference.transform.position : originTransform.position;
             float spacing = Mathf.Max(0.1f, _params.margin);
@@ -482,7 +487,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 {
                     if (fx1 is IForceScaledEffect scalable1)
                     {
-                        int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
+                        int stacks = GetDebuffStacks();
                         float distMeters = PerpendicularDistanceToLineXZ(
                             arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition()),
                             _sStart, _sEnd);
@@ -510,14 +515,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z + offset);
-                        end = new Vector3(center.x + 100f, center.y, center.z + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + offset);
                         break;
                     }
                     case FeatherAxisMode.Z:
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x + offset, center.y, center.z - 100f);
-                        end = new Vector3(center.x + offset, center.y, center.z + 100f);
+                        end   = new Vector3(center.x + offset, center.y, center.z + 100f);
                         break;
                     }
                     case FeatherAxisMode.XZ:
@@ -527,16 +532,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         if ((i % 2) == 0)
                         {
                             int k = i / 2;
-                            float offX = (k - (nX - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x - 100f, center.y, center.z + offX);
-                            end = new Vector3(center.x + 100f, center.y, center.z + offX);
+                            float offset = (k - (nX - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x - 100f, center.y, center.z + offset);
+                            end   = new Vector3(center.x + 100f, center.y, center.z + offset);
                         }
                         else
                         {
                             int k = (i - 1) / 2;
-                            float offZ = (k - (nZ - 1) * 0.5f) * spacing;
-                            start = new Vector3(center.x + offZ, center.y, center.z - 100f);
-                            end = new Vector3(center.x + offZ, center.y, center.z + 100f);
+                            float offset = (k - (nZ - 1) * 0.5f) * spacing;
+                            start = new Vector3(center.x + offset, center.y, center.z - 100f);
+                            end   = new Vector3(center.x + offset, center.y, center.z + 100f);
                         }
                         break;
                     }
@@ -545,7 +550,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     {
                         float offset = (i - (n - 1) * 0.5f) * spacing;
                         start = new Vector3(center.x - 100f, center.y, center.z - 100f + offset);
-                        end = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
+                        end   = new Vector3(center.x + 100f, center.y, center.z + 100f + offset);
                         break;
                     }
                 }
@@ -559,12 +564,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                         AbilityEffect fx = effects[ei];
                         if (fx is IForceScaledEffect scalable)
                         {
-                            int stacks = GetPlayerDebuffStacks != null ? GetPlayerDebuffStacks() : 0;
-                            float distMeters = PerpendicularDistanceToLineXZ(
+                            int stacks2 = GetDebuffStacks();
+                            float distMeters2 = PerpendicularDistanceToLineXZ(
                                 arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition()),
                                 _sStart, _sEnd);
-                            int distMul = Mathf.RoundToInt(distMeters);
-                            scalable.SetForceScalers(stacks, distMul);
+                            int distMul2 = Mathf.RoundToInt(distMeters2);
+                            scalable.SetForceScalers(stacks2, distMul2);
                         }
                         fx?.Execute(caster, target);
                     }
@@ -582,6 +587,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             UpdateSingleArrow(playerWorld);
         }
 
+        private int GetDebuffStacks()
+        {
+            if (_arenaRef == null) return 0;
+            var ic = _arenaRef.NaraController;
+            if (ic is NaraController concrete) return concrete.GetNumberDebuffs();
+            return 0;
+        }
+
         private void UpdateSingleArrow(Vector3 playerWorld)
         {
             Vector3 v = playerWorld - _sStart; v.y = 0f;
@@ -590,10 +603,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
             Vector3 perp = proj - new Vector3(playerWorld.x, playerWorld.y, playerWorld.z);
             perp.y = 0f;
-            if (perp.sqrMagnitude < 1e-6f)
-            {
-                perp = new Vector3(-_axisUnit.z, 0f, _axisUnit.x);
-            }
+            if (perp.sqrMagnitude < 1e-6f) perp = new Vector3(-_axisUnit.z, 0f, _axisUnit.x);
 
             Vector3 dir = (_isPushMode ? -perp : perp).normalized;
 
@@ -611,7 +621,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             Vector3 leftWing = tip - dir * headLen + side * headHalfW;
             Vector3 rightWing = tip - dir * headLen - side * headHalfW;
 
-            Color c = _isPushMode ? new Color(1f, 0.35f, 0.35f, 1f) : new Color(0.35f, 0.7f, 1f, 1f);
+            int stacks = GetDebuffStacks();
+            float tColor = Mathf.Clamp01(stacks / 10f);
+            Color c = Color.Lerp(Color.green, Color.red, tColor);
+
             _singleArrow.startColor = c;
             _singleArrow.endColor = c;
 

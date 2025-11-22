@@ -1,16 +1,17 @@
 using Logic.Scripts.Core.Audio;
 using Logic.Scripts.Core.Mvc.LoadingScreen;
+using Logic.Scripts.Core.Mvc.UICamera;
+using Logic.Scripts.Core.Mvc.WorldCamera;
+using Logic.Scripts.Services.AddressablesLoader;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.InitiatorInvokerService;
 using Logic.Scripts.Services.Logger;
+using Logic.Scripts.Services.ResourcesLoaderService;
+using Logic.Scripts.Services.StateMachineService;
 using Logic.Scripts.Services.UpdateService;
-using Logic.Scripts.Core.Mvc.UICamera;
 using UnityEngine;
 using Zenject;
-using Logic.Scripts.Services.StateMachineService;
-using Logic.Scripts.Services.ResourcesLoaderService;
-using Logic.Scripts.Core.Mvc.WorldCamera;
 
 public class CoreInstaler : MonoInstaller
 {
@@ -24,6 +25,7 @@ public class CoreInstaler : MonoInstaller
     public override void InstallBindings() {
         Container.BindInterfacesTo<UnityLogger>().AsSingle().NonLazy();
         Container.BindInterfacesTo<SceneLoaderService>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<AddressablesLoaderService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<ResourcesLoaderService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<StateMachineService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<UpdateSubscriptionService>().FromInstance(_updateSubscriptionService).AsSingle().NonLazy();

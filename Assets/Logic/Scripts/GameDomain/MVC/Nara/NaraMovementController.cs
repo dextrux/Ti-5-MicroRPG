@@ -165,6 +165,11 @@ public class NaraMovementController : IMovement, IFixedUpdatable
         cam = camera;
     }
 
+    public void SetRadiusToZero()
+    {
+        movementRadius = 0;
+    }
+
     public void ManagedFixedUpdate() {
         Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
         Move(dir, MoveSpeed, RotationSpeed);

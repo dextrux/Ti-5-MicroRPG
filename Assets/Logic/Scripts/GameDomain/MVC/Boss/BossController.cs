@@ -11,6 +11,7 @@ using Object = UnityEngine.Object;
 using Logic.Scripts.GameDomain.MVC.Ui;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss {
+    [Serializable]
     public class BossController : IBossController, IFixedUpdatable, IInitializable, IEffectable {
         private readonly IUpdateSubscriptionService _updateSubscriptionService;
         private readonly IAudioService _audioService;
@@ -368,7 +369,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _gamePlayUiController.OnActualBossHealthChange(_bossData.ActualHealth);
             _gamePlayUiController.OnActualBossLifeChange(_bossData.ActualHealth);
             _gamePlayUiController.OnPreviewBossHealthChange(_bossData.ActualHealth);
-            if (_bossData.ActualHealth <= 0) _gamePlayUiController.TempShowWinScreen();
         }
 
         public void Heal(int amount) {
@@ -429,7 +429,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                 _bossAbilityController.SetBehavior(_activeBehavior);
                 _executedTurnsCount = 0;
                 _pendingCasts?.Clear();
-            } else if (newBehavior == null) {
+            }
+            else if (newBehavior == null) {
                 Debug.LogWarning($"[Boss] Phase '{newName}' has no Behavior assigned. Keeping current behavior.");
             }
             PlayPhaseTransitionAnimation();
@@ -448,8 +449,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             return true;
         }
 
-        private BossBehaviorSO GetBehaviorForPhaseIndex(int index)
-        {
+        private BossBehaviorSO GetBehaviorForPhaseIndex(int index) {
             if (_bossPhases == null) return null;
             var phases = _bossPhases.Phases;
             if (phases == null || index < 0 || index >= phases.Length) return null;

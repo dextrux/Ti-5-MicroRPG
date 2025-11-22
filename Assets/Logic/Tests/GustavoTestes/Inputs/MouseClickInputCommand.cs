@@ -11,10 +11,13 @@ public class MouseClickInputCommand : BaseCommand, ICommandVoid {
     }
 
     public void Execute() {
-        _castController.UseAbility((IEffectable)_naraController);
-        if (_castController.GetCanUseAbility() == true)
-        {
-            _naraController.SetNewMovementArea();
+        if (_castController.GetCanUseAbility() == true) {
+            _castController.UseAbility((IEffectable)_naraController);
+            if (_naraController?.NaraMove is NaraTurnMovementController naraTurnMovement) {
+                naraTurnMovement.RecalculateRadiusAfterAbility();
+                naraTurnMovement.SetMovementRadiusCenter();
+                naraTurnMovement.Refresh();
+            }
             _castController.SetCanUseAbility(false);
         }
     }

@@ -14,7 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: ae405c1dcb2d1e54681e1d3f4bdf3805
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 1ebcec871c31d8443870452623c90e0f
+    m_Address: LobbyLibrary
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46e4fb9e84eb2714e853f5a2d1653e77
+    m_Address: LevelsSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e14dd5af69742b14087b42349ea185fd
+    m_Address: ArenaHocari
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 1aa2ed669703ed04f9faf7e9247f6702, type: 2}
   m_SchemaSet:

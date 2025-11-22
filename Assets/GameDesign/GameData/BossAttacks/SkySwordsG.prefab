@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7008708713626683138}
   - component: {fileID: -7797698259084971289}
   m_Layer: 0
-  m_Name: Orb
+  m_Name: SkySwordsG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,10 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd88fb69c32f73948bbae5629112d0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effects: []
-  _attackType: 3
+  _effects:
+  - rid: 2599984782535819372
+  - rid: 2599984789869297870
+  - rid: 1723426629190942869
+  _attackType: 5
+  _displacementPriority: 0
   _protean:
-    radius: 6
+    radius: 18
     angleDeg: 45
     sides: 36
   _wingSlash:
@@ -55,8 +59,8 @@ MonoBehaviour:
     angleDeg: 215
     sides: 48
   _feather:
-    featherCount: 8
-    axisMode: 1
+    featherCount: 3
+    axisMode: 2
     width: 2
     margin: 5
     forceBase: 2
@@ -64,13 +68,39 @@ MonoBehaviour:
     forcePerDebuff: 0.5
   _featherIsPull: 0
   _orb:
-    prefab: {fileID: 7907701672196164393, guid: b324b43eefa456c489d7c248777254b6, type: 3}
+    prefab: {fileID: 0}
     moveStepMeters: 6
     growStepMeters: 6
-    initialRadius: 5
-    maxRadiusCap: 30
+    initialRadius: 4
+    maxRadiusCap: 60
     baseDamage: 10
     initialHp: 50
+  _skySwords:
+    radius: 6
+    ringWidth: 0.3
+  _skySwordsIsPull: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1723426629190942869
+      type: {class: GrappleEffect, ns: Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
+      data:
+        Name: 
+        Description: 
+        IsAutoCast: 0
+        _force: 2
+        _stopDistance: 1
+    - rid: 2599984782535819372
+      type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
+      data:
+        Name: 
+        Description: 
+        IsAutoCast: 0
+        amount: 10
+    - rid: 2599984789869297870
+      type: {class: AddDebuffStacksEffect, ns: Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
+      data:
+        Name: 
+        Description: 
+        IsAutoCast: 0
+        amount: 1

@@ -22,18 +22,31 @@ namespace Logic.Scripts.GameDomain.Effects
             if (target == null) return;
             if (!TryGetNaraRigidbody(target, out var rb)) return;
 
-            Vector3 axis = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis;
-            Vector3 a = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialStart;
-            Vector3 b = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialEnd;
-            axis.y = 0f; axis.Normalize();
-            Vector3 normal = new Vector3(-axis.z, 0f, axis.x).normalized;
-            Vector3 player = rb.position;
-            Vector3 ab = (b - a); ab.y = 0f;
-            float t = Mathf.Clamp01(Vector3.Dot(player - a, ab) / Mathf.Max(1e-6f, ab.sqrMagnitude));
-            Vector3 closest = a + ab * t;
-            Vector3 toLine = closest - player;
-            toLine.y = 0f;
-            float dist = toLine.magnitude;
+            Vector3 toLine;
+            float dist;
+            if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentDisplacementEnabled)
+            {
+                Vector3 center = Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentCenterWorld;
+                Vector3 player = rb.position;
+                Vector3 toCenter = center - player; toCenter.y = 0f;
+                dist = toCenter.magnitude;
+                toLine = toCenter;
+            }
+            else
+            {
+                Vector3 axis = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis;
+                Vector3 a = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialStart;
+                Vector3 b = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialEnd;
+                axis.y = 0f; axis.Normalize();
+                Vector3 normal = new Vector3(-axis.z, 0f, axis.x).normalized;
+                Vector3 player = rb.position;
+                Vector3 ab = (b - a); ab.y = 0f;
+                float t = Mathf.Clamp01(Vector3.Dot(player - a, ab) / Mathf.Max(1e-6f, ab.sqrMagnitude));
+                Vector3 closest = a + ab * t;
+                toLine = closest - player;
+                toLine.y = 0f;
+                dist = toLine.magnitude;
+            }
             if (dist <= _stopDistance + 1e-5f) return;
 
             int stacks = 0;
@@ -70,17 +83,30 @@ namespace Logic.Scripts.GameDomain.Effects
         {
             if (target == null) yield break;
             if (!TryGetNaraRigidbody(target, out var rb)) yield break;
-            Vector3 axis = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis;
-            Vector3 a = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialStart;
-            Vector3 b = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialEnd;
-            axis.y = 0f; axis.Normalize();
-            Vector3 player = rb.position;
-            Vector3 ab = (b - a); ab.y = 0f;
-            float t = Mathf.Clamp01(Vector3.Dot(player - a, ab) / Mathf.Max(1e-6f, ab.sqrMagnitude));
-            Vector3 closest = a + ab * t;
-            Vector3 toLine = closest - player;
-            toLine.y = 0f;
-            float dist = toLine.magnitude;
+            Vector3 toLine;
+            float dist;
+            if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentDisplacementEnabled)
+            {
+                Vector3 center = Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentCenterWorld;
+                Vector3 player = rb.position;
+                Vector3 toCenter = center - player; toCenter.y = 0f;
+                dist = toCenter.magnitude;
+                toLine = toCenter;
+            }
+            else
+            {
+                Vector3 axis = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis;
+                Vector3 a = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialStart;
+                Vector3 b = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialEnd;
+                axis.y = 0f; axis.Normalize();
+                Vector3 player = rb.position;
+                Vector3 ab = (b - a); ab.y = 0f;
+                float t = Mathf.Clamp01(Vector3.Dot(player - a, ab) / Mathf.Max(1e-6f, ab.sqrMagnitude));
+                Vector3 closest = a + ab * t;
+                toLine = closest - player;
+                toLine.y = 0f;
+                dist = toLine.magnitude;
+            }
             int stacks = 0;
             if (target is NaraController nc) stacks = Mathf.Clamp(nc.GetDebuffStacks(), 0, 5);
             float stacksFactor = 1f + stacks * 0.2f;

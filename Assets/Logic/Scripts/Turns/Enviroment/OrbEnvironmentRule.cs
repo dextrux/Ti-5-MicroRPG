@@ -2,7 +2,7 @@ using Logic.Scripts.GameDomain.MVC.Environment.Orb;
 
 namespace Logic.Scripts.Turns
 {
-    public class OrbEnvironmentRule : IEnviromentRule, IEnviromentAsyncRule
+	public class OrbEnvironmentRule : IEnvironmentCommand, IEnvironmentAsyncCommand
     {
         public OrbEnvironmentRule() {}
         public void Execute()
@@ -19,7 +19,7 @@ namespace Logic.Scripts.Turns
             }
         }
 
-        public async System.Threading.Tasks.Task ExecuteAsync()
+		public async System.Threading.Tasks.Task ExecuteAsync()
         {
             var alt = OrbController.Instances;
             var tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>(alt.Count);

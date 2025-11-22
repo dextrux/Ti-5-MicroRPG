@@ -83,12 +83,12 @@ namespace Logic.Scripts.Turns {
         private void StartPlayerPhase() {
             _actionPointsService.GainTurnPoints();
             _phase = TurnPhase.PlayerAct;
-            _turnMovement.ResetMovementArea();
+            //_turnMovement.ResetMovementArea();
             _turnStateService.AdvanceTurn(_turnNumber, _phase);
             LogService.Log($"Turno {_turnNumber} - Fase: PlayerAct");
             _waitingPlayer = true;
             _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.RecenterNaraMovementOnPlayerTurnCommand>().Execute();
-            _turnMovement?.LineHandlerController.SetVisible(true);
+            //_turnMovement?.LineHandlerController.SetVisible(true);
             _turnStateService.RequestPlayerAction();
         }
 
@@ -120,7 +120,7 @@ namespace Logic.Scripts.Turns {
             _phase = TurnPhase.EnviromentAct;
             _turnStateService.AdvanceTurn(_turnNumber, _phase);
             LogService.Log($"Turno {_turnNumber} - Fase: EnviromentAct");
-            _turnMovement?.LineHandlerController.SetVisible(false);
+            //_turnMovement?.LineHandlerController.SetVisible(false);
             await _enviromentActionService.ExecuteEnviromentTurnAsync();
             OnEnviromentCompleted();
         }

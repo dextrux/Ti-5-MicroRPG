@@ -16,6 +16,11 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
             return _rigidbody;
         }
 
+        public Camera GetCamera()
+        {
+            return Camera.main;
+        }
+
         public void SetMoving(bool isMoving)
         {
             if (_animator != null)

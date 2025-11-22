@@ -53,6 +53,10 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _updateSubscriptionService.RegisterFixedUpdatable(this);
         }
 
+        public void UnregisterListeners() {
+            _updateSubscriptionService.UnregisterFixedUpdatable(this);
+        }
+
         public void ManagedFixedUpdate() {
             if (_turnStateReader != null && _turnStateReader.Active && _turnStateReader.Phase == TurnPhase.PlayerAct) {
                 Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
@@ -73,14 +77,16 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _naraMovementController = movementController;
         }
 
-        public void DestroyNara() {
+        public void ResetController() {
             UnityEngine.Object.Destroy(_naraView);
             _naraData.ResetData();
             _naraMovementController = null;
+            UnregisterListeners();
         }
 
         public void InitEntryPoint() {
             _gamePlayUiController.SetPlayerValues(_naraData.ActualHealth, _naraData.PreviewHealth);
+            _naraMovementController.InitEntryPoint(_naraView.GetRigidbody(), _naraView.GetCamera());
         }
 
         public void SetPosition(Vector3 movementCenter) {

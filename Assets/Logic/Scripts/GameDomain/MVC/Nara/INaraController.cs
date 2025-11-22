@@ -7,7 +7,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         NaraMovementController NaraMove { get; }
         void InitEntryPoint();
         void CreateNara(NaraMovementController movementController);
-        void DestroyNara();
+        void ResetController();
         void RegisterListeners();
         void ManagedFixedUpdate();
         void PlayAttackType(int type);

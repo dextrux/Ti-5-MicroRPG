@@ -1,12 +1,12 @@
+using CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.StartLevel;
 using Logic.Scripts.Core.Mvc.WorldCamera;
 using Logic.Scripts.GameDomain.GameInputActions;
 using Logic.Scripts.GameDomain.MVC.Nara;
+using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
-using Logic.Scripts.Services.UpdateService;
 using System.Threading;
 using UnityEngine;
-using Logic.Scripts.GameDomain.MVC.Ui;
 
 namespace Logic.Scripts.GameDomain.Commands {
     public class StartGamePlayStateCommand : BaseCommand, ICommandAsync {
@@ -18,7 +18,6 @@ namespace Logic.Scripts.GameDomain.Commands {
         private ICommandFactory _commandFactory;
         private IWorldCameraController _worldCameraController;
         private IGameInputActionsController _gameInputActionsController;
-        private IUpdateSubscriptionService _updateSubscriptionService;
         private ICastController _castController;
 
         private GamePlayInitatorEnterData _enterData;
@@ -36,20 +35,15 @@ namespace Logic.Scripts.GameDomain.Commands {
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
-            _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
             _castController = _diContainer.Resolve<ICastController>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-            await _gameInputActionsController.WaitForAnyKeyPressed(cancellationTokenSource, true);
             _gameInputActionsController.EnableInputs();
             _gameInputActionsController.RegisterAllInputListeners();
             _naraController.InitEntryPoint();
-            //_naraController.NaraMove.InitEntryPoint(_worldCameraController.);
-            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _castController.InitEntryPoint(_naraController);
-            await Awaitable.NextFrameAsync();
-            _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute();
+            await _commandFactory.CreateCommandAsync<StartLevelCommand>().Execute(cancellationTokenSource);
         }
     }
 }

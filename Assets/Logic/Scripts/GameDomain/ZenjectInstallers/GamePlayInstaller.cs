@@ -8,6 +8,7 @@ using Zenject;
 using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.GameDomain.MVC.Echo;
+using Logic.Scripts.Services.AudioService;
 
 public class GamePlayInstaller : MonoInstaller {
 
@@ -29,6 +30,12 @@ public class GamePlayInstaller : MonoInstaller {
     public override void InstallBindings() {
         BindServices();
         BindControllers();
+
+        Container.Bind<IAudioService>()
+            .To<AudioService>()
+            .FromComponentInHierarchy()
+            .AsSingle()
+            .IfNotBound();
     }
 
     private void BindServices() {
@@ -37,7 +44,6 @@ public class GamePlayInstaller : MonoInstaller {
 
     private void BindControllers() {
         Container.BindInterfacesTo<NaraController>().AsSingle().WithArguments(_naraViewPrefab, _naraConfiguration).NonLazy();
-        //Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
         Container.BindInterfacesTo<CastController>().AsSingle().WithArguments(_skills).NonLazy();

@@ -475,13 +475,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             IEffectable target = arenaReference.NaraController as IEffectable;
             if (target == null) yield break;
 
-            EnsureAudio();
-            if (!_attackSfxPlayed)
-            {
-                _audioSvc?.PlayAudio(AudioClipType.BossAttack1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
-                _attackSfxPlayed = true;
-            }
-
             Vector3 center = arenaReference != null ? arenaReference.transform.position : originTransform.position;
             float spacing = Mathf.Max(0.1f, _params.margin);
             int n = _views != null ? _views.Length : 0;

@@ -4,6 +4,8 @@ using DG.Tweening;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Boss;
+using Logic.Scripts.Services.AudioService;
+using Zenject;
 
 namespace Logic.Scripts.GameDomain.Effects
 {
@@ -12,9 +14,16 @@ namespace Logic.Scripts.GameDomain.Effects
     {
         [Min(0f)] [SerializeField] private float _force = 2f;
         [Min(0f)] [SerializeField] private float _stopDistance = 1f;
-        //[Min(0f)] [SerializeField] private float _speed = 6f;
         [SerializeField] private static int _stacksMul = 0;
         private int _distanceMul;
+
+        private static IAudioService _audio;
+        private static IAudioService Audio => _audio ??= TryResolveAudio();
+        private static IAudioService TryResolveAudio()
+        {
+            try { return ProjectContext.Instance.Container.Resolve<IAudioService>(); }
+            catch { return null; }
+        }
 
         public override void Execute(IEffectable caster, IEffectable target)
         {
@@ -26,7 +35,6 @@ namespace Logic.Scripts.GameDomain.Effects
             Vector3 a = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialStart;
             Vector3 b = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialEnd;
             axis.y = 0f; axis.Normalize();
-            Vector3 normal = new Vector3(-axis.z, 0f, axis.x).normalized;
             Vector3 player = rb.position;
             Vector3 ab = (b - a); ab.y = 0f;
             float t = Mathf.Clamp01(Vector3.Dot(player - a, ab) / Mathf.Max(1e-6f, ab.sqrMagnitude));
@@ -45,15 +53,16 @@ namespace Logic.Scripts.GameDomain.Effects
             distanceFactor = Mathf.Clamp(distanceFactor, 0.5f, 3.0f);
             float maxForce = Mathf.Max(0f, _force * stacksFactor * distanceFactor);
             float step = Mathf.Min(maxForce, Mathf.Max(0f, dist - _stopDistance));
-            Debug.Log($"GrappleEffect calc -> base={_force:0.###} stacks={stacks} stacksFactor={stacksFactor:0.00} distM={dMeters:0.###}/{maxMeters:0.###} distFactor={distanceFactor:0.00} step={step:0.###}");
             if (step <= 1e-6f) return;
+
+            Audio?.PlayAudio(AudioClipType.StrongWindTornado1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
 
             Vector3 dir = toLine / dist;
             Vector3 start = rb.position;
             Vector3 end = start + dir * step;
             end.y = start.y;
 
-            float duration = 0.45f; // a little less than the handler's 0.5s wait
+            float duration = 0.45f;
             DOTween.Kill(rb, complete: false);
             DOVirtual.Float(0f, 1f, duration, v =>
             {
@@ -70,6 +79,7 @@ namespace Logic.Scripts.GameDomain.Effects
         {
             if (target == null) yield break;
             if (!TryGetNaraRigidbody(target, out var rb)) yield break;
+
             Vector3 axis = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis;
             Vector3 a = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialStart;
             Vector3 b = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialEnd;
@@ -81,6 +91,7 @@ namespace Logic.Scripts.GameDomain.Effects
             Vector3 toLine = closest - player;
             toLine.y = 0f;
             float dist = toLine.magnitude;
+
             int stacks = 0;
             if (target is NaraController nc) stacks = Mathf.Clamp(nc.GetDebuffStacks(), 0, 5);
             float stacksFactor = 1f + stacks * 0.2f;
@@ -91,11 +102,13 @@ namespace Logic.Scripts.GameDomain.Effects
             float maxForce = Mathf.Max(0f, _force * stacksFactor * distanceFactor);
             float step = Mathf.Min(maxForce, Mathf.Max(0f, dist - _stopDistance));
             if (step <= 1e-6f) yield break;
+
+            Audio?.PlayAudio(AudioClipType.StrongWindTornado1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
+
             Vector3 dir = toLine / Mathf.Max(1e-6f, dist);
             Vector3 start = rb.position;
             Vector3 end = start + dir * step;
             float duration = 0.45f;
-            Debug.Log($"GrappleEffect calc (routine) -> base={_force:0.###} stacks={stacks} stacksFactor={stacksFactor:0.00} distM={dMeters:0.###}/{maxMeters:0.###} distFactor={distanceFactor:0.00} step={step:0.###}");
             float elapsed = 0f;
             while (elapsed < duration)
             {
@@ -105,15 +118,9 @@ namespace Logic.Scripts.GameDomain.Effects
                 rb.MovePosition(new Vector3(p.x, start.y, p.z));
                 yield return new WaitForFixedUpdate();
             }
-
-            
         }
 
-        public void SetForceScalers(int stacksMultiplier, int distanceMultiplier)
-        {
-            //_stacksMul = stacksMultiplier;
-            _distanceMul = distanceMultiplier;
-        }
+        public void SetForceScalers(int stacksMultiplier, int distanceMultiplier) { _distanceMul = distanceMultiplier; }
 
         private static bool TryGetNaraRigidbody(IEffectable target, out Rigidbody rb)
         {
@@ -139,13 +146,9 @@ namespace Logic.Scripts.GameDomain.Effects
         {
             var bossView = UnityEngine.Object.FindFirstObjectByType<BossView>();
             if (bossView != null) return bossView.transform.position;
-
             var naraView = UnityEngine.Object.FindFirstObjectByType<NaraView>();
             if (naraView != null) return naraView.transform.position;
-
             return Vector3.zero;
         }
     }
 }
-
-

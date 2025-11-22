@@ -43,15 +43,8 @@ namespace Logic.Scripts.GameDomain.Commands {
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-            await _gameInputActionsController.WaitForAnyKeyPressed(cancellationTokenSource, true);
-            _gamePlayUiController.TempHoldScreenHide();
-            _gameInputActionsController.EnableInputs();
-            _gameInputActionsController.RegisterAllInputListeners();
-            _naraController.InitEntryPoint();
-            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
-            _castController.InitEntryPoint(_naraController);
-            await Awaitable.NextFrameAsync();
-            _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute();
+            Debug.LogWarning("LoadGameplayCommand");
+            await _commandFactory.CreateCommandAsync<LoadLevelCommand>().SetEnterData(new LoadLevelCommandData(_enterData.LevelNumberToEnter)).Execute(cancellationTokenSource);
             return;
         }
     }

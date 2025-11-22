@@ -73,7 +73,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void InitEntryPoint() {
-            CreateNara();
             _gamePlayUiController.SetPlayerValues(_naraData.ActualHealth, _naraData.PreviewHealth);
         }
 
@@ -143,7 +142,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
             _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
             if (_naraData.IsAlive()) {
-                _gamePlayUiController.TempShowLoseScreen();
                 _naraView?.PlayDeath();
             }
         }

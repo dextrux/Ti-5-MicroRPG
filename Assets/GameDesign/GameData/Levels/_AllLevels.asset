@@ -10,13 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db9b00f1f2753c04281b682212e75ebe, type: 3}
-  m_Name: LevelData
+  m_Name: _AllLevels
   m_EditorClassIdentifier: 
-  LevelAddress: 
-  LevelType:
-    rid: -2
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+  AllLevels:
+  - {fileID: 11400000, guid: 6432792ee37b1fa4c8df08dcf7b3911c, type: 2}
+  - {fileID: 11400000, guid: 0136c551ae0d9e847b48745c3a35ae02, type: 2}

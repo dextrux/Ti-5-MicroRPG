@@ -3,7 +3,7 @@ using Logic.Scripts.Services.UpdateService;
 using UnityEngine;
 
 public abstract class NaraMovementController : INaraMovementController, IFixedUpdatable {
-    protected readonly IUpdateSubscriptionService ÙpdateSubscriptionService;
+    protected readonly IUpdateSubscriptionService UpdateSubscriptionService;
     protected readonly float MoveSpeed;
     protected readonly float RotationSpeed;
 
@@ -15,7 +15,7 @@ public abstract class NaraMovementController : INaraMovementController, IFixedUp
 
     public NaraMovementController(GameInputActions inputActions, IUpdateSubscriptionService updateSubscriptionService,
         NaraConfigurationSO naraConfiguration) {
-        ÙpdateSubscriptionService = updateSubscriptionService;
+        UpdateSubscriptionService = updateSubscriptionService;
         GameInputActions = inputActions;
         MoveSpeed = naraConfiguration.MoveSpeed;
         RotationSpeed = naraConfiguration.RotationSpeed;
@@ -52,10 +52,10 @@ public abstract class NaraMovementController : INaraMovementController, IFixedUp
     }
 
     public void RegisterListeners() {
-        ÙpdateSubscriptionService.RegisterFixedUpdatable(this);
+        UpdateSubscriptionService.RegisterFixedUpdatable(this);
     }
 
     public void UnregisterListeners() {
-        ÙpdateSubscriptionService.UnregisterFixedUpdatable(this);
+        UpdateSubscriptionService.UnregisterFixedUpdatable(this);
     }
 }

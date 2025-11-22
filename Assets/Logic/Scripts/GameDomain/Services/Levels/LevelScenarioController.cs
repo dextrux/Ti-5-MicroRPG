@@ -17,9 +17,9 @@ public class LevelScenarioController : ILevelScenarioController {
 
     public async Awaitable CreateLevelScenario(int levelNumber, CancellationTokenSource cancellationTokenSource) {
         Debug.LogWarning("CreateLevelScenario is null: " + (_levelsDataService == null));
-        var trackAddress = _levelsDataService.GetLevelData(levelNumber).LevelAddress;
-        LogService.LogTopic($"Create level {levelNumber} track , track adress: {trackAddress}", LogTopicType.LevelTrack);
-        _currentLevelScenarioData = new LevelTrackData(await _levelFactory.CreateLevelTrack(trackAddress, cancellationTokenSource), trackAddress);
+        var levelAddress = _levelsDataService.GetLevelData(levelNumber).LevelAddress;
+        LogService.LogTopic($"Create level {levelNumber} track , track adress: {levelAddress}", LogTopicType.LevelTrack);
+        _currentLevelScenarioData = new LevelTrackData(await _levelFactory.CreateLevelTrack(levelAddress, cancellationTokenSource), levelAddress);
     }
 
     public void DestroyScenario(bool shouldReleaseFromMemory) {

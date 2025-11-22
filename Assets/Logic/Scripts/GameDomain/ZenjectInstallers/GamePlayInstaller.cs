@@ -34,6 +34,7 @@ public class GamePlayInstaller : MonoInstaller {
     private void BindServices() {
         Container.Bind<IGamePlayInitiator>().To<GamePlayInitiator>().AsSingle().NonLazy();
         Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
+        Container.Bind<INaraMovementControllerFactory>().To<NaraMovementControllerFactory>().AsSingle();
     }
 
     private void BindControllers() {

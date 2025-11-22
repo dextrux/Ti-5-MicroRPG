@@ -45,6 +45,7 @@ namespace Logic.Scripts.GameDomain.Commands {
             _gameInputActionsController.EnableInputs();
             _gameInputActionsController.RegisterAllInputListeners();
             _naraController.InitEntryPoint();
+            //_naraController.NaraMove.InitEntryPoint(_worldCameraController.);
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _castController.InitEntryPoint(_naraController);
             await Awaitable.NextFrameAsync();

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LevelTurnData
   m_EditorClassIdentifier: 
   levelAddress: 
+  naraLevelConfiguration: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}
   controller:
     _typeName: 
   bossConfiguration: {fileID: 11400000, guid: c53b316a57f027e498cfcd5b31cdc99d, type: 2}

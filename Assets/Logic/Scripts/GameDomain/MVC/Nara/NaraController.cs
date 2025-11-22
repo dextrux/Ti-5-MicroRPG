@@ -3,9 +3,10 @@ using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.ResourcesLoaderService;
 using Logic.Scripts.Services.UpdateService;
-using UnityEngine;
 using Logic.Scripts.Turns;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
     public class NaraController : INaraController, IFixedUpdatable, IEffectable, IEffectableAction {
@@ -43,7 +44,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _resourcesLoaderService = resourcesLoaderService;
             _naraViewPrefab = naraViewPrefab;
             _gamePlayUiController = gamePlayUiController;
-            _naraMovementController = new NaraTurnMovementController(inputActions, updateSubscriptionService, naraConfiguration);
             _gameInputActions = new global::GameInputActions();
             _gameInputActions.Enable();
             _turnStateReader = turnStateReader;
@@ -66,10 +66,17 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             }
         }
 
-        public void CreateNara() {
+        public void CreateNara(NaraMovementController movementController) {
             _naraView = Object.Instantiate(_naraViewPrefab);
             _naraData.ResetData();
             _naraView.SetMoving(false);
+            _naraMovementController = movementController;
+        }
+
+        public void DestroyNara() {
+            UnityEngine.Object.Destroy(_naraView);
+            _naraData.ResetData();
+            _naraMovementController = null;
         }
 
         public void InitEntryPoint() {

@@ -42,7 +42,6 @@ public class LevelsDataService : ILevelsDataService {
     }
 
     public LevelData GetLevelData(int levelNumber) {
-        Debug.Log("LevesData contagem: " + _levelsData.AllLevels.Length);
         return _levelsData.AllLevels[levelNumber];
     }
 }

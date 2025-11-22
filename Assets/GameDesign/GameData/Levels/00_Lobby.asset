@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 00_Lobby
   m_EditorClassIdentifier: 
   levelAddress: LobbyLibrary
+  naraLevelConfiguration: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}
   controller:
     _typeName: NaraExplorerMovementController, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null

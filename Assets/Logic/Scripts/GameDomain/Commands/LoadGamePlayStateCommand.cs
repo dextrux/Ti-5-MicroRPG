@@ -10,18 +10,10 @@ using Logic.Scripts.GameDomain.MVC.Ui;
 
 namespace Logic.Scripts.GameDomain.Commands {
     public class LoadGamePlayStateCommand : BaseCommand, ICommandAsync {
-        //To-Do depois criar o instanciamento async das fases
-
-
-        private IGamePlayUiController _gamePlayUiController;
         private IAudioService _audioService;
         private INaraController _naraController;
         //private GamePlayAudioClipsScriptableObject _gamePlayAudioClipsScriptableObject; Lista de audios espec�ficos do gameplay
         private ICommandFactory _commandFactory;
-        private IWorldCameraController _worldCameraController;
-        private IGameInputActionsController _gameInputActionsController;
-        private IUpdateSubscriptionService _updateSubscriptionService;
-        private ICastController _castController;
 
         private GamePlayInitatorEnterData _enterData;
 
@@ -33,17 +25,11 @@ namespace Logic.Scripts.GameDomain.Commands {
         public override void ResolveDependencies() {
             _audioService = _diContainer.Resolve<IAudioService>();
             //_gamePlayAudioClipsScriptableObject = _diContainer.Resolve<GamePlayAudioClipsScriptableObject>();
-            _gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
             _naraController = _diContainer.Resolve<INaraController>();
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
-            _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
-            _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
-            _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
-            _castController = _diContainer.Resolve<ICastController>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-            Debug.LogWarning("LoadGameplayCommand");
             await _commandFactory.CreateCommandAsync<LoadLevelCommand>().SetEnterData(new LoadLevelCommandData(_enterData.LevelNumberToEnter)).Execute(cancellationTokenSource);
             return;
         }

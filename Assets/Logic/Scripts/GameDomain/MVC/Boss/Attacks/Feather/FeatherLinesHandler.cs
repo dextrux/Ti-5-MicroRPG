@@ -8,6 +8,7 @@ using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Shared;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.GameDomain.MVC.Nara;
+using Logic.Scripts.Services.AudioService;
 using Object = UnityEngine.Object;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
@@ -52,6 +53,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static Vector3 CurrentSpecialAxis;
         public static float CurrentStripWidth;
 
+        private AudioService _audioSvc;
+        private bool _prepSfxPlayed;
+        private bool _attackSfxPlayed;
+
         public FeatherLinesHandler(FeatherLinesParams p, IUpdateSubscriptionService updateSubscriptionService)
         {
             _params = p;
@@ -91,6 +96,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             }
             catch { }
             return null;
+        }
+
+        private void EnsureAudio()
+        {
+            if (_audioSvc == null)
+                _audioSvc = Object.FindFirstObjectByType<AudioService>(FindObjectsInactive.Include);
         }
 
         public void PrepareTelegraph(Transform parentTransform)
@@ -146,6 +157,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
             UpdateTelegraphGeometryAtCenter(parentTransform.position);
             FreezeSpecialAxis(parentTransform.position);
+
+            EnsureAudio();
+            if (!_prepSfxPlayed)
+            {
+                _audioSvc?.PlayAudio(AudioClipType.BossPrepAttack1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
+                _prepSfxPlayed = true;
+            }
+
             _updateSvc?.RegisterUpdatable(this);
         }
 
@@ -456,6 +475,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             IEffectable target = arenaReference.NaraController as IEffectable;
             if (target == null) yield break;
 
+            EnsureAudio();
+            if (!_attackSfxPlayed)
+            {
+                _audioSvc?.PlayAudio(AudioClipType.BossAttack1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
+                _attackSfxPlayed = true;
+            }
+
             Vector3 center = arenaReference != null ? arenaReference.transform.position : originTransform.position;
             float spacing = Mathf.Max(0.1f, _params.margin);
             int n = _views != null ? _views.Length : 0;
@@ -657,6 +683,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             }
 
             _views = null;
+            _prepSfxPlayed = false;
+            _attackSfxPlayed = false;
         }
     }
 }

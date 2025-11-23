@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _effects: []
   _attackType: 3
+  _displacementPriority: 0
   _protean:
     radius: 6
     angleDeg: 45
@@ -70,7 +71,11 @@ MonoBehaviour:
     initialRadius: 5
     maxRadiusCap: 30
     baseDamage: 10
-    initialHp: 50
+    initialHp: 5
+  _skySwords:
+    radius: 4.5
+    ringWidth: 0.3
+  _skySwordsIsPull: 0
   references:
     version: 2
     RefIds: []

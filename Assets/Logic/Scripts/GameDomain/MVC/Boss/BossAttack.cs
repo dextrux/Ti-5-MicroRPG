@@ -62,6 +62,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         private bool _executing;
         private System.Threading.Tasks.TaskCompletionSource<bool> _executeTcs;
         private ICommandFactory _commandFactory;
+		[Zenject.Inject(Optional = true)] private Logic.Scripts.GameDomain.MVC.Boss.Telegraph.ITelegraphMaterialProvider _telegraphProvider;
 
 		public int GetDisplacementPriority() { return _displacementPriority; }
 		public void SetDisplacementEnabled(bool enabled) { _displacementEnabled = enabled; }
@@ -262,23 +263,31 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 
         private void SelectAndBuildHandler()
         {
+			Material areaMat = ResolveTelegraphMaterial();
+			UnityEngine.Debug.Log($"[BossAttack] Using telegraph material: {(areaMat != null ? areaMat.name : "NULL")} | attack={name} type={_attackType}");
             switch (_attackType)
             {
                 case AttackType.ProteanCones:
                 {
                     float[] yaws = new float[] { 0f, 90f, 180f, 270f };
-                    _handler = new ConeAttackHandler(_protean.radius, _protean.angleDeg, _protean.sides, yaws);
+					_handler = new ConeAttackHandler(_protean.radius, _protean.angleDeg, _protean.sides, yaws, areaMat);
                     break;
                 }
                 case AttackType.FeatherLines:
                 {
-                    _handler = new FeatherLinesHandler(_feather, _featherIsPull);
+					// Base material (normal) e material de deslocamento (grapple/knockback)
+					Material baseMat = ResolveTelegraphMaterialFor(false);
+					Material dispMat = ResolveTelegraphMaterialFor(true);
+					_handler = new FeatherLinesHandler(_feather, _featherIsPull, baseMat, dispMat);
                     break;
                 }
                 case AttackType.WingSlash:
                 {
-                    float[] yaws = new float[] { 0f }; // frente do boss
-                    _handler = new ConeAttackHandler(_wingSlash.radius, _wingSlash.angleDeg, _wingSlash.sides, yaws);
+					// Ângulo: permitir sinais. 180 => cobre lado esquerdo; -180 => cobre lado direito.
+					float angleAbs = Mathf.Abs(_wingSlash.angleDeg);
+					float yawBase = (_wingSlash.angleDeg < 0f) ? 90f : -90f; // negativo -> direita; positivo -> esquerda
+					float[] yaws = new float[] { yawBase };
+					_handler = new ConeAttackHandler(_wingSlash.radius, angleAbs, _wingSlash.sides, yaws, areaMat);
                     break;
                 }
                 case AttackType.Orb:
@@ -292,7 +301,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 						_skySwords.radius,
 						_skySwords.ringWidth,
 						_skySwordsIsPull,
-						_telegraphDisplacementEnabled);
+						_telegraphDisplacementEnabled,
+						areaMat);
 					break;
 				}
                 default:
@@ -302,6 +312,34 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
                 }
             }
         }
+
+		private Material ResolveTelegraphMaterial()
+		{
+			// Provider por injeção
+			if (_telegraphProvider != null)
+			{
+				return _telegraphProvider.GetMaterial(_telegraphDisplacementEnabled, _effects);
+			}
+			// Provider via serviço estático (para MonoBehaviours não injetados)
+			if (Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider != null)
+			{
+				return Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider
+					.GetMaterial(_telegraphDisplacementEnabled, _effects);
+			}
+
+			// Fallback mínimo
+			return new Material(Shader.Find("Sprites/Default"));
+		}
+
+		private Material ResolveTelegraphMaterialFor(bool displacementEnabled)
+		{
+			if (_telegraphProvider != null)
+				return _telegraphProvider.GetMaterial(displacementEnabled, _effects);
+			if (Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider != null)
+				return Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider
+					.GetMaterial(displacementEnabled, _effects);
+			return new Material(Shader.Find("Sprites/Default"));
+		}
     }
 }
 

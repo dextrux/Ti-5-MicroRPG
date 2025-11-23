@@ -15,7 +15,12 @@ namespace Logic.Scripts.Turns
 
 			Container.BindInterfacesAndSelfTo<EnvironmentActorsRegistry>().AsSingle();
             Container.BindInterfacesAndSelfTo<EnviromentActionService>().AsSingle();
-            Container.BindInterfacesTo<OrbEnvironmentRule>().AsSingle();
+			// OrbEnvironmentRule desabilitada: orb agora é executada como IEnvironmentTurnActor
+
+			// Publicar registro globalmente para acesso cross-container
+			var envReg = Container.Resolve<IEnvironmentActorsRegistry>();
+			EnvironmentActorsRegistryService.Instance = envReg;
+
             Container.BindInterfacesAndSelfTo<TurnFlowController>().AsSingle();
         }
     }

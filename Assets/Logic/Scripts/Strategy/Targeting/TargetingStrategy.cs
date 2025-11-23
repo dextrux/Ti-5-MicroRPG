@@ -1,4 +1,5 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.UpdateService;
 using UnityEngine;
 
@@ -7,13 +8,17 @@ public abstract class TargetingStrategy : IUpdatable {
     protected IEffectable Caster;
     protected IUpdateSubscriptionService SubscriptionService;
     protected LayerMask CastableLayerMask;
+    protected ICommandFactory CommandFactory;
+
     public virtual void Initialize(AbilityData data, IEffectable caster) {
         Ability = data;
         Caster = caster;
+        Caster.GetTransformCastPoint().rotation = Quaternion.identity;
     }
 
-    public virtual void SetUp(IUpdateSubscriptionService updateSubscriptionService) {
+    public virtual void SetUp(IUpdateSubscriptionService updateSubscriptionService, ICommandFactory commandFactory) {
         SubscriptionService = updateSubscriptionService;
+        CommandFactory = commandFactory;
     }
 
     public virtual Vector3 LockAim(out IEffectable[] targets) {

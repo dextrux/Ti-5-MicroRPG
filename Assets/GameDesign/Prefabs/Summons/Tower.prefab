@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 7698350839524583709}
   - component: {fileID: 4876656314110998499}
   - component: {fileID: 2595908500974364955}
+  - component: {fileID: 3256876868554599017}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -165,7 +166,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <VisualRoot>k__BackingField: {fileID: 869992208777892931}
-  _radius: 30
+  _radius: 6
+  _healAreaColor: {r: 0.38098615, g: 0.8301887, b: 0.30936277, a: 0.8509804}
 --- !u!65 &2595908500974364955
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -187,3 +189,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &3256876868554599017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7607732262930965216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9199e9ef7969f3d498e917e287f57439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _segments: 64

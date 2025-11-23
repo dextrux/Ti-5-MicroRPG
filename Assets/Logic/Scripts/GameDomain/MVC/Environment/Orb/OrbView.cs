@@ -1,10 +1,8 @@
 using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Shared;
 
-namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
-{
-    public class OrbView : MonoBehaviour
-    {
+namespace Logic.Scripts.GameDomain.MVC.Environment.Orb {
+    public class OrbView : MonoBehaviour {
         private GameObject _telegraphGO;
         private LineRenderer _line;
         private MeshFilter _meshFilter;
@@ -12,8 +10,13 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
         private Mesh _mesh;
         [SerializeField] private int _segments = 64;
 
-        public void PrepareTelegraph()
-        {
+        public void UpdateColor(Color newColor) {
+            _line.startColor = newColor;
+            _line.endColor = newColor;
+            _meshRenderer.material = new Material(Shader.Find("Sprites/Default")) { color = newColor };
+        }
+
+        public void PrepareTelegraph() {
             if (_telegraphGO != null) return;
             _telegraphGO = new GameObject("OrbTelegraph");
             _telegraphGO.transform.SetParent(transform, false);
@@ -34,8 +37,7 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
             _meshFilter.sharedMesh = _mesh;
         }
 
-        public void UpdateRadius(float radius)
-        {
+        public void UpdateRadius(float radius) {
             if (_telegraphGO == null) PrepareTelegraph();
             Vector3 center = transform.position; center.y = 0.2f;
             Vector3[] ring = DiscMath.GenerateDiscVertices(center, radius, _segments);
@@ -53,8 +55,7 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
             for (int i = 0; i < seg; i++) verts[i + 1] = t.InverseTransformPoint(ring[i]);
             int[] tris = new int[seg * 3];
             int ti = 0;
-            for (int i = 1; i <= seg; i++)
-            {
+            for (int i = 1; i <= seg; i++) {
                 int next = (i == seg) ? 1 : i + 1;
                 tris[ti++] = 0; tris[ti++] = i; tris[ti++] = next;
             }

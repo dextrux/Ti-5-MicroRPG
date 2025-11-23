@@ -1,50 +1,69 @@
+using System.Reflection;
 using UnityEngine;
 using Zenject;
 using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.Turns;
 
-[RequireComponent(typeof(MeshCollider))]
-public class ArenaLimit : MonoBehaviour, IUpdatable
+namespace Logic.Scripts.GameDomain.MVC.Environment
 {
-    private ITurnStateReader _turnReader;
-    private IUpdateSubscriptionService _updateService;
-    private MeshCollider _meshCollider;
-    private bool _lastApplied;
-
-    [Inject]
-    public void Construct(ITurnStateReader turnReader, IUpdateSubscriptionService updateSvc)
+    [RequireComponent(typeof(MeshCollider))]
+    public class ArenaLimit : MonoBehaviour, IUpdatable
     {
-        _turnReader = turnReader;
-        _updateService = updateSvc;
+        private TurnStateService _turnStateService;
+        private IUpdateSubscriptionService _updateSvc;
+        private MeshCollider _meshCollider;
+        private bool _lastEnabled;
 
-        _meshCollider = GetComponent<MeshCollider>();
-        if (_meshCollider == null) return;
-
-        _updateService.RegisterUpdatable(this);
-        ApplyNow();
-    }
-
-    private void OnDestroy()
-    {
-        _updateService?.UnregisterUpdatable(this);
-    }
-
-    public void ManagedUpdate()
-    {
-        if (_meshCollider == null || _turnReader == null) return;
-
-        bool shouldEnable = _turnReader.Active && _turnReader.Phase == TurnPhase.PlayerAct;
-        if (shouldEnable != _lastApplied)
+        [Inject]
+        public void Construct(TurnStateService turnStateService, IUpdateSubscriptionService updateSubscriptionService)
         {
-            _meshCollider.enabled = shouldEnable;
-            _lastApplied = shouldEnable;
-        }
-    }
+            _turnStateService = turnStateService;
+            _updateSvc = updateSubscriptionService;
 
-    private void ApplyNow()
-    {
-        if (_meshCollider == null || _turnReader == null) return;
-        _lastApplied = _turnReader.Active && _turnReader.Phase == TurnPhase.PlayerAct;
-        _meshCollider.enabled = _lastApplied;
+            _meshCollider = GetComponent<MeshCollider>();
+            _meshCollider.enabled = false;
+            _lastEnabled = _meshCollider.enabled;
+
+            _updateSvc.RegisterUpdatable(this);
+        }
+
+        private void OnDestroy()
+        {
+            _updateSvc?.UnregisterUpdatable(this);
+        }
+
+        public void ManagedUpdate()
+        {
+            if (_meshCollider == null || _turnStateService == null) return;
+
+            bool shouldEnable = IsPlayerPhase(_turnStateService);
+            if (shouldEnable != _lastEnabled)
+            {
+                _meshCollider.enabled = shouldEnable;
+                _lastEnabled = shouldEnable;
+            }
+        }
+
+        private static bool IsPlayerPhase(TurnStateService service)
+        {
+            var t = service.GetType();
+
+            var prop = t.GetProperty("Phase", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                       ?? t.GetProperty("CurrentPhase", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (prop != null)
+            {
+                object v = prop.GetValue(service, null);
+                if (v is TurnPhase p) return p == TurnPhase.PlayerAct;
+            }
+
+            var field = t.GetField("_phase", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (field != null)
+            {
+                object v = field.GetValue(service);
+                if (v is TurnPhase p) return p == TurnPhase.PlayerAct;
+            }
+
+            return false;
+        }
     }
 }

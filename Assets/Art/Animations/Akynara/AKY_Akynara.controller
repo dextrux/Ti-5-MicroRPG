@@ -39,6 +39,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameterName: AKY_AttackType
   resetValue: 0
+  resetExecuteTrigger: 1
+  resetCancelTrigger: 1
+  executeTriggerName: Execute
+  cancelTriggerName: Cancel
 --- !u!1102 &-8758312789060188967
 AnimatorState:
   serializedVersion: 6
@@ -86,7 +90,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -213,7 +217,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -615,7 +619,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -762,7 +766,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AKY_AttackChooser
-  m_Speed: 1
+  m_Speed: 50
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2394986073519132747}
@@ -883,22 +887,22 @@ AnimatorStateMachine:
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: 8055648933717099756}
-    m_Position: {x: 580, y: -460, z: 0}
+    m_Position: {x: 580, y: -390, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 2856597067262100036}
-    m_Position: {x: 610, y: 130, z: 0}
+    m_Position: {x: 590, y: 140, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 2687266639716346540}
-    m_Position: {x: 580, y: -230, z: 0}
+    m_Position: {x: 580, y: -180, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 3566982962282117662}
-    m_Position: {x: 580, y: -350, z: 0}
+    m_Position: {x: 580, y: -290, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 4958005474634702461}
-    m_Position: {x: 590, y: -30, z: 0}
+    m_Position: {x: 590, y: 10, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 6811052563190170363}
-    m_Position: {x: 590, y: -130, z: 0}
+    m_Position: {x: 590, y: -80, z: 0}
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions:
@@ -945,7 +949,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -995,7 +999,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -1177,9 +1181,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.9375
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0.011285318
+  m_ExitTime: 0.93749994
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0

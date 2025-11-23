@@ -1,6 +1,7 @@
 using UnityEngine;
 using Logic.Scripts.Services.CommandFactory;
 using Zenject;
+using Logic.Scripts.Turns;
 
 namespace Logic.Scripts.GameDomain.Commands
 {
@@ -33,7 +34,6 @@ namespace Logic.Scripts.GameDomain.Commands
         public override void ResolveDependencies()
         {
             _container = _diContainer;
-            // No-op: fallback path removed; we now rely on OrbController.Instances in the rule
         }
 
         public void Execute()
@@ -46,7 +46,16 @@ namespace Logic.Scripts.GameDomain.Commands
             if (controller != null)
             {
                 controller.Initialize(_data.Arena, _registry, _data.MoveStep, _data.GrowStep, _data.InitialRadius, _data.MaxRadius, _data.BaseDamage, _data.InitialHp);
-                // No registry registration; rule will use OrbController.Instances
+                // Registrar no registro único publicado via serviço estático.
+                // Padrão oficial: qualquer ator criado em runtime deve ser adicionado via EnvironmentActorsRegistryService.Instance.
+                var envReg = EnvironmentActorsRegistryService.Instance;
+                if (envReg == null)
+                {
+                    Debug.LogWarning("[SpawnOrb] EnvironmentActorsRegistryService.Instance is null. Orb will NOT act on Environment turn.");
+                    return;
+                }
+                envReg.Add(controller);
+                Debug.Log("[SpawnOrb] Registered OrbController in IEnvironmentActorsRegistry");
             }
         }
     }

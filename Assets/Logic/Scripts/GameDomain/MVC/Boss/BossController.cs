@@ -32,7 +32,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         private Rigidbody _bossRigidbody;
         private Transform _bossTransform;
 
-        private enum BossMoveMode { None, Forward, TowardPlayer, Direction, Random }
+		private enum BossMoveMode { None, Forward, TowardPlayer, Random, TowardArenaCenter }
         private BossMoveMode _moveMode;
         private Vector3 _fixedDirection;
         private float _moveSpeed;
@@ -111,12 +111,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                         }
                         break;
                     }
-                case BossMoveMode.Direction: {
-                        Vector3 dir = _fixedDirection;
-                        dir.y = 0f;
-                        if (dir.sqrMagnitude > 0.0001f) worldDir = dir.normalized;
-                        break;
-                    }
                 case BossMoveMode.Random: {
                         if (_randomDirTimeRemaining <= 0f || _randomDirection.sqrMagnitude < 0.0001f) {
                             float angle = UnityEngine.Random.Range(0f, 360f);
@@ -130,6 +124,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                         worldDir = _randomDirection;
                         break;
                     }
+				case BossMoveMode.TowardArenaCenter: {
+						Vector3 center = _arenaReference != null ? _arenaReference.transform.position : Vector3.zero;
+						Vector3 toCenter = center - _bossTransform.position;
+						toCenter.y = 0f;
+						if (toCenter.sqrMagnitude > 0.0001f) worldDir = toCenter.normalized;
+						break;
+					}
                 case BossMoveMode.None:
                 default:
                     break;
@@ -292,10 +293,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             int indexInPattern = _executedTurnsCount % pattern.Length;
             BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
 
-			// Coleta múltiplos índices quando configurados; caso contrário usa o índice legado
-			int[] indices = (entry.AttackIndices != null && entry.AttackIndices.Length > 0)
-				? entry.AttackIndices
-				: new int[] { entry.AttackIndex };
+			// Coleta múltiplos índices (modelo atual). Se vier vazio, não agenda ataques neste turno.
+			int[] indices = entry.AttackIndices;
+			if (indices == null || indices.Length == 0) {
+				Debug.LogWarning("[BossBehavior] TurnPattern entry has empty AttackIndices; no attacks queued this turn.");
+				return;
+			}
 
 			// Primeiro criamos todos, depois escolhemos um vencedor de movimento por prioridade e configuramos telegraph/efeitos
 			var created = new System.Collections.Generic.List<(BossAttack atk, int idx, bool hasMove, int pri)>(indices.Length);
@@ -359,7 +362,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
             float multiplier = entry.DistanceMultiplier <= 0f ? 1f : entry.DistanceMultiplier;
             _turnMoveDistanceBudget = baseStep * multiplier;
-            switch (entry.Mode) {
+			switch (entry.Mode) {
                 case BossBehaviorSO.TurnMoveMode.Forward:
                     SetMoveModeForward(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
                     Debug.Log($"Boss turn move: Mode=Forward | distance={_turnMoveDistanceBudget:0.###}");
@@ -368,14 +371,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                     SetMoveModeTowardPlayer(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
                     Debug.Log($"Boss turn move: Mode=TowardPlayer | distance={_turnMoveDistanceBudget:0.###}");
                     break;
-                case BossBehaviorSO.TurnMoveMode.Direction:
-                    SetMoveModeDirection(entry.Direction, _bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
-                    Debug.Log($"Boss turn move: Mode=Direction dir=({entry.Direction.x:0.###},{entry.Direction.y:0.###},{entry.Direction.z:0.###}) | distance={_turnMoveDistanceBudget:0.###}");
-                    break;
                 case BossBehaviorSO.TurnMoveMode.Random:
                     SetMoveModeRandom(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed, behavior.RandomChangeDirectionSeconds);
                     Debug.Log($"Boss turn move: Mode=Random | distance={_turnMoveDistanceBudget:0.###}");
                     break;
+				case BossBehaviorSO.TurnMoveMode.TowardArenaCenter:
+					SetMoveModeTowardArenaCenter(_bossConfiguration.MoveSpeed, _bossConfiguration.RotationSpeed);
+					Debug.Log($"Boss turn move: Mode=TowardArenaCenter | distance={_turnMoveDistanceBudget:0.###}");
+					break;
             }
         }
 
@@ -391,12 +394,11 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _moveMode = BossMoveMode.TowardPlayer;
         }
 
-        public void SetMoveModeDirection(Vector3 worldDirection, float moveSpeed, float rotationSpeed) {
-            _fixedDirection = worldDirection;
-            _moveSpeed = moveSpeed;
-            _rotationSpeed = rotationSpeed;
-            _moveMode = BossMoveMode.Direction;
-        }
+		public void SetMoveModeTowardArenaCenter(float moveSpeed, float rotationSpeed) {
+			_moveSpeed = moveSpeed;
+			_rotationSpeed = rotationSpeed;
+			_moveMode = BossMoveMode.TowardArenaCenter;
+		}
 
         public void SetMoveModeRandom(float moveSpeed, float rotationSpeed, float changeDirectionSeconds = 1.5f) {
             _moveSpeed = moveSpeed;

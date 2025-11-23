@@ -6,16 +6,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
     [CreateAssetMenu(fileName = "BossBehavior", menuName = "Scriptable Objects/BossBehavior")]
     public class BossBehaviorSO : ScriptableObject
     {
-        public enum TurnMoveMode { Forward, TowardPlayer, Direction, Random }
+		public enum TurnMoveMode { Forward, TowardPlayer, Random, TowardArenaCenter }
 
         [System.Serializable]
         public struct BossTurnConfig
         {
             public TurnMoveMode Mode;
-            public Vector3 Direction;
             public float DistanceMultiplier;
-			public int AttackIndex; // legado: usado se AttackIndices estiver vazio
-			public int[] AttackIndices; // novo: múltiplos ataques preparados para o mesmo ciclo
+			public int[] AttackIndices; // múltiplos ataques preparados para o mesmo ciclo; use 1 elemento para ataque único
         }
 
         [Header("Available Attacks")] 

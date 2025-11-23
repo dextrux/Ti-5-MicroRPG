@@ -135,7 +135,7 @@ MonoBehaviour:
   TargetPrefab: {fileID: 2424838709813407452, guid: b5158c4a8eb168949a504c64c35b769d, type: 3}
   _rigidbody: {fileID: 5824117036771753600}
   _collider: {fileID: 5589792799600363805}
-  _animator: {fileID: 7148999217704967988}
+  _animator: {fileID: 4637235295064148607}
 --- !u!1 &2376470481348735176
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,15 +544,40 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0cbf9ee470b593947910b7bb18ebb455, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4637235295064148607}
   m_SourcePrefab: {fileID: 100100000, guid: 0cbf9ee470b593947910b7bb18ebb455, type: 3}
 --- !u!4 &3879415937918846286 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0cbf9ee470b593947910b7bb18ebb455, type: 3}
   m_PrefabInstance: {fileID: 3629001077419483813}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &7148999217704967988 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 0cbf9ee470b593947910b7bb18ebb455, type: 3}
+--- !u!1 &4511943345598373876 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0cbf9ee470b593947910b7bb18ebb455, type: 3}
   m_PrefabInstance: {fileID: 3629001077419483813}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &4637235295064148607
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4511943345598373876}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 0cbf9ee470b593947910b7bb18ebb455, type: 3}
+  m_Controller: {fileID: 9100000, guid: 3e2000020dd86b848bb782206c644a0d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

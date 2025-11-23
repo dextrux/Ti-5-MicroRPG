@@ -1,8 +1,7 @@
-// AbilityData.cs
 using Logic.Scripts.Services.UpdateService;
 using System.Collections.Generic;
 using UnityEngine;
-using System; // <<< ADICIONADO para Math.Max
+using System;
 
 namespace Logic.Scripts.GameDomain.MVC.Abilitys {
     [CreateAssetMenu(fileName = "AbilityData", menuName = "Scriptable Objects/Ability Data")]
@@ -16,6 +15,8 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public int Cooldown;
         public int Cost;
         public int Range;
+
+		public int AnimatorAttackType;
 
         [SerializeField] private int _baseDamage;
         [SerializeField] private int _baseCost;

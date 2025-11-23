@@ -25,7 +25,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             EditorGUILayout.PropertyField(attackType);
 			EditorGUILayout.PropertyField(displacementPriority, new GUIContent("Displacement Priority"));
 
-			// 0 = ProteanCones, 1 = FeatherLines, 2 = WingSlash, 3 = Orb, 4 = HookAwakening, 5 = SkySwords
+            // 0 = ProteanCones, 1 = FeatherLines, 2 = WingSlash, 3 = Orb, 4 = HookAwakening
             switch (attackType.enumValueIndex)
             {
                 case 0: // ProteanCones

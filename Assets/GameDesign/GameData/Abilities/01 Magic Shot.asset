@@ -21,14 +21,11 @@ MonoBehaviour:
   Cooldown: 0
   Cost: 0
   Range: 0
-  Casts: 0
-  Area: 0
+  AnimatorAttackType: 1
   _baseDamage: 3
   _baseCost: 3
   _baseCooldown: 3
   _baseRange: 3
-  _baseArea: 3
-  _baseCasts: 3
   Effects:
   - rid: 7012276589014548555
   TargetingStrategy:

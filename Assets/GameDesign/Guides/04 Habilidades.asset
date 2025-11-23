@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02fd617bcf3e6174fac4f95d3839e4aa, type: 3}
+  m_Name: 04 Habilidades
+  m_EditorClassIdentifier: 
+  guideTitle: Habilidades
+  pages:
+  - pageSprite: {fileID: 0}
+    descriptionText: "Nara conta com 5 habilidades b\xE1sicas, todas distintas e
+      divididas entre habilidades ofensivas e defensivas."
+  - pageSprite: {fileID: 0}
+    descriptionText: "1. Disparo M\xE1gico \xE9 excelente para causar dano r\xE1pido
+      e direto, mas depende de um campo de vis\xE3o desobstru\xEDdo at\xE9 o alvo.\n2.
+      Meteorito ignora qualquer obst\xE1culo entre Nara e seu alvo al\xE9m de ter
+      um alcance maior, mas n\xE3o  causa um dano alto.\n3. Explos\xE3o \xE9 uma
+      excelente op\xE7\xE3o para acertar v\xE1rios alvos em \xE1rea, mas seu dano
+      \xE9 o menor entre as tr\xEAs."
+  - pageSprite: {fileID: 0}
+    descriptionText: "4. Totem \xE9 a melhor op\xE7\xE3o para curar Nara, mas ela
+      precisa se manter pr\xF3xima a ele para receber seus efeitos.\n5. Teleporte
+      consegue levar Nara de forma instant\xE2nea para outro local dentro de seu
+      alcance."

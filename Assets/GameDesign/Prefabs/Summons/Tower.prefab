@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <VisualRoot>k__BackingField: {fileID: 869992208777892931}
+  _radius: 30
 --- !u!65 &2595908500974364955
 BoxCollider:
   m_ObjectHideFlags: 0

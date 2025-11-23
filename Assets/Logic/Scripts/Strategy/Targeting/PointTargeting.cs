@@ -5,6 +5,8 @@ using UnityEngine.Timeline;
 public class PointTargeting : TargetingStrategy {
     public LayerMask GroundLayerMask;
     [SerializeField] private AbilitySummon _objectToSummon;
+    [SerializeField] private int _duration;
+    [SerializeField] private int _healAmount;
     private Transform _previewTransform;
     public override void Initialize(AbilityData data, IEffectable caster) {
         base.Initialize(data, caster);
@@ -32,6 +34,7 @@ public class PointTargeting : TargetingStrategy {
         base.LockAim(out targets);
         AbilitySummon summonObject = Object.Instantiate(_objectToSummon, _previewTransform.position, _previewTransform.rotation);
         CommandFactory.CreateCommandVoid<SummonSkillCommand>().SetData(new SummonSkillCommandData(summonObject)).Execute();
+        summonObject.SetUp(_duration, _healAmount, Caster);
         return _previewTransform.position;
     }
 

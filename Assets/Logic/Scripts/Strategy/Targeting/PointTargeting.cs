@@ -30,7 +30,8 @@ public class PointTargeting : TargetingStrategy {
 
     public override Vector3 LockAim(out IEffectable[] targets) {
         base.LockAim(out targets);
-        Object.Instantiate(_objectToSummon, _previewTransform.position, _previewTransform.rotation);
+        AbilitySummon summonObject = Object.Instantiate(_objectToSummon, _previewTransform.position, _previewTransform.rotation);
+        CommandFactory.CreateCommandVoid<SummonSkillCommand>().SetData(new SummonSkillCommandData(summonObject)).Execute();
         return _previewTransform.position;
     }
 

@@ -7,7 +7,7 @@ using Logic.Scripts.Turns;
 public class ArenaLimit : MonoBehaviour, IUpdatable
 {
     private ITurnStateReader _turnReader;
-    private IUpdateSubscriptionService _updateSvc;
+    private IUpdateSubscriptionService _updateService;
     private MeshCollider _meshCollider;
     private bool _lastApplied;
 
@@ -15,18 +15,18 @@ public class ArenaLimit : MonoBehaviour, IUpdatable
     public void Construct(ITurnStateReader turnReader, IUpdateSubscriptionService updateSvc)
     {
         _turnReader = turnReader;
-        _updateSvc = updateSvc;
+        _updateService = updateSvc;
 
         _meshCollider = GetComponent<MeshCollider>();
         if (_meshCollider == null) return;
 
-        _updateSvc.RegisterUpdatable(this);
+        _updateService.RegisterUpdatable(this);
         ApplyNow();
     }
 
     private void OnDestroy()
     {
-        _updateSvc?.UnregisterUpdatable(this);
+        _updateService?.UnregisterUpdatable(this);
     }
 
     public void ManagedUpdate()

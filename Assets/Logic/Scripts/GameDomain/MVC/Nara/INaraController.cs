@@ -14,6 +14,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void PlayAttackType1();
         void TriggerExecute();
         void ResetExecuteTrigger();
+		void TriggerCancel();
         void SetPosition(Vector3 movementCenter);
     }
 }

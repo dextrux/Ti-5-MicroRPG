@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara
 {
@@ -58,6 +59,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
             if (_animator != null)
             {
                 _animator.SetTrigger("Execute");
+				StartCoroutine(ResetTriggerNextFrame("Execute"));
             }
         }
 
@@ -69,9 +71,28 @@ namespace Logic.Scripts.GameDomain.MVC.Nara
             }
         }
 
+		public void TriggerCancel()
+		{
+			if (_animator != null)
+			{
+				_animator.SetTrigger("Cancel");
+				StartCoroutine(ResetTriggerNextFrame("Cancel"));
+			}
+		}
+
         public LineRenderer GetPointLineRenderer()
         {
             return CastLineRenderer;
         }
+
+		private IEnumerator ResetTriggerNextFrame(string triggerName)
+		{
+			// Reset on the next frame so the Animator can consume the trigger this frame.
+			yield return null;
+			if (_animator != null)
+			{
+				_animator.ResetTrigger(triggerName);
+			}
+		}
     }
 }

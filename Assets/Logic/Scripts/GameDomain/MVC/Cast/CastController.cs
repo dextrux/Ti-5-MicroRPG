@@ -16,6 +16,7 @@ public class CastController : ICastController {
     public Transform PlayerTransform;
 
     private bool _canUseAbility;
+	private IEffectable _currentCaster;
 
     public CastController(IUpdateSubscriptionService updateSubscriptionService, ICommandFactory commandFactory,
         IActionPointsService actionPointsService, AbilityData[] abilities) {
@@ -34,8 +35,10 @@ public class CastController : ICastController {
         if (_actionPointsService.CanSpend(_abilities[index].GetCost())) {
             _abilities[index].Aim(caster);
             _currentAbility = _abilities[index];
+			_currentCaster = caster;
             if (caster is INaraController naraController) {
-                naraController.PlayAttackType1();
+				int attackType = _abilities[index] != null ? _abilities[index].AnimatorAttackType : 1;
+				naraController.PlayAttackType(attackType);
             }
             return true;
         }
@@ -45,8 +48,12 @@ public class CastController : ICastController {
     }
 
     public void CancelAbilityUse() {
+		if (_currentCaster is INaraController naraController) {
+			naraController.TriggerCancel();
+		}
         _currentAbility?.Cancel();
         _currentAbility = null;
+		_currentCaster = null;
     }
 
     public void UseAbility(IEffectable caster)

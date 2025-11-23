@@ -31,17 +31,17 @@ MonoBehaviour:
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 0
     AttackIndex: 0
-    AttackIndices: 
+    AttackIndices: 05000000
   - Mode: 1
     Direction: {x: 0, y: 0, z: 0}
     DistanceMultiplier: 3
     AttackIndex: 6
-    AttackIndices: 07000000
+    AttackIndices: 05000000
   - Mode: 0
     Direction: {x: 90, y: 0, z: 0}
     DistanceMultiplier: 3
     AttackIndex: 3
-    AttackIndices: 
+    AttackIndices: 06000000
   - Mode: 0
     Direction: {x: 25, y: 0, z: 0}
     DistanceMultiplier: 0

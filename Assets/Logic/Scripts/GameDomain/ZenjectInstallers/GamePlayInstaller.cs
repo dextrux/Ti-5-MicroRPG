@@ -8,6 +8,7 @@ using Zenject;
 using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.GameDomain.MVC.Echo;
+using Logic.Scripts.GameDomain.MVC.Boss.Telegraph;
 
 public class GamePlayInstaller : MonoInstaller {
 
@@ -20,6 +21,9 @@ public class GamePlayInstaller : MonoInstaller {
 
     [SerializeField] private LayerMask _layerMaskMouse;
 
+    [Header("Telegraph Materials")]
+    [SerializeField] private TelegraphMaterialConfig _telegraphMaterials;
+
     public override void InstallBindings() {
         BindServices();
         BindControllers();
@@ -30,6 +34,14 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.Bind<INaraMovementControllerFactory>().To<NaraMovementControllerFactory>().AsSingle();
         Container.BindInterfacesTo<GamePlayDataService>().AsSingle().NonLazy();
+        if (_telegraphMaterials != null) {
+            Debug.Log($"[GamePlayInstaller] Binding TelegraphMaterialConfig: {_telegraphMaterials.name}");
+            Container.Bind<TelegraphMaterialConfig>().FromInstance(_telegraphMaterials).AsSingle();
+            Container.BindInterfacesAndSelfTo<TelegraphMaterialProvider>().AsSingle();
+			Container.BindInterfacesTo<TelegraphMaterialProviderBootstrap>().AsSingle().NonLazy();
+        } else {
+            Debug.LogWarning("[GamePlayInstaller] TelegraphMaterialConfig is NULL. Telegraphs will fallback to Sprites/Default.");
+        }
     }
 
     private void BindControllers() {

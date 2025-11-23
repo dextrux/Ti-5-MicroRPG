@@ -3,10 +3,11 @@ using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using System.Collections.Generic;
 using Logic.Scripts.GameDomain.MVC.Environment.Orb;
+using Logic.Scripts.Turns;
 
 namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
 {
-    public class OrbController : MonoBehaviour, IEffectable
+    public class OrbController : MonoBehaviour, IEffectable, IEnvironmentTurnActor
     {
         public static readonly System.Collections.Generic.List<OrbController> Instances = new System.Collections.Generic.List<OrbController>();
         private ArenaPosReference _arena;
@@ -26,6 +27,9 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
         private int _stunAttackTurns;
         private bool _isMoving;
         public System.Threading.Tasks.Task CurrentTickTask { get; private set; }
+
+        // Remove automaticamente do registro genérico do Environment quando a orb estiver destruída
+        public bool RemoveAfterRun => _hp <= 0;
 
         [SerializeReference] private List<AbilityEffect> _effects;
 
@@ -62,6 +66,14 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
         public void StartTickAsync()
         {
             CurrentTickTask = DoTickAsync();
+        }
+
+        public async System.Threading.Tasks.Task ExecuteAsync()
+        {
+            if (_hp <= 0) return;
+            StartTickAsync();
+            var t = CurrentTickTask;
+            if (t != null) await t;
         }
 
         private async System.Threading.Tasks.Task DoTickAsync()
@@ -192,6 +204,11 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
         {
             Instances.Remove(this);
             _registry?.Unregister(this);
+            // Remover do registro genérico publicado globalmente
+            if (Logic.Scripts.Turns.EnvironmentActorsRegistryService.Instance != null)
+            {
+                Logic.Scripts.Turns.EnvironmentActorsRegistryService.Instance.Remove(this);
+            }
         }
 
         public void TakeDamage(int amount)

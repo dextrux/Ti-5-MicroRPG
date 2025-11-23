@@ -85,10 +85,6 @@ public class ProjectileTargeting : TargetingStrategy {
         Vector3 finalAimDirection;
         finalAimDirection = directionFromCasterXZ.normalized;
 
-        if (finalAimDirection.sqrMagnitude > 0.001f) {
-            Caster.GetTransformCastPoint().rotation = Quaternion.LookRotation(finalAimDirection);
-        }
-
         currentLaunchSpeed = ProjectilePrefab.InitialSpeed;
         Vector3 lookPointCaster = finalAimDirection;
         lookPointCaster.y = 0f;

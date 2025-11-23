@@ -11,10 +11,10 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public Sprite Icon;
         [SerializeField] private AudioClip _sfx;
 
-        public int Damage;
-        public int Cooldown;
-        public int Cost;
-        public int Range;
+        [HideInInspector] public int Damage;
+        [HideInInspector] public int Cooldown;
+        [HideInInspector] public int Cost;
+        [HideInInspector] public int Range;
 
 		public int AnimatorAttackType;
 
@@ -66,11 +66,11 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         }
 
         public int GetCost() {
-            return _baseCost - Cost;
+            return _baseCost + Cost;
         }
 
         public int GetCooldown() {
-            return _baseCooldown - Cooldown;
+            return _baseCooldown + Cooldown;
         }
         #endregion
 

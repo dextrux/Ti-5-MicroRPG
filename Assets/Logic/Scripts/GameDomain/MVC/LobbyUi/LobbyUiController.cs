@@ -23,25 +23,30 @@ public class LobbyUiController : ILobbyController {
 
     public void InitEntryPoint() {
         _lobbyView.Initialize(_abilityPointService.AllAbilities[0]);
-        _lobbyView.RegisterCallbacks(OnClickPlay, OnCustomizeClicked, OnExitPlay, OnCustomizeExit, OnDamagePlus, OnDamageMinus,
-            OnCooldownPlus, OnCooldownMinus, OnCostPlus, OnCostMinus, OnRangePlus, OnRangeMinus, OnAbility1Button, OnAbility2Button, OnAbility3Button, OnAbility4Button,
-            OnAbility5Button, OnResetSkills);
+        _lobbyView.RegisterCallbacks(OnClickPlay, OnClickLoad, OnClickOptions, OnExitPlay);
         _selectedAbility = _abilityPointService.AllAbilities[0];
     }
+
     public void OnClickPlay() {
         _stateMachineService.SwitchState(_gamePlayStateFactory.Create(new GamePlayInitatorEnterData(0)));
     }
-    public void OnCustomizeClicked() {
-        _lobbyView.CustomizationContainer.RemoveFromClassList("close-container");
-        OnAbility1Button();
+
+    public void OnClickLoad() {
+
     }
-    public void OnCustomizeExit() {
-        _lobbyView.CustomizationContainer.AddToClassList("close-container");
-        _abilityPointService.SaveStats();
+
+    public void OnClickOptions() {
+
     }
+
     public void OnExitPlay() {
         Application.Quit();
     }
+}
+
+/*
+ * 
+ * 
 
     public void OnResetSkills() {
         _abilityPointService.ResetAllAbilities();
@@ -183,4 +188,5 @@ public class LobbyUiController : ILobbyController {
         }
     }
     #endregion
-}
+ * 
+ */

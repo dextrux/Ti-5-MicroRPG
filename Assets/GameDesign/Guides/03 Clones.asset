@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02fd617bcf3e6174fac4f95d3839e4aa, type: 3}
+  m_Name: 03 Clones
+  m_EditorClassIdentifier: 
+  guideTitle: Clones
+  pages:
+  - pageSprite: {fileID: 0}
+    descriptionText: "Nara \xE9 capaz de fragmentar sua alma, dividindo-se temporariamente.
+      Sendo uma iniciante seus clones n\xE3o conseguem realizar a\xE7\xF5es complexas,
+      mas s\xE3o perfeitos para interagir com objetos inanimados de forma pr\xE1tica."
+  - pageSprite: {fileID: 0}
+    descriptionText: "A \xFAnica diferen\xE7a entre as duas vers\xF5es \xE9 a dura\xE7\xE3o
+      que Nara consegue manter cada um ativo. Um clone tem dura\xE7\xE3o de 1 turno
+      e o outro dura por 2."

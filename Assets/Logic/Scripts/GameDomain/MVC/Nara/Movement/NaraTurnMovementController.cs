@@ -124,4 +124,14 @@ public class NaraTurnMovementController : NaraMovementController {
     public void SetRadiusToZero() {
         _movementRadius = 0;
     }
+
+    public void ActivateNaraGravity()
+    {
+        NaraRigidbody.useGravity = true;
+    }
+
+    public void DeactivateNaraGravity()
+    {
+        NaraRigidbody.useGravity = false;
+    }
 }

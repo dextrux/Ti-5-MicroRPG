@@ -90,6 +90,7 @@ namespace Logic.Scripts.Turns {
             _waitingPlayer = true;
             _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.RecenterNaraMovementOnPlayerTurnCommand>().Execute();
             _turnMovement?.LineHandlerController.SetVisible(true);
+            _turnMovement.DeactivateNaraGravity();
             _turnStateService.RequestPlayerAction();
         }
 
@@ -102,6 +103,7 @@ namespace Logic.Scripts.Turns {
         public void CompletePlayerAction() {
             if (!_active || !_waitingPlayer) return;
             _waitingPlayer = false;
+            _turnMovement.ActivateNaraGravity();
             StartEchoPhaseAsync();
         }
 

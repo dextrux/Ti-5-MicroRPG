@@ -53,7 +53,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static Vector3 CurrentSpecialAxis;
         public static float CurrentStripWidth;
 
-        private AudioService _audioSvc;
+        private AudioService _audioService;
         private bool _prepSfxPlayed;
         private bool _attackSfxPlayed;
 
@@ -100,8 +100,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 
         private void EnsureAudio()
         {
-            if (_audioSvc == null)
-                _audioSvc = Object.FindFirstObjectByType<AudioService>(FindObjectsInactive.Include);
+            if (_audioService == null)
+                _audioService = Object.FindFirstObjectByType<AudioService>(FindObjectsInactive.Include);
         }
 
         public void PrepareTelegraph(Transform parentTransform)
@@ -161,7 +161,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             EnsureAudio();
             if (!_prepSfxPlayed)
             {
-                _audioSvc?.PlayAudio(AudioClipType.BossPrepAttack1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
+                _audioService?.PlayAudio(AudioClipType.BossPrepAttack1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
                 _prepSfxPlayed = true;
             }
 

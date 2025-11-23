@@ -16,21 +16,16 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         public int Cooldown;
         public int Cost;
         public int Range;
-        public int Casts;
-        public int Area;
 
         [SerializeField] private int _baseDamage;
         [SerializeField] private int _baseCost;
         [SerializeField] private int _baseCooldown;
         [SerializeField] private int _baseRange;
-        [SerializeField] private int _baseArea;
-        [SerializeField] private int _baseCasts;
 
         [SerializeReference] public List<AbilityEffect> Effects;
         [SerializeReference] public TargetingStrategy TargetingStrategy;
 
         public PlotTwistData PlotData;
-
         //To-Do Adicionar VFXController
         //To-Do Tocar audioClip quando tivermos
 
@@ -69,14 +64,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             return _baseRange + (Range / 2.0f);
         }
 
-        public float GetArea() {
-            return _baseArea + (Area / 2.0f);
-        }
-
-        public int GetCasts() {
-            return _baseCasts + Casts;
-        }
-
         public int GetCost() {
             return _baseCost - Cost;
         }
@@ -92,8 +79,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             Cooldown = 0;
             Cost = 0;
             Range = 0;
-            Casts = 0;
-            Area = 0;
         }
 
         public int GetPointsSpent() {
@@ -102,8 +87,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             total += Math.Max(0, Cooldown);
             total += Math.Max(0, Cost);
             total += Math.Max(0, Range);
-            total += Math.Max(0, Casts);
-            total += Math.Max(0, Area);
             return total;
         }
 
@@ -113,8 +96,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
             total += Math.Max(0, -Cooldown);
             total += Math.Max(0, -Cost);
             total += Math.Max(0, -Range);
-            total += Math.Max(0, -Casts);
-            total += Math.Max(0, -Area);
             return total;
         }
 
@@ -124,8 +105,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
                 case AbilityStat.Cooldown: return _baseCooldown;
                 case AbilityStat.Cost: return _baseCost;
                 case AbilityStat.Range: return _baseRange;
-                case AbilityStat.Casts: return _baseCasts;
-                case AbilityStat.Area: return _baseArea;
                 default: return 0;
             }
         }
@@ -136,8 +115,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
                 case AbilityStat.Cooldown: return GetCooldown();
                 case AbilityStat.Cost: return GetCost();
                 case AbilityStat.Range: return (_baseRange + Range);
-                case AbilityStat.Casts: return GetCasts();
-                case AbilityStat.Area: return (_baseArea + Area);
                 default: return 0;
             }
         }
@@ -148,8 +125,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
                 case AbilityStat.Cooldown: return Cooldown;
                 case AbilityStat.Cost: return Cost;
                 case AbilityStat.Range: return Range;
-                case AbilityStat.Casts: return Casts;
-                case AbilityStat.Area: return Area;
                 default: return 0;
             }
         }
@@ -160,8 +135,6 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
                 case AbilityStat.Cooldown: Cooldown = newValue; break;
                 case AbilityStat.Cost: Cost = newValue; break;
                 case AbilityStat.Range: Range = newValue; break;
-                case AbilityStat.Casts: Casts = newValue; break;
-                case AbilityStat.Area: Area = newValue; break;
             }
         }
         #endregion

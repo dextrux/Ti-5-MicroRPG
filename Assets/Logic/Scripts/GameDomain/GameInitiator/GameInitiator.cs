@@ -13,14 +13,16 @@ namespace Logic.Scripts.GameDomain.GameInitiator {
         private readonly IStateMachineService _stateMachine;
         private readonly ILoadingScreenController _loadingScreenController;
         private readonly LobbyState.Factory _lobbyStateFactory;
+        private readonly ILevelsDataService _levelsDataService;
         private readonly ISceneInitiatorsService _sceneInitiatorsService;
 
         public SceneType SceneType => SceneType.GameScene;
 
-        public GameInitiator(IStateMachineService stateMachine, LobbyState.Factory LobbyStateFactory, ILoadingScreenController loadingScreenController, ISceneInitiatorsService sceneInitiatorsService) {
+        public GameInitiator(IStateMachineService stateMachine, LobbyState.Factory LobbyStateFactory, ILoadingScreenController loadingScreenController, ILevelsDataService levelsDataService, ISceneInitiatorsService sceneInitiatorsService) {
             _stateMachine = stateMachine;
             _lobbyStateFactory = LobbyStateFactory;
             _loadingScreenController = loadingScreenController;
+            _levelsDataService = levelsDataService;
             _sceneInitiatorsService = sceneInitiatorsService;
             _sceneInitiatorsService.RegisterInitiator(this);
         }
@@ -29,7 +31,7 @@ namespace Logic.Scripts.GameDomain.GameInitiator {
         public async Awaitable LoadEntryPoint(IInitiatorEnterData enterDataObject, CancellationTokenSource cancellationTokenSource) {
             GameInitiatorEnterData enterData = (GameInitiatorEnterData)enterDataObject;
             _ = _loadingScreenController.SetLoadingSlider(0.5f, cancellationTokenSource);
-            //await To-do Adicionar informações de load dos níveis
+            await _levelsDataService.LoadLevelsData(cancellationTokenSource);
             await _stateMachine.EnterInitialGameState(_lobbyStateFactory.Create(new LobbyInitiatorEnterData()), cancellationTokenSource);
         }
 

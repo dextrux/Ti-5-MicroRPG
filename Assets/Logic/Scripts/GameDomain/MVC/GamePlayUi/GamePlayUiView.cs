@@ -13,9 +13,6 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
 
         [SerializeField] private GamePlayUiBindSO _gamePlayUiBindSO;
         [SerializeField] private float tweenDuration = 0.5f;
-        [SerializeField] private GameObject _tempHoldScreen;
-        [SerializeField] private GameObject _tempWinScreen;
-        [SerializeField] private GameObject _tempLoseScreen;
 
         private Button _setSkillSet1Btn;
         private Button _setSkillSet2Btn;
@@ -29,23 +26,6 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
         private ITurnQuery _turnQuery;
         private ICommandFactory _commandFactory;
         private int _cachedAp;
-
-        public void TempHoldScreenHide() {
-            _tempHoldScreen.SetActive(false);
-        }
-
-        public void TempShowWinScreen()
-        {
-            _tempWinScreen.SetActive(true);
-            Time.timeScale = 0f;
-        }
-
-        public void TempShowLoseScreen()
-        {
-            _tempLoseScreen.SetActive(true);
-            Time.timeScale = 0f;
-        }
-
 
         #region AuxMethods
         void TweenLength(System.Func<Length> getter, System.Action<Length> setter, int newValue) {

@@ -14,15 +14,9 @@ public class GamePlayInstaller : MonoInstaller {
     [SerializeField] private NaraView _naraViewPrefab;
     [SerializeField] private NaraConfigurationSO _naraConfiguration;
 
-    [SerializeField] private BossView _bossViewPrefab;
-    [SerializeField] private BossConfigurationSO _bossConfiguration;
-    [SerializeField] private BossPhasesSO _bossPhases;
-
     [SerializeField] private GamePlayUiView _gamePlayUiView;
 
     [SerializeField] private AbilityData[] _skills;
-
-    [SerializeField] private EchoView _echoviewPrefab;
 
     [SerializeField] private LayerMask _layerMaskMouse;
 
@@ -33,19 +27,18 @@ public class GamePlayInstaller : MonoInstaller {
 
     private void BindServices() {
         Container.Bind<IGamePlayInitiator>().To<GamePlayInitiator>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
+        Container.Bind<INaraMovementControllerFactory>().To<NaraMovementControllerFactory>().AsSingle();
+        Container.BindInterfacesTo<GamePlayDataService>().AsSingle().NonLazy();
     }
 
     private void BindControllers() {
-        Container.BindInterfacesTo<NaraController>().AsSingle().WithArguments(_naraViewPrefab, _naraConfiguration).NonLazy();
-        //Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
-        Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
+        Container.BindInterfacesTo<LevelScenarioController>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<NaraController>().AsSingle().WithArguments(_naraViewPrefab, _naraConfiguration).NonLazy();
+        Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<CastController>().AsSingle().WithArguments(_skills).NonLazy();
-        Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
-
-        if (_bossPhases != null) Container.BindInstance(_bossPhases);
-        Container.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments((BossBehaviorSO)null).NonLazy();
-        Container.BindInterfacesTo<BossController>().AsSingle().WithArguments(_bossViewPrefab, _bossConfiguration, _bossPhases).NonLazy();
-        Container.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();
+        //Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
+        Container.BindInterfacesTo<PortalController>().AsSingle().NonLazy();
     }
 }

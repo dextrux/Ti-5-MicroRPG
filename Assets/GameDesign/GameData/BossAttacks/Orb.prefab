@@ -45,11 +45,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effects: []
-  _attackType: 2
+  _attackType: 3
   _protean:
     radius: 6
     angleDeg: 45
     sides: 36
+  _wingSlash:
+    radius: 4
+    angleDeg: 215
+    sides: 48
   _feather:
     featherCount: 8
     axisMode: 1
@@ -58,6 +62,7 @@ MonoBehaviour:
     forceBase: 2
     forcePerMeter: 0.4
     forcePerDebuff: 0.5
+  _featherIsPull: 0
   _orb:
     prefab: {fileID: 7907701672196164393, guid: b324b43eefa456c489d7c248777254b6, type: 3}
     moveStepMeters: 6

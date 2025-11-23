@@ -3,33 +3,29 @@ using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.ResourcesLoaderService;
 using Logic.Scripts.Services.UpdateService;
-using Logic.Scripts.GameDomain.MVC.Abilitys;
-using UnityEngine;
 using Logic.Scripts.Turns;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
-    public class NaraController : INaraController, IFixedUpdatable, IEffectable, IEffectableAction
-    {
+    public class NaraController : INaraController, IFixedUpdatable, IEffectable, IEffectableAction {
         private readonly IUpdateSubscriptionService _updateSubscriptionService;
         private readonly IAudioService _audioService;
         private readonly ICommandFactory _commandFactory;
         private readonly IResourcesLoaderService _resourcesLoaderService;
         private readonly IGamePlayUiController _gamePlayUiController;
         private readonly ITurnStateReader _turnStateReader;
-        //int i = 0; Nao usado
+        private readonly NaraView _naraViewPrefab;
+        private readonly NaraData _naraData;
+        private readonly NaraConfigurationSO _naraConfiguration;
         public GameObject NaraViewGO => _naraView.gameObject;
         public Transform NaraSkillSpotTransform => _naraView.transform;
         public NaraMovementController NaraMove => _naraMovementController;
 
         private NaraView _naraView;
-        private readonly NaraView _naraViewPrefab;
-        private readonly NaraData _naraData;
         private NaraMovementController _naraMovementController;
         private int _debuffStacks;
-
-        private const float MoveSpeed = 15f;
-        private const float RotationSpeed = 10f;
 
         private readonly global::GameInputActions _gameInputActions;
 
@@ -39,102 +35,113 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
             IResourcesLoaderService resourcesLoaderService, IGamePlayUiController gamePlayUiController, NaraView naraViewPrefab,
-            NaraConfigurationSO naraConfiguration, global::GameInputActions inputActions, ITurnStateReader turnStateReader)
-        {
+            NaraConfigurationSO naraConfiguration, global::GameInputActions inputActions, ITurnStateReader turnStateReader) {
             _naraData = new NaraData(naraConfiguration);
+            _naraConfiguration = naraConfiguration;
             _updateSubscriptionService = updateSubscriptionService;
             _audioService = audioService;
             _commandFactory = commandFactory;
             _resourcesLoaderService = resourcesLoaderService;
             _naraViewPrefab = naraViewPrefab;
             _gamePlayUiController = gamePlayUiController;
-            _naraMovementController = new NaraMovementController(naraConfiguration, inputActions, updateSubscriptionService);
             _gameInputActions = new global::GameInputActions();
             _gameInputActions.Enable();
             _turnStateReader = turnStateReader;
         }
 
-        public void RegisterListeners()
-        {
+        public void RegisterListeners() {
             _updateSubscriptionService.RegisterFixedUpdatable(this);
         }
 
-        public void ManagedFixedUpdate()
-        {
-            if (_turnStateReader != null && _turnStateReader.Active && _turnStateReader.Phase == TurnPhase.PlayerAct)
-            {
-                Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
-                _naraMovementController.Move(dir, MoveSpeed, RotationSpeed);
-                bool willMove = dir.sqrMagnitude > 0.0001f && MoveSpeed > 0f;
-                _naraView?.SetMoving(willMove);
+        public void UnregisterListeners() {
+            _updateSubscriptionService.UnregisterFixedUpdatable(this);
+        }
+
+        public void ManagedFixedUpdate() {
+            if (_naraMovementController is NaraTurnMovementController) {
+                if (_turnStateReader != null && _turnStateReader.Active && _turnStateReader.Phase == TurnPhase.PlayerAct) {
+                    Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+                    _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
+                    bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
+                    _naraView?.SetMoving(willMove);
+                }
+                else {
+                    _naraMovementController.Move(Vector2.zero, 0f, 0f);
+                    _naraView?.SetMoving(false);
+                }
             }
-            else
-            {
-                _naraMovementController.Move(Vector2.zero, 0f, 0f);
-                _naraView?.SetMoving(false);
+            else {
+                Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+                if (dir != Vector2.zero) {
+                    _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
+                    bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
+                    _naraView?.SetMoving(willMove);
+                }
+                else {
+                    _naraMovementController.Move(Vector2.zero, 0f, 0f);
+                    _naraView?.SetMoving(false);
+                }
             }
         }
 
-        public void CreateNara()
-        {
+        public void CreateNara(NaraMovementController movementController) {
             _naraView = Object.Instantiate(_naraViewPrefab);
             _naraData.ResetData();
-            _naraMovementController.SetNaraRigidbody(_naraView.GetRigidbody());
-            _naraMovementController.SetMovementRadiusCenter();
-            _naraView.SetNaraCenterView(_naraMovementController.GetNaraCenter());
-            _naraView.SetNaraRadiusView(_naraMovementController.GetNaraRadius());
-            _naraView.CreateLineRenderer();
-            _naraView.SetCamera();
-            _naraMovementController.SetCamera(_naraView.GetCamera());
             _naraView.SetMoving(false);
+            _naraMovementController = movementController;
         }
 
-        public void InitEntryPoint()
-        {
-            CreateNara();
+        public void ResetController() {
+            UnregisterListeners();
+            _naraData.ResetData();
+            UnityEngine.Object.Destroy(_naraView.gameObject);
+        }
+
+        public void InitEntryPoint() {
             _gamePlayUiController.SetPlayerValues(_naraData.ActualHealth, _naraData.PreviewHealth);
+            _naraMovementController.InitEntryPoint(_naraView.GetRigidbody(), _naraView.GetCamera());
         }
 
-        public void ResetController()
-        {
+        public void SetPosition(Vector3 movementCenter) {
+            _naraView.GetRigidbody().position = movementCenter;
         }
 
-        public void RecenterMovementAreaAtTurnStart()
-        {
-            _naraMovementController.SetMovementRadiusCenter();
-            _naraView.SetNaraMovementAreaAgain(_naraMovementController.GetNaraRadius(), _naraMovementController.GetNaraCenter());
-        }
+        //public void RecenterMovementAreaAtTurnStart() {
+        //    _naraMovementController.SetMovementRadiusCenter();
+        //    _naraView.SetNaraMovementAreaAgain(_naraMovementController.GetNaraRadius(), _naraMovementController.GetNaraCenter());
+        //}
 
-        public void SetMovementCircleVisible(bool visible)
-        {
-            if (_naraView != null)
-            {
-                _naraView.SetMovementCircleVisible(visible);
-            }
-        }
+        //public void SetMovementCircleVisible(bool visible) {
+        //    if (_naraView != null) {
+        //        _naraView.SetMovementCircleVisible(visible);
+        //    }
+        //}
 
-        public void SetNewMovementArea()
-        {
-            _naraMovementController.RecalculateRadiusAfterAbility();
-            RecenterMovementAreaAtTurnStart();
-        }
+        //public void SetNewMovementArea() {
+        //    _naraMovementController.RecalculateRadiusAfterAbility();
+        //    RecenterMovementAreaAtTurnStart();
+        //}
 
-        public void ResetMovementArea()
-        {
-            _naraMovementController.ResetMovementRadius();
-            RecenterMovementAreaAtTurnStart();
-        }
+        //public void ResetMovementArea() {
+        //    _naraMovementController.ResetMovementRadius();
+        //    RecenterMovementAreaAtTurnStart();
+        //}
 
-        public void RemoveMovementAreaLimit()
-        {
-            _naraMovementController.RemoveMovementRadius();
-            RecenterMovementAreaAtTurnStart();
-        }
+        //public void RemoveMovementAreaLimit() {
+        //    _naraMovementController.RemoveMovementRadius();
+        //    RecenterMovementAreaAtTurnStart();
+        //}
 
-        public void RecenterNara()
-        {
-            _naraView.SetPosition();
-        }
+        //public void RecenterNara() {
+        //    _naraView.SetPosition();
+        //}
+
+        //Funcao pra setar o raio para zero. Isso zera a movimentacao
+        //To-Do levar isso para o lugar correto
+        //public void CancelMovement() {
+        //    _naraMovementController.SetRadiusToZero();
+        //    _naraView.SetNaraRadiusView(0);
+        //}
 
         #region IEffectable Methods
 
@@ -145,54 +152,45 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public void ResetPreview() {
             _naraData.ResetPreview();
         }
-        public void PreviewDamage(int damageAmound)
-        {
+        public void PreviewDamage(int damageAmound) {
             _naraData.TakeDamage(damageAmound);
             _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
         }
 
-        public void PreviewHeal(int damageAmound)
-        {
+        public void PreviewHeal(int damageAmound) {
             _naraData.TakeDamage(damageAmound);
             _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
         }
 
-        public void TakeDamage(int damageAmound)
-        {
+        public void TakeDamage(int damageAmound) {
             _naraData.TakeDamage(damageAmound);
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
             _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
             if (_naraData.IsAlive()) {
-                _gamePlayUiController.TempShowLoseScreen();
                 _naraView?.PlayDeath();
             }
         }
 
-        public void PlayAttackType(int type)
-        {
+        public void PlayAttackType(int type) {
             _naraView?.SetAttackType(type);
         }
 
-        public void PlayAttackType1()
-        {
+        public void PlayAttackType1() {
             _naraView?.SetAttackType(1);
         }
 
-        public void Heal(int healAmount)
-        {
+        public void Heal(int healAmount) {
             _naraData.Heal(healAmount);
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
         }
 
-        public void TriggerExecute()
-        {
+        public void TriggerExecute() {
             _naraView?.TriggerExecute();
         }
 
-        public void ResetExecuteTrigger()
-        {
+        public void ResetExecuteTrigger() {
             _naraView?.ResetExecuteTrigger();
         }
 
@@ -238,15 +236,17 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         #endregion
 
         // Debuff API
-        public void AddDebuffStacks(int amount)
-        {
+        public int GetNumberDebuffs() {
+            return _debuffStacks;
+        }
+
+        public void AddDebuffStacks(int amount) {
             if (amount <= 0) return;
             _debuffStacks += amount;
             Debug.Log($"Nara debuff stacks updated: {_debuffStacks} (+{amount})");
         }
 
-        public int GetDebuffStacks()
-        {
+        public int GetDebuffStacks() {
             return _debuffStacks;
         }
 

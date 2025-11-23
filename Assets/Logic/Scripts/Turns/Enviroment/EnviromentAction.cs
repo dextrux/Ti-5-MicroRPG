@@ -4,14 +4,18 @@ namespace Logic.Scripts.Turns
 {
     public class EnviromentActionService : IEnviromentActionService
     {
-        private readonly System.Collections.Generic.IEnumerable<IEnviromentRule> _rules;
-        private readonly System.Collections.Generic.IEnumerable<IEnviromentAsyncRule> _asyncRules;
+		private readonly System.Collections.Generic.IEnumerable<IEnvironmentCommand> _commands;
+		private readonly System.Collections.Generic.IEnumerable<IEnvironmentAsyncCommand> _asyncCommands;
+		private readonly IEnvironmentActorsRegistry _actorsRegistry;
 
-        public EnviromentActionService(System.Collections.Generic.IEnumerable<IEnviromentRule> rules,
-            System.Collections.Generic.IEnumerable<IEnviromentAsyncRule> asyncRules)
+		public EnviromentActionService(
+			System.Collections.Generic.IEnumerable<IEnvironmentCommand> commands,
+			System.Collections.Generic.IEnumerable<IEnvironmentAsyncCommand> asyncCommands,
+			IEnvironmentActorsRegistry actorsRegistry)
         {
-            _rules = rules;
-            _asyncRules = asyncRules;
+			_commands = commands;
+			_asyncCommands = asyncCommands;
+			_actorsRegistry = actorsRegistry;
         }
 
         public async void ExecuteEnviromentTurn()
@@ -22,31 +26,56 @@ namespace Logic.Scripts.Turns
         public async System.Threading.Tasks.Task ExecuteEnviromentTurnAsync()
         {
             UnityEngine.Debug.Log("[Environment] Begin ExecuteEnviromentTurnAsync");
-            foreach (IEnviromentRule rule in _rules)
+			// Executa comandos síncronos
+			if (_commands != null)
             {
-                UnityEngine.Debug.Log($"[Environment] Execute rule: {rule.GetType().Name}");
-                rule.Execute();
+				foreach (IEnvironmentCommand command in _commands)
+				{
+					if (command == null) continue;
+					UnityEngine.Debug.Log($"[Environment] Execute command: {command.GetType().Name}");
+					command.Execute();
+				}
             }
-            // Await async rules if any are bound
-            int asyncCount = 0;
-            if (_asyncRules != null)
+			// Await comandos assíncronos
+			int asyncCount = 0;
+			if (_asyncCommands != null)
             {
-                foreach (var r in _asyncRules) asyncCount++;
-                UnityEngine.Debug.Log($"[Environment] Awaiting async rules (injected): {asyncCount}");
-                foreach (var r in _asyncRules)
+				foreach (IEnvironmentAsyncCommand c in _asyncCommands) asyncCount++;
+				UnityEngine.Debug.Log($"[Environment] Awaiting async commands (injected): {asyncCount}");
+				foreach (IEnvironmentAsyncCommand command in _asyncCommands)
                 {
-                    UnityEngine.Debug.Log($"[Environment] ExecuteAsync rule: {r.GetType().Name}");
-                    await r.ExecuteAsync();
+					if (command == null) continue;
+					UnityEngine.Debug.Log($"[Environment] ExecuteAsync command: {command.GetType().Name}");
+					await command.ExecuteAsync();
                 }
             }
-            else
+			// Executa atores dinâmicos registrados
+			System.Collections.Generic.IReadOnlyList<IEnvironmentTurnActor> snapshot = _actorsRegistry != null ? _actorsRegistry.Snapshot() : null;
+			if (snapshot != null && snapshot.Count > 0)
             {
-                var asyncRulesFallback = Zenject.ProjectContext.Instance.Container.ResolveAll<IEnviromentAsyncRule>();
-                UnityEngine.Debug.Log($"[Environment] Awaiting async rules (fallback): {asyncRulesFallback.Count}");
-                for (int i = 0; i < asyncRulesFallback.Count; i++)
+				// Log dos atores enfileirados para este turno
+				System.Text.StringBuilder namesBuilder = new System.Text.StringBuilder(256);
+				for (int i = 0; i < snapshot.Count; i++)
+				{
+					IEnvironmentTurnActor actor = snapshot[i];
+					string n = actor != null ? actor.GetType().Name : "null";
+					if (i > 0) namesBuilder.Append(", ");
+					namesBuilder.Append(n);
+				}
+				UnityEngine.Debug.Log($"[Environment] Actors queued this turn ({snapshot.Count}): {namesBuilder.ToString()}");
+
+				System.Collections.Generic.List<IEnvironmentTurnActor> toRemove = new System.Collections.Generic.List<IEnvironmentTurnActor>();
+				for (int i = 0; i < snapshot.Count; i++)
                 {
-                    UnityEngine.Debug.Log($"[Environment] ExecuteAsync rule: {asyncRulesFallback[i].GetType().Name}");
-                    await asyncRulesFallback[i].ExecuteAsync();
+					IEnvironmentTurnActor actor = snapshot[i];
+					if (actor == null) continue;
+					UnityEngine.Debug.Log($"[Environment] Execute actor: {actor.GetType().Name}");
+					await actor.ExecuteAsync();
+					if (actor.RemoveAfterRun) toRemove.Add(actor);
+				}
+				for (int i = 0; i < toRemove.Count; i++)
+				{
+					_actorsRegistry.Remove(toRemove[i]);
                 }
             }
             UnityEngine.Debug.Log("[Environment] End ExecuteEnviromentTurnAsync");

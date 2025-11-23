@@ -22,7 +22,15 @@ namespace Logic.Scripts.GameDomain.Effects
             if (!TryGetNaraRigidbody(target, out var rb)) return;
 
             Vector3 dir;
-            if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis != Vector3.zero)
+            if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentDisplacementEnabled)
+            {
+                Vector3 center = Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentCenterWorld;
+                dir = (rb.position - center);
+                dir.y = 0f;
+                if (dir.sqrMagnitude < 1e-6f) return;
+                dir.Normalize();
+            }
+            else if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis != Vector3.zero)
             {
                 Vector3 axis = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis;
                 axis.y = 0f; axis.Normalize();
@@ -83,7 +91,15 @@ namespace Logic.Scripts.GameDomain.Effects
             if (!TryGetNaraRigidbody(target, out var rb)) yield break;
             // Duplicate calculation of dir and scaledForce to run synchronously but yield duration
             Vector3 dir;
-            if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis != Vector3.zero)
+            if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentDisplacementEnabled)
+            {
+                Vector3 center = Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentCenterWorld;
+                dir = (rb.position - center);
+                dir.y = 0f;
+                if (dir.sqrMagnitude < 1e-6f) yield break;
+                dir.Normalize();
+            }
+            else if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis != Vector3.zero)
             {
                 Vector3 axis = Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.CurrentSpecialAxis;
                 axis.y = 0f; axis.Normalize();

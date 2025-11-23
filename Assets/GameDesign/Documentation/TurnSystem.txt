@@ -1,0 +1,151 @@
+Turn System - Fluxo, Fases e Atores
+
+1) Visão geral do fluxo de turnos (estado atual)
+
+- Orquestrador: TurnFlowController
+  - StartTurns(): reseta AP, entra em modo de turnos e inicia AdvanceTurnAsync().
+  - Ordem das fases por turno: BossAct → PlayerAct → EchoesAct → EnviromentAct → próximo turno.
+  - Publica estado em TurnStateService (TurnNumber e Phase) a cada transição de fase.
+
+- Serviços centrais
+  - ActionPointsService: controla AP do jogador, publica em TurnStateService.
+  - IEchoService (EchoService): gerencia lista de ecos com contagem regressiva por turno.
+  - IEnviromentActionService (EnviromentActionService): executa comandos de cenário síncronos/assíncronos.
+  - IBossActionService (BossActionService): delega turno do boss ao BossController.
+
+
+2) Fases e marcadores
+
+- BossAct
+  - Marcadores: _phase = BossAct, _waitingBoss = true.
+  - Fluxo: TurnFlowController chama IBossActionService.ExecuteBossTurnAsync(), aguarda término e chama OnBossCompleted().
+  - Transição: OnBossCompleted() limpa _waitingBoss e inicia PlayerAct.
+
+- PlayerAct
+  - Marcadores: _phase = PlayerAct, _waitingPlayer = true.
+  - Ações ao entrar: ActionPointsService.GainTurnPoints(), reseta/recentra área de movimento (INaraController), exibe círculo de movimento.
+  - Conclusão: via CommandFactory (CompletePlayerActionCommand) → TurnFlowController.CompletePlayerAction() limpa _waitingPlayer e inicia EchoesAct.
+  - Uso de skills: via IAbilityController.CreateAbility(caster, slot); checagem/consumo de AP via ActionPointsService.
+
+- EchoesAct
+  - Marcadores: _phase = EchoesAct.
+  - Fluxo: TurnFlowController chama IEchoService.ResolveDueEchoesAsync().
+  - Serviço: decrementa TurnsRemaining de cada eco; executa e remove ecos vencidos.
+  - Transição: OnEchoesCompleted() inicia EnviromentAct.
+
+- EnviromentAct
+  - Marcadores: _phase = EnviromentAct.
+  - Fluxo: TurnFlowController chama IEnviromentActionService.ExecuteEnviromentTurnAsync().
+  - Serviço: executa todos os comandos de cenário síncronos/assíncronos (ver seção 7) e, em seguida, executa os atores dinâmicos registrados (se houver).
+  - Transição: OnEnviromentCompleted() volta para AdvanceTurnAsync() (próximo turno).
+
+
+3) Atores por fase (definição conceitual)
+
+- BossTurn (ator: Boss)
+  - Implementação efetiva: BossActionService → BossController.
+  - BossController por turno: ResolvePendingCasts() → ExecutePreparedActionAsync() → MoveTurnAsync() → PrepareNextAction().
+  - Ataques: BossAttack (handlers/efeitos) instanciados conforme padrão do Behavior.
+
+- PlayerTurn (ator: Player/Nara)
+  - Implementação efetiva: INaraController + ActionPointsService + IAbilityController; conclusão via CompletePlayerActionCommand.
+  - Entrada na fase: concede AP, recentra/exibe UI de movimento; jogador usa habilidades via IAbilityController; quando terminar, dispara o comando de completar a ação do player.
+
+- EchoesTurn (atores: ecos pendentes)
+  - Implementação efetiva: EchoService mantém entries (action, turnsRemaining), resolve as que venceram.
+
+- EnviromentTurn (atores: regras atuais e, a partir deste design, atores dinâmicos)
+  - Implementação efetiva atualizada: EnviromentActionService executa IEnvironmentCommand e IEnvironmentAsyncCommand.
+  - Extensão: suporte a múltiplos atores de Environment dinâmicos (abaixo).
+
+
+4) Suporte a múltiplos atores por fase (design aprovado, orientação de implementação)
+
+- Ideia central: cada fase resolve uma coleção de “atores” daquela fase, aguardando cada um terminar antes de avançar.
+  - Para Boss/Player/Echoes, os atores já existem via serviços/fluxos descritos acima.
+  - Para Environment, adicionamos um registro dinâmico de atores.
+
+- Environment: registro dinâmico de atores
+  - Interface do ator (executa por turno; pode optar por auto-remoção após executar):
+    interface IEnvironmentTurnActor {
+      System.Threading.Tasks.Task ExecuteAsync();
+      bool RemoveAfterRun { get; }
+    }
+  - Registro singleton (thread-safe simples) com Add / Remove / Snapshot:
+    interface IEnvironmentActorsRegistry {
+      void Add(IEnvironmentTurnActor actor);
+      void Remove(IEnvironmentTurnActor actor);
+      System.Collections.Generic.IReadOnlyList<IEnvironmentTurnActor> Snapshot();
+    }
+  - Execução por turno no EnviromentActionService:
+    - Após executar comandos sync/async, obter Snapshot() do registro.
+    - Executar todos os atores em ordem (sequencial).
+    - Se RemoveAfterRun == true, remover do registro ao final daquele turno.
+
+- Registro dinâmico em runtime
+  - Command para registrar: RegisterEnvironmentActorCommand (recebe actor e chama registry.Add(actor)).
+  - Command para remover: UnregisterEnvironmentActorCommand (opcional; RemoveAfterRun cobre o caso mais comum).
+  - Comandos preservam o padrão de orquestração via CommandFactory.
+
+
+5) Como configurar um novo ator de Environment (passo a passo)
+
+1. Criar a classe do ator implementando IEnvironmentTurnActor.
+   - Definir a ação concreta dentro de ExecuteAsync() (ex.: aplicar dano em área, spawn/despawn de objetos, efeitos de terreno, etc.).
+   - Retornar CompletedTask para ações instantâneas; usar awaits se houver animações/esperas.
+   - Definir RemoveAfterRun = true se o ator for “one-shot”; false se for persistente por múltiplos turnos.
+
+   Exemplo básico (conceito):
+   - DangerZoneEnvironmentActor(center, radius, damage, removeAfterRun: true) executa uma aplicação de dano em quem estiver na zona e se remove.
+
+2. Registrar o ator durante a execução do jogo.
+   - Opção A (recomendada): via CommandFactory
+     - Criar o ator (new DangerZoneEnvironmentActor(...)).
+     - Criar e executar RegisterEnvironmentActorCommand, passando o ator.
+   - Opção B: injetar IEnvironmentActorsRegistry e chamar Add(actor) diretamente.
+
+3. (Opcional) Remover manualmente (antes de executar no turno) quando necessário.
+   - Usar UnregisterEnvironmentActorCommand ou registry.Remove(actor).
+
+4. Execução por turno
+   - No próximo EnviromentAct, EnviromentActionService irá:
+     - Executar comandos sync/async já injetados.
+     - Obter a lista Snapshot() e executar todos os IEnvironmentTurnActor registrados.
+     - Remover os atores com RemoveAfterRun == true.
+   - Se o registro estiver vazio, o turno de Environment não executa atores adicionais (somente regras existentes).
+
+
+6) Substituição de Rules por Commands (contratos e ligação)
+
+- Objetivo: remover o conceito de “rules” e utilizar “commands” para o turno de Environment.
+- Contratos sugeridos:
+  interface IEnvironmentCommand {
+    void Execute();
+  }
+  interface IEnvironmentAsyncCommand {
+    System.Threading.Tasks.Task ExecuteAsync();
+  }
+- Execução no EnviromentActionService (antes dos atores dinâmicos):
+  - Iterar todos IEnvironmentCommand e chamar Execute().
+  - Iterar/aguardar todos IEnvironmentAsyncCommand via await ExecuteAsync().
+- Binding no installer:
+  - Registrar implementações concretas de IEnvironmentCommand / IEnvironmentAsyncCommand como múltiplas instâncias (AsSingle/Transient conforme necessidade).
+  - Manter EnviromentActionService injetando IEnumerable<IEnvironmentCommand> e IEnumerable<IEnvironmentAsyncCommand>.
+
+
+7) Checklist de teste
+
+- Fluxo básico sem atores de Environment: BossAct → PlayerAct → EchoesAct → EnviromentAct (sem ações extras) → próximo turno.
+- Registrar 2 atores de Environment “dummy” que fazem await Task.Delay(100ms) cada; verificar que ambos rodam no mesmo EnviromentAct e só após o segundo o fluxo avança.
+- Um ator com RemoveAfterRun = true deve rodar apenas uma vez; com false, deve rodar a cada EnviromentAct até ser removido.
+- Player: usar habilidades consome AP e respeita limites; ao disparar CompletePlayerActionCommand, o fluxo avança para EchoesAct.
+- Boss: confirmar que ExecuteBossTurnAsync() prepara/resolve ataques conforme Behavior e conclui antes de avançar para PlayerAct.
+
+
+8) Notas de integração
+
+- O fluxo de fases permanece inalterado e continua publicado via TurnStateService (útil para UI e gating de input).
+- A adição do registro de atores de Environment não interfere nos comandos atuais; quando não há atores registrados, o turno de Environment executa apenas os comandos configurados (ou nenhum, se não houver).
+- Toda a interação em tempo de jogo para criar/remover atores é feita via CommandFactory (ou DI direta), preservando o padrão do projeto.
+
+

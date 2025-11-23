@@ -1,18 +1,22 @@
+using CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.StartLevel;
 using Logic.Scripts.Core.Mvc.WorldCamera;
 using Logic.Scripts.GameDomain.GameInputActions;
 using Logic.Scripts.GameDomain.MVC.Nara;
+using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
-using Logic.Scripts.Services.UpdateService;
 using System.Threading;
 using UnityEngine;
-using Logic.Scripts.GameDomain.MVC.Ui;
 
 namespace Logic.Scripts.GameDomain.Commands {
     public class StartGamePlayStateCommand : BaseCommand, ICommandAsync {
         //Temporario para tirar os asserts
 
-
+        private IGamePlayUiController _gamePlayUiController;
+        private IAudioService _audioService;
+        private INaraController _naraController;
+        private ICommandFactory _commandFactory;
+        private IWorldCameraController _worldCameraController;
         private IGameInputActionsController _gameInputActionsController;
 
         private GamePlayInitatorEnterData _enterData;
@@ -23,12 +27,19 @@ namespace Logic.Scripts.GameDomain.Commands {
         }
 
         public override void ResolveDependencies() {
+            _audioService = _diContainer.Resolve<IAudioService>();
+            //_gamePlayAudioClipsScriptableObject = _diContainer.Resolve<GamePlayAudioClipsScriptableObject>();
+            _gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
+            _naraController = _diContainer.Resolve<INaraController>();
+            _commandFactory = _diContainer.Resolve<ICommandFactory>();
+            _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-            await _gameInputActionsController.WaitForAnyKeyPressed(cancellationTokenSource, true);
-            return;
+            _gameInputActionsController.EnableInputs();
+            _gameInputActionsController.RegisterAllInputListeners();
+            await _commandFactory.CreateCommandAsync<StartLevelCommand>().Execute(cancellationTokenSource);
         }
     }
 }

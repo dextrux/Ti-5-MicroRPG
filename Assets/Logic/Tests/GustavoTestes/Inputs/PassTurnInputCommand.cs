@@ -14,7 +14,7 @@ public class PassTurnInputCommand : BaseCommand, ICommandVoid
 
     public void Execute()
     {
-        _naraController.RemoveMovementAreaLimit();
+        if (_naraController?.NaraMove is NaraTurnMovementController naraTurnMovement) naraTurnMovement.RemoveMovementRadius();
         _turnFlowController.CompletePlayerAction();
     }
 }

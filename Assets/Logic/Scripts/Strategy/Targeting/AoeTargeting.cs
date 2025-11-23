@@ -15,7 +15,6 @@ public class AoeTargeting : TargetingStrategy {
         base.Initialize(data, caster);
         if (AoePrefab != null) {
             previewInstance = GameObject.Instantiate(AoePrefab, new Vector3(0f, 0.1f, 0f), Quaternion.identity);
-            previewInstance.transform.localScale = new Vector3(data.GetArea(), 1.0f, data.GetArea());
         }
         SubscriptionService.RegisterUpdatable(this);
     }
@@ -75,7 +74,7 @@ public class AoeTargeting : TargetingStrategy {
     public override Vector3 LockAim(out IEffectable[] targets) {
         //To-Do Alterar para new input system
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, float.MaxValue, GroundLayerMask)) {
-            Collider[] colliders = Physics.OverlapSphere(hit.point, (Ability.GetArea()/2.0f));
+            Collider[] colliders = Physics.OverlapSphere(hit.point, (5f));
             List<IEffectable> targetsList = new List<IEffectable>();
             foreach (Collider collider in colliders) {
                 if (collider.TryGetComponent<IEffectable>(out IEffectable effectable)) {

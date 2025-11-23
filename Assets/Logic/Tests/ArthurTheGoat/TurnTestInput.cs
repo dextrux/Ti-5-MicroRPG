@@ -1,6 +1,5 @@
 using UnityEngine;
 using Zenject;
-using Logic.Scripts.Turns;
 
 namespace Logic.Scripts.Turns.Ui
 {

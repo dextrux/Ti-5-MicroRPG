@@ -49,9 +49,13 @@ MonoBehaviour:
   - rid: 2599984789869297870
   _attackType: 0
   _protean:
-    radius: 6
+    radius: 18
     angleDeg: 45
     sides: 36
+  _wingSlash:
+    radius: 4
+    angleDeg: 215
+    sides: 48
   _feather:
     featherCount: 3
     axisMode: 2
@@ -60,6 +64,7 @@ MonoBehaviour:
     forceBase: 2
     forcePerMeter: 0.4
     forcePerDebuff: 0.5
+  _featherIsPull: 0
   _orb:
     prefab: {fileID: 0}
     moveStepMeters: 6
@@ -76,10 +81,12 @@ MonoBehaviour:
       data:
         Name: 
         Description: 
+        IsAutoCast: 0
         amount: 10
     - rid: 2599984789869297870
       type: {class: AddDebuffStacksEffect, ns: Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
         Name: 
         Description: 
+        IsAutoCast: 0
         amount: 1

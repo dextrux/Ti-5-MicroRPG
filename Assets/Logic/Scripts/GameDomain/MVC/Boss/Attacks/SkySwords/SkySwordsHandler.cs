@@ -30,12 +30,15 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 		private bool? _pullOverride = null;
 		public static void PrimeNextTelegraphPull(bool isPull) => _nextIsPull = isPull;
 
-		public SkySwordsHandler(float radius, float ringWidth, bool isPull, bool telegraphDisplacementEnabled)
+		private readonly Material _areaMaterial;
+
+		public SkySwordsHandler(float radius, float ringWidth, bool isPull, bool telegraphDisplacementEnabled, Material areaMaterial)
 		{
 			_radius = Mathf.Max(0.1f, radius);
 			_ringWidth = Mathf.Max(0.02f, ringWidth);
 			_isPull = isPull;
 			_telegraphDisplacementEnabled = telegraphDisplacementEnabled;
+			_areaMaterial = areaMaterial;
 		}
 
 		public void PrepareTelegraph(Transform parentTransform)
@@ -55,7 +58,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 			var go = new GameObject("SkySwords_Ring");
 			go.transform.SetParent(parentTransform, false);
 			_ring = go.AddComponent<LineRenderer>();
-			_ring.material = new Material(Shader.Find("Sprites/Default"));
+				_ring.material = _areaMaterial != null ? _areaMaterial : new Material(Shader.Find("Sprites/Default"));
 			_ring.useWorldSpace = true;
 			_ring.loop = true;
 			_ring.widthMultiplier = _ringWidth;
@@ -70,10 +73,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 				discGo.transform.SetParent(parentTransform, false);
 				_discFilter = discGo.AddComponent<MeshFilter>();
 				_discRenderer = discGo.AddComponent<MeshRenderer>();
-				_discRenderer.material = new Material(Shader.Find("Sprites/Default"))
-				{
-					color = _ring.startColor * new Color(1f, 1f, 1f, 0.35f)
-				};
+				_discRenderer.material = _areaMaterial != null ? _areaMaterial : new Material(Shader.Find("Sprites/Default"));
 				float effectiveRadius = Mathf.Max(0.01f, _radius - _ringWidth * 0.5f);
 				_discFilter.sharedMesh = BuildFilledDisc(effectiveRadius, 64);
 				// Posiciona o fill no centro do círculo, em y=0.05 (plano)
@@ -216,9 +216,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 					int i1 = i + 1;
 					int i2 = (i == segments - 1) ? 1 : (i + 2);
 					int triIdx = i * 3;
+					// Inverte a ordem para garantir normal para cima (Y+)
 					tris[triIdx + 0] = i0;
-					tris[triIdx + 1] = i1;
-					tris[triIdx + 2] = i2;
+					tris[triIdx + 1] = i2;
+					tris[triIdx + 2] = i1;
 				}
 				mesh.vertices = verts;
 				mesh.triangles = tris;

@@ -53,35 +53,26 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static Vector3 CurrentSpecialAxis;
         public static float CurrentStripWidth;
 
-        private AudioService _audioService;
-        private bool _prepSfxPlayed;
-        private bool _attackSfxPlayed;
+        private IAudioService _audio;
 
         public FeatherLinesHandler(FeatherLinesParams p, IUpdateSubscriptionService updateSubscriptionService)
         {
-            _params = p;
-            _updateSvc = updateSubscriptionService;
+            _params = p; _updateSvc = updateSubscriptionService;
         }
-
         public FeatherLinesHandler(FeatherLinesParams p)
         {
-            _params = p;
-            _updateSvc = TryFindUpdateServiceInScene();
+            _params = p; _updateSvc = TryFindUpdateServiceInScene();
         }
-
         public FeatherLinesHandler(FeatherLinesParams p, bool isPull, IUpdateSubscriptionService updateSubscriptionService)
         {
-            _params = p;
-            _updateSvc = updateSubscriptionService;
-            _ctorIsPush = !isPull;
+            _params = p; _updateSvc = updateSubscriptionService; _ctorIsPush = !isPull;
         }
-
         public FeatherLinesHandler(FeatherLinesParams p, bool isPull)
         {
-            _params = p;
-            _updateSvc = TryFindUpdateServiceInScene();
-            _ctorIsPush = !isPull;
+            _params = p; _updateSvc = TryFindUpdateServiceInScene(); _ctorIsPush = !isPull;
         }
+
+        public void SetAudio(IAudioService audio) { _audio = audio; }
 
         private IUpdateSubscriptionService TryFindUpdateServiceInScene()
         {
@@ -89,19 +80,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             {
                 var all = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
                 foreach (var go in all)
-                {
-                    if (go.TryGetComponent<IUpdateSubscriptionService>(out var svc))
-                        return svc;
-                }
+                    if (go.TryGetComponent<IUpdateSubscriptionService>(out var svc)) return svc;
             }
             catch { }
             return null;
-        }
-
-        private void EnsureAudio()
-        {
-            if (_audioService == null)
-                _audioService = Object.FindFirstObjectByType<AudioService>(FindObjectsInactive.Include);
         }
 
         public void PrepareTelegraph(Transform parentTransform)
@@ -159,11 +141,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             FreezeSpecialAxis(parentTransform.position);
 
             EnsureAudio();
-            if (!_prepSfxPlayed)
-            {
-                _audioService?.PlayAudio(AudioClipType.BossPrepAttack1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
-                _prepSfxPlayed = true;
-            }
+            _audio?.PlayAudio(AudioClipType.BossPrepAttack1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
 
             _updateSvc?.RegisterUpdatable(this);
         }
@@ -173,16 +151,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             if (_ctorIsPush.HasValue) return _ctorIsPush.Value;
             if (_nextTelegraphPushMode.HasValue)
             {
-                bool v = _nextTelegraphPushMode.Value;
-                _nextTelegraphPushMode = null;
-                return v;
+                bool v = _nextTelegraphPushMode.Value; _nextTelegraphPushMode = null; return v;
             }
-            if (_isPushProvider != null)
-            {
-                try { return _isPushProvider(); } catch { }
-            }
-            if (TryInferPushFromParamsViaReflection(out bool fromParams))
-                return fromParams;
+            if (_isPushProvider != null) { try { return _isPushProvider(); } catch { } }
+            if (TryInferPushFromParamsViaReflection(out bool fromParams)) return fromParams;
             return _globalFallbackPushMode;
         }
 
@@ -195,17 +167,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 foreach (var name in new[] { "isPush", "push", "shouldPush", "knockback" })
                 {
                     var f = t.GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    if (f != null && f.FieldType == typeof(bool))
-                    {
-                        isPush = (bool)f.GetValue(_params);
-                        return true;
-                    }
+                    if (f != null && f.FieldType == typeof(bool)) { isPush = (bool)f.GetValue(_params); return true; }
                     var p = t.GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    if (p != null && p.PropertyType == typeof(bool))
-                    {
-                        isPush = (bool)p.GetValue(_params);
-                        return true;
-                    }
+                    if (p != null && p.PropertyType == typeof(bool)) { isPush = (bool)p.GetValue(_params); return true; }
                 }
                 var enumField = t.GetField("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                               ?? t.GetField("displacementMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -469,6 +433,18 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             return area2 / len;
         }
 
+        private void EnsureAudio()
+        {
+            if (_audio != null) return;
+            try
+            {
+                var behaviours = Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+                foreach (var mb in behaviours)
+                    if (mb is IAudioService a) { _audio = a; break; }
+            }
+            catch { }
+        }
+
         public IEnumerator ExecuteEffects(List<AbilityEffect> effects, ArenaPosReference arenaReference, Transform originTransform, IEffectable caster)
         {
             if (effects == null || effects.Count == 0) yield break;
@@ -485,6 +461,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             if (sMr != null) sMr.enabled = false;
 
             yield return new WaitForSeconds(0.5f);
+
+            EnsureAudio();
+            _audio?.PlayAudio(AudioClipType.StrongWindTornado1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
 
             int lastIndex = effects.Count - 1;
             Vector3 playerWorld = arenaReference.RelativeArenaPositionToRealPosition(arenaReference.GetPlayerArenaPosition());
@@ -663,10 +642,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             if (_views != null)
             {
                 for (int i = 0; i < _views.Length; i++)
-                {
-                    if (_views[i]?.Line != null)
-                        Object.Destroy(_views[i].Line.gameObject);
-                }
+                    if (_views[i]?.Line != null) Object.Destroy(_views[i].Line.gameObject);
             }
 
             if (_singleArrow != null)
@@ -676,8 +652,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             }
 
             _views = null;
-            _prepSfxPlayed = false;
-            _attackSfxPlayed = false;
         }
     }
 }

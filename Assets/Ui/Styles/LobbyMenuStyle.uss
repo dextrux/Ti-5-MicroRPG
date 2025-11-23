@@ -1,40 +1,65 @@
-.simple-button {
-    width: 30%;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
+.mainMenu-button {
+    width: 22%;
     margin-bottom: 1%;
     margin-top: 1%;
-    height: 7%;
-    font-size: 319%;
-    -unity-font-definition: url("project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&guid=74a5091d8707f334b9a5c31ef71a64ba&type=3#PerfectDOSVGA437");
+    height: 85%;
+    font-size: 380%;
+    -unity-font-definition: url("project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&guid=4778bedcd2ddc204c8a5bdab7a003316&type=3#Text-Bold");
+    background-image: url("project://database/Assets/Ui/Images/ButtonTexture.png?fileID=2800000&guid=17bdc5d1a8d91d5498c5f64c68eecfff&type=3#ButtonTexture");
+    -unity-font-style: normal;
+    color: rgb(107, 15, 142);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
 }
 
-.simple-button:hover {
-    width: 30%;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
+.mainMenu-button:hover {
+    width: 22%;
     margin-bottom: 1%;
     margin-top: 1%;
-    height: 7%;
-    font-size: 319%;
+    height: 85%;
+    font-size: 380%;
+    -unity-font-definition: url("project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&guid=4778bedcd2ddc204c8a5bdab7a003316&type=3#Text-Bold");
+    background-image: url("project://database/Assets/Ui/Images/ButtonTexture.png?fileID=2800000&guid=17bdc5d1a8d91d5498c5f64c68eecfff&type=3#ButtonTexture");
+    -unity-font-style: normal;
+    color: rgb(107, 15, 142);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
     scale: 1.1 1.1;
-    background-color: rgb(40, 46, 173);
 }
 
-.simple-button:active {
-    width: 30%;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
+.mainMenu-button:active {
+    width: 22%;
     margin-bottom: 1%;
     margin-top: 1%;
-    height: 7%;
-    font-size: 319%;
+    height: 85%;
+    font-size: 380%;
+    -unity-font-definition: url("project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&guid=4778bedcd2ddc204c8a5bdab7a003316&type=3#Text-Bold");
+    background-image: url("project://database/Assets/Ui/Images/ButtonTexture.png?fileID=2800000&guid=17bdc5d1a8d91d5498c5f64c68eecfff&type=3#ButtonTexture");
+    -unity-font-style: normal;
+    color: rgb(107, 15, 142);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
     scale: 0.9 0.9;
 }
 
@@ -89,4 +114,154 @@
     translate: 100% 100%;
     transition-timing-function: ease-in-out;
     transition-duration: 0.5s;
+}
+
+.simple-button {
+    width: 95%;
+    margin-bottom: 2%;
+    margin-top: 3%;
+    height: 13%;
+    font-size: 380%;
+    -unity-font-definition: url("project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&guid=4778bedcd2ddc204c8a5bdab7a003316&type=3#Text-Bold");
+    background-image: url("project://database/Assets/Ui/Images/ButtonTexture.png?fileID=2800000&guid=17bdc5d1a8d91d5498c5f64c68eecfff&type=3#ButtonTexture");
+    -unity-font-style: normal;
+    color: rgb(107, 15, 142);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.simple-button:hover {
+    width: 95%;
+    margin-bottom: 2%;
+    margin-top: 3%;
+    height: 13%;
+    font-size: 380%;
+    -unity-font-definition: url("project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&guid=4778bedcd2ddc204c8a5bdab7a003316&type=3#Text-Bold");
+    background-image: url("project://database/Assets/Ui/Images/ButtonTexture.png?fileID=2800000&guid=17bdc5d1a8d91d5498c5f64c68eecfff&type=3#ButtonTexture");
+    -unity-font-style: normal;
+    color: rgb(107, 15, 142);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    scale: 1.1 1.1;
+}
+
+.simple-button:active {
+    width: 95%;
+    margin-bottom: 2%;
+    margin-top: 3%;
+    height: 13%;
+    font-size: 380%;
+    -unity-font-definition: url("project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&guid=4778bedcd2ddc204c8a5bdab7a003316&type=3#Text-Bold");
+    background-image: url("project://database/Assets/Ui/Images/ButtonTexture.png?fileID=2800000&guid=17bdc5d1a8d91d5498c5f64c68eecfff&type=3#ButtonTexture");
+    -unity-font-style: normal;
+    color: rgb(107, 15, 142);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    scale: 0.9 0.9;
+}
+
+.close-button {
+    width: 100px;
+    height: 100px;
+    align-self: center;
+    background-color: rgba(188, 188, 188, 0);
+    background-image: url("project://database/Assets/Ui/Images/icon_Close.png?fileID=2800000&guid=27440cca8ad51eb48b9a5fbd134dd4b5&type=3#icon_Close");
+    -unity-background-scale-mode: scale-to-fit;
+    background-size: 60% 60%;
+    border-left-color: rgb(76, 0, 109);
+    border-right-color: rgb(76, 0, 109);
+    border-top-color: rgb(76, 0, 109);
+    border-bottom-color: rgb(76, 0, 109);
+    border-top-width: 7px;
+    border-right-width: 7px;
+    border-bottom-width: 7px;
+    border-left-width: 7px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+}
+
+.floating-button {
+    border-left-color: rgb(76, 0, 109);
+    border-right-color: rgb(76, 0, 109);
+    border-top-color: rgb(76, 0, 109);
+    border-bottom-color: rgb(76, 0, 109);
+    background-color: rgba(255, 255, 255, 0);
+    font-size: 310%;
+    border-top-width: 12px;
+    border-right-width: 12px;
+    border-bottom-width: 12px;
+    border-left-width: 12px;
+    border-top-left-radius: 33px;
+    border-top-right-radius: 33px;
+    border-bottom-right-radius: 33px;
+    border-bottom-left-radius: 33px;
+    width: 27%;
+    height: 70%;
+    -unity-font-definition: url("project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&guid=4778bedcd2ddc204c8a5bdab7a003316&type=3#Text-Bold");
+}
+
+.page-non-selected-button {
+    background-color: rgba(188, 188, 188, 0);
+    border-top-left-radius: 100%;
+    border-top-right-radius: 100%;
+    border-bottom-right-radius: 100%;
+    border-bottom-left-radius: 100%;
+    border-top-width: 8px;
+    border-right-width: 8px;
+    border-bottom-width: 8px;
+    border-left-width: 8px;
+    border-left-color: rgb(76, 0, 109);
+    border-right-color: rgb(76, 0, 109);
+    border-top-color: rgb(76, 0, 109);
+    border-bottom-color: rgb(76, 0, 109);
+    width: 40px;
+    height: 40px;
+}
+
+.page-selected-button {
+    background-color: rgb(76, 0, 109);
+    border-top-left-radius: 100%;
+    border-top-right-radius: 100%;
+    border-bottom-right-radius: 100%;
+    border-bottom-left-radius: 100%;
+    border-top-width: 8px;
+    border-right-width: 8px;
+    border-bottom-width: 8px;
+    border-left-width: 8px;
+    border-left-color: rgb(76, 0, 109);
+    border-right-color: rgb(76, 0, 109);
+    border-top-color: rgb(76, 0, 109);
+    border-bottom-color: rgb(76, 0, 109);
+    width: 40px;
+    height: 40px;
+}
+
+#guide-list-scroll #unity-content-container {
+    padding-top: 5%;
+    padding-right: 2%;
+    padding-bottom: 1%;
+    padding-left: 5%;
 }

@@ -8,9 +8,32 @@ public class LobbyUiView : MonoBehaviour {
     [SerializeField] private UIDocument _uIDocument;
     private VisualElement _root;
     private Button _playButton;
-    private Button _customizeButton;
+    private Button _loadButton;
+    private Button _optionsButton;
     private Button _exitButton;
 
+    public void Initialize(AbilityData data) {
+        _root = _uIDocument.rootVisualElement;
+        _playButton = _root.Q<Button>("play-btn");
+        _loadButton = _root.Q<Button>("load-btn");
+        _optionsButton = _root.Q<Button>("options-btn");
+        _exitButton = _root.Q<Button>("exit-btn");
+
+    }
+
+    public void RegisterCallbacks(Action OnPlayButtonPressed, Action OnLoadButtonPressed,
+        Action OnOptionsButtonPressed, Action OnExitButtonPressed) {
+        _playButton.clicked += OnPlayButtonPressed;
+        _loadButton.clicked += OnLoadButtonPressed;
+        _optionsButton.clicked += OnOptionsButtonPressed;
+        _exitButton.clicked += OnExitButtonPressed;
+
+    }
+}
+/*Customization
+ * 
+ * 
+ *  public TemplateContainer CustomizationContainer => _customizationContainer;
     private Label _balanceLabel;
     private Label _disadvantageLabel;
 
@@ -37,16 +60,7 @@ public class LobbyUiView : MonoBehaviour {
     private Button _costMinusButton;
     private Button _rangePlusButton;
     private Button _rangeMinusButton;
-
-    #region Properties
-    public TemplateContainer CustomizationContainer => _customizationContainer;
-    #endregion
-
-    public void Initialize(AbilityData data) {
-        _root = _uIDocument.rootVisualElement;
-        _playButton = _root.Q<Button>("play-btn");
-        _exitButton = _root.Q<Button>("exit-btn");
-        _customizeButton = _root.Q<Button>("customize-btn");
+ *              _customizeButton = _root.Q<Button>("customize-btn");
         _customizationContainer = _root.Q<TemplateContainer>("customization-container");
         _customizeExitButton = _customizationContainer.Q<Button>("exit-customization-button");
         _resetSkillsButton = _customizationContainer.Q<Button>("reset-button");
@@ -76,18 +90,11 @@ public class LobbyUiView : MonoBehaviour {
         _rangeMinusButton = _customizationContainer.Q<Button>("range-minus-button");
 
         SetAbility(data);
-    }
-
-    public void RegisterCallbacks(Action OnPlayButtonPressed, Action OnCustomizeButtonPressed, Action OnExitButtonPressed,
-        Action OnCustomizeExitButtonPressed, Action OnDamagePlusPressed, Action OnDamageMinusPressed, Action OnCooldownPlusPressed,
+        (Action OnCustomizeExitButtonPressed, Action OnDamagePlusPressed, Action OnDamageMinusPressed, Action OnCooldownPlusPressed,
         Action OnCooldownMinusPressed, Action OnCostPlusPressed, Action OnCostMinusPressed, Action OnRangePlusPressed,
         Action OnRangeMinusPressed, Action OnSetAbility1Pressed, Action OnSetAbility2Pressed, Action OnSetAbility3Pressed,
-        Action OnSetAbility4Pressed, Action OnSetAbility5Pressed, Action OnResetSkillPressed) {
-        _playButton.clicked += OnPlayButtonPressed;
-        _customizeButton.clicked += OnCustomizeButtonPressed;
-        _customizeExitButton.clicked += OnCustomizeExitButtonPressed;
-        _exitButton.clicked += OnExitButtonPressed;
-        _ability1Slot.clicked += OnSetAbility1Pressed;
+        Action OnSetAbility4Pressed, Action OnSetAbility5Pressed, Action OnResetSkillPressed)
+ *         _ability1Slot.clicked += OnSetAbility1Pressed;
         _ability2Slot.clicked += OnSetAbility2Pressed;
         _ability3Slot.clicked += OnSetAbility3Pressed;
         _ability4Slot.clicked += OnSetAbility4Pressed;
@@ -182,4 +189,6 @@ public class LobbyUiView : MonoBehaviour {
         _balanceLabel.text = balanceText;
         _disadvantageLabel.text = disadvantageText;
     }
-}
+ * 
+ * 
+ * */

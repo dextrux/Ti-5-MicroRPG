@@ -32,12 +32,14 @@ public class GuideUIView : MonoBehaviour {
 
         titleLabel = root.Q<Label>("title-label");
         descriptionLabel = root.Q<Label>("description-label");
-        pageImageContainer = root.Q<VisualElement>("pageImage-container");
+        pageImageContainer = root.Q<VisualElement>("page-image-container");
         buttonsContainer = root.Q<VisualElement>("buttons-container");
         pagesButtonContainer = root.Q<VisualElement>("pages-button");
-        guidesListContainer = root.Q<VisualElement>("guides-list-container");
         nextPageButton = root.Q<Button>("next-page-button");
         previousPageButton = root.Q<Button>("previous-page-button");
+        VisualElement guidesListRoot = root.Q<VisualElement>("guide-list-scroll");
+        guidesListContainer = guidesListRoot.Q<VisualElement>("unity-content-container");
+
 
         if (nextPageButton != null) {
             nextPageButton.clickable.clicked += () => NavigatePage(1);

@@ -1,6 +1,6 @@
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.CommandFactory;
-using Logic.Scripts.Services.Logger.Base;
+using UnityEngine;
 
 public class MouseClickInputCommand : BaseCommand, ICommandVoid {
     private INaraController _naraController;
@@ -11,14 +11,14 @@ public class MouseClickInputCommand : BaseCommand, ICommandVoid {
     }
 
     public void Execute() {
-        if (_castController.GetCanUseAbility() == true) {
-            _castController.UseAbility((IEffectable)_naraController);
+        _castController.UseAbility((IEffectable)_naraController);
+        if (_castController?.GetCanUseAbility() == true) {
             if (_naraController?.NaraMove is NaraTurnMovementController naraTurnMovement) {
                 naraTurnMovement.RecalculateRadiusAfterAbility();
                 naraTurnMovement.SetMovementRadiusCenter();
                 naraTurnMovement.Refresh();
+                _castController.SetCanUseAbility(false);
             }
-            _castController.SetCanUseAbility(false);
         }
     }
 }

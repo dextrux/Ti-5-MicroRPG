@@ -21,6 +21,7 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
         private ICommandFactory _commandFactory;
         private IGamePlayDataService _gamePlayDataService;
         private IBossController _bossController;
+        private ICastController _castController;
 
         public override void ResolveDependencies() {
             _gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
@@ -32,6 +33,7 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
             _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
             if (_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber).ControllerType == typeof(NaraTurnMovementController)) {
+                _castController = _diContainer.Resolve<ICastController>();
                 _bossController = _diContainer.Resolve<IBossController>();
             }
         }
@@ -45,6 +47,7 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
             //To-Do Unfreeze movement nara
             //Activate GameplayView se necessário
             if (_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber).ControllerType == typeof(NaraTurnMovementController)) {
+                _castController.InitEntryPoint(_naraController);
                 _bossController.Initialize();
                 _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute();
             }

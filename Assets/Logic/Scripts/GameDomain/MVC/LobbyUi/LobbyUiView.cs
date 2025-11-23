@@ -18,8 +18,6 @@ public class LobbyUiView : MonoBehaviour {
     private Label _cooldownLabel;
     private Label _costLabel;
     private Label _rangeLabel;
-    private Label _castsLabel;
-    private Label _areaLabel;
 
     private TemplateContainer _customizationContainer;
     private VisualElement _skillContainer;
@@ -39,10 +37,6 @@ public class LobbyUiView : MonoBehaviour {
     private Button _costMinusButton;
     private Button _rangePlusButton;
     private Button _rangeMinusButton;
-    private Button _castsPlusButton;
-    private Button _castsMinusButton;
-    private Button _areaPlusButton;
-    private Button _areaMinusButton;
 
     #region Properties
     public TemplateContainer CustomizationContainer => _customizationContainer;
@@ -66,8 +60,6 @@ public class LobbyUiView : MonoBehaviour {
         _cooldownLabel = _customizationContainer.Q<Label>("cooldown-txt");
         _costLabel = _customizationContainer.Q<Label>("cost-txt");
         _rangeLabel = _customizationContainer.Q<Label>("range-txt");
-        _castsLabel = _customizationContainer.Q<Label>("casts-txt");
-        _areaLabel = _customizationContainer.Q<Label>("area-txt");
 
         _ability1Slot = _customizationContainer.Q<Button>("ability-slot1-button");
         _ability2Slot = _customizationContainer.Q<Button>("ability-slot2-button");
@@ -82,10 +74,6 @@ public class LobbyUiView : MonoBehaviour {
         _costMinusButton = _customizationContainer.Q<Button>("costs-minus-button");
         _rangePlusButton = _customizationContainer.Q<Button>("range-plus-button");
         _rangeMinusButton = _customizationContainer.Q<Button>("range-minus-button");
-        _castsPlusButton = _customizationContainer.Q<Button>("casts-plus-button");
-        _castsMinusButton = _customizationContainer.Q<Button>("casts-minus-button");
-        _areaPlusButton = _customizationContainer.Q<Button>("area-plus-button");
-        _areaMinusButton = _customizationContainer.Q<Button>("area-minus-button");
 
         SetAbility(data);
     }
@@ -93,8 +81,7 @@ public class LobbyUiView : MonoBehaviour {
     public void RegisterCallbacks(Action OnPlayButtonPressed, Action OnCustomizeButtonPressed, Action OnExitButtonPressed,
         Action OnCustomizeExitButtonPressed, Action OnDamagePlusPressed, Action OnDamageMinusPressed, Action OnCooldownPlusPressed,
         Action OnCooldownMinusPressed, Action OnCostPlusPressed, Action OnCostMinusPressed, Action OnRangePlusPressed,
-        Action OnRangeMinusPressed, Action OnCastsPlusPressed, Action OnCastsMinusPressed, Action OnAreaPlusPressed,
-        Action OnAreaMinusPressed, Action OnSetAbility1Pressed, Action OnSetAbility2Pressed, Action OnSetAbility3Pressed,
+        Action OnRangeMinusPressed, Action OnSetAbility1Pressed, Action OnSetAbility2Pressed, Action OnSetAbility3Pressed,
         Action OnSetAbility4Pressed, Action OnSetAbility5Pressed, Action OnResetSkillPressed) {
         _playButton.clicked += OnPlayButtonPressed;
         _customizeButton.clicked += OnCustomizeButtonPressed;
@@ -109,14 +96,10 @@ public class LobbyUiView : MonoBehaviour {
         _cooldownPlusButton.clicked += OnCooldownPlusPressed;
         _costPlusButton.clicked += OnCostPlusPressed;
         _rangePlusButton.clicked += OnRangePlusPressed;
-        _castsPlusButton.clicked += OnCastsPlusPressed;
-        _areaPlusButton.clicked += OnAreaPlusPressed;
         _damageMinusButton.clicked += OnDamageMinusPressed;
         _cooldownMinusButton.clicked += OnCooldownMinusPressed;
         _costMinusButton.clicked += OnCostMinusPressed;
         _rangeMinusButton.clicked += OnRangeMinusPressed;
-        _castsMinusButton.clicked += OnCastsMinusPressed;
-        _areaMinusButton.clicked += OnAreaMinusPressed;
         _resetSkillsButton.clicked += OnResetSkillPressed;
     }
 
@@ -128,31 +111,23 @@ public class LobbyUiView : MonoBehaviour {
         _pointsContainer.dataSource = data;
     }
 
-    public void SetSignOnOff(AbilityAtributeType type, bool isMinus, bool newState) {
+    public void SetSignOnOff(AbilityStat type, bool isMinus, bool newState) {
         switch (type) {
-            case AbilityAtributeType.Damage:
+            case AbilityStat.Damage:
                 if (isMinus) _damageMinusButton.SetEnabled(newState);
                 else _damagePlusButton.SetEnabled(newState);
                 break;
-            case AbilityAtributeType.Cooldown:
+            case AbilityStat.Cooldown:
                 if (isMinus) _cooldownMinusButton.SetEnabled(newState);
                 else _cooldownPlusButton.SetEnabled(newState);
                 break;
-            case AbilityAtributeType.Cost:
+            case AbilityStat.Cost:
                 if (isMinus) _costMinusButton.SetEnabled(newState);
                 else _costPlusButton.SetEnabled(newState);
                 break;
-            case AbilityAtributeType.Range:
+            case AbilityStat.Range:
                 if (isMinus) _rangeMinusButton.SetEnabled(newState);
                 else _rangePlusButton.SetEnabled(newState);
-                break;
-            case AbilityAtributeType.Casts:
-                if (isMinus) _castsMinusButton.SetEnabled(newState);
-                else _castsPlusButton.SetEnabled(newState);
-                break;
-            case AbilityAtributeType.Area:
-                if (isMinus) _areaMinusButton.SetEnabled(newState);
-                else _areaPlusButton.SetEnabled(newState);
                 break;
         }
     }
@@ -166,10 +141,6 @@ public class LobbyUiView : MonoBehaviour {
         else _costMinusButton.SetEnabled(false);
         if (data.GetModifierStatValue(AbilityStat.Range) > 1) _rangeMinusButton.SetEnabled(true);
         else _rangeMinusButton.SetEnabled(false);
-        if (data.GetModifierStatValue(AbilityStat.Casts) > 1) _castsMinusButton.SetEnabled(true);
-        else _castsMinusButton.SetEnabled(false);
-        if (data.GetModifierStatValue(AbilityStat.Area) > 1) _areaMinusButton.SetEnabled(true);
-        else _areaMinusButton.SetEnabled(false);
     }
 
     public void SetUpText(AbilityStat type, int newValue) {
@@ -190,14 +161,6 @@ public class LobbyUiView : MonoBehaviour {
                 Debug.Log("Range: " + newValue.ToString("00"));
                 _rangeLabel.text = newValue.ToString("00");
                 break;
-            case AbilityStat.Casts:
-                Debug.Log("Casts: " + newValue.ToString("00"));
-                _castsLabel.text = newValue.ToString("00");
-                break;
-            case AbilityStat.Area:
-                Debug.Log("Area: " + newValue.ToString("00"));
-                _areaLabel.text = newValue.ToString("00");
-                break;
         }
     }
 
@@ -206,8 +169,6 @@ public class LobbyUiView : MonoBehaviour {
         _cooldownMinusButton.SetEnabled(newState);
         _costMinusButton.SetEnabled(newState);
         _rangeMinusButton.SetEnabled(newState);
-        _castsMinusButton.SetEnabled(newState);
-        _areaMinusButton.SetEnabled(newState);
     }
 
     public void SetAllPlusSign(bool newState) {
@@ -215,8 +176,6 @@ public class LobbyUiView : MonoBehaviour {
         _cooldownPlusButton.SetEnabled(newState);
         _costPlusButton.SetEnabled(newState);
         _rangePlusButton.SetEnabled(newState);
-        _castsPlusButton.SetEnabled(newState);
-        _areaPlusButton.SetEnabled(newState);
     }
 
     public void SetUpBalanceText(string balanceText, string disadvantageText) {

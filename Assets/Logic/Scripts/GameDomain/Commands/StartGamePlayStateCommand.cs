@@ -18,7 +18,6 @@ namespace Logic.Scripts.GameDomain.Commands {
         private ICommandFactory _commandFactory;
         private IWorldCameraController _worldCameraController;
         private IGameInputActionsController _gameInputActionsController;
-        private ICastController _castController;
 
         private GamePlayInitatorEnterData _enterData;
 
@@ -35,13 +34,11 @@ namespace Logic.Scripts.GameDomain.Commands {
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
-            _castController = _diContainer.Resolve<ICastController>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
             _gameInputActionsController.EnableInputs();
             _gameInputActionsController.RegisterAllInputListeners();
-            _castController.InitEntryPoint(_naraController);
             await _commandFactory.CreateCommandAsync<StartLevelCommand>().Execute(cancellationTokenSource);
         }
     }

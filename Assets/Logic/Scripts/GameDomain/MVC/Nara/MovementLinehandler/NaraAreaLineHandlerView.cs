@@ -1,4 +1,3 @@
-using Logic.Scripts.GameDomain.MVC.Nara;
 using UnityEngine;
 
 public class NaraAreaLineHandlerView : MonoBehaviour {

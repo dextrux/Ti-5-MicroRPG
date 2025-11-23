@@ -23,9 +23,8 @@ public class LobbyUiController : ILobbyController {
 
     public void InitEntryPoint() {
         _lobbyView.Initialize(_abilityPointService.AllAbilities[0]);
-        _lobbyView.RegisterCallbacks(OnClickPlay, OnCustomizeClicked, OnExtiPlay, OnCustomizeExit, OnDamagePlus, OnDamageMinus,
-            OnCooldownPlus, OnCooldownMinus, OnCostPlus, OnCostMinus, OnRangePlus, OnRangeMinus,
-            OnCastsPlus, OnCastsMinus, OnAreaPlus, OnAreaMinus, OnAbility1Button, OnAbility2Button, OnAbility3Button, OnAbility4Button,
+        _lobbyView.RegisterCallbacks(OnClickPlay, OnCustomizeClicked, OnExitPlay, OnCustomizeExit, OnDamagePlus, OnDamageMinus,
+            OnCooldownPlus, OnCooldownMinus, OnCostPlus, OnCostMinus, OnRangePlus, OnRangeMinus, OnAbility1Button, OnAbility2Button, OnAbility3Button, OnAbility4Button,
             OnAbility5Button, OnResetSkills);
         _selectedAbility = _abilityPointService.AllAbilities[0];
     }
@@ -40,7 +39,7 @@ public class LobbyUiController : ILobbyController {
         _lobbyView.CustomizationContainer.AddToClassList("close-container");
         _abilityPointService.SaveStats();
     }
-    public void OnExtiPlay() {
+    public void OnExitPlay() {
         Application.Quit();
     }
 
@@ -66,12 +65,10 @@ public class LobbyUiController : ILobbyController {
         else {
             _lobbyView.SetAllMinusSign(true);
         }
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Damage) > 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Damage, true, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Cooldown) > 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Cooldown, true, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Cost) > 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Cost, true, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Range) > 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Range, true, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Casts) > 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Casts, true, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Area) > 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Area, true, true);
+        if (_selectedAbility.GetModifierStatValue(AbilityStat.Damage) > 0) _lobbyView.SetSignOnOff(AbilityStat.Damage, true, true);
+        if (_selectedAbility.GetModifierStatValue(AbilityStat.Cooldown) > 0) _lobbyView.SetSignOnOff(AbilityStat.Cooldown, true, true);
+        if (_selectedAbility.GetModifierStatValue(AbilityStat.Cost) > 0) _lobbyView.SetSignOnOff(AbilityStat.Cost, true, true);
+        if (_selectedAbility.GetModifierStatValue(AbilityStat.Range) > 0) _lobbyView.SetSignOnOff(AbilityStat.Range, true, true);
     }
 
     private void SetAllPlusSigns() {
@@ -81,12 +78,10 @@ public class LobbyUiController : ILobbyController {
         else {
             _lobbyView.SetAllPlusSign(true);
         }
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Damage) < 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Damage, false, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Cooldown) < 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Cooldown, false, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Cost) < 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Cost, false, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Range) < 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Range, false, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Casts) < 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Casts, false, true);
-        if (_selectedAbility.GetModifierStatValue(AbilityStat.Area) < 0) _lobbyView.SetSignOnOff(AbilityAtributeType.Area, false, true);
+        if (_selectedAbility.GetModifierStatValue(AbilityStat.Damage) < 0) _lobbyView.SetSignOnOff(AbilityStat.Damage, false, true);
+        if (_selectedAbility.GetModifierStatValue(AbilityStat.Cooldown) < 0) _lobbyView.SetSignOnOff(AbilityStat.Cooldown, false, true);
+        if (_selectedAbility.GetModifierStatValue(AbilityStat.Cost) < 0) _lobbyView.SetSignOnOff(AbilityStat.Cost, false, true);
+        if (_selectedAbility.GetModifierStatValue(AbilityStat.Range) < 0) _lobbyView.SetSignOnOff(AbilityStat.Range, false, true);
     }
 
     public void UpdateAllAtributeText() {
@@ -96,8 +91,6 @@ public class LobbyUiController : ILobbyController {
         _lobbyView.SetUpText(AbilityStat.Cooldown, (int)_selectedAbility.GetCurrentStatValue(AbilityStat.Cooldown));
         _lobbyView.SetUpText(AbilityStat.Cost, (int)_selectedAbility.GetCurrentStatValue(AbilityStat.Cost));
         _lobbyView.SetUpText(AbilityStat.Range, (int)_selectedAbility.GetCurrentStatValue(AbilityStat.Range));
-        _lobbyView.SetUpText(AbilityStat.Casts, (int)_selectedAbility.GetCurrentStatValue(AbilityStat.Casts));
-        _lobbyView.SetUpText(AbilityStat.Area, (int)_selectedAbility.GetCurrentStatValue(AbilityStat.Area));
     }
 
     #region SetAbilityButtonsCallbacks
@@ -187,34 +180,6 @@ public class LobbyUiController : ILobbyController {
         if (_abilityPointService.TryDecreaseStat(_selectedAbility, AbilityStat.Range)) {
             VerifyBalanceAndSetSigns();
             _lobbyView.SetUpText(AbilityStat.Range, (int)_selectedAbility.GetCurrentStatValue(AbilityStat.Range));
-        }
-    }
-
-    public void OnCastsPlus() {
-        if (_abilityPointService.TryIncreaseStat(_selectedAbility, AbilityStat.Casts)) {
-            VerifyBalanceAndSetSigns();
-            _lobbyView.SetUpText(AbilityStat.Casts, _selectedAbility.GetCasts());
-        }
-    }
-
-    public void OnCastsMinus() {
-        if (_abilityPointService.TryDecreaseStat(_selectedAbility, AbilityStat.Casts)) {
-            VerifyBalanceAndSetSigns();
-            _lobbyView.SetUpText(AbilityStat.Casts, _selectedAbility.GetCasts());
-        }
-    }
-
-    public void OnAreaPlus() {
-        if (_abilityPointService.TryIncreaseStat(_selectedAbility, AbilityStat.Area)) {
-            VerifyBalanceAndSetSigns();
-            _lobbyView.SetUpText(AbilityStat.Area, (int)_selectedAbility.GetCurrentStatValue(AbilityStat.Area));
-        }
-    }
-
-    public void OnAreaMinus() {
-        if (_abilityPointService.TryDecreaseStat(_selectedAbility, AbilityStat.Area)) {
-            VerifyBalanceAndSetSigns();
-            _lobbyView.SetUpText(AbilityStat.Area, (int)_selectedAbility.GetCurrentStatValue(AbilityStat.Area));
         }
     }
     #endregion

@@ -3,6 +3,4 @@ public enum AbilityStat {
     Cooldown,
     Cost,
     Range,
-    Casts,
-    Area
 }

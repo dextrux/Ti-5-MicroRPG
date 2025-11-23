@@ -2,6 +2,7 @@ using Logic.Scripts.GameDomain.MVC.Nara;
 using UnityEngine;
 using Logic.Scripts.Turns;
 using Logic.Scripts.Services.UpdateService;
+using ModestTree;
 
 public class NaraTurnMovementController : NaraMovementController {
     private Vector3 _movement;
@@ -128,10 +129,12 @@ public class NaraTurnMovementController : NaraMovementController {
     public void ActivateNaraGravity()
     {
         NaraRigidbody.useGravity = true;
+        NaraRigidbody.constraints &= ~RigidbodyConstraints.FreezePositionY;
     }
 
     public void DeactivateNaraGravity()
     {
         NaraRigidbody.useGravity = false;
+        NaraRigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
     }
 }

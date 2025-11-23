@@ -16,6 +16,7 @@ namespace Logic.Scripts.Turns
 			Container.BindInterfacesAndSelfTo<EnvironmentActorsRegistry>().AsSingle();
             Container.BindInterfacesAndSelfTo<EnviromentActionService>().AsSingle();
             Container.BindInterfacesTo<OrbEnvironmentRule>().AsSingle();
+
             Container.BindInterfacesAndSelfTo<TurnFlowController>().AsSingle();
         }
     }

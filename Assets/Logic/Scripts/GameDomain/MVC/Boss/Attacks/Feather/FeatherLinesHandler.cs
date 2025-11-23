@@ -17,7 +17,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         private readonly FeatherLinesParams _params;
         private readonly IUpdateSubscriptionService _updateSvc;
 
-        private class FeatherSubView
+		private class FeatherSubView
         {
             public LineRenderer Line;
             public MeshFilter MeshFilter;
@@ -33,6 +33,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         private LineRenderer _singleArrow;
         private Vector3 _sStart, _sEnd, _axisUnit;
         private float _stripWidth;
+		private readonly Material _baseMaterial;
+		private readonly Material _displacementMaterial;
 
         private Transform _parentTransform;
         private ArenaPosReference _arenaRef;
@@ -67,19 +69,32 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             _updateSvc = TryFindUpdateServiceInScene();
         }
 
-        public FeatherLinesHandler(FeatherLinesParams p, bool isPull, IUpdateSubscriptionService updateSubscriptionService)
+		public FeatherLinesHandler(FeatherLinesParams p, bool isPull, IUpdateSubscriptionService updateSubscriptionService, Material baseMaterial = null, Material displacementMaterial = null)
         {
             _params = p;
             _updateSvc = updateSubscriptionService;
             _ctorIsPush = !isPull;
+			_baseMaterial = baseMaterial;
+			_displacementMaterial = displacementMaterial;
         }
 
-        public FeatherLinesHandler(FeatherLinesParams p, bool isPull)
+		public FeatherLinesHandler(FeatherLinesParams p, bool isPull)
         {
             _params = p;
             _updateSvc = TryFindUpdateServiceInScene();
             _ctorIsPush = !isPull;
+			_baseMaterial = null;
+			_displacementMaterial = null;
         }
+
+		public FeatherLinesHandler(FeatherLinesParams p, bool isPull, Material baseMaterial, Material displacementMaterial = null)
+		{
+			_params = p;
+			_updateSvc = TryFindUpdateServiceInScene();
+			_ctorIsPush = !isPull;
+			_baseMaterial = baseMaterial;
+			_displacementMaterial = displacementMaterial;
+		}
 
         private IUpdateSubscriptionService TryFindUpdateServiceInScene()
         {
@@ -128,17 +143,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     Mesh = new Mesh { name = "FeatherStripMesh" }
                 };
 
-                v.Line.material = new Material(Shader.Find("Sprites/Default"));
+				Material selected = (_telegraphDisplacementEnabled && i == _specialIndex && _displacementMaterial != null)
+					? _displacementMaterial
+					: (_baseMaterial != null ? _baseMaterial : new Material(Shader.Find("Sprites/Default")));
+				v.Line.material = selected;
                 v.Line.useWorldSpace = true;
                 v.Line.loop = true;
                 v.Line.widthMultiplier = 0.1f;
-				v.Line.startColor = (i == _specialIndex) ? Color.red : Color.yellow;
-                v.Line.endColor = v.Line.startColor;
+				// Cor via material (ShaderGraph); removemos tint manual
 
-                v.MeshRenderer.material = new Material(Shader.Find("Sprites/Default"))
-                {
-					color = (i == _specialIndex) ? new Color(1f, 0f, 0f, 0.2f) : new Color(1f, 1f, 0f, 0.2f)
-                };
+				v.MeshRenderer.material = selected;
                 v.MeshFilter.sharedMesh = v.Mesh;
 
                 _views[i] = v;

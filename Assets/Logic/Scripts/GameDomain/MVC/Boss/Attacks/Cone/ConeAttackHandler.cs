@@ -11,7 +11,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
         private readonly float _angleDeg;
         private readonly int _sides;
         private readonly float[] _yaws;
-        private class ConeSubView
+		private class ConeSubView
         {
             public LineRenderer Line;
             public MeshFilter MeshFilter;
@@ -19,13 +19,15 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
             public Mesh Mesh;
         }
         private ConeSubView[] _views;
+		private readonly Material _areaMaterial;
 
-        public ConeAttackHandler(float radius, float angleDeg, int sides, float[] yaws)
+		public ConeAttackHandler(float radius, float angleDeg, int sides, float[] yaws, Material areaMaterial)
         {
             _radius = radius;
             _angleDeg = angleDeg;
             _sides = sides;
             _yaws = yaws;
+			_areaMaterial = areaMaterial;
         }
 
         public void PrepareTelegraph(Transform parentTransform)
@@ -39,16 +41,15 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
 
                 ConeSubView v = new ConeSubView();
                 v.Line = go.AddComponent<LineRenderer>();
-                v.Line.material = new Material(Shader.Find("Sprites/Default"));
+				v.Line.material = _areaMaterial != null ? _areaMaterial : new Material(Shader.Find("Sprites/Default"));
                 v.Line.useWorldSpace = true;
                 v.Line.loop = true;
                 v.Line.widthMultiplier = 0.1f;
-                v.Line.startColor = Color.yellow;
-                v.Line.endColor = Color.yellow;
+				// Deixe a cor/controlar via material do ShaderGraph
 
                 v.MeshFilter = go.AddComponent<MeshFilter>();
                 v.MeshRenderer = go.AddComponent<MeshRenderer>();
-                v.MeshRenderer.material = new Material(Shader.Find("Sprites/Default")) { color = new Color(1f, 1f, 0f, 0.2f) };
+				v.MeshRenderer.material = _areaMaterial != null ? _areaMaterial : new Material(Shader.Find("Sprites/Default"));
                 v.Mesh = new Mesh();
                 v.Mesh.name = "ConeMesh";
                 v.MeshFilter.sharedMesh = v.Mesh;
@@ -59,20 +60,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
                 Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * parentFwd;
 
                 Vector3[] outline = ConeArea.GenerateConeOutlinePolygon(origin, forward, _radius, _angleDeg, _sides);
-                for (int p = 0; p < outline.Length; p++) outline[p].y = 0.2f;
+				for (int p = 0; p < outline.Length; p++) outline[p].y = 0.05f;
                 v.Line.positionCount = outline.Length;
                 v.Line.SetPositions(outline);
 
                 Vector3[] arc = ConeArea.GenerateConeArcVertices(origin, forward, _radius, _angleDeg, _sides);
-                for (int p = 0; p < arc.Length; p++) arc[p].y = 0.2f;
+				for (int p = 0; p < arc.Length; p++) arc[p].y = 0.05f;
 
                 Transform mT = v.MeshFilter.transform;
-                mT.localPosition = new Vector3(0f, 0.2f, 0f);
+				mT.localPosition = new Vector3(0f, 0.05f, 0f);
                 mT.localRotation = Quaternion.identity;
 
                 // Build triangle fan: vertex 0 = origin, then arc points
                 Vector3[] worldVerts = new Vector3[arc.Length + 1];
-                worldVerts[0] = new Vector3(origin.x, 0.2f, origin.z);
+				worldVerts[0] = new Vector3(origin.x, 0.05f, origin.z);
                 for (int a = 0; a < arc.Length; a++) worldVerts[a + 1] = arc[a];
 
                 Vector3[] localVerts = new Vector3[worldVerts.Length];

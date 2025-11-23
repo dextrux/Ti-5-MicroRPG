@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d63f767bf773e074695224ac1fef14ac, type: 3}
+  m_Name: TelegraphMaterialConfig
+  m_EditorClassIdentifier: 
+  NormalAreaMaterial: {fileID: 2100000, guid: 954868a6902822f449340fe4ad0baed1, type: 2}
+  GrappleAreaMaterial: {fileID: 2100000, guid: dab0ad903237b8d4ca7c15dc0784b4dd, type: 2}
+  KnockbackAreaMaterial: {fileID: 2100000, guid: eef6b270f338bc646b82cbb87937c8ca, type: 2}

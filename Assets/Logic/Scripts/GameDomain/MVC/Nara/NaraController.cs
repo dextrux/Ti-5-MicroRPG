@@ -196,7 +196,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
 		public void TriggerCancel() {
 			_naraView?.TriggerCancel();
-			_naraView?.ResetAttackType();
 		}
 
         public void TakeDamagePerTurn(int damageAmount, int duration) {

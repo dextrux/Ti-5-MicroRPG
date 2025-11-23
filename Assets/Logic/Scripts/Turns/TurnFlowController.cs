@@ -9,10 +9,10 @@ namespace Logic.Scripts.Turns {
         private readonly IEchoService _echoService;
         private readonly TurnStateService _turnStateService;
         private readonly ICommandFactory _commandFactory;
-        private readonly NaraTurnMovementController _turnMovement;
 
         private IBossActionService _bossActionService;
         private IEnviromentActionService _enviromentActionService;
+        private NaraTurnMovementController _turnMovement;
         private bool _active;
         private int _turnNumber;
         private bool _waitingBoss;
@@ -29,16 +29,18 @@ namespace Logic.Scripts.Turns {
             _echoService = echoService;
             _turnStateService = turnStateService;
             _commandFactory = commandFactory;
-            if (naraController.NaraMove is NaraTurnMovementController naraTurnMovement) _turnMovement = naraTurnMovement;
         }
 
         public void Initialize(IBossActionService bossActionService,
-            IEnviromentActionService enviromentActionService) {
+            IEnviromentActionService enviromentActionService, NaraTurnMovementController naraTurnMovement) {
             _bossActionService = bossActionService;
             _enviromentActionService = enviromentActionService;
+            StartTurns();
+            _turnMovement = naraTurnMovement;
         }
 
         public void Dispose() {
+            StopTurns();
         }
 
         public void StartTurns() {

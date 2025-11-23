@@ -40,10 +40,5 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<CastController>().AsSingle().WithArguments(_skills).NonLazy();
         //Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
         Container.BindInterfacesTo<PortalController>().AsSingle().NonLazy();
-
-        /*if (_bossPhases != null) Container.BindInstance(_bossPhases);
-        Container.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments((BossBehaviorSO)null).NonLazy();
-        Container.BindInterfacesTo<BossController>().AsSingle().WithArguments(_bossViewPrefab, _bossConfiguration, _bossPhases).NonLazy();
-        Container.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();*/
     }
 }

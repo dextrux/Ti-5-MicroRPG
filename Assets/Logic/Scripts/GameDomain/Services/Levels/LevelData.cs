@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using Logic.Scripts.GameDomain.MVC.Nara;
 public abstract class LevelData : ScriptableObject {
     [SerializeField] private string levelAddress;

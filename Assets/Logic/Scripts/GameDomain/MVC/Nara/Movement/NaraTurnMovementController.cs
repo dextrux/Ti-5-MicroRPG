@@ -16,11 +16,13 @@ public class NaraTurnMovementController : NaraMovementController {
     public NaraTurnMovementController(GameInputActions inputActions, IUpdateSubscriptionService updateSubscriptionService,
         NaraConfigurationSO naraConfiguration) : base(inputActions, updateSubscriptionService, naraConfiguration) {
         _initialMovementRadius = naraConfiguration.InitialMovementDistance;
+        LineHandlerController = new NaraAreaLineHandlerController(naraConfiguration, updateSubscriptionService);
     }
 
     public override void InitEntryPoint(Rigidbody rigidbody, Camera camera) {
         base.InitEntryPoint(rigidbody, camera);
         _movementRadius = _initialMovementRadius;
+        LineHandlerController.InitEntryPoint(NaraTransform);
     }
 
     public void SetActionPointsService(ActionPointsService actionPointsService) {
@@ -76,6 +78,7 @@ public class NaraTurnMovementController : NaraMovementController {
         NaraRigidbody.linearVelocity = new Vector3(vel.x, NaraRigidbody.linearVelocity.y, vel.z);
 
         Rotate(rotation);
+        CheckRadiusLimit();
     }
 
 

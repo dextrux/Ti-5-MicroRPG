@@ -10,5 +10,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         [field: SerializeField] public float MoveSpeed { get; private set; }
         [field: SerializeField] public float RotationSpeed { get; private set; }
         [field: SerializeField] public float MaxMovementRadius { get; private set; }
+        [field: SerializeField] public NaraAreaLineHandlerView NaraAreaLineHandlerView { get; private set; }
     }
 }

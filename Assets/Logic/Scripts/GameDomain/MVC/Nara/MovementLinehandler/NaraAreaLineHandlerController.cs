@@ -12,17 +12,18 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private float _radius;
         private Transform _referenceTransform;
 
-        public NaraAreaLineHandlerController(NaraConfigurationSO naraConfiguration, Transform referenceTransform,
-            NaraAreaLineHandlerView naraAreaLineHandlerViewprefab, IUpdateSubscriptionService updateSubscriptionService, int segments = 100) {
+        public NaraAreaLineHandlerController(NaraConfigurationSO naraConfiguration,
+            IUpdateSubscriptionService updateSubscriptionService, int segments = 100) {
             _segments = Mathf.Max(8, segments);
             _maxRadius = naraConfiguration.MaxMovementRadius;
-            _referenceTransform = referenceTransform;
-            _lineHandlerViewPrefab = naraAreaLineHandlerViewprefab;
+            _lineHandlerViewPrefab = naraConfiguration.NaraAreaLineHandlerView;
             _updateSubscriptionService = updateSubscriptionService;
         }
 
-        public void InitEntryPoint() {
+        public void InitEntryPoint(Transform referenceTransform) {
+            _referenceTransform = referenceTransform;
             _lineHandlerView = Object.Instantiate(_lineHandlerViewPrefab, _referenceTransform).GetComponent<NaraAreaLineHandlerView>();
+            Debug.Log("Isnull: " + (_referenceTransform == null));
             Refresh(_center, _maxRadius, _referenceTransform.position);
             SetVisible(false);
         }
@@ -59,6 +60,12 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public void SetVisible(bool visible) {
             _lineHandlerView.FullMoveArea.enabled = visible;
             _lineHandlerView.ResultMoveArea.enabled = visible;
+            if (visible) {
+                RegisterListeners();
+            }
+            else {
+                UnregisterListeners();
+            }
         }
 
         private void DrawCircle(LineRenderer lr, Vector3 center, float radius, float y) {

@@ -1,6 +1,9 @@
+using Logic.Scripts.GameDomain.Commands;
+using Logic.Scripts.GameDomain.MVC.Boss;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.Turns;
 using System;
 using System.Threading;
 using UnityEngine;
@@ -51,6 +54,13 @@ public class LoadLevelCommand : BaseCommand, ICommandAsync {
         await _levelScenarioController.CreateLevelScenario(levelNumber, cancellationTokenSource);
         _portalController.SetUpPortals(_levelScenarioController.CurrentLevelScenarioView.PortalViews);
         //To-Do adicionar efeitos do cenario
+        if (_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber).ControllerType == typeof(NaraTurnMovementController)) {
+            LevelTurnData levelTurnData = (LevelTurnData)_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber);
+            _diContainer.BindInstance(levelTurnData.BossPhases);
+            _diContainer.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments((BossBehaviorSO)null).NonLazy();
+            _diContainer.BindInterfacesTo<BossController>().AsSingle().WithArguments(levelTurnData.BossPrefab, levelTurnData.BossConfiguration, levelTurnData.BossPhases).NonLazy();
+            _diContainer.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();
+        }
     }
 
 }

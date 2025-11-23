@@ -4,15 +4,15 @@ using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.GameDomain.MVC.Nara;
 
 namespace Logic.Scripts.Turns {
-    public class TurnFlowController : IInitializable, System.IDisposable {
+    public class TurnFlowController : System.IDisposable {
         private readonly IActionPointsService _actionPointsService;
         private readonly IEchoService _echoService;
-        private readonly IBossActionService _bossActionService;
-        private readonly IEnviromentActionService _enviromentActionService;
         private readonly TurnStateService _turnStateService;
         private readonly ICommandFactory _commandFactory;
         private readonly NaraTurnMovementController _turnMovement;
 
+        private IBossActionService _bossActionService;
+        private IEnviromentActionService _enviromentActionService;
         private bool _active;
         private int _turnNumber;
         private bool _waitingBoss;
@@ -22,21 +22,20 @@ namespace Logic.Scripts.Turns {
         public TurnFlowController(
             IActionPointsService actionPointsService,
             IEchoService echoService,
-            IBossActionService bossActionService,
-            IEnviromentActionService enviromentActionService,
-            TurnStateService turnStateService,
+                        TurnStateService turnStateService,
             ICommandFactory commandFactory,
             INaraController naraController) {
             _actionPointsService = actionPointsService;
             _echoService = echoService;
-            _bossActionService = bossActionService;
-            _enviromentActionService = enviromentActionService;
             _turnStateService = turnStateService;
             _commandFactory = commandFactory;
             if (naraController.NaraMove is NaraTurnMovementController naraTurnMovement) _turnMovement = naraTurnMovement;
         }
 
-        public void Initialize() {
+        public void Initialize(IBossActionService bossActionService,
+            IEnviromentActionService enviromentActionService) {
+            _bossActionService = bossActionService;
+            _enviromentActionService = enviromentActionService;
         }
 
         public void Dispose() {
@@ -83,12 +82,12 @@ namespace Logic.Scripts.Turns {
         private void StartPlayerPhase() {
             _actionPointsService.GainTurnPoints();
             _phase = TurnPhase.PlayerAct;
-            //_turnMovement.ResetMovementArea();
+            _turnMovement.ResetMovementArea();
             _turnStateService.AdvanceTurn(_turnNumber, _phase);
             LogService.Log($"Turno {_turnNumber} - Fase: PlayerAct");
             _waitingPlayer = true;
             _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.RecenterNaraMovementOnPlayerTurnCommand>().Execute();
-            //_turnMovement?.LineHandlerController.SetVisible(true);
+            _turnMovement?.LineHandlerController.SetVisible(true);
             _turnStateService.RequestPlayerAction();
         }
 
@@ -120,7 +119,7 @@ namespace Logic.Scripts.Turns {
             _phase = TurnPhase.EnviromentAct;
             _turnStateService.AdvanceTurn(_turnNumber, _phase);
             LogService.Log($"Turno {_turnNumber} - Fase: EnviromentAct");
-            //_turnMovement?.LineHandlerController.SetVisible(false);
+            _turnMovement?.LineHandlerController.SetVisible(false);
             await _enviromentActionService.ExecuteEnviromentTurnAsync();
             OnEnviromentCompleted();
         }

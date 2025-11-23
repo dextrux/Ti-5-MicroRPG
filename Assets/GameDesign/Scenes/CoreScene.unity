@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _loadingUiDocument: {fileID: 6270316909704306622}
   _animationDuration: 0.5
-  _animationEase: 6
+  _animationEase: 3
   _loadingBarPercentage: {fileID: 11400000, guid: 8a621e2509de721448f8ba12f67a7cbc, type: 2}
 --- !u!114 &6270316909704306622 stripped
 MonoBehaviour:

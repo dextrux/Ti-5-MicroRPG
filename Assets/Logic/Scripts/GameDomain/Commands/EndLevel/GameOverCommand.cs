@@ -12,6 +12,7 @@ public class GameOverCommand : BaseCommand, ICommandAsync {
     private INaraController _naraController;
     private ICommandFactory _commandFactory;
     private ILevelsDataService _levelsDataService;
+    private IGamePlayDataService _gamePlayDataService;
 
     public override void ResolveDependencies() {
         _gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
@@ -19,6 +20,7 @@ public class GameOverCommand : BaseCommand, ICommandAsync {
         _commandFactory = _diContainer.Resolve<ICommandFactory>();
         _naraController = _diContainer.Resolve<INaraController>();
         _levelsDataService = _diContainer.Resolve<ILevelsDataService>();
+        _gamePlayDataService = _diContainer.Resolve<IGamePlayDataService>();
     }
 
     public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
@@ -27,7 +29,7 @@ public class GameOverCommand : BaseCommand, ICommandAsync {
         //_naraController.DisableCallbacks();
 
         _commandFactory.CreateCommandVoid<DisposeLevelCommand>().Execute();
-        await _commandFactory.CreateCommandAsync<LoadLevelCommand>().SetEnterData(new LoadLevelCommandData(0)).Execute(cancellationTokenSource);
+        await _commandFactory.CreateCommandAsync<LoadLevelCommand>().SetEnterData(new LoadLevelCommandData(_gamePlayDataService.CurrentLevelNumber)).Execute(cancellationTokenSource);
         await _commandFactory.CreateCommandAsync<StartLevelCommand>().Execute(cancellationTokenSource);
     }
 }

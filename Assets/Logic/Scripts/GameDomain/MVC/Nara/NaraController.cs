@@ -58,15 +58,29 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void ManagedFixedUpdate() {
-            if (_turnStateReader != null && _turnStateReader.Active && _turnStateReader.Phase == TurnPhase.PlayerAct) {
-                Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
-                _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
-                bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
-                _naraView?.SetMoving(willMove);
+            if (_naraMovementController is NaraTurnMovementController) {
+                if (_turnStateReader != null && _turnStateReader.Active && _turnStateReader.Phase == TurnPhase.PlayerAct) {
+                    Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+                    _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
+                    bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
+                    _naraView?.SetMoving(willMove);
+                }
+                else {
+                    _naraMovementController.Move(Vector2.zero, 0f, 0f);
+                    _naraView?.SetMoving(false);
+                }
             }
             else {
-                _naraMovementController.Move(Vector2.zero, 0f, 0f);
-                _naraView?.SetMoving(false);
+                Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+                if (dir != Vector2.zero) {
+                    _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
+                    bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
+                    _naraView?.SetMoving(willMove);
+                }
+                else {
+                    _naraMovementController.Move(Vector2.zero, 0f, 0f);
+                    _naraView?.SetMoving(false);
+                }
             }
         }
 
@@ -78,10 +92,9 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void ResetController() {
-            UnityEngine.Object.Destroy(_naraView);
-            _naraData.ResetData();
-            _naraMovementController = null;
             UnregisterListeners();
+            _naraData.ResetData();
+            UnityEngine.Object.Destroy(_naraView.gameObject);
         }
 
         public void InitEntryPoint() {

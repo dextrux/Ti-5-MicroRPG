@@ -8,4 +8,7 @@ public class LevelTurnData : LevelData {
 
     [SerializeField] private BossView bossPrefab;
     public BossView BossPrefab => bossPrefab;
+
+    [SerializeField] private BossPhasesSO bossPhases;
+    public BossPhasesSO BossPhases => bossPhases;
 }

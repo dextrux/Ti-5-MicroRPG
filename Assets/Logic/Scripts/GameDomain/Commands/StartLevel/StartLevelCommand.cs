@@ -22,6 +22,7 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
         private ILevelsDataService _levelsDataService;
         private IUpdateSubscriptionService _updateSubscriptionService;
         private ICommandFactory _commandFactory;
+        private IGamePlayDataService _gamePlayDataService;
 
         public override void ResolveDependencies() {
             _gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
@@ -30,6 +31,7 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _levelCancellationTokenService = _diContainer.Resolve<ILevelCancellationTokenService>();
             _levelsDataService = _diContainer.Resolve<ILevelsDataService>();
+            _gamePlayDataService = _diContainer.Resolve<IGamePlayDataService>();
             _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
         }
@@ -38,10 +40,14 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
             _gameInputActionsController.RegisterAllInputListeners();
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _naraController.RegisterListeners();
+            _naraController.InitEntryPoint();
             await Awaitable.NextFrameAsync();
             //To-Do Unfreeze movement nara
             //Activate GameplayView se necessário
-            _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute(); //To-Do verificar se é modo de turno o level
+            if (_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber).ControllerType == typeof(NaraTurnMovementController)) {
+                _commandFactory.CreateCommandVoid<EnterTurnModeCommand>().Execute(); //To-Do verificar se é modo de turno o level
+            }
+
         }
     }
 }

@@ -8,7 +8,7 @@ public class LevelScenarioController : ILevelScenarioController {
     private readonly LevelFactory _levelFactory;
 
     private LevelTrackData _currentLevelScenarioData;
-    public LevelScenarioView CurrentLevelTrackView => _currentLevelScenarioData.ScenarioView;
+    public LevelScenarioView CurrentLevelScenarioView => _currentLevelScenarioData.ScenarioView;
 
     public LevelScenarioController(IAddressablesLoaderService addressablesLoaderService, ILevelsDataService levelsDataService) {
         _levelsDataService = levelsDataService;
@@ -16,7 +16,6 @@ public class LevelScenarioController : ILevelScenarioController {
     }
 
     public async Awaitable CreateLevelScenario(int levelNumber, CancellationTokenSource cancellationTokenSource) {
-        Debug.LogWarning("CreateLevelScenario is null: " + (_levelsDataService == null));
         var levelAddress = _levelsDataService.GetLevelData(levelNumber).LevelAddress;
         LogService.LogTopic($"Create level {levelNumber} track , track adress: {levelAddress}", LogTopicType.LevelTrack);
         _currentLevelScenarioData = new LevelTrackData(await _levelFactory.CreateLevelTrack(levelAddress, cancellationTokenSource), levelAddress);

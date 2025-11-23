@@ -2,6 +2,7 @@ using Logic.Scripts.Services.UpdateService;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Logic.Scripts.Services.CommandFactory;
 
 namespace Logic.Scripts.GameDomain.MVC.Abilitys {
     [CreateAssetMenu(fileName = "AbilityData", menuName = "Scriptable Objects/Ability Data")]
@@ -16,7 +17,7 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         [HideInInspector] public int Cost;
         [HideInInspector] public int Range;
 
-		public int AnimatorAttackType;
+        public int AnimatorAttackType;
 
         [SerializeField] private int _baseDamage;
         [SerializeField] private int _baseCost;
@@ -30,8 +31,8 @@ namespace Logic.Scripts.GameDomain.MVC.Abilitys {
         //To-Do Adicionar VFXController
         //To-Do Tocar audioClip quando tivermos
 
-        public void SetUp(IUpdateSubscriptionService updateSubscriptionService) {
-            TargetingStrategy.SetUp(updateSubscriptionService);
+        public void SetUp(IUpdateSubscriptionService updateSubscriptionService, ICommandFactory commandFactory) {
+            TargetingStrategy.SetUp(updateSubscriptionService, commandFactory);
         }
 
         public void Aim(IEffectable caster) {

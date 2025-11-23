@@ -190,18 +190,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 263079784243073161}
     m_Modifications:
-    - target: {fileID: 242208036689546302, guid: f0114394809e9ba46b96f3162a397c87, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: ec61e12c9ec211e44a2314aa27c26d73, type: 2}
-    - target: {fileID: 3632079718960465030, guid: f0114394809e9ba46b96f3162a397c87, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 391cd503d4f419248b106326bb0be11d, type: 2}
-    - target: {fileID: 3915657984983951493, guid: f0114394809e9ba46b96f3162a397c87, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 391cd503d4f419248b106326bb0be11d, type: 2}
     - target: {fileID: 7693081121816446305, guid: f0114394809e9ba46b96f3162a397c87, type: 3}
       propertyPath: m_Name
       value: HOC_ArenaGround

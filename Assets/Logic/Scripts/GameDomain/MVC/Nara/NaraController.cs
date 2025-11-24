@@ -164,6 +164,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public void TakeDamage(int damageAmound) {
             _naraData.TakeDamage(damageAmound);
+            _audioService?.PlayAudio(AudioClipType.AbilityPrep2SFX, AudioChannelType.Fx);
             _gamePlayUiController.OnActualPlayerHealthChange(_naraData.ActualHealth);
             _gamePlayUiController.OnActualPlayerLifePercentChange(_naraData.ActualHealth);
             _gamePlayUiController.OnPreviewPlayerLifePercentChange(_naraData.ActualHealth);
@@ -187,6 +188,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void TriggerExecute() {
+            _audioService.PlayAudio(AudioClipType.AbilityUsed1SFX, AudioChannelType.Fx);
             _naraView?.TriggerExecute();
         }
 

@@ -211,6 +211,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             // 2) Definir movimento deste turno via padrão configurável
             ConfigureTurnMovement();
 
+            _audioService.PlayAudio(AudioClipType.BossMove1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
+
             // 3) Preparar ataque deste turno conforme padrão do behavior
             QueuePreparedAttackFromBehavior();
             _executedTurnsCount++;

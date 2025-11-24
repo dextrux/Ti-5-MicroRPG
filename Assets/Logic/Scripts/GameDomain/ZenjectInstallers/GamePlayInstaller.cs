@@ -9,6 +9,7 @@ using UnityEngine;
 using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.GameDomain.MVC.Echo;
 using Logic.Scripts.GameDomain.MVC.Boss.Telegraph;
+using Logic.Scripts.Services.AudioService;
 
 public class GamePlayInstaller : MonoInstaller {
 
@@ -27,6 +28,12 @@ public class GamePlayInstaller : MonoInstaller {
     public override void InstallBindings() {
         BindServices();
         BindControllers();
+
+        Container.Bind<IAudioService>()
+            .To<AudioService>()
+            .FromComponentInHierarchy()
+            .AsSingle()
+            .IfNotBound();
     }
 
     private void BindServices() {

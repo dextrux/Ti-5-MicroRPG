@@ -7,6 +7,7 @@ using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather;
 using Logic.Scripts.GameDomain.MVC.Boss.Attacks.Orb;
 using Logic.Scripts.GameDomain.Commands;
 using Logic.Scripts.Services.CommandFactory;
+using Logic.Scripts.Services.AudioService;
 using Zenject;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss
@@ -15,12 +16,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
     {
         [SerializeReference] private List<AbilityEffect> _effects;
 
-		private enum AttackType { ProteanCones, FeatherLines, WingSlash, Orb, HookAwakening, SkySwords }
+        private enum AttackType { ProteanCones, FeatherLines, WingSlash, Orb, HookAwakening, SkySwords }
         [SerializeField] private AttackType _attackType = AttackType.ProteanCones;
 
-		[SerializeField] private int _displacementPriority = 0;
-		private bool _displacementEnabled = true;
-		private bool _telegraphDisplacementEnabled = true;
+        [SerializeField] private int _displacementPriority = 0;
+        private bool _displacementEnabled = true;
+        private bool _telegraphDisplacementEnabled = true;
 
         [SerializeField] private ProteanConesParams _protean = new ProteanConesParams { radius = 3f, angleDeg = 60f, sides = 36 };
         [SerializeField] private ProteanConesParams _wingSlash = new ProteanConesParams { radius = 4f, angleDeg = 215f, sides = 48 };
@@ -28,7 +29,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         [SerializeField] private FeatherLinesParams _feather = new FeatherLinesParams { featherCount = 3, axisMode = FeatherAxisMode.XZ, width = 2f, margin = 5f, forceBase = 2f, forcePerMeter = 0.4f, forcePerDebuff = 0.5f };
 
         [Header("Feather Visuals")]
-        [SerializeField] private bool _featherIsPull = false; // false = push (azul escuro), true = pull (roxo)
+        [SerializeField] private bool _featherIsPull = false;
 
         [System.Serializable]
         private struct OrbSpawnParams
@@ -44,17 +45,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 
         [SerializeField] private OrbSpawnParams _orb = new OrbSpawnParams { prefab = null, moveStepMeters = 6f, growStepMeters = 6f, initialRadius = 4f, maxRadiusCap = 60f, baseDamage = 10, initialHp = 50 };
 
-		[System.Serializable]
-		private struct SkySwordsParams
-		{
-			public float radius;
-			public float ringWidth;
-		}
+        [System.Serializable]
+        private struct SkySwordsParams
+        {
+            public float radius;
+            public float ringWidth;
+        }
 
-		[Header("Sky Swords")]
-		[Tooltip("Raio e largura do anel do Sky Swords")]
-		[SerializeField] private SkySwordsParams _skySwords = new SkySwordsParams { radius = 4.5f, ringWidth = 0.3f };
-		[SerializeField] private bool _skySwordsIsPull = false; // false = push (para fora), true = pull (para o centro)
+        [Header("Sky Swords")]
+        [SerializeField] private SkySwordsParams _skySwords = new SkySwordsParams { radius = 4.5f, ringWidth = 0.3f };
+        [SerializeField] private bool _skySwordsIsPull = false;
 
         private ArenaPosReference _arena;
         private IEffectable _caster;
@@ -62,86 +62,88 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         private bool _executing;
         private System.Threading.Tasks.TaskCompletionSource<bool> _executeTcs;
         private ICommandFactory _commandFactory;
-		[Zenject.Inject(Optional = true)] private Logic.Scripts.GameDomain.MVC.Boss.Telegraph.ITelegraphMaterialProvider _telegraphProvider;
+        [Zenject.Inject(Optional = true)] private Logic.Scripts.GameDomain.MVC.Boss.Telegraph.ITelegraphMaterialProvider _telegraphProvider;
 
-		public int GetDisplacementPriority() { return _displacementPriority; }
-		public void SetDisplacementEnabled(bool enabled) { _displacementEnabled = enabled; }
-		public void ConfigureTelegraphDisplacementEnabled(bool enabled) { _telegraphDisplacementEnabled = enabled; }
-		private static bool IsForcedMovementEffect(AbilityEffect fx)
-		{
-			if (fx == null) return false;
-			// Displacement stack
-			if (fx is Assets.Logic.Scripts.GameDomain.Effects.DisplacementEffect) return true;
-			// Knockback/Grapple effects
-			if (fx is Logic.Scripts.GameDomain.Effects.KnockbackEffect) return true;
-			if (fx is Logic.Scripts.GameDomain.Effects.GrappleEffect) return true;
-			return false;
-		}
+        private IAudioService _audio;
 
-		public bool HasDisplacementEffect()
-		{
-			if (_effects == null) return false;
-			for (int i = 0; i < _effects.Count; i++)
-			{
-				if (IsForcedMovementEffect(_effects[i])) return true;
-			}
-			return false;
-		}
-		public void StripDisplacementForTelegraph()
-		{
-			if (_effects == null || _effects.Count == 0) return;
-			for (int i = _effects.Count - 1; i >= 0; i--)
-			{
-				if (IsForcedMovementEffect(_effects[i]))
-				{
-					_effects.RemoveAt(i);
-				}
-			}
-		}
+        public int GetDisplacementPriority() { return _displacementPriority; }
+        public void SetDisplacementEnabled(bool enabled) { _displacementEnabled = enabled; }
+        public void ConfigureTelegraphDisplacementEnabled(bool enabled) { _telegraphDisplacementEnabled = enabled; }
+        private static bool IsForcedMovementEffect(AbilityEffect fx)
+        {
+            if (fx == null) return false;
+            if (fx is Assets.Logic.Scripts.GameDomain.Effects.DisplacementEffect) return true;
+            if (fx is Logic.Scripts.GameDomain.Effects.KnockbackEffect) return true;
+            if (fx is Logic.Scripts.GameDomain.Effects.GrappleEffect) return true;
+            return false;
+        }
+
+        public bool HasDisplacementEffect()
+        {
+            if (_effects == null) return false;
+            for (int i = 0; i < _effects.Count; i++)
+            {
+                if (IsForcedMovementEffect(_effects[i])) return true;
+            }
+            return false;
+        }
+        public void StripDisplacementForTelegraph()
+        {
+            if (_effects == null || _effects.Count == 0) return;
+            for (int i = _effects.Count - 1; i >= 0; i--)
+            {
+                if (IsForcedMovementEffect(_effects[i]))
+                {
+                    _effects.RemoveAt(i);
+                }
+            }
+        }
 
         public void Setup(ArenaPosReference arena, IEffectable caster)
         {
             _arena = arena;
             _caster = caster;
             try { _commandFactory = ProjectContext.Instance.Container.Resolve<ICommandFactory>(); } catch { _commandFactory = null; }
+            try { _audio = ProjectContext.Instance.Container.Resolve<IAudioService>(); } catch { _audio = null; }
+
             SelectAndBuildHandler();
             Transform parentForTelegraph = transform;
             if (_attackType == AttackType.FeatherLines)
             {
                 parentForTelegraph = _arena != null ? _arena.transform : transform;
-				// Prime visual behavior for telegraph (arrow/highlight) according to configured flag
-				Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.PrimeNextTelegraphDisplacementEnabled(_telegraphDisplacementEnabled);
+                Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather.FeatherLinesHandler.PrimeNextTelegraphDisplacementEnabled(_telegraphDisplacementEnabled);
             }
-			else if (_attackType == AttackType.SkySwords)
-			{
-				// Deduzir push/pull automaticamente pelos efeitos do ataque
-				bool hasGrapple = false;
-				bool hasKnock = false;
-				if (_effects != null)
-				{
-					for (int i = 0; i < _effects.Count; i++)
-					{
-						var fx = _effects[i];
-						if (fx == null) continue;
-						if (fx is Logic.Scripts.GameDomain.Effects.GrappleEffect) hasGrapple = true;
-						else if (fx is Logic.Scripts.GameDomain.Effects.KnockbackEffect) hasKnock = true;
-					}
-				}
-				// Prioridade: Grapple define pull; caso contrário, Knockback define push; se nenhum, permanece configuração padrão do prefab
-				if (hasGrapple)
-				{
-					Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.PrimeNextTelegraphPull(true);
-				}
-				else if (hasKnock)
-				{
-					Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.PrimeNextTelegraphPull(false);
-				}
-			}
+            else if (_attackType == AttackType.SkySwords)
+            {
+                bool hasGrapple = false;
+                bool hasKnock = false;
+                if (_effects != null)
+                {
+                    for (int i = 0; i < _effects.Count; i++)
+                    {
+                        var fx = _effects[i];
+                        if (fx == null) continue;
+                        if (fx is Logic.Scripts.GameDomain.Effects.GrappleEffect) hasGrapple = true;
+                        else if (fx is Logic.Scripts.GameDomain.Effects.KnockbackEffect) hasKnock = true;
+                    }
+                }
+                if (hasGrapple)
+                {
+                    Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.PrimeNextTelegraphPull(true);
+                }
+                else if (hasKnock)
+                {
+                    Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.PrimeNextTelegraphPull(false);
+                }
+            }
             _handler?.PrepareTelegraph(parentForTelegraph);
         }
 
         public void Execute()
         {
+            if (_attackType != AttackType.FeatherLines)
+                _audio?.PlayAudio(AudioClipType.MetalSlash1SFX, AudioChannelType.Fx);
+
             if (_attackType == AttackType.Orb)
             {
                 if (_executeTcs == null) _executeTcs = new System.Threading.Tasks.TaskCompletionSource<bool>();
@@ -161,6 +163,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 
         public System.Threading.Tasks.Task ExecuteAsync()
         {
+            if (_attackType != AttackType.FeatherLines)
+                _audio?.PlayAudio(AudioClipType.MetalSlash1SFX, AudioChannelType.Fx);
+
             if (_attackType == AttackType.Orb)
             {
                 if (_executeTcs == null) _executeTcs = new System.Threading.Tasks.TaskCompletionSource<bool>();
@@ -188,12 +193,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             if (_effects != null)
             {
                 System.Collections.Generic.List<AbilityEffect> effectsToRun = _effects;
-				if ((_attackType == AttackType.WingSlash || !_displacementEnabled) && _effects != null)
+                if ((_attackType == AttackType.WingSlash || !_displacementEnabled) && _effects != null)
                 {
                     var filtered = new System.Collections.Generic.List<AbilityEffect>(_effects.Count);
                     foreach (var fx in _effects)
                     {
-						if (!IsForcedMovementEffect(fx))
+                        if (!IsForcedMovementEffect(fx))
                         {
                             filtered.Add(fx);
                         }
@@ -222,7 +227,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             if (_commandFactory != null)
             {
                 var spawnByFactory = _commandFactory.CreateCommandVoid<SpawnOrbCommand>();
-                // Try resolve registry from the same subscene container
                 Logic.Scripts.GameDomain.MVC.Environment.Orb.OrbRegistry reg = null;
                 try { reg = ProjectContext.Instance.Container.Resolve<Logic.Scripts.GameDomain.MVC.Environment.Orb.OrbRegistry>(); } catch { reg = null; }
                 Vector3 origin = transform.position;
@@ -245,7 +249,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
                 spawnByFactory.Execute();
                 return;
             }
-            // Fallback without DI (registry won’t be resolved)
             var spawn = new SpawnOrbCommand();
             spawn.ResolveDependencies();
             spawn.SetData(new SpawnOrbData
@@ -266,31 +269,29 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
 
         private void SelectAndBuildHandler()
         {
-			Material areaMat = ResolveTelegraphMaterial();
-			UnityEngine.Debug.Log($"[BossAttack] Using telegraph material: {(areaMat != null ? areaMat.name : "NULL")} | attack={name} type={_attackType}");
+            Material areaMat = ResolveTelegraphMaterial();
+            UnityEngine.Debug.Log($"[BossAttack] Using telegraph material: {(areaMat != null ? areaMat.name : "NULL")} | attack={name} type={_attackType}");
             switch (_attackType)
             {
                 case AttackType.ProteanCones:
                 {
                     float[] yaws = new float[] { 0f, 90f, 180f, 270f };
-					_handler = new ConeAttackHandler(_protean.radius, _protean.angleDeg, _protean.sides, yaws, areaMat);
+                    _handler = new ConeAttackHandler(_protean.radius, _protean.angleDeg, _protean.sides, yaws, areaMat);
                     break;
                 }
                 case AttackType.FeatherLines:
                 {
-					// Base material (normal) e material de deslocamento (grapple/knockback)
-					Material baseMat = ResolveTelegraphMaterialFor(false);
-					Material dispMat = ResolveTelegraphMaterialFor(true);
-					_handler = new FeatherLinesHandler(_feather, _featherIsPull, baseMat, dispMat);
+                    Material baseMat = ResolveTelegraphMaterialFor(false);
+                    Material dispMat = ResolveTelegraphMaterialFor(true);
+                    _handler = new FeatherLinesHandler(_feather, _featherIsPull, baseMat, dispMat);
                     break;
                 }
                 case AttackType.WingSlash:
                 {
-					// Ângulo: permitir sinais. 180 => cobre lado esquerdo; -180 => cobre lado direito.
-					float angleAbs = Mathf.Abs(_wingSlash.angleDeg);
-					float yawBase = (_wingSlash.angleDeg < 0f) ? 90f : -90f; // negativo -> direita; positivo -> esquerda
-					float[] yaws = new float[] { yawBase };
-					_handler = new ConeAttackHandler(_wingSlash.radius, angleAbs, _wingSlash.sides, yaws, areaMat);
+                    float angleAbs = Mathf.Abs(_wingSlash.angleDeg);
+                    float yawBase = (_wingSlash.angleDeg < 0f) ? 90f : -90f;
+                    float[] yaws = new float[] { yawBase };
+                    _handler = new ConeAttackHandler(_wingSlash.radius, angleAbs, _wingSlash.sides, yaws, areaMat);
                     break;
                 }
                 case AttackType.Orb:
@@ -298,16 +299,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
                     _handler = new OrbSpawnHandler(_orb.initialRadius);
                     break;
                 }
-				case AttackType.SkySwords:
-				{
-					_handler = new Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler(
-						_skySwords.radius,
-						_skySwords.ringWidth,
-						_skySwordsIsPull,
-						_telegraphDisplacementEnabled,
-						areaMat);
-					break;
-				}
+                case AttackType.SkySwords:
+                {
+                    _handler = new Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler(
+                        _skySwords.radius,
+                        _skySwords.ringWidth,
+                        _skySwordsIsPull,
+                        _telegraphDisplacementEnabled,
+                        areaMat);
+                    break;
+                }
                 default:
                 {
                     _handler = null;
@@ -316,34 +317,28 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
             }
         }
 
-		private Material ResolveTelegraphMaterial()
-		{
-			// Provider por injeção
-			if (_telegraphProvider != null)
-			{
-				return _telegraphProvider.GetMaterial(_telegraphDisplacementEnabled, _effects);
-			}
-			// Provider via serviço estático (para MonoBehaviours não injetados)
-			if (Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider != null)
-			{
-				return Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider
-					.GetMaterial(_telegraphDisplacementEnabled, _effects);
-			}
+        private Material ResolveTelegraphMaterial()
+        {
+            if (_telegraphProvider != null)
+            {
+                return _telegraphProvider.GetMaterial(_telegraphDisplacementEnabled, _effects);
+            }
+            if (Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider != null)
+            {
+                return Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider
+                    .GetMaterial(_telegraphDisplacementEnabled, _effects);
+            }
+            return new Material(Shader.Find("Sprites/Default"));
+        }
 
-			// Fallback mínimo
-			return new Material(Shader.Find("Sprites/Default"));
-		}
-
-		private Material ResolveTelegraphMaterialFor(bool displacementEnabled)
-		{
-			if (_telegraphProvider != null)
-				return _telegraphProvider.GetMaterial(displacementEnabled, _effects);
-			if (Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider != null)
-				return Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider
-					.GetMaterial(displacementEnabled, _effects);
-			return new Material(Shader.Find("Sprites/Default"));
-		}
+        private Material ResolveTelegraphMaterialFor(bool displacementEnabled)
+        {
+            if (_telegraphProvider != null)
+                return _telegraphProvider.GetMaterial(displacementEnabled, _effects);
+            if (Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider != null)
+                return Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphMaterialService.Provider
+                    .GetMaterial(displacementEnabled, _effects);
+            return new Material(Shader.Find("Sprites/Default"));
+        }
     }
 }
-
-

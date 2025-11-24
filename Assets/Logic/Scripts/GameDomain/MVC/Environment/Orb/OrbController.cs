@@ -10,6 +10,8 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
     public class OrbController : MonoBehaviour, IEffectable, IEnvironmentTurnActor
     {
         public static readonly System.Collections.Generic.List<OrbController> Instances = new System.Collections.Generic.List<OrbController>();
+			// Current transform to follow. Defaults to player; can be reassigned (e.g., to a clone).
+			private Transform _followTarget;
         private ArenaPosReference _arena;
         private INaraController _nara;
         private OrbView _view;
@@ -53,6 +55,8 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
                 _view.PrepareTelegraph();
                 _view.UpdateRadius(_radius);
             }
+			// Default: follow player. This can be changed at runtime via SetFollowTarget/RetargetAllTo.
+			_followTarget = (_nara != null && _nara.NaraViewGO != null) ? _nara.NaraViewGO.transform : null;
             UnityEngine.Debug.Log($"[Orb] Initialized at {transform.position} radius={_radius} max={_maxRadius}");
         }
 
@@ -95,21 +99,26 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
             PerformAction();
         }
 
-        public System.Threading.Tasks.Task MoveAsync(float duration)
+		public async System.Threading.Tasks.Task MoveAsync(float duration)
         {
-            if (_hp <= 0) return System.Threading.Tasks.Task.CompletedTask;
-            if (_stunMoveTurns > 0) { _stunMoveTurns--; return System.Threading.Tasks.Task.CompletedTask; }
-            if (_nara == null || _nara.NaraViewGO == null) return System.Threading.Tasks.Task.CompletedTask;
-            if (_isMoving) return System.Threading.Tasks.Task.CompletedTask;
-            Transform target = _nara.NaraViewGO.transform;
+			if (_hp <= 0) return;
+			if (_stunMoveTurns > 0) { _stunMoveTurns--; return; }
+			if (_isMoving) return;
+			// Ensure a valid follow target; fallback to player if available.
+			if (_followTarget == null && _nara != null && _nara.NaraViewGO != null) _followTarget = _nara.NaraViewGO.transform;
+			Transform target = _followTarget;
+			if (target == null) return;
             Vector3 from = transform.position;
             Vector3 to = target.position;
             Vector3 delta = to - from; delta.y = 0f;
             float dist = delta.magnitude;
-            if (dist < 1e-3f) return System.Threading.Tasks.Task.CompletedTask;
+			if (dist < 1e-3f) return;
             float step = Mathf.Min(_moveStep, dist);
             Vector3 end = from + (delta / dist) * step; end.y = from.y;
-            return SmoothMoveTo(end, duration);
+			bool willReach = step >= dist - 1e-4f;
+			await SmoothMoveTo(end, duration);
+			// If we reached the current follow target, detonate and apply AoE effects.
+			if (willReach && _hp > 0) { Explode(); }
         }
 
         private System.Threading.Tasks.Task SmoothMoveTo(Vector3 end, float duration)
@@ -140,34 +149,65 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
             tcs.TrySetResult(true);
         }
 
-        private void PerformAction()
+		private void PerformAction()
         {
-            int damage = _baseDamage * (1 << _damageExponent);
-            _damageExponent = Mathf.Min(_damageExponent + 1, 30);
-            if (_nara != null)
-            {
-                Transform playerT = _nara.NaraViewGO != null ? _nara.NaraViewGO.transform : null;
-                if (playerT == null) return;
-                Vector3 playerPos = playerT.position;
-                Vector3 center = transform.position;
-                Vector2 c = new Vector2(center.x, center.z);
-                Vector2 p = new Vector2(playerPos.x, playerPos.z);
-                if ((p - c).sqrMagnitude <= _radius * _radius)
-                {
-                    IEffectable caster = this as IEffectable;
-                    IEffectable target = _nara as IEffectable;
-                    if (target != null && _effects != null)
-                    {
-                        for (int i = 0; i < _effects.Count; i++)
-                        {
-                            AbilityEffect fx = _effects[i];
-                            fx?.Execute(caster, target);
-                        }
-                    }
-                }
-            }
+			// Per-turn orb damage removed: orb only damages when it explodes upon reaching its follow target.
+			_damageExponent = Mathf.Min(_damageExponent + 1, 30);
         }
 
+		// Explodes at current position, applying configured effects to all IEffectable within the current radius.
+		// Note: Being destroyed (HP <= 0) does not cause this effect; only calling Explode does.
+		private void Explode()
+		{
+			try
+			{
+				if (_effects != null && _effects.Count > 0)
+				{
+					var hits = Physics.OverlapSphere(transform.position, _radius);
+					if (hits != null && hits.Length > 0)
+					{
+						var caster = this as IEffectable;
+						var affected = new System.Collections.Generic.HashSet<IEffectable>();
+						for (int i = 0; i < hits.Length; i++)
+						{
+							var h = hits[i];
+							if (h == null) continue;
+							var eff = h.GetComponentInParent<IEffectable>();
+							if (eff == null) continue;
+							if (!affected.Add(eff)) continue;
+							for (int e = 0; e < _effects.Count; e++)
+							{
+								var fx = _effects[e];
+								fx?.Execute(caster, eff);
+							}
+						}
+					}
+				}
+			}
+			finally
+			{
+				// Mark as dead and remove from scene; OnDestroy only unregisters.
+				_hp = 0;
+				Destroy(gameObject);
+			}
+		}
+
+		// Public API to change the orb's follow target (e.g., switch to a placed clone).
+		public void SetFollowTarget(Transform t)
+		{
+			_followTarget = t;
+		}
+
+		// Convenience API to retarget all active orbs at once.
+		public static void RetargetAllTo(Transform t)
+		{
+			if (t == null) return;
+			for (int i = 0; i < Instances.Count; i++)
+			{
+				var orb = Instances[i];
+				if (orb != null) orb.SetFollowTarget(t);
+			}
+		}
         private System.Threading.Tasks.Task AnimateGrowAsync(float duration)
         {
             if (_radius >= _maxRadius) return System.Threading.Tasks.Task.CompletedTask;

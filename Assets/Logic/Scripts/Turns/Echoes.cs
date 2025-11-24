@@ -26,7 +26,7 @@ namespace Logic.Scripts.Turns {
 
             for (int i = _entries.Count - 1; i >= 0; i--) {
                 if (_entries[i].TurnsRemaining <= 0) {
-                    //_entries[i].Action.Execute(_abilityController);
+                    _entries[i].Action?.Execute();
                     _entries.RemoveAt(i);
                 }
             }

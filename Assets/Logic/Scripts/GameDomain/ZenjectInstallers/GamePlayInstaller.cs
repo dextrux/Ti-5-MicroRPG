@@ -17,10 +17,12 @@ public class GamePlayInstaller : MonoInstaller {
     [SerializeField] private NaraConfigurationSO _naraConfiguration;
 
     [SerializeField] private GamePlayUiView _gamePlayUiView;
+    [SerializeField] private CustomizeUIView _customizeUiView;
 
     [SerializeField] private AbilityData[] _skills;
 
     [SerializeField] private LayerMask _layerMaskMouse;
+    [SerializeField] private EchoView _echoviewPrefab;
 
     [Header("Telegraph Materials")]
     [SerializeField] private TelegraphMaterialConfig _telegraphMaterials;
@@ -41,15 +43,16 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.Bind<INaraMovementControllerFactory>().To<NaraMovementControllerFactory>().AsSingle();
         Container.BindInterfacesTo<GamePlayDataService>().AsSingle().NonLazy();
-        if (_telegraphMaterials != null) {
+		if (_telegraphMaterials != null) {
             Debug.Log($"[GamePlayInstaller] Binding TelegraphMaterialConfig: {_telegraphMaterials.name}");
             Container.Bind<TelegraphMaterialConfig>().FromInstance(_telegraphMaterials).AsSingle();
             Container.BindInterfacesAndSelfTo<TelegraphMaterialProvider>().AsSingle();
 			Container.BindInterfacesAndSelfTo<TelegraphLayeringService>().AsSingle();
             Container.BindInterfacesTo<TelegraphMaterialProviderBootstrap>().AsSingle().NonLazy();
-        } else {
-            Debug.LogWarning("[GamePlayInstaller] TelegraphMaterialConfig is NULL. Telegraphs will fallback to Sprites/Default.");
-        }
+		} else {
+			Debug.LogWarning("[GamePlayInstaller] TelegraphMaterialConfig is NULL. Telegraphs will fallback to Sprites/Default.");
+			Container.BindInterfacesTo<TelegraphMaterialProviderBootstrap>().AsSingle().NonLazy();
+		}
     }
 
     private void BindControllers() {
@@ -58,7 +61,8 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<NaraController>().AsSingle().WithArguments(_naraViewPrefab, _naraConfiguration).NonLazy();
         Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<CastController>().AsSingle().WithArguments(_skills).NonLazy();
-        //Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
+        Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
         Container.BindInterfacesTo<PortalController>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<CustomizeUIController>().AsSingle().WithArguments(_customizeUiView).NonLazy();
     }
 }

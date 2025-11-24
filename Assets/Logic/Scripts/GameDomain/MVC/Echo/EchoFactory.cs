@@ -11,11 +11,15 @@ namespace Logic.Scripts.GameDomain.MVC.Echo {
             _echoService = echoService;
         }
 
-        /*public EchoView CreateEcho(AbilityView abilityView, int castTime, Transform referenceTransform) {
+        public EchoView CreateEcho(int castTime, Transform referenceTransform) {
+            Debug.LogWarning("Is null refTransform: " + (referenceTransform == null));
+            Debug.LogWarning("Is null echoprefab: " + (_echoViewPrefab == null));
             EchoView echo = Object.Instantiate(_echoViewPrefab, referenceTransform.position, referenceTransform.rotation);
-            echo.SetAbilityToCast(abilityView);
-            _echoService.EnqueueEcho(echo, castTime);
+			// Retarget all current orbs to follow this newly created echo clone.
+			Logic.Scripts.GameDomain.MVC.Environment.Orb.OrbController.RetargetAllTo(echo.transform);
+			// Schedule destruction after castTime+1 Echoes phases so it lasts full 'castTime' turns.
+			_echoService.EnqueueEcho(new DestroyEchoAfterDelayAction(echo.gameObject), castTime + 1);
             return echo;
-        }*/
+        }
     }
 }

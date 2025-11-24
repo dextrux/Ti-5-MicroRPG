@@ -32,7 +32,7 @@ MonoBehaviour:
     AttackIndices: 00000000
   - Mode: 3
     DistanceMultiplier: 0
-    AttackIndices: 01000000
+    AttackIndices: 0100000005000000
   - Mode: 3
     DistanceMultiplier: 0
     AttackIndices: 04000000
@@ -56,4 +56,4 @@ MonoBehaviour:
     AttackIndices: 0700000000000000
   - Mode: 3
     DistanceMultiplier: 0
-    AttackIndices: 06000000
+    AttackIndices: 0600000005000000

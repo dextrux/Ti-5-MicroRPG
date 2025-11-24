@@ -10,49 +10,49 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: 01 Magic Shot
+  m_Name: 01 Disparo Magico
   m_EditorClassIdentifier: 
-  Name: Magic Shot
-  Description: Fire a projectile in a straight line. It collides with terrain. On
-    hit, it deals X (+0) DMG to the target.
-  Icon: {fileID: 21300000, guid: f237d9b9db422b84fa7deba6d9252049, type: 3}
+  Name: "Disparo M\xE1gico"
+  Description: "Atira em linha reta com um alcance mediano, acertando o primeiro
+    inimigo no caminho. Obst\xE1culos podem bloquear o disparo."
+  Icon: {fileID: 21300000, guid: 86916411a156e0444b57b1e16bf23107, type: 3}
   _sfx: {fileID: 0}
   Damage: 0
   Cooldown: 0
   Cost: 0
   Range: 0
-  AnimatorAttackType: 1
+  AnimatorAttackType: 2
   _baseDamage: 3
-  _baseCost: 3
-  _baseCooldown: 3
-  _baseRange: 3
+  _baseCost: 1
+  _baseCooldown: 0
+  _baseRange: 2
   Effects:
-  - rid: 7012276589014548555
+  - rid: 7012276589014548556
   TargetingStrategy:
-    rid: 7012276592317825428
+    rid: 7012276748036342002
   PlotData: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 7012276589014548555
+    - rid: 7012276589014548556
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
         Name: 2
-        Description: 3
+        Description: 2
         IsAutoCast: 0
-        amount: 10
-    - rid: 7012276592317825428
+        amount: 2
+    - rid: 7012276748036342002
       type: {class: ProjectileTargeting, ns: , asm: Assembly-CSharp}
       data:
-        ProjectilePrefab: {fileID: 1632181508370474111, guid: 0e78a960fca348f409e3bfff04da7e06, type: 3}
+        ProjectilePrefab: {fileID: 1632181508370474111, guid: a619a48c474dbda4f9b3e2490435dc74, type: 3}
         hitMarker: {fileID: 0}
-        maxPoints: 200
+        maxPoints: 50
         increment: 0.025
         rayOverlap: 1.1
-        aimingMode: 1
+        aimingMode: 0
         GroundLayerMask:
           serializedVersion: 2
           m_Bits: 128
-        parabolicMaxHeight: 5
-        parabolicMaxRange: 200
-        parabolicMinRange: 1
+        parabolicMaxHeight: 10
+        parabolicMaxRange: 50
+        parabolicMinRange: 3

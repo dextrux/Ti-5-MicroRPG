@@ -44,10 +44,11 @@ MonoBehaviour:
     - rid: 7546693122258370636
       type: {class: AoeTargeting, ns: , asm: Assembly-CSharp}
       data:
-        AoePrefab: {fileID: 1945505432758974249, guid: ccb2ab164b2d4f94bbd18cde829780b2, type: 3}
+        AoePrefab: {fileID: 5864932686153904597, guid: 8f80778aeed56a34db1c56cbfb2f76d4, type: 3}
         GroundLayerMask:
           serializedVersion: 2
           m_Bits: 128
         HittableLayerMask:
           serializedVersion: 2
           m_Bits: 64
+        Radius: 0

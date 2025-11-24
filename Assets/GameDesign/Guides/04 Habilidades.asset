@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guideTitle: Habilidades
   pages:
-  - pageSprite: {fileID: 0}
+  - pageSprite: {fileID: 21300000, guid: 83ffb8ed44da24d46b66f177015f6d62, type: 3}
     descriptionText: "Nara conta com 5 habilidades b\xE1sicas, todas distintas e
       divididas entre habilidades ofensivas e defensivas."
-  - pageSprite: {fileID: 0}
+  - pageSprite: {fileID: 21300000, guid: f82075ec18cbf8547be23356674d784c, type: 3}
     descriptionText: "1. Disparo M\xE1gico \xE9 excelente para causar dano r\xE1pido
       e direto, mas depende de um campo de vis\xE3o desobstru\xEDdo at\xE9 o alvo.\n2.
       Meteorito ignora qualquer obst\xE1culo entre Nara e seu alvo al\xE9m de ter
       um alcance maior, mas n\xE3o  causa um dano alto.\n3. Explos\xE3o \xE9 uma
       excelente op\xE7\xE3o para acertar v\xE1rios alvos em \xE1rea, mas seu dano
       \xE9 o menor entre as tr\xEAs."
-  - pageSprite: {fileID: 0}
+  - pageSprite: {fileID: 21300000, guid: c4af56b69acf64e4f845e8c480188c61, type: 3}
     descriptionText: "4. Totem \xE9 a melhor op\xE7\xE3o para curar Nara, mas ela
       precisa se manter pr\xF3xima a ele para receber seus efeitos.\n5. Teleporte
       consegue levar Nara de forma instant\xE2nea para outro local dentro de seu

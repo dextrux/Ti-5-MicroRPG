@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guideTitle: "Pontos de A\xE7\xE3o"
   pages:
-  - pageSprite: {fileID: 0}
+  - pageSprite: {fileID: 21300000, guid: 18da0da7fbfe8a64fa0ae20e3d4ef1c1, type: 3}
     descriptionText: "Pontos de A\xE7\xE3o (PA) s\xE3o o recurso necess\xE1rio para
       que o jogador consiga utilizar suas habilidades. \n* Cada habilidade possui
       seu pr\xF3prio custo de PA\n* No in\xEDcio de cada turno o jogador recupera

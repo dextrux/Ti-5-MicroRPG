@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0fe5c1ee2b66b44ab8155da38ca823c, type: 3}
   m_Name: CoreAudioClips
   m_EditorClassIdentifier: 
-  AudioClips:
-    m_keys: 
-    m_values: []
+  _entries: []

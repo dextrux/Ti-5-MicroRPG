@@ -4,6 +4,8 @@ using DG.Tweening;
 using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.GameDomain.MVC.Boss;
+using Logic.Scripts.Services.AudioService;
+using Zenject;
 
 namespace Logic.Scripts.GameDomain.Effects
 {
@@ -11,9 +13,16 @@ namespace Logic.Scripts.GameDomain.Effects
     public sealed class KnockbackEffect : AbilityEffect, IForceScaledEffect, IAsyncEffect
     {
         [Min(0f)] [SerializeField] private float _force = 2f;
-        //[Min(0f)] [SerializeField] private float _speed = 6f;
         [SerializeField] private static int _stacksMul = 0;
         private int _distanceMul;
+
+        private static IAudioService _audio;
+        private static IAudioService Audio => _audio ??= TryResolveAudio();
+        private static IAudioService TryResolveAudio()
+        {
+            try { return ProjectContext.Instance.Container.Resolve<IAudioService>(); }
+            catch { return null; }
+        }
 
         public override void Execute(IEffectable caster, IEffectable target)
         {
@@ -54,25 +63,23 @@ namespace Logic.Scripts.GameDomain.Effects
                 dir.Normalize();
             }
 
-            // Scalers: stacks 0..5 -> 1x..2x; distance 0..max -> 0.5x..1.5x
             int stacks = 0;
             if (target is NaraController ncExec) stacks = Mathf.Clamp(ncExec.GetDebuffStacks(), 0, 5);
             float stacksFactor = 1f + stacks * 0.2f;
-            // distance multiplier comes as an integer approx in meters; clamp 0..60 (cap)
             float maxMeters = 60f;
             float dMeters = Mathf.Clamp(_distanceMul, 0, maxMeters);
-            // far -> 0.5x, near -> 3.0x (range 0.5..3.0)
             float distanceFactor = 0.5f + 2.5f * (1f - (dMeters / maxMeters));
             distanceFactor = Mathf.Clamp(distanceFactor, 0.5f, 3.0f);
             float scaledForce = Mathf.Max(0f, _force * stacksFactor * distanceFactor);
-            Debug.Log($"KnockbackEffect calc -> base={_force:0.###} stacks={stacks} stacksFactor={stacksFactor:0.00} distM={dMeters:0.###}/{maxMeters:0.###} distFactor={distanceFactor:0.00} scaled={scaledForce:0.###}");
             if (scaledForce <= 0f) return;
+
+            Audio?.PlayAudio(AudioClipType.StrongWindTornado1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
 
             Vector3 start = rb.position;
             Vector3 end   = start + dir * scaledForce;
             end.y = start.y;
 
-            float duration = 0.45f; // a little less than the handler's 0.5s wait
+            float duration = 0.45f;
             DOTween.Kill(rb, complete: false);
             DOVirtual.Float(0f, 1f, duration, v =>
             {
@@ -89,7 +96,7 @@ namespace Logic.Scripts.GameDomain.Effects
         {
             if (target == null) yield break;
             if (!TryGetNaraRigidbody(target, out var rb)) yield break;
-            // Duplicate calculation of dir and scaledForce to run synchronously but yield duration
+
             Vector3 dir;
             if (Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords.SkySwordsHandler.CurrentDisplacementEnabled)
             {
@@ -122,6 +129,7 @@ namespace Logic.Scripts.GameDomain.Effects
                 if (dir.sqrMagnitude < 1e-6f) yield break;
                 dir.Normalize();
             }
+
             int stacks = 0;
             if (target is NaraController nc) stacks = Mathf.Clamp(nc.GetDebuffStacks(), 0, 5);
             float stacksFactor = 1f + stacks * 0.2f;
@@ -130,6 +138,9 @@ namespace Logic.Scripts.GameDomain.Effects
             float distanceFactor = 0.5f + 2.5f * (1f - (dMeters / maxMeters));
             distanceFactor = Mathf.Clamp(distanceFactor, 0.5f, 3.0f);
             float scaledForce = Mathf.Max(0f, _force * stacksFactor * distanceFactor);
+
+            Audio?.PlayAudio(AudioClipType.StrongWindTornado1SFX, AudioChannelType.Fx, AudioPlayType.OneShot);
+
             Vector3 start = rb.position;
             Vector3 end = start + dir * scaledForce;
             end.y = start.y;
@@ -145,11 +156,7 @@ namespace Logic.Scripts.GameDomain.Effects
             }
         }
 
-        public void SetForceScalers(int stacksMultiplier, int distanceMultiplier)
-        {
-            //_stacksMul = stacksMultiplier;
-            _distanceMul = distanceMultiplier;
-        }
+        public void SetForceScalers(int stacksMultiplier, int distanceMultiplier) { _distanceMul = distanceMultiplier; }
 
         private static bool TryGetNaraRigidbody(IEffectable target, out Rigidbody rb)
         {
@@ -175,13 +182,9 @@ namespace Logic.Scripts.GameDomain.Effects
         {
             var bossView = UnityEngine.Object.FindFirstObjectByType<BossView>();
             if (bossView != null) return bossView.transform.position;
-
             var naraView = UnityEngine.Object.FindFirstObjectByType<NaraView>();
             if (naraView != null) return naraView.transform.position;
-
             return Vector3.zero;
         }
     }
 }
-
-

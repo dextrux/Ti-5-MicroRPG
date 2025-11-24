@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guideTitle: Pontos de Movimento
   pages:
-  - pageSprite: {fileID: 0}
+  - pageSprite: {fileID: 21300000, guid: 951a0669c3944a9478d8b69aa85a9f89, type: 3}
     descriptionText: "Pontos de Movimento (PM) s\xE3o o recurso necess\xE1rio para
       que o jogador consiga se movimentar pela arena durante seu turno. \n* No in\xEDcio
-      de cada turno o jogador recupera todo o seu PM;\n* Existem outras formas de
-      se movimentar que n\xE3o custam PM;"
+      de cada turno o jogador recupera todo o seu PM;\n* At\xE9 confirmar sua a\xE7\xE3o
+      o c\xEDrculo azul \xE9 recalculado em tempo real, informando o jogador qual
+      ser\xE1 seu valor de PM restante."

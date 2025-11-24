@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2311a3bf99fe9c044b375d21b1d88fe5, type: 3}
-  m_Name: 04 Fire Totem
+  m_Name: 04 Aura de Protecao
   m_EditorClassIdentifier: 
-  Name: Fire Totem
-  Description: Summon a totem at a selected location (range Y (+0) m) that lasts
-    T (+0) turns. Every turn it pulses, healing X (+0) HP to allies within R (+0)
-    m.
-  Icon: {fileID: 21300000, guid: fe2ff39912b25c14993d92230da23d02, type: 3}
+  Name: "Aura de Prote\xE7\xE3o"
+  Description: "Cria uma aura ao seu redor que, a cada turno, d\xE1 PM extra e recupera
+    um pouco da sua vida."
+  Icon: {fileID: 21300000, guid: df5d49bca1ac86e429cadc59bf398b2c, type: 3}
   _sfx: {fileID: 0}
   Damage: 0
   Cooldown: 0

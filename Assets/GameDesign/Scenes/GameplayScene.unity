@@ -447,6 +447,7 @@ MonoBehaviour:
   _layerMaskMouse:
     serializedVersion: 2
     m_Bits: 1
+  _echoviewPrefab: {fileID: 2514628826693967162, guid: 129572cef78695d4db9eafd60f165ed6, type: 3}
   _telegraphMaterials: {fileID: 11400000, guid: f55d7723a1e531b479d9a3b4d9873ffd, type: 2}
 --- !u!4 &2129559430
 Transform:

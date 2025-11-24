@@ -1,4 +1,5 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using UnityEngine;
 
 public class CustomizeUIController : ICustomizeUIController {
     private readonly CustomizeUIView _customizationView;
@@ -11,8 +12,11 @@ public class CustomizeUIController : ICustomizeUIController {
     }
 
     public void InitEntryPoint() {
-        _selectedAbility = _abilityPointService.AllAbilities[0];
-        _customizationView.InitStartPoint(_abilityPointService.AllAbilities[0]);
+        //_selectedAbility = _abilityPointService.AllAbilities[0];
+        //_customizationView.InitStartPoint(_abilityPointService.AllAbilities[0]);
+        //HideCustomize();
+        //_customizationView.RegisterCallbacks(HideCustomize, OnDamagePlus, OnDamageMinus, OnCooldownPlus, OnCooldownMinus, OnCostPlus,
+        //    OnCostMinus, OnRangePlus, OnRangeMinus, OnAbility1Button, OnAbility2Button, OnAbility3Button, OnAbility4Button, OnAbility5Button);
     }
 
     public void ShowCustomize() {

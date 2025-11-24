@@ -12,6 +12,7 @@ public class CustomizeUIView : MonoBehaviour {
     private Label _costLabel;
     private Label _rangeLabel;
 
+    private VisualElement _mainContainer;
     private VisualElement _skillContainer;
     private VisualElement _pointsContainer;
     private Button _customizeExitButton;
@@ -31,10 +32,10 @@ public class CustomizeUIView : MonoBehaviour {
 
     public void InitStartPoint(AbilityData data) {
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+        _mainContainer = root.Q<Button>("main-container");
         _customizeExitButton = root.Q<Button>("exit-customization-button");
         _skillContainer = root.Q<VisualElement>("skill-container");
         _pointsContainer = root.Q<VisualElement>("point-slot-container");
-
         _balanceLabel = root.Q<Label>("balance-txt");
 
         _damageLabel = root.Q<Label>("damage-txt");
@@ -55,7 +56,6 @@ public class CustomizeUIView : MonoBehaviour {
         _costMinusButton = root.Q<Button>("costs-minus-button");
         _rangePlusButton = root.Q<Button>("range-plus-button");
         _rangeMinusButton = root.Q<Button>("range-minus-button");
-
         SetAbility(data);
     }
 
@@ -63,11 +63,22 @@ public class CustomizeUIView : MonoBehaviour {
         _skillContainer.dataSource = data;
         _pointsContainer.dataSource = data;
     }
+    public void ShowCustomize() {
+        _mainContainer.AddToClassList("open-container");
+        _mainContainer.RemoveFromClassList("close-container");
+    }
+
+    public void HideCustomize() {
+        Debug.LogWarning("Chegou ate aqui");
+        _mainContainer.AddToClassList("close-container");
+        _mainContainer.RemoveFromClassList("open-container");
+    }
 
     public void RegisterCallbacks(Action OnCustomizeExitButtonPressed, Action OnDamagePlusPressed, Action OnDamageMinusPressed, Action OnCooldownPlusPressed,
         Action OnCooldownMinusPressed, Action OnCostPlusPressed, Action OnCostMinusPressed, Action OnRangePlusPressed,
         Action OnRangeMinusPressed, Action OnSetAbility1Pressed, Action OnSetAbility2Pressed, Action OnSetAbility3Pressed,
         Action OnSetAbility4Pressed, Action OnSetAbility5Pressed) {
+        _customizeExitButton.clicked += OnCustomizeExitButtonPressed;
         _ability1Slot.clicked += OnSetAbility1Pressed;
         _ability2Slot.clicked += OnSetAbility2Pressed;
         _ability3Slot.clicked += OnSetAbility3Pressed;

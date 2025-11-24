@@ -110,12 +110,6 @@
     transition-duration: 0.5s;
 }
 
-.close-container {
-    translate: 100% 100%;
-    transition-timing-function: ease-in-out;
-    transition-duration: 0.5s;
-}
-
 .simple-button {
     width: 95%;
     margin-bottom: 2%;
@@ -286,4 +280,10 @@
     border-top-right-radius: 14px;
     border-bottom-right-radius: 14px;
     border-bottom-left-radius: 14px;
+}
+
+.close-container {
+    translate: 100% 0;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.5s;
 }

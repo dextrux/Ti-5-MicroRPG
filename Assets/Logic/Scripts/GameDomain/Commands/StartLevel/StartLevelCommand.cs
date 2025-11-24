@@ -22,6 +22,7 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
         private IGamePlayDataService _gamePlayDataService;
         private IBossController _bossController;
         private ICastController _castController;
+        private ICustomizeUIController _customizeUIController;
 
         public override void ResolveDependencies() {
             _gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
@@ -32,6 +33,7 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
             _gamePlayDataService = _diContainer.Resolve<IGamePlayDataService>();
             _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
+            _customizeUIController = _diContainer.Resolve<ICustomizeUIController>();
             if (_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber).ControllerType == typeof(NaraTurnMovementController)) {
                 _castController = _diContainer.Resolve<ICastController>();
                 _bossController = _diContainer.Resolve<IBossController>();
@@ -43,6 +45,7 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _naraController.RegisterListeners();
             _naraController.InitEntryPoint();
+            _customizeUIController.InitEntryPoint();
             await Awaitable.NextFrameAsync();
             //To-Do Unfreeze movement nara
             //Activate GameplayView se necessário

@@ -16,6 +16,7 @@ public class GamePlayInstaller : MonoInstaller {
     [SerializeField] private NaraConfigurationSO _naraConfiguration;
 
     [SerializeField] private GamePlayUiView _gamePlayUiView;
+    [SerializeField] private CustomizeUIView _customizeUiView;
 
     [SerializeField] private AbilityData[] _skills;
 
@@ -52,5 +53,6 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<CastController>().AsSingle().WithArguments(_skills).NonLazy();
         //Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();
         Container.BindInterfacesTo<PortalController>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<CustomizeUIController>().AsSingle().WithArguments(_customizeUiView).NonLazy();
     }
 }

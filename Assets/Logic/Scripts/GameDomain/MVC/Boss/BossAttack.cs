@@ -225,10 +225,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
                 // Try resolve registry from the same subscene container
                 Logic.Scripts.GameDomain.MVC.Environment.Orb.OrbRegistry reg = null;
                 try { reg = ProjectContext.Instance.Container.Resolve<Logic.Scripts.GameDomain.MVC.Environment.Orb.OrbRegistry>(); } catch { reg = null; }
+                Vector3 origin = transform.position;
+                var bossView = GetComponentInParent<Logic.Scripts.GameDomain.MVC.Boss.BossView>();
+                if (bossView != null) origin = bossView.transform.position;
                 spawnByFactory.SetData(new SpawnOrbData
                 {
                     Arena = _arena,
-                    Origin = transform.position,
+                    Origin = origin,
                     Prefab = _orb.prefab,
                     Registry = reg,
                     MoveStep = _orb.moveStepMeters,

@@ -1,85 +1,15 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Ui/Styles/LobbyMenuStyle.uss?fileID=7433441132597879392&amp;guid=8c15ef07de17af044bf70c45766414bf&amp;type=3#LobbyMenuStyle" />
-    <engine:VisualElement name="main-container" style="flex-grow: 1; flex-direction: column; background-color: rgb(197, 184, 168);">
-        <engine:VisualElement style="flex-grow: 1; height: 9%; flex-direction: row; padding-right: 2%; padding-left: 2%; padding-top: 1%;">
-            <engine:Label text="SkillList" style="height: 100%; -unity-text-align: middle-left; font-size: 103%; width: 50%;" />
-            <engine:Button text="Resetar" name="reset-button" class="simple-button" style="align-self: center; height: 100%;" />
-            <engine:VisualElement style="flex-grow: 1; width: 18%;" />
-            <engine:Button text="X" name="exit-customization-button" style="height: 100%; background-color: rgba(0, 0, 0, 0); background-image: url(&quot;project://database/Assets/Ui/Images/icon_Close.png?fileID=2800000&amp;guid=27440cca8ad51eb48b9a5fbd134dd4b5&amp;type=3#icon_Close&quot;); -unity-background-scale-mode: scale-to-fit; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; width: 2%;" />
+    <engine:VisualElement name="main-container" style="flex-grow: 1; flex-direction: column; background-color: rgb(197, 184, 168); background-image: url(&quot;project://database/Assets/Ui/Images/DarkBackground.png?fileID=2800000&amp;guid=b4606be581164c5489be0b83576a836b&amp;type=3#DarkBackground&quot;);">
+        <engine:VisualElement style="flex-grow: 1; height: 15%; flex-direction: row; padding-right: 2%; padding-left: 2%; padding-top: 1%;">
+            <engine:Label text="Habilidades" style="height: 100%; -unity-text-align: middle-left; font-size: 103%; width: 95%; -unity-font-definition: url(&quot;project://database/Assets/Ui/UI%20Fonts/Title.ttf?fileID=12800000&amp;guid=e8f8a8a2d6ddad14086f666da53e1f84&amp;type=3#Title&quot;); color: rgb(245, 237, 237);" />
+            <engine:Button class="close-button" style="background-color: rgb(254, 238, 205);" />
         </engine:VisualElement>
-        <engine:VisualElement style="flex-grow: 1; flex-direction: row; height: 50%; align-self: auto; justify-content: space-between; align-items: center; padding-top: 0; padding-right: 2%; padding-bottom: 0; padding-left: 2%;">
-            <engine:VisualElement name="skillList-container" style="flex-grow: 1; width: 30%; padding-top: 1%; padding-right: 1%; padding-bottom: 1%; padding-left: 1%; background-image: url(&quot;project://database/Assets/Ui/Images/DarkBackground.png?fileID=2800000&amp;guid=3c68acb718d8a61459b1ef02718bd66a&amp;type=3#DarkBackground&quot;); -unity-background-scale-mode: stretch-to-fill; border-left-color: rgb(254, 238, 205); border-right-color: rgb(254, 238, 205); border-top-color: rgb(254, 238, 205); border-bottom-color: rgb(254, 238, 205); height: 60%; border-top-width: 8px; border-right-width: 8px; border-bottom-width: 8px; border-left-width: 8px; border-top-left-radius: 84px; border-top-right-radius: 84px; border-bottom-right-radius: 84px; border-bottom-left-radius: 84px;">
-                <engine:VisualElement name="VisualElement" style="flex-grow: 1; height: 80%; border-left-color: rgb(254, 238, 205); border-right-color: rgb(254, 238, 205); border-top-color: rgb(254, 238, 205); border-bottom-color: rgb(254, 238, 205); display: flex;">
-                    <engine:VisualElement style="flex-grow: 1; background-image: none; height: 70%; justify-content: space-between; align-self: stretch; align-items: center;">
-                        <engine:VisualElement style="flex-grow: 1; flex-direction: row; width: 100%; align-items: center; justify-content: space-around; height: 50%;">
-                            <engine:Button text="&#x9;" name="ability-slot1-button" class="select-skill-button">
-                                <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/01%20Magic%20Shot.asset?fileID=11400000&amp;guid=d9d52de431f81e94c97467c811060a54&amp;type=2#01 Magic Shot" binding-mode="ToTarget" />
-                                </Bindings>
-                            </engine:Button>
-                            <engine:Button name="ability-slot2-button" class="select-skill-button">
-                                <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/02%20Skyfall.asset?fileID=11400000&amp;guid=4c82f2d9bc2cf09418a437c668996e07&amp;type=2#02 Skyfall" binding-mode="ToTarget" />
-                                </Bindings>
-                            </engine:Button>
-                            <engine:Button name="ability-slot3-button" class="select-skill-button">
-                                <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/03%20Water%20Pillar.asset?fileID=11400000&amp;guid=d774261d7df73ed4fa8f08149dc4b81f&amp;type=2#03 Water Pillar" binding-mode="ToTarget" />
-                                </Bindings>
-                            </engine:Button>
-                        </engine:VisualElement>
-                        <engine:VisualElement style="flex-grow: 1; flex-direction: row; width: 100%; align-items: center; justify-content: space-around; height: 50%;">
-                            <engine:Button name="ability-slot4-button" class="select-skill-button" style="visibility: visible;">
-                                <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/04%20Fire%20Totem.asset?fileID=11400000&amp;guid=72ba9ea640b863144836fdfdc9469bd6&amp;type=2#04 Fire Totem" binding-mode="ToTarget" />
-                                </Bindings>
-                            </engine:Button>
-                            <engine:Button name="ability-slot5-button" class="select-skill-button" style="visibility: visible;">
-                                <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/05%20Blink.asset?fileID=11400000&amp;guid=f4ae99592295ab4438105fcbb1c1ae10&amp;type=2#05 Blink" binding-mode="ToTarget" />
-                                </Bindings>
-                            </engine:Button>
-                        </engine:VisualElement>
-                    </engine:VisualElement>
-                </engine:VisualElement>
-            </engine:VisualElement>
-            <engine:VisualElement name="skill-description-container" style="flex-grow: 1; width: 70%; height: 90%; background-image: none; align-self: auto; justify-content: center; align-items: center;">
-                <engine:VisualElement name="skill-container" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Ui/Images/LightBackground.png?fileID=2800000&amp;guid=520fe887bb59e0444821db4c956cba60&amp;type=3#LightBackground&quot;); -unity-background-scale-mode: scale-and-crop; width: 81%; flex-direction: row; border-top-width: 12px; border-right-width: 12px; border-bottom-width: 12px; border-left-width: 12px; border-left-color: rgb(76, 0, 109); border-right-color: rgb(76, 0, 109); border-top-color: rgb(76, 0, 109); border-bottom-color: rgb(76, 0, 109); border-top-left-radius: 66px; border-top-right-radius: 66px; border-bottom-right-radius: 66px; border-bottom-left-radius: 66px; overflow: hidden;">
-                    <engine:VisualElement style="flex-grow: 1; width: 25%;">
-                        <engine:Label text="Fire Totem" style="height: 21%; background-color: rgb(76, 0, 109); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 1%; padding-right: 0; padding-bottom: 0; padding-left: 1%; font-size: 42%; -unity-text-align: middle-center; color: rgb(254, 238, 205); border-bottom-right-radius: 31px; border-left-color: rgb(76, 0, 109); border-right-color: rgb(76, 0, 109); border-top-color: rgb(76, 0, 109); border-bottom-color: rgb(76, 0, 109); top: -1%; left: -1%; width: 101%;">
-                            <Bindings>
-                                <engine:DataBinding property="text" data-source-path="Name" binding-mode="ToTarget" />
-                            </Bindings>
-                        </engine:Label>
-                        <engine:VisualElement style="flex-grow: 1; align-items: center; justify-content: center; padding-top: 10%; padding-bottom: 8%; height: 60%;">
-                            <engine:VisualElement style="flex-grow: 1; height: 60%; width: 80%; align-self: auto; align-content: auto; border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; border-left-color: rgb(76, 0, 109); border-right-color: rgb(76, 0, 109); border-top-color: rgb(76, 0, 109); border-bottom-color: rgb(76, 0, 109); border-top-left-radius: 25%; border-top-right-radius: 25%; border-bottom-right-radius: 25%; border-bottom-left-radius: 25%;">
-                                <Bindings>
-                                    <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" binding-mode="ToTarget" />
-                                </Bindings>
-                            </engine:VisualElement>
-                        </engine:VisualElement>
-                        <engine:Button text="Plot Twist" name="active-plot-button" style="height: 10%; flex-shrink: 1; flex-grow: 1; width: 80%; align-self: center; border-left-color: rgb(107, 15, 142); border-right-color: rgb(107, 15, 142); border-top-color: rgb(107, 15, 142); border-bottom-color: rgb(107, 15, 142); background-color: rgb(76, 0, 109); color: rgb(254, 238, 205); font-size: 31%; border-top-left-radius: 19px; border-top-right-radius: 19px; border-bottom-right-radius: 19px; border-bottom-left-radius: 19px;" />
-                        <engine:VisualElement name="plot-active-icon" style="flex-grow: 1; height: 15%; background-image: url(&quot;project://database/Assets/Ui/Images/BrushIcon.png?fileID=2800000&amp;guid=322553f5a23d7784b8fedcfb1250ad4f&amp;type=3#BrushIcon&quot;); -unity-background-scale-mode: scale-to-fit; visibility: hidden;" />
-                        <engine:VisualElement style="flex-grow: 1; height: 9%;" />
-                    </engine:VisualElement>
-                    <engine:VisualElement style="flex-grow: 1; width: 75%; justify-content: center; align-items: flex-start; padding-top: 3%; padding-right: 3%; padding-bottom: 3%; padding-left: 3%;">
-                        <engine:Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse bibendum dolor ut odio volutpat dictum. Aenean sed rutrum nulla, sed ultricies lectus. Aliquam tincidunt tincidunt risus, et tristique massa congue vel. Praesent vehicula commodo felis scelerisque fringilla." style="width: 100%; height: 100%; white-space: normal; font-size: 40%; -unity-text-align: middle-left;">
-                            <Bindings>
-                                <engine:DataBinding property="text" data-source-path="Description" binding-mode="ToTarget" />
-                            </Bindings>
-                        </engine:Label>
-                    </engine:VisualElement>
-                </engine:VisualElement>
-            </engine:VisualElement>
-        </engine:VisualElement>
-        <engine:VisualElement style="flex-grow: 1; height: 5%; flex-direction: row; justify-content: space-between; padding-left: 5%; padding-right: 5%; display: flex;">
-            <engine:Label text="Saldo: 00" name="balance-txt" style="height: 100%; -unity-text-align: middle-center; font-size: 45%; width: 35%;" />
-            <engine:Label text="Desvantagens: 00/00" name="disadvantage-txt" style="height: 100%; -unity-text-align: middle-right; font-size: 45%; width: 35%;" />
-        </engine:VisualElement>
-        <engine:VisualElement style="flex-grow: 1; height: 35%; padding-top: 2%; padding-right: 2%; padding-bottom: 2%; padding-left: 2%; flex-direction: row; display: flex;">
-            <engine:VisualElement name="point-slot-container" style="flex-grow: 1; background-image: none; flex-direction: row; justify-content: space-between; align-items: center; padding-top: 1%; padding-right: 3%; padding-bottom: 1%; padding-left: 3%; background-color: rgb(76, 0, 109); border-left-color: rgb(254, 238, 205); border-right-color: rgb(254, 238, 205); border-top-color: rgb(254, 238, 205); border-bottom-color: rgb(254, 238, 205); border-top-width: 12px; border-right-width: 12px; border-bottom-width: 12px; border-left-width: 12px; border-top-left-radius: 68px; border-top-right-radius: 68px; border-bottom-right-radius: 68px; border-bottom-left-radius: 68px;">
-                <engine:VisualElement style="background-color: rgb(254, 238, 205); width: 12%; height: 100%; position: relative; margin-top: 0; margin-right: 1%; margin-bottom: 0; margin-left: 1%; border-left-color: rgb(107, 15, 142); border-right-color: rgb(107, 15, 142); border-top-color: rgb(107, 15, 142); border-bottom-color: rgb(107, 15, 142); border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px;">
-                    <engine:Label text="DMG" style="-unity-text-align: middle-center; width: 70%; align-items: auto; align-self: center; background-color: rgb(76, 0, 109); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 20%; font-size: 25%; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; color: rgb(254, 238, 205);" />
+        <engine:VisualElement style="flex-grow: 1; flex-direction: row; height: 63%; align-self: auto; justify-content: space-between; align-items: center; padding-top: 0; padding-right: 2%; padding-bottom: 0; padding-left: 2%;">
+            <engine:VisualElement name="skillList-container" style="flex-grow: 1; width: 30%; padding-top: 1%; padding-right: 1%; padding-bottom: 1%; padding-left: 1%; background-image: url(&quot;project://database/Assets/Ui/Images/LightBackground.png?fileID=2800000&amp;guid=d381c8275c6bbd248aa86c1b4d5cc440&amp;type=3#LightBackground&quot;); -unity-background-scale-mode: stretch-to-fill; height: 60%; flex-direction: column;">
+                <engine:VisualElement style="background-color: rgb(254, 238, 205); width: 100%; height: 100%; position: relative; margin-top: 0; margin-right: 1%; margin-bottom: 0; margin-left: 1%; border-left-color: rgb(107, 15, 142); border-right-color: rgb(107, 15, 142); border-top-color: rgb(107, 15, 142); border-bottom-color: rgb(107, 15, 142); border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; flex-direction: row;">
+                    <engine:VisualElement style="flex-grow: 1;" />
+                    <engine:Label text="Força" style="-unity-text-align: middle-center; width: 50%; align-items: auto; align-self: center; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 100%; font-size: 25%; -unity-font-definition: url(&quot;project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&amp;guid=4778bedcd2ddc204c8a5bdab7a003316&amp;type=3#Text-Bold&quot;);" />
                     <engine:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: center; align-items: center; align-self: center; align-content: auto; width: 80%; height: 70%;">
                         <engine:Button name="damage-minus-button" style="background-image: url(&quot;project://database/Assets/Ui/Images/icon_Minus.png?fileID=2800000&amp;guid=7d407676f7a83264ba43e0ac1ea06c2e&amp;type=3#icon_Minus&quot;); background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-scale-mode: scale-to-fit; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 35%; height: 40%;" />
                         <engine:Label text="10" name="damage-txt" style="width: 30%; -unity-text-align: middle-center; margin-top: 8%; margin-right: 8%; margin-bottom: 8%; margin-left: 8%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 47%; -unity-font-style: bold;" />
@@ -110,22 +40,54 @@
                         <engine:Button name="range-plus-button" style="background-image: url(&quot;project://database/Assets/Ui/Images/icon_Plus.png?fileID=2800000&amp;guid=fc56f32568b3b1042923cf8275df713d&amp;type=3#icon_Plus&quot;); background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-scale-mode: scale-to-fit; width: 35%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 40%;" />
                     </engine:VisualElement>
                 </engine:VisualElement>
-                <engine:VisualElement style="background-color: rgb(254, 238, 205); width: 12%; height: 100%; position: relative; margin-top: 0; margin-right: 1%; margin-bottom: 0; margin-left: 1%; border-left-color: rgb(107, 15, 142); border-right-color: rgb(107, 15, 142); border-top-color: rgb(107, 15, 142); border-bottom-color: rgb(107, 15, 142); border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px;">
-                    <engine:Label text="CASTS" style="-unity-text-align: middle-center; width: 70%; align-items: auto; align-self: center; background-color: rgb(76, 0, 109); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 20%; font-size: 25%; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; color: rgb(254, 238, 205);" />
-                    <engine:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: center; align-items: center; align-self: center; align-content: auto; width: 80%; height: 70%;">
-                        <engine:Button name="casts-minus-button" style="background-image: url(&quot;project://database/Assets/Ui/Images/icon_Minus.png?fileID=2800000&amp;guid=7d407676f7a83264ba43e0ac1ea06c2e&amp;type=3#icon_Minus&quot;); background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-scale-mode: scale-to-fit; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 35%; height: 40%;" />
-                        <engine:Label text="10" name="casts-txt" style="width: 30%; -unity-text-align: middle-center; margin-top: 8%; margin-right: 8%; margin-bottom: 8%; margin-left: 8%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 47%; -unity-font-style: bold;" />
-                        <engine:Button name="casts-plus-button" style="background-image: url(&quot;project://database/Assets/Ui/Images/icon_Plus.png?fileID=2800000&amp;guid=fc56f32568b3b1042923cf8275df713d&amp;type=3#icon_Plus&quot;); background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-scale-mode: scale-to-fit; width: 35%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 40%;" />
+            </engine:VisualElement>
+            <engine:VisualElement name="skill-description-container" style="flex-grow: 1; width: 70%; height: 90%; background-image: none; align-self: auto; justify-content: center; align-items: center;">
+                <engine:VisualElement name="skill-container" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Ui/Images/CleanBackground.png?fileID=2800000&amp;guid=6dcdf45004f567c4bb2bb3a8e1e23dcc&amp;type=3#CleanBackground&quot;); -unity-background-scale-mode: scale-to-fit; width: 81%; flex-direction: column; overflow: hidden; padding-right: 8%; padding-left: 8%; padding-bottom: 3%; padding-top: 3%;">
+                    <engine:VisualElement style="flex-grow: 1; height: 30%; width: 100%; align-self: auto; align-content: auto; -unity-background-scale-mode: scale-to-fit;">
+                        <Bindings>
+                            <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" binding-mode="ToTarget" />
+                        </Bindings>
                     </engine:VisualElement>
+                    <engine:Label text="Fire Totem" style="height: 10%; font-size: 42%; -unity-text-align: middle-center; color: rgb(17, 17, 16); top: -1%; left: -1%; width: 100%; -unity-font-definition: url(&quot;project://database/Assets/Ui/UI%20Fonts/Text-Bold.otf?fileID=12800000&amp;guid=4778bedcd2ddc204c8a5bdab7a003316&amp;type=3#Text-Bold&quot;);">
+                        <Bindings>
+                            <engine:DataBinding property="text" data-source-path="Name" binding-mode="ToTarget" />
+                        </Bindings>
+                    </engine:Label>
+                    <engine:Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse bibendum dolor ut odio volutpat dictum. Aenean sed rutrum nulla, sed ultricies lectus. Aliquam tincidunt tincidunt risus, et tristique massa congue vel. Praesent vehicula commodo felis scelerisque fringilla." style="width: 100%; height: 50%; white-space: normal; font-size: 35%; -unity-text-align: middle-left;">
+                        <Bindings>
+                            <engine:DataBinding property="text" data-source-path="Description" binding-mode="ToTarget" />
+                        </Bindings>
+                    </engine:Label>
                 </engine:VisualElement>
-                <engine:VisualElement style="background-color: rgb(254, 238, 205); width: 12%; height: 100%; position: relative; margin-top: 0; margin-right: 1%; margin-bottom: 0; margin-left: 1%; border-left-color: rgb(107, 15, 142); border-right-color: rgb(107, 15, 142); border-top-color: rgb(107, 15, 142); border-bottom-color: rgb(107, 15, 142); border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px;">
-                    <engine:Label text="AREA" style="-unity-text-align: middle-center; width: 70%; align-items: auto; align-self: center; background-color: rgb(76, 0, 109); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 20%; font-size: 25%; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; color: rgb(254, 238, 205);" />
-                    <engine:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: center; align-items: center; align-self: center; align-content: auto; width: 80%; height: 70%;">
-                        <engine:Button name="area-minus-button" style="background-image: url(&quot;project://database/Assets/Ui/Images/icon_Minus.png?fileID=2800000&amp;guid=7d407676f7a83264ba43e0ac1ea06c2e&amp;type=3#icon_Minus&quot;); background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-scale-mode: scale-to-fit; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 35%; height: 40%;" />
-                        <engine:Label text="10" name="area-txt" style="width: 30%; -unity-text-align: middle-center; margin-top: 8%; margin-right: 8%; margin-bottom: 8%; margin-left: 8%; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 47%; -unity-font-style: bold;" />
-                        <engine:Button name="area-plus-button" style="background-image: url(&quot;project://database/Assets/Ui/Images/icon_Plus.png?fileID=2800000&amp;guid=fc56f32568b3b1042923cf8275df713d&amp;type=3#icon_Plus&quot;); background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-scale-mode: scale-to-fit; width: 35%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 40%;" />
-                    </engine:VisualElement>
-                </engine:VisualElement>
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement style="flex-grow: 1; height: 22%; padding-top: 2%; padding-right: 2%; padding-bottom: 0; padding-left: 2%; flex-direction: row; display: flex; align-items: flex-end; justify-content: center; overflow: hidden;">
+            <engine:VisualElement style="flex-grow: 0; width: 50%; height: 110%; background-image: url(&quot;project://database/Assets/Ui/Images/ButtonTexture.png?fileID=2800000&amp;guid=17bdc5d1a8d91d5498c5f64c68eecfff&amp;type=3#ButtonTexture&quot;); background-position-x: center -5%; background-position-y: center 60%; -unity-background-scale-mode: stretch-to-fill; top: 15%; flex-direction: row; align-items: flex-start; justify-content: space-between; padding-top: 1%; padding-left: 2%; padding-right: 2%;">
+                <engine:Button text="&#x9;" name="ability-slot1-button" class="select-skill-button">
+                    <Bindings>
+                        <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/01%20Magic%20Shot.asset?fileID=11400000&amp;guid=d9d52de431f81e94c97467c811060a54&amp;type=2#01 Magic Shot" binding-mode="ToTarget" />
+                    </Bindings>
+                </engine:Button>
+                <engine:Button name="ability-slot2-button" class="select-skill-button">
+                    <Bindings>
+                        <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/02%20Skyfall.asset?fileID=11400000&amp;guid=4c82f2d9bc2cf09418a437c668996e07&amp;type=2#02 Skyfall" binding-mode="ToTarget" />
+                    </Bindings>
+                </engine:Button>
+                <engine:Button name="ability-slot3-button" class="select-skill-button">
+                    <Bindings>
+                        <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/03%20Water%20Pillar.asset?fileID=11400000&amp;guid=d774261d7df73ed4fa8f08149dc4b81f&amp;type=2#03 Water Pillar" binding-mode="ToTarget" />
+                    </Bindings>
+                </engine:Button>
+                <engine:Button name="ability-slot4-button" class="select-skill-button" style="visibility: visible;">
+                    <Bindings>
+                        <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/04%20Fire%20Totem.asset?fileID=11400000&amp;guid=72ba9ea640b863144836fdfdc9469bd6&amp;type=2#04 Fire Totem" binding-mode="ToTarget" />
+                    </Bindings>
+                </engine:Button>
+                <engine:Button name="ability-slot5-button" class="select-skill-button" style="visibility: visible;">
+                    <Bindings>
+                        <engine:DataBinding property="style.backgroundImage" data-source-path="Icon" data-source="project://database/Assets/GameDesign/GameData/Abilities/05%20Blink.asset?fileID=11400000&amp;guid=f4ae99592295ab4438105fcbb1c1ae10&amp;type=2#05 Blink" binding-mode="ToTarget" />
+                    </Bindings>
+                </engine:Button>
             </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>

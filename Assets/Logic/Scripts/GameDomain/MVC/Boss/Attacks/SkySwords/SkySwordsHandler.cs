@@ -20,6 +20,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 			private LineRenderer _arrow;
 		private Vector3 _centerWorld;
 			private Logic.Scripts.Services.UpdateService.IUpdateSubscriptionService _updateSvc;
+			private float _yOffset = 0.05f;
+			private int _rqAdd = 0;
 
 			// Exposição global para efeitos (Grapple/Knockback) direcionarem pelo centro do SkySwords
 			public static bool CurrentDisplacementEnabled;
@@ -58,7 +60,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 			var go = new GameObject("SkySwords_Ring");
 			go.transform.SetParent(parentTransform, false);
 			_ring = go.AddComponent<LineRenderer>();
-				_ring.material = _areaMaterial != null ? _areaMaterial : new Material(Shader.Find("Sprites/Default"));
+			var layering = Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphLayeringLocator.Service;
+			var layer = layering != null ? layering.Register(preferTop: _telegraphDisplacementEnabled) : default;
+			_yOffset = layer.Y;
+			_rqAdd = layer.QueueAdd;
+			var ringMat = _areaMaterial != null ? new Material(_areaMaterial) : new Material(Shader.Find("Sprites/Default"));
+			ringMat.renderQueue += _rqAdd;
+			_ring.material = ringMat;
 			_ring.useWorldSpace = true;
 			_ring.loop = true;
 			_ring.widthMultiplier = _ringWidth;
@@ -73,11 +81,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 				discGo.transform.SetParent(parentTransform, false);
 				_discFilter = discGo.AddComponent<MeshFilter>();
 				_discRenderer = discGo.AddComponent<MeshRenderer>();
-				_discRenderer.material = _areaMaterial != null ? _areaMaterial : new Material(Shader.Find("Sprites/Default"));
+				var discMat = _areaMaterial != null ? new Material(_areaMaterial) : new Material(Shader.Find("Sprites/Default"));
+				discMat.renderQueue += _rqAdd;
+				_discRenderer.material = discMat;
 				float effectiveRadius = Mathf.Max(0.01f, _radius - _ringWidth * 0.5f);
 				_discFilter.sharedMesh = BuildFilledDisc(effectiveRadius, 64);
-				// Posiciona o fill no centro do círculo, em y=0.05 (plano)
-				_discFilter.transform.position = new Vector3(_centerWorld.x, 0.05f, _centerWorld.z);
+				// Posiciona o fill no centro do círculo, em y offset (plano)
+				_discFilter.transform.position = new Vector3(_centerWorld.x, _yOffset, _centerWorld.z);
 
 				// Arrow (player direction), similar ao feather quando deslocamento habilitado
 				if (_telegraphDisplacementEnabled)
@@ -85,7 +95,23 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 					var arrowGo = new GameObject("SkySwords_DirectionArrow");
 					arrowGo.transform.SetParent(parentTransform, false);
 					_arrow = arrowGo.AddComponent<LineRenderer>();
-					_arrow.material = new Material(Shader.Find("Sprites/Default"));
+					var shader = Shader.Find("Universal Render Pipeline/Unlit");
+					if (shader == null) shader = Shader.Find("Unlit/Color");
+					if (shader == null) shader = Shader.Find("Sprites/Default");
+					var arrowMat = new Material(shader);
+					// não forçar renderQueue; manter no padrão do shader (opaco)
+					// cor da seta igual à cor do material de área (provider já resolveu Grapple/Knockback)
+					if (_areaMaterial != null)
+					{
+						Color col;
+						if (_areaMaterial.HasProperty("_BaseColor")) col = _areaMaterial.GetColor("_BaseColor");
+						else if (_areaMaterial.HasProperty("_Color")) col = _areaMaterial.color;
+						else col = Color.white;
+						col.a = 1f; // força opacidade total na seta
+						if (arrowMat.HasProperty("_BaseColor")) arrowMat.SetColor("_BaseColor", col);
+						if (arrowMat.HasProperty("_Color")) arrowMat.color = col;
+					}
+					_arrow.material = arrowMat;
 					_arrow.useWorldSpace = true;
 					_arrow.loop = false;
 					_arrow.widthMultiplier = 0.08f;
@@ -184,7 +210,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 			segments = Mathf.Max(12, segments);
 			_ring.positionCount = segments;
 			float step = Mathf.PI * 2f / segments;
-			float y = 0.05f;
+			float y = _yOffset;
 			for (int i = 0; i < segments; i++)
 			{
 				float a = i * step;
@@ -261,7 +287,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.SkySwords
 				dir.Normalize();
 				dir = UsePull() ? -dir : dir;
 
-				float y = 0.05f;
+				// Seta sempre acima dos telegraphs
+				float y = Mathf.Max(_yOffset + 0.25f, 0.3f);
 				float outOffset = Mathf.Max(0.35f, _radius * 0.1f);
 				float shaftLen = Mathf.Max(0.75f, _radius * 0.2f);
 				float headLen = shaftLen * 0.35f;

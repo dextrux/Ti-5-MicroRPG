@@ -43,9 +43,20 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
             _naraController.RegisterListeners();
             _naraController.InitEntryPoint();
+			// Set initial player position: x=0, z=-10 relative to arena center (keep current Y)
+			try {
+				var arena = UnityEngine.Object.FindFirstObjectByType<ArenaPosReference>(UnityEngine.FindObjectsInactive.Exclude);
+				var naraGO = _naraController.NaraViewGO;
+				if (naraGO != null) {
+					Vector3 curr = naraGO.transform.position;
+					Vector3 ac = arena != null ? arena.transform.position : Vector3.zero;
+					Vector3 desired = new Vector3(ac.x + 0f, curr.y, ac.z - 10f);
+					_naraController.SetPosition(desired);
+				}
+			} catch { }
             await Awaitable.NextFrameAsync();
             //To-Do Unfreeze movement nara
-            //Activate GameplayView se necessário
+            //Activate GameplayView se necessï¿½rio
             if (_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber).ControllerType == typeof(NaraTurnMovementController)) {
                 _castController.InitEntryPoint(_naraController);
                 _bossController.Initialize();

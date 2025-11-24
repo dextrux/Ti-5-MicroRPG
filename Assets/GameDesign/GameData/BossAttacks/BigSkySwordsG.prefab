@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7008708713626683138}
   - component: {fileID: -7797698259084971289}
   m_Layer: 0
-  m_Name: Cones
+  m_Name: BigSkySwordsG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,8 @@ MonoBehaviour:
   _effects:
   - rid: 2599984782535819372
   - rid: 2599984789869297870
-  _attackType: 0
+  - rid: 1723426629190942869
+  _attackType: 5
   _displacementPriority: 0
   _protean:
     radius: 18
@@ -75,19 +76,27 @@ MonoBehaviour:
     baseDamage: 10
     initialHp: 50
   _skySwords:
-    radius: 4.5
+    radius: 10
     ringWidth: 0.3
   _skySwordsIsPull: 0
   references:
     version: 2
     RefIds:
+    - rid: 1723426629190942869
+      type: {class: GrappleEffect, ns: Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
+      data:
+        Name: 
+        Description: 
+        IsAutoCast: 0
+        _force: 3
+        _stopDistance: 1
     - rid: 2599984782535819372
       type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:
         Name: 
         Description: 
         IsAutoCast: 0
-        amount: 10
+        amount: 15
     - rid: 2599984789869297870
       type: {class: AddDebuffStacksEffect, ns: Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:

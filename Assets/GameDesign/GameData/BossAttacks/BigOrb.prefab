@@ -71,7 +71,7 @@ MonoBehaviour:
     initialRadius: 6
     maxRadiusCap: 30
     baseDamage: 30
-    initialHp: 20
+    initialHp: 10
   _skySwords:
     radius: 4.5
     ringWidth: 0.3

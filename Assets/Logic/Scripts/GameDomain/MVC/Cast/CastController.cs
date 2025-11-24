@@ -78,20 +78,10 @@ public class CastController : ICastController {
     }
 
     public void UseFastEcho(IEchoController echoController, Transform caster) {
-        if (_currentAbility == null) return;
-        if (_actionPointsService.CanSpend(_currentAbility.GetCost())) {
-            //echoController.CreateFastEcho(_currentAbility, caster);
-            _actionPointsService.Spend(_currentAbility.GetCost());
-            CancelAbilityUse();
-        }
+        echoController.CreateFastEcho(caster);
     }
 
     public void UseSlowEcho(IEchoController echoController, Transform caster) {
-        if (_currentAbility == null) return;
-        if (_actionPointsService.CanSpend(_currentAbility.GetCost())) {
-            //echoController.CreateSlowEcho(_currentAbilityView, caster);
-            _actionPointsService.Spend(_currentAbility.GetCost());
-            CancelAbilityUse();
-        }
+        echoController.CreateSlowEcho(caster);
     }
 }

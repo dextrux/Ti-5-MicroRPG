@@ -18,12 +18,12 @@ namespace Logic.Scripts.GameDomain.MVC.Echo {
             _echoViewList = new List<EchoView>();
         }
 
-        /*public void CreateFastEcho(AbilityView castingAbility, Transform referenceTransform) {
-            _echoFactory.CreateEcho(castingAbility, ONE_INT, referenceTransform);
+        public void CreateFastEcho(Transform referenceTransform) {
+            _echoFactory.CreateEcho(ONE_INT, referenceTransform);
         }
 
-        public void CreateSlowEcho(AbilityView castingAbility, Transform referenceTransform) {
-            _echoFactory.CreateEcho(castingAbility, TWO_INT, referenceTransform);
-        }*/
+        public void CreateSlowEcho(Transform referenceTransform) {
+            _echoFactory.CreateEcho(TWO_INT, referenceTransform);
+        }
     }
 }

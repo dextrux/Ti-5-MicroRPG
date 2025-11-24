@@ -47,13 +47,14 @@ MonoBehaviour:
   _effects:
   - rid: 2599984782535819375
   _attackType: 2
+  _displacementPriority: 0
   _protean:
     radius: 6
     angleDeg: 45
     sides: 36
   _wingSlash:
     radius: 12
-    angleDeg: 265
+    angleDeg: 235
     sides: 48
   _feather:
     featherCount: 8
@@ -72,6 +73,10 @@ MonoBehaviour:
     maxRadiusCap: 60
     baseDamage: 10
     initialHp: 50
+  _skySwords:
+    radius: 4.5
+    ringWidth: 0.3
+  _skySwordsIsPull: 0
   references:
     version: 2
     RefIds:
@@ -80,4 +85,5 @@ MonoBehaviour:
       data:
         Name: 
         Description: 
+        IsAutoCast: 0
         amount: 25

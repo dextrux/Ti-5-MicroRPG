@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c0c6085d048acf4fb600bcd04cc02b7, type: 3}
-  m_Name: BossPhase1
+  m_Name: BossTestPhase
   m_EditorClassIdentifier: 
   _availableAttacks:
   - {fileID: -7797698259084971289, guid: 33365d6a13b9a3b4d938f40f0697b1e7, type: 3}
@@ -29,22 +29,22 @@ MonoBehaviour:
   _turnPattern:
   - Mode: 3
     DistanceMultiplier: 0
-    AttackIndices: 00000000
+    AttackIndices: 05000000
   - Mode: 3
     DistanceMultiplier: 0
     AttackIndices: 01000000
   - Mode: 3
     DistanceMultiplier: 0
+    AttackIndices: 02000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 0300000005000000
+  - Mode: 3
+    DistanceMultiplier: 0
     AttackIndices: 04000000
   - Mode: 3
     DistanceMultiplier: 0
-    AttackIndices: 0000000008000000
-  - Mode: 3
-    DistanceMultiplier: 0
-    AttackIndices: 05000000
-  - Mode: 3
-    DistanceMultiplier: 0
-    AttackIndices: 0800000004000000
+    AttackIndices: 0500000004000000
   - Mode: 3
     DistanceMultiplier: 0
     AttackIndices: 03000000

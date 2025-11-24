@@ -2,22 +2,25 @@ using Zenject;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss.Telegraph
 {
-	// Publica o provider globalmente após todos os installers concluírem.
+	// Publica serviços globais após os installers concluírem.
 	public sealed class TelegraphMaterialProviderBootstrap : IInitializable
 	{
 		private readonly ITelegraphMaterialProvider _provider;
+		private readonly ITelegraphLayeringService _layering;
 
-		public TelegraphMaterialProviderBootstrap(ITelegraphMaterialProvider provider)
+		public TelegraphMaterialProviderBootstrap(
+			ITelegraphMaterialProvider provider,
+			ITelegraphLayeringService layering)
 		{
 			_provider = provider;
+			_layering = layering;
 		}
 
 		public void Initialize()
 		{
 			TelegraphMaterialService.Provider = _provider;
-			UnityEngine.Debug.Log("[TelegraphProvider] Published provider to TelegraphMaterialService");
+			TelegraphLayeringLocator.Service = _layering;
+			UnityEngine.Debug.Log("[TelegraphProvider] Published provider and layering service");
 		}
 	}
 }
-
-

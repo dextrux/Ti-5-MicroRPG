@@ -39,8 +39,9 @@ namespace Logic.Scripts.GameDomain.Commands
         public void Execute()
         {
             if (_data.Prefab == null) { Debug.LogWarning("SpawnOrbCommand: Prefab null"); return; }
-            Debug.Log($"[SpawnOrb] Instantiating orb prefab at {_data.Origin}");
-            GameObject orbGo = Object.Instantiate(_data.Prefab, _data.Origin, Quaternion.identity);
+			Vector3 spawnPos = _data.Origin; spawnPos.y = 1f;
+			Debug.Log($"[SpawnOrb] Instantiating orb prefab at {spawnPos}");
+			GameObject orbGo = Object.Instantiate(_data.Prefab, spawnPos, Quaternion.identity);
             if (!orbGo.activeSelf) orbGo.SetActive(true);
             var controller = orbGo.GetComponent<Logic.Scripts.GameDomain.MVC.Environment.Orb.OrbController>();
             if (controller != null)

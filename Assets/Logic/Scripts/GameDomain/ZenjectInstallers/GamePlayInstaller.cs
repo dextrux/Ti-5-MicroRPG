@@ -36,18 +36,16 @@ public class GamePlayInstaller : MonoInstaller {
         Container.BindInterfacesTo<LevelCancellationTokenService>().AsSingle().NonLazy();
         Container.Bind<INaraMovementControllerFactory>().To<NaraMovementControllerFactory>().AsSingle();
         Container.BindInterfacesTo<GamePlayDataService>().AsSingle().NonLazy();
-        if (_telegraphMaterials != null) {
+		if (_telegraphMaterials != null) {
             Debug.Log($"[GamePlayInstaller] Binding TelegraphMaterialConfig: {_telegraphMaterials.name}");
             Container.Bind<TelegraphMaterialConfig>().FromInstance(_telegraphMaterials).AsSingle();
             Container.BindInterfacesAndSelfTo<TelegraphMaterialProvider>().AsSingle();
 			Container.BindInterfacesAndSelfTo<TelegraphLayeringService>().AsSingle();
             Container.BindInterfacesTo<TelegraphMaterialProviderBootstrap>().AsSingle().NonLazy();
-        } else {
-            Container.BindInterfacesTo<TelegraphMaterialProviderBootstrap>().AsSingle().NonLazy();
-        }
-        else {
-            Debug.LogWarning("[GamePlayInstaller] TelegraphMaterialConfig is NULL. Telegraphs will fallback to Sprites/Default.");
-        }
+		} else {
+			Debug.LogWarning("[GamePlayInstaller] TelegraphMaterialConfig is NULL. Telegraphs will fallback to Sprites/Default.");
+			Container.BindInterfacesTo<TelegraphMaterialProviderBootstrap>().AsSingle().NonLazy();
+		}
     }
 
     private void BindControllers() {

@@ -14,5 +14,7 @@ namespace Logic.Scripts.GameDomain.MVC.Echo {
         /*public void SetAbilityToCast(AbilityView ability) {
             AbilityToCast = ability;
         }*/
+
+        public void Execute() { }
     }
 }

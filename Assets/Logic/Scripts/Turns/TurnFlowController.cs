@@ -9,6 +9,7 @@ namespace Logic.Scripts.Turns {
         private readonly IEchoService _echoService;
         private readonly TurnStateService _turnStateService;
         private readonly ICommandFactory _commandFactory;
+		private readonly Logic.Scripts.GameDomain.MVC.Echo.ICloneUseLimiter _cloneUseLimiter;
 
         private IBossActionService _bossActionService;
         private IEnviromentActionService _enviromentActionService;
@@ -19,16 +20,18 @@ namespace Logic.Scripts.Turns {
         private bool _waitingPlayer;
         private TurnPhase _phase;
 
-        public TurnFlowController(
+		public TurnFlowController(
             IActionPointsService actionPointsService,
             IEchoService echoService,
                         TurnStateService turnStateService,
             ICommandFactory commandFactory,
-            INaraController naraController) {
+			INaraController naraController,
+			Logic.Scripts.GameDomain.MVC.Echo.ICloneUseLimiter cloneUseLimiter) {
             _actionPointsService = actionPointsService;
             _echoService = echoService;
             _turnStateService = turnStateService;
             _commandFactory = commandFactory;
+			_cloneUseLimiter = cloneUseLimiter;
         }
 
         public void Initialize(IBossActionService bossActionService,
@@ -86,6 +89,7 @@ namespace Logic.Scripts.Turns {
             _phase = TurnPhase.PlayerAct;
             _turnMovement.ResetMovementArea();
             _turnStateService.AdvanceTurn(_turnNumber, _phase);
+			_cloneUseLimiter?.ResetForPlayerTurn();
             LogService.Log($"Turno {_turnNumber} - Fase: PlayerAct");
             _waitingPlayer = true;
             _commandFactory.CreateCommandVoid<Logic.Scripts.GameDomain.Commands.RecenterNaraMovementOnPlayerTurnCommand>().Execute();

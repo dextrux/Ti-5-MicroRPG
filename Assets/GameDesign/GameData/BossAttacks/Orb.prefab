@@ -66,12 +66,12 @@ MonoBehaviour:
   _featherIsPull: 0
   _orb:
     prefab: {fileID: 7907701672196164393, guid: b324b43eefa456c489d7c248777254b6, type: 3}
-    moveStepMeters: 4
-    growStepMeters: 4
+    moveStepMeters: 6
+    growStepMeters: 3
     initialRadius: 3
     maxRadiusCap: 30
-    baseDamage: 10
-    initialHp: 5
+    baseDamage: 20
+    initialHp: 10
   _skySwords:
     radius: 4.5
     ringWidth: 0.3

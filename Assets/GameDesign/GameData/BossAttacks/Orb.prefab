@@ -66,9 +66,9 @@ MonoBehaviour:
   _featherIsPull: 0
   _orb:
     prefab: {fileID: 7907701672196164393, guid: b324b43eefa456c489d7c248777254b6, type: 3}
-    moveStepMeters: 6
-    growStepMeters: 6
-    initialRadius: 5
+    moveStepMeters: 4
+    growStepMeters: 4
+    initialRadius: 3
     maxRadiusCap: 30
     baseDamage: 10
     initialHp: 5

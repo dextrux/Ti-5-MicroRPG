@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7008708713626683138}
   - component: {fileID: -7797698259084971289}
   m_Layer: 0
-  m_Name: Cones
+  m_Name: BigOrb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,13 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd88fb69c32f73948bbae5629112d0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effects:
-  - rid: 2599984782535819372
-  - rid: 2599984789869297870
-  _attackType: 0
+  _effects: []
+  _attackType: 3
   _displacementPriority: 0
   _protean:
-    radius: 18
+    radius: 6
     angleDeg: 45
     sides: 36
   _wingSlash:
@@ -58,8 +56,8 @@ MonoBehaviour:
     angleDeg: 215
     sides: 48
   _feather:
-    featherCount: 3
-    axisMode: 2
+    featherCount: 8
+    axisMode: 1
     width: 2
     margin: 5
     forceBase: 2
@@ -67,31 +65,17 @@ MonoBehaviour:
     forcePerDebuff: 0.5
   _featherIsPull: 0
   _orb:
-    prefab: {fileID: 0}
+    prefab: {fileID: 7907701672196164393, guid: b324b43eefa456c489d7c248777254b6, type: 3}
     moveStepMeters: 6
     growStepMeters: 6
-    initialRadius: 4
-    maxRadiusCap: 60
-    baseDamage: 10
-    initialHp: 50
+    initialRadius: 6
+    maxRadiusCap: 30
+    baseDamage: 20
+    initialHp: 20
   _skySwords:
     radius: 4.5
     ringWidth: 0.3
   _skySwordsIsPull: 0
   references:
     version: 2
-    RefIds:
-    - rid: 2599984782535819372
-      type: {class: DamageEffect, ns: Assets.Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
-      data:
-        Name: 
-        Description: 
-        IsAutoCast: 0
-        amount: 10
-    - rid: 2599984789869297870
-      type: {class: AddDebuffStacksEffect, ns: Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
-      data:
-        Name: 
-        Description: 
-        IsAutoCast: 0
-        amount: 1
+    RefIds: []

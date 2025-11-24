@@ -9,6 +9,7 @@ using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Object = UnityEngine.Object;
+using Logic.Scripts.GameDomain.MVC.Boss.Telegraph;
 
 namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 {
@@ -56,6 +57,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
         public static Vector3 CurrentSpecialEnd;
         public static Vector3 CurrentSpecialAxis;
         public static float CurrentStripWidth;
+
+        private int _layerId = -1;
+        private float _yOffset = 0.05f;
+        private int _rqAdd = 0;
 
         public FeatherLinesHandler(FeatherLinesParams p, IUpdateSubscriptionService updateSubscriptionService)
         {
@@ -116,6 +121,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             _parentTransform = parentTransform;
             _arenaRef = Object.FindFirstObjectByType<ArenaPosReference>(FindObjectsInactive.Exclude);
 
+            // Layering for unified Y/queue with fill
+            var layering = TelegraphLayeringLocator.Service;
+            if (layering != null)
+            {
+                var layer = layering.Register(preferTop: _telegraphDisplacementEnabled);
+                _layerId = layer.Id;
+                _yOffset = layer.Y;
+                _rqAdd = layer.QueueAdd;
+            }
+
 			if (_nextTelegraphDisplacementEnabled.HasValue)
 			{
 				_telegraphDisplacementEnabled = _nextTelegraphDisplacementEnabled.Value;
@@ -143,16 +158,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                     Mesh = new Mesh { name = "FeatherStripMesh" }
                 };
 
-				Material selected = (_telegraphDisplacementEnabled && i == _specialIndex && _displacementMaterial != null)
+                Material selected = (_telegraphDisplacementEnabled && i == _specialIndex && _displacementMaterial != null)
 					? _displacementMaterial
 					: (_baseMaterial != null ? _baseMaterial : new Material(Shader.Find("Sprites/Default")));
-				v.Line.material = selected;
+				var lineMat = new Material(selected);
+				lineMat.renderQueue += _rqAdd;
+				v.Line.material = lineMat;
                 v.Line.useWorldSpace = true;
                 v.Line.loop = true;
                 v.Line.widthMultiplier = 0.1f;
 				// Cor via material (ShaderGraph); removemos tint manual
 
-				v.MeshRenderer.material = selected;
+				var meshMat = new Material(selected);
+				meshMat.renderQueue += _rqAdd;
+				v.MeshRenderer.material = meshMat;
                 v.MeshFilter.sharedMesh = v.Mesh;
 
                 _views[i] = v;
@@ -163,7 +182,24 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
 				var arrowGO = new GameObject("FeatherDirectionArrow_Global");
 				arrowGO.transform.SetParent(parentTransform, false);
 				_singleArrow = arrowGO.AddComponent<LineRenderer>();
-				_singleArrow.material = new Material(Shader.Find("Sprites/Default"));
+				var shader = Shader.Find("Universal Render Pipeline/Unlit");
+				if (shader == null) shader = Shader.Find("Unlit/Color");
+				if (shader == null) shader = Shader.Find("Sprites/Default");
+				var arrowMat = new Material(shader);
+				// não forçar renderQueue; manter padrão opaco do shader
+				// cor da seta igual à cor do material ativo (displacement => displacementMaterial; senão baseMaterial)
+				Material refMat = (_telegraphDisplacementEnabled && _displacementMaterial != null) ? _displacementMaterial : _baseMaterial;
+				if (refMat != null)
+				{
+					Color col;
+					if (refMat.HasProperty("_BaseColor")) col = refMat.GetColor("_BaseColor");
+					else if (refMat.HasProperty("_Color")) col = refMat.color;
+					else col = Color.white;
+					col.a = 1f; // força opacidade total na seta
+					if (arrowMat.HasProperty("_BaseColor")) arrowMat.SetColor("_BaseColor", col);
+					if (arrowMat.HasProperty("_Color")) arrowMat.color = col;
+				}
+				_singleArrow.material = arrowMat;
 				_singleArrow.useWorldSpace = true;
 				_singleArrow.loop = false;
 				_singleArrow.widthMultiplier = 0.08f;
@@ -290,13 +326,13 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
                 }
 
                 Vector3[] vertsWorld = StripMath.GenerateStripVertices(start, end, _params.width);
-                for (int p = 0; p < vertsWorld.Length; p++) vertsWorld[p].y = 0.2f;
+                for (int p = 0; p < vertsWorld.Length; p++) vertsWorld[p].y = _yOffset;
 
                 _views[i].Line.positionCount = vertsWorld.Length;
                 _views[i].Line.SetPositions(vertsWorld);
 
                 Transform mT = _views[i].MeshFilter.transform;
-                mT.localPosition = new Vector3(0f, 0.2f, 0f);
+                mT.localPosition = new Vector3(0f, _yOffset, 0f);
                 mT.localRotation = Quaternion.identity;
 
                 Vector3 v0L = mT.InverseTransformPoint(vertsWorld[0]);
@@ -656,13 +692,6 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Feather
             Vector3 side = new Vector3(-dir.z, 0f, dir.x);
             Vector3 leftWing = tip - dir * headLen + side * headHalfW;
             Vector3 rightWing = tip - dir * headLen - side * headHalfW;
-
-            int stacks = GetDebuffStacks();
-            float tColor = Mathf.Clamp01(stacks / 10f);
-            Color c = Color.Lerp(Color.green, Color.red, tColor);
-
-            _singleArrow.startColor = c;
-            _singleArrow.endColor = c;
 
             _singleArrow.enabled = true;
             _singleArrow.positionCount = 5;

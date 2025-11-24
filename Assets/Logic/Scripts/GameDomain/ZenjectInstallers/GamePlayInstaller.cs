@@ -38,7 +38,8 @@ public class GamePlayInstaller : MonoInstaller {
             Debug.Log($"[GamePlayInstaller] Binding TelegraphMaterialConfig: {_telegraphMaterials.name}");
             Container.Bind<TelegraphMaterialConfig>().FromInstance(_telegraphMaterials).AsSingle();
             Container.BindInterfacesAndSelfTo<TelegraphMaterialProvider>().AsSingle();
-			Container.BindInterfacesTo<TelegraphMaterialProviderBootstrap>().AsSingle().NonLazy();
+			Container.BindInterfacesAndSelfTo<TelegraphLayeringService>().AsSingle();
+            Container.BindInterfacesTo<TelegraphMaterialProviderBootstrap>().AsSingle().NonLazy();
         } else {
             Debug.LogWarning("[GamePlayInstaller] TelegraphMaterialConfig is NULL. Telegraphs will fallback to Sprites/Default.");
         }

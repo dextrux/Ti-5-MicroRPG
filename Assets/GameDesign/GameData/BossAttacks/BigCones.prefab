@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7008708713626683138}
   - component: {fileID: -7797698259084971289}
   m_Layer: 0
-  m_Name: Cones
+  m_Name: BigCones
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
   _displacementPriority: 0
   _protean:
     radius: 18
-    angleDeg: 45
+    angleDeg: 65
     sides: 36
   _wingSlash:
     radius: 4
@@ -87,7 +87,7 @@ MonoBehaviour:
         Name: 
         Description: 
         IsAutoCast: 0
-        amount: 10
+        amount: 20
     - rid: 2599984789869297870
       type: {class: AddDebuffStacksEffect, ns: Logic.Scripts.GameDomain.Effects, asm: Assembly-CSharp}
       data:

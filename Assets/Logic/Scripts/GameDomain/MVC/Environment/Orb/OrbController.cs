@@ -142,7 +142,6 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Orb
 
         private void PerformAction()
         {
-            if (_radius < _maxRadius) return; // before cap, no action
             int damage = _baseDamage * (1 << _damageExponent);
             _damageExponent = Mathf.Min(_damageExponent + 1, 30);
             if (_nara != null)

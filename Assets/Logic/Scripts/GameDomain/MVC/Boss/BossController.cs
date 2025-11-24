@@ -77,7 +77,12 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _updateSubscriptionService.RegisterFixedUpdatable(this);
             CreateBoss();
             _arenaReference = Object.FindFirstObjectByType<ArenaPosReference>();
-            _gamePlayUiController.SetBossValues(_bossData.ActualHealth);
+            // Initialize UI with correct percentages and absolute values
+            int maxHp = _bossConfiguration != null ? _bossConfiguration.MaxHealth : Mathf.Max(1, _bossData.ActualHealth);
+            int pct = maxHp > 0 ? Mathf.RoundToInt((float)_bossData.ActualHealth / maxHp * 100f) : 0;
+            _gamePlayUiController.OnActualBossHealthChange(pct);
+            _gamePlayUiController.OnPreviewBossHealthChange(pct);
+            _gamePlayUiController.OnActualBossLifeChange(_bossData.ActualHealth);
             if (_bossView != null) {
                 _bossView.SetMoving(false);
             }
@@ -89,12 +94,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             }
         }
 
-        public void ManagedFixedUpdate() {
-            if (_bossRigidbody == null || _bossTransform == null) return;
-            if (_turnMoveDistanceBudget <= 0f) {
-                if (_bossView != null) _bossView.SetMoving(false);
-                return; // só mover durante o turno (quando há orçamento)
-            }
+		public void ManagedFixedUpdate() {
+			if (_bossRigidbody == null || _bossTransform == null) return;
 
             Vector3 worldDir = Vector3.zero;
             switch (_moveMode) {
@@ -136,23 +137,31 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
                     break;
             }
 
-            if (worldDir.sqrMagnitude > 0.0001f) {
-                if (_bossView != null) _bossView.SetMoving(true);
-                float step = _moveSpeed * Time.fixedDeltaTime;
-                if (step > _turnMoveDistanceBudget) step = _turnMoveDistanceBudget;
-                _turnMoveDistanceBudget -= step;
-                Vector3 fromPos = _bossTransform.position;
-                Vector3 toPos = fromPos + worldDir.normalized * step;
-                Vector3 toPlanar = new Vector3(toPos.x, fromPos.y, toPos.z);
-                _bossRigidbody.MovePosition(toPlanar);
+			if (worldDir.sqrMagnitude > 0.0001f) {
+				// Rotaciona sempre para olhar na direção, mesmo sem deslocar
+				Quaternion targetRot = Quaternion.LookRotation(worldDir.normalized, Vector3.up);
+				Quaternion newRot = Quaternion.Slerp(_bossTransform.rotation, targetRot, Time.fixedDeltaTime * _rotationSpeed);
+				_bossRigidbody.MoveRotation(newRot);
 
-                Quaternion targetRot = Quaternion.LookRotation(worldDir.normalized, Vector3.up);
-                Quaternion newRot = Quaternion.Slerp(_bossTransform.rotation, targetRot, Time.fixedDeltaTime * _rotationSpeed);
-                _bossRigidbody.MoveRotation(newRot);
-                if (_turnMoveDistanceBudget <= 0f) {
-                    if (_bossView != null) _bossView.SetMoving(false);
-                }
-            }
+				// Translada apenas se houver orçamento de movimento
+				if (_turnMoveDistanceBudget > 0f) {
+					if (_bossView != null) _bossView.SetMoving(true);
+					float step = _moveSpeed * Time.fixedDeltaTime;
+					if (step > _turnMoveDistanceBudget) step = _turnMoveDistanceBudget;
+					_turnMoveDistanceBudget -= step;
+					Vector3 fromPos = _bossTransform.position;
+					Vector3 toPos = fromPos + worldDir.normalized * step;
+					Vector3 toPlanar = new Vector3(toPos.x, fromPos.y, toPos.z);
+					_bossRigidbody.MovePosition(toPlanar);
+					if (_turnMoveDistanceBudget <= 0f) {
+						if (_bossView != null) _bossView.SetMoving(false);
+					}
+				} else {
+					if (_bossView != null) _bossView.SetMoving(false);
+				}
+			} else {
+				if (_bossView != null) _bossView.SetMoving(false);
+			}
         }
 
         public void DisableCallbacks() {
@@ -165,6 +174,15 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _bossView.SetupCallbacks(PreviewHeal, PreviewDamage, TakeDamage, Heal);
             _bossRigidbody = _bossView != null ? _bossView.GetRigidbody() : null;
             _bossTransform = _bossView != null ? _bossView.transform : null;
+			// Position boss at arena center if available
+			try {
+				var arena = Object.FindFirstObjectByType<ArenaPosReference>(FindObjectsInactive.Exclude);
+				if (arena != null && _bossTransform != null) {
+					Vector3 p = _bossTransform.position;
+					Vector3 ac = arena.transform.position;
+					_bossTransform.position = new Vector3(ac.x, p.y, ac.z);
+				}
+			} catch { }
             if (_bossView != null) {
                 var relay = _bossView.gameObject.GetComponent<Assets.Logic.Scripts.GameDomain.Effects.EffectableRelay>();
                 if (relay == null) relay = _bossView.gameObject.AddComponent<Assets.Logic.Scripts.GameDomain.Effects.EffectableRelay>();
@@ -360,7 +378,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             }
             int indexInPattern = _executedTurnsCount % pattern.Length;
             BossBehaviorSO.BossTurnConfig entry = pattern[indexInPattern];
-            float multiplier = entry.DistanceMultiplier <= 0f ? 1f : entry.DistanceMultiplier;
+			float multiplier = Mathf.Max(0f, entry.DistanceMultiplier);
             _turnMoveDistanceBudget = baseStep * multiplier;
 			switch (entry.Mode) {
                 case BossBehaviorSO.TurnMoveMode.Forward:
@@ -436,18 +454,34 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         public void TakeDamage(int amount) {
             _bossData.TakeDamage(amount);
             Debug.Log("Tomou dano!!!!!!!!!!!!!!!!");
-            Debug.Log($"[Boss] Damage: -{amount} -> HP={_bossData.ActualHealth}/{_bossConfiguration.MaxHealth}");
-            _gamePlayUiController.OnActualBossHealthChange(_bossData.ActualHealth);
+            int maxHp = _bossConfiguration != null ? _bossConfiguration.MaxHealth : Mathf.Max(1, _bossData.ActualHealth);
+            Debug.Log($"[Boss] Damage: -{amount} -> HP={_bossData.ActualHealth}/{maxHp}");
+            // Update UI with percentage and absolute
+            int pct = maxHp > 0 ? Mathf.RoundToInt((float)_bossData.ActualHealth / maxHp * 100f) : 0;
+            _gamePlayUiController.OnActualBossHealthChange(pct);
             _gamePlayUiController.OnActualBossLifeChange(_bossData.ActualHealth);
-            _gamePlayUiController.OnPreviewBossHealthChange(_bossData.ActualHealth);
+            _gamePlayUiController.OnPreviewBossHealthChange(pct);
+            // Handle death immediately
+            if (_bossData.ActualHealth <= 0) {
+                Debug.Log("[Boss] Died");
+                try { _updateSubscriptionService.UnregisterFixedUpdatable(this); } catch {}
+                if (_bossView != null) {
+                    // Optional: play death animation here if available
+                }
+                return;
+            }
+            // Evaluate phase transition immediately after damage
+            _ = EvaluateAndMaybeSwitchPhaseAsync();
         }
 
         public void Heal(int amount) {
             _bossData?.Heal(amount);
-            Debug.Log($"[Boss] Heal: +{amount} -> HP={_bossData.ActualHealth}/{_bossConfiguration.MaxHealth}");
-            _gamePlayUiController.OnActualBossHealthChange(_bossData.ActualHealth);
+            int maxHp = _bossConfiguration != null ? _bossConfiguration.MaxHealth : Mathf.Max(1, _bossData.ActualHealth);
+            Debug.Log($"[Boss] Heal: +{amount} -> HP={_bossData.ActualHealth}/{maxHp}");
+            int pct = maxHp > 0 ? Mathf.RoundToInt((float)_bossData.ActualHealth / maxHp * 100f) : 0;
+            _gamePlayUiController.OnActualBossHealthChange(pct);
             _gamePlayUiController.OnActualBossLifeChange(_bossData.ActualHealth);
-            _gamePlayUiController.OnPreviewBossHealthChange(_bossData.ActualHealth);
+            _gamePlayUiController.OnPreviewBossHealthChange(pct);
         }
 
         public void AddShield(int amount) {
@@ -489,7 +523,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         private async System.Threading.Tasks.Task<bool> EvaluateAndMaybeSwitchPhaseAsync() {
             if (_bossPhases == null || _bossConfiguration == null) return false;
             int newIndex = _bossPhases.GetPhaseIndexByHealth(_bossData.ActualHealth, _bossConfiguration.MaxHealth);
-            if (newIndex == _currentPhaseIndex || newIndex < 0) return false;
+            if (newIndex == _currentPhaseIndex || newIndex < 0) {
+                Debug.Log($"[Boss] Phase unchanged (current={_currentPhaseIndex}) at HP={_bossData.ActualHealth}/{_bossConfiguration.MaxHealth}");
+                return false;
+            }
             var phases = _bossPhases.Phases;
             string prevName = (_currentPhaseIndex >= 0 && phases != null && _currentPhaseIndex < phases.Length) ? phases[_currentPhaseIndex].Name : "(none)";
             BossBehaviorSO newBehavior = GetBehaviorForPhaseIndex(newIndex);
@@ -498,8 +535,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             if (newBehavior != null && newBehavior != _activeBehavior) {
                 _activeBehavior = newBehavior;
                 _bossAbilityController.SetBehavior(_activeBehavior);
+                // Próxima preparação deve começar no primeiro passo do novo comportamento
                 _executedTurnsCount = 0;
-                _pendingCasts?.Clear();
+                // NÃO limpar _pendingCasts: ataques já preparados devem ser completados antes da nova fase iniciar seu padrão
+                Debug.Log("[Boss] Pending prepared attacks preserved to complete before new behavior pattern starts.");
             }
             else if (newBehavior == null) {
                 Debug.LogWarning($"[Boss] Phase '{newName}' has no Behavior assigned. Keeping current behavior.");

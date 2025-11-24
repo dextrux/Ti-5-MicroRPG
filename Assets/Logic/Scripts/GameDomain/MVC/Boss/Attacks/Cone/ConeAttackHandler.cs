@@ -18,8 +18,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
             public MeshRenderer MeshRenderer;
             public Mesh Mesh;
         }
-        private ConeSubView[] _views;
+		private ConeSubView[] _views;
 		private readonly Material _areaMaterial;
+		private Logic.Scripts.GameDomain.MVC.Boss.Telegraph.ITelegraphLayeringService.TelegraphLayer _layer;
 
 		public ConeAttackHandler(float radius, float angleDeg, int sides, float[] yaws, Material areaMaterial)
         {
@@ -32,6 +33,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
 
         public void PrepareTelegraph(Transform parentTransform)
         {
+			var layering = Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphLayeringLocator.Service;
+			_layer = layering != null ? layering.Register(preferTop: false) : default;
+
             if (_yaws == null || _yaws.Length == 0) return;
             _views = new ConeSubView[_yaws.Length];
             for (int i = 0; i < _yaws.Length; i++)
@@ -41,7 +45,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
 
                 ConeSubView v = new ConeSubView();
                 v.Line = go.AddComponent<LineRenderer>();
-				v.Line.material = _areaMaterial != null ? _areaMaterial : new Material(Shader.Find("Sprites/Default"));
+				var lineMat = _areaMaterial != null ? new Material(_areaMaterial) : new Material(Shader.Find("Sprites/Default"));
+				lineMat.renderQueue += _layer.QueueAdd;
+				v.Line.material = lineMat;
                 v.Line.useWorldSpace = true;
                 v.Line.loop = true;
                 v.Line.widthMultiplier = 0.1f;
@@ -49,7 +55,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
 
                 v.MeshFilter = go.AddComponent<MeshFilter>();
                 v.MeshRenderer = go.AddComponent<MeshRenderer>();
-				v.MeshRenderer.material = _areaMaterial != null ? _areaMaterial : new Material(Shader.Find("Sprites/Default"));
+				var meshMat = _areaMaterial != null ? new Material(_areaMaterial) : new Material(Shader.Find("Sprites/Default"));
+				meshMat.renderQueue += _layer.QueueAdd;
+				v.MeshRenderer.material = meshMat;
                 v.Mesh = new Mesh();
                 v.Mesh.name = "ConeMesh";
                 v.MeshFilter.sharedMesh = v.Mesh;
@@ -60,20 +68,20 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
                 Vector3 forward = Quaternion.Euler(0f, _yaws[i], 0f) * parentFwd;
 
                 Vector3[] outline = ConeArea.GenerateConeOutlinePolygon(origin, forward, _radius, _angleDeg, _sides);
-				for (int p = 0; p < outline.Length; p++) outline[p].y = 0.05f;
+				for (int p = 0; p < outline.Length; p++) outline[p].y = _layer.Y;
                 v.Line.positionCount = outline.Length;
                 v.Line.SetPositions(outline);
 
                 Vector3[] arc = ConeArea.GenerateConeArcVertices(origin, forward, _radius, _angleDeg, _sides);
-				for (int p = 0; p < arc.Length; p++) arc[p].y = 0.05f;
+				for (int p = 0; p < arc.Length; p++) arc[p].y = _layer.Y;
 
                 Transform mT = v.MeshFilter.transform;
-				mT.localPosition = new Vector3(0f, 0.05f, 0f);
+				mT.localPosition = new Vector3(0f, _layer.Y, 0f);
                 mT.localRotation = Quaternion.identity;
 
                 // Build triangle fan: vertex 0 = origin, then arc points
                 Vector3[] worldVerts = new Vector3[arc.Length + 1];
-				worldVerts[0] = new Vector3(origin.x, 0.05f, origin.z);
+				worldVerts[0] = new Vector3(origin.x, _layer.Y, origin.z);
                 for (int a = 0; a < arc.Length; a++) worldVerts[a + 1] = arc[a];
 
                 Vector3[] localVerts = new Vector3[worldVerts.Length];
@@ -150,6 +158,9 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
                 }
             }
             _views = null;
+
+			var layering = Logic.Scripts.GameDomain.MVC.Boss.Telegraph.TelegraphLayeringLocator.Service;
+			if (layering != null && _layer.Id >= 0) layering.Unregister(_layer.Id);
         }
     }
 }

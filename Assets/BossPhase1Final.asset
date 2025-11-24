@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c0c6085d048acf4fb600bcd04cc02b7, type: 3}
+  m_Name: BossPhase1Final
+  m_EditorClassIdentifier: 
+  _availableAttacks:
+  - {fileID: -7797698259084971289, guid: 33365d6a13b9a3b4d938f40f0697b1e7, type: 3}
+  - {fileID: -7797698259084971289, guid: c4a31e5408742194ca0ca3e3c2bd8daa, type: 3}
+  - {fileID: -7797698259084971289, guid: 734b914b8e060ad4dba898b6231a3e53, type: 3}
+  - {fileID: -7797698259084971289, guid: 81be49511951dd549a8da9ee7950fde1, type: 3}
+  - {fileID: -7797698259084971289, guid: e3ebe2321d4723346be2e3e8c2112696, type: 3}
+  - {fileID: -7797698259084971289, guid: 90683a701b66b50428ee05cfbebeaaa2, type: 3}
+  - {fileID: -7797698259084971289, guid: 040e6941640cde54d858dcd096fa46ee, type: 3}
+  - {fileID: -7797698259084971289, guid: b991501c847a0cd4db465576ae6d88f4, type: 3}
+  - {fileID: -7797698259084971289, guid: 738468fd4415b44408d5ad2868dbff5d, type: 3}
+  _fallbackStepDistance: 1
+  _stepDistance: 2
+  _randomChangeDirectionSeconds: 1.5
+  _turnPatternLength: 10
+  _turnPattern:
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 00000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 01000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 04000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 0000000008000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 05000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 0800000004000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 03000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 00000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 0700000000000000
+  - Mode: 3
+    DistanceMultiplier: 0
+    AttackIndices: 06000000

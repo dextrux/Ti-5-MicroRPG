@@ -62,7 +62,7 @@ namespace Logic.Scripts.Turns
 
         public void Reset()
         {
-            _current = 0;
+            _current = 2;
             PublishChange();
         }
 

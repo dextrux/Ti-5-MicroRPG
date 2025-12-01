@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SHDRMAT_PlayerAttackArea
+  m_Name: SHDRMAT_PlayerAttackArea 1
   m_Shader: {fileID: -6465566751694194690, guid: 1acb36ab1dde31947841f463892cee88, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -61,13 +61,13 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _FresnelPower: 3
-    - _GradientPower: 20
+    - _GradientPower: 28.01
     - _NoiseScale: 15
-    - _Power: 6
+    - _Power: 5
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
     - _Color: {r: 0.33949977, g: 1.7554624, b: 1.6052016, a: 0}
-    - _NoiseSpeed: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - _NoiseSpeed: {r: 0.4, g: 0.2, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

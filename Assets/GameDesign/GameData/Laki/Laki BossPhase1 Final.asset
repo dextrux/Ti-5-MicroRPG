@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c0c6085d048acf4fb600bcd04cc02b7, type: 3}
+  m_Name: Laki BossPhase1 Final
+  m_EditorClassIdentifier: 
+  _availableAttacks: []
+  _fallbackStepDistance: 1
+  _stepDistance: 2
+  _randomChangeDirectionSeconds: 1.5
+  _turnPatternLength: 8
+  _turnPattern:
+  - Mode: 0
+    DistanceMultiplier: 0
+    AttackIndices: 
+  - Mode: 0
+    DistanceMultiplier: 0
+    AttackIndices: 
+  - Mode: 0
+    DistanceMultiplier: 0
+    AttackIndices: 
+  - Mode: 0
+    DistanceMultiplier: 0
+    AttackIndices: 
+  - Mode: 0
+    DistanceMultiplier: 0
+    AttackIndices: 

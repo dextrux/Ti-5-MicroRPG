@@ -24,6 +24,8 @@ public class NaraTurnMovementController : NaraMovementController {
         base.InitEntryPoint(rigidbody, camera);
         _movementRadius = _initialMovementRadius;
         LineHandlerController.InitEntryPoint(NaraTransform);
+        // Ensure movement center starts at current position to avoid unintended clamps before first player phase
+        SetMovementRadiusCenter();
     }
 
     public void SetActionPointsService(ActionPointsService actionPointsService) {

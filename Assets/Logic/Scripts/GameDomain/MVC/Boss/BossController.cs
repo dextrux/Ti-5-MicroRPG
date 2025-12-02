@@ -174,13 +174,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _bossView.SetupCallbacks(PreviewHeal, PreviewDamage, TakeDamage, Heal);
             _bossRigidbody = _bossView != null ? _bossView.GetRigidbody() : null;
             _bossTransform = _bossView != null ? _bossView.transform : null;
-			// Position boss at arena center if available
+			// Position boss using fixed world position from BossConfiguration
 			try {
-				var arena = Object.FindFirstObjectByType<ArenaPosReference>(FindObjectsInactive.Exclude);
-				if (arena != null && _bossTransform != null) {
-					Vector3 p = _bossTransform.position;
-					Vector3 ac = arena.transform.position;
-					_bossTransform.position = new Vector3(ac.x, p.y, ac.z);
+				if (_bossTransform != null && _bossConfiguration != null) {
+					_bossTransform.position = _bossConfiguration.InitialBossPosition;
 				}
 			} catch { }
             if (_bossView != null) {
@@ -200,7 +197,8 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
             _rotationSpeed = _bossConfiguration != null ? _bossConfiguration.RotationSpeed : 5f;
             var behavior = GetCurrentBehavior();
             _randomDirDuration = behavior != null ? behavior.RandomChangeDirectionSeconds : 1.5f;
-            _moveMode = BossMoveMode.TowardPlayer;
+            // Do not move immediately after spawn; movement will be configured by turn flow
+            _moveMode = BossMoveMode.None;
         }
         public void PlanNextTurn() { }
 

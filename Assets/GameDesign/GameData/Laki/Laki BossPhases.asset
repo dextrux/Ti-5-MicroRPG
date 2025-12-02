@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e23b7d52cfbbd24d81ad7ba44869bd0, type: 3}
+  m_Name: Laki BossPhases
+  m_EditorClassIdentifier: 
+  _phases:
+  - Name: InitialPhase
+    TriggerType: 0
+    HealthPercentThreshold: 1
+    HealthAbsoluteThreshold: 0
+    Behavior: {fileID: 11400000, guid: 8891cde9d1acb7848ae24523b9f4c6ed, type: 2}
+  - Name: EnragedPhase
+    TriggerType: 0
+    HealthPercentThreshold: 0.5
+    HealthAbsoluteThreshold: 50
+    Behavior: {fileID: 11400000, guid: 03c0e426f8bb667479348687e2216e30, type: 2}

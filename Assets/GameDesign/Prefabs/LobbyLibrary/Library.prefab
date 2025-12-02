@@ -3930,7 +3930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1979060493221071873
 Transform:
   m_ObjectHideFlags: 0
@@ -4518,6 +4518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PortalViews>k__BackingField:
   - {fileID: 3406261795273223451}
+  - {fileID: 369740885830210113}
   <Interactableview>k__BackingField:
   - {fileID: 8499947776244106464}
   <EchoInteractableview>k__BackingField: []
@@ -33727,6 +33728,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BSHOC_Circle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5864932686153904597, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8647272893320142125, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.049999997
@@ -51627,6 +51632,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BSHOC_Circle (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5864932686153904597, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8647272893320142125, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.049999997
@@ -58841,6 +58850,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BSHOC_Circle (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5864932686153904597, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8647272893320142125, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.049999997
@@ -62622,6 +62635,10 @@ PrefabInstance:
     - target: {fileID: 5864932686153904597, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
       propertyPath: m_Name
       value: BSHOC_Circle
+      objectReference: {fileID: 0}
+    - target: {fileID: 5864932686153904597, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8647272893320142125, guid: c9b1beb74d781fe4b951875f6902c171, type: 3}
       propertyPath: m_LocalScale.x

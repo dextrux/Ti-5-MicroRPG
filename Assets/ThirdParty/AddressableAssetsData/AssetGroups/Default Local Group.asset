@@ -55,6 +55,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Guides
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c717f644a59cfa94b99bfd49937b879a
+    m_Address: ArenaLaki
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1ab4423e3bff4743ab7bc1e93fcdc6a
     m_Address: Assets/GameDesign/Guides/05 Atributos.asset
     m_ReadOnly: 0

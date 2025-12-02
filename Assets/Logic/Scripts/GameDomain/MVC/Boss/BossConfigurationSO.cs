@@ -9,5 +9,10 @@ namespace Logic.Scripts.GameDomain.MVC.Boss
         [field: SerializeField] public int InitialMovementDistance { get; private set; }
         [field: SerializeField] public float MoveSpeed { get; private set; }
         [field: SerializeField] public float RotationSpeed { get; private set; }
+
+        // Absolute world positions for spawn. When set, they should be used instead of ArenaPosReference.
+        // Defaults reproduce current behavior in world space.
+        [field: SerializeField] public Vector3 InitialBossPosition { get; private set; } = new Vector3(0f, 0f, 0f);
+        [field: SerializeField] public Vector3 InitialPlayerPosition { get; private set; } = new Vector3(0f, 0f, -10f);
     }
 }

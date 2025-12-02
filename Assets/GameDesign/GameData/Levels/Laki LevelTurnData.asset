@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3acf87508f8aeef468d77d19c2a466b5, type: 3}
+  m_Name: Laki LevelTurnData
+  m_EditorClassIdentifier: 
+  levelAddress: ArenaLaki
+  naraLevelConfiguration: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}
+  controller:
+    _typeName: NaraTurnMovementController, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  bossConfiguration: {fileID: 11400000, guid: 42d784a237d02bd469c6dd2b5dc8f998, type: 2}
+  bossPrefab: {fileID: 6143116250716774284, guid: ac27dec7d9c42a441a810c3f4a549619, type: 3}
+  bossPhases: {fileID: 11400000, guid: bc36ee94f7e75904db90fdc4d4eab46f, type: 2}

@@ -8,8 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-public class SceneLoaderService : ISceneLoaderService
-{
+public class SceneLoaderService : ISceneLoaderService {
     private readonly ISceneInitiatorsService _sceneInitiatorsService;
     private readonly HashSet<string> _loadedScenes = new();
     private readonly HashSet<string> _loadingScenes = new();
@@ -46,7 +45,6 @@ public class SceneLoaderService : ISceneLoaderService
         if (!await TryLoadScene(sceneType.ToString(), cancellationTokenSource)) {
             return false;
         }
-
         await _sceneInitiatorsService.InvokeInitiatorLoadEntryPoint(sceneType, enterData, cancellationTokenSource);
         return true;
     }

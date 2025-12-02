@@ -6,7 +6,8 @@ public abstract class InteractableObjects : MonoBehaviour {
     [SerializeField] protected float InteractDistance;
     protected ICommandFactory CommandFactory;
 
-    public bool CanInteract(INaraController naraController) {
+    public bool CanInteract(INaraController naraController, ICommandFactory commandFactory) {
+        CommandFactory = commandFactory;
         if (Vector3.Distance(naraController.NaraViewGO.transform.position, transform.position) <= InteractDistance) {
             OnInteract();
             return true;

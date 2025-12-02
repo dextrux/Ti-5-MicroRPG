@@ -17,6 +17,10 @@ namespace Logic.Scripts.Services.UpdateService {
         private void Update() {
             for (_currentUpdateIndex = _updateObservers.Count - 1; _currentUpdateIndex >= 0; _currentUpdateIndex--) {
                 var observer = _updateObservers[_currentUpdateIndex];
+                if (observer == null) {
+                    _updateObservers.RemoveAt(_currentUpdateIndex);
+                    continue;
+                }
                 observer.ManagedUpdate();
             }
         }
@@ -28,6 +32,10 @@ namespace Logic.Scripts.Services.UpdateService {
             _pendingRemoveLateUpdateObservers.Clear();
 
             foreach (var observer in _lateUpdateObservers) {
+                if (observer == null) {
+                    _lateUpdateObservers.RemoveAt(_currentUpdateIndex);
+                    continue;
+                }
                 observer.ManagedLateUpdate();
             }
         }
@@ -39,6 +47,10 @@ namespace Logic.Scripts.Services.UpdateService {
             _pendingRemoveFixedUpdateObservers.Clear();
 
             foreach (var observer in _fixedUpdateObservers) {
+                if (observer == null) {
+                    _fixedUpdateObservers.RemoveAt(_currentUpdateIndex);
+                    continue;
+                }
                 observer.ManagedFixedUpdate();
             }
         }

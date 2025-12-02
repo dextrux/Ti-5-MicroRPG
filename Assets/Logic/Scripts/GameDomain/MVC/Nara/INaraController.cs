@@ -1,3 +1,4 @@
+using Logic.Scripts.GameDomain.MVC.Ui;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
@@ -5,7 +6,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         GameObject NaraViewGO { get; }
         Transform NaraSkillSpotTransform { get; }
         NaraMovementController NaraMove { get; }
-        void InitEntryPoint();
+        void InitEntryPointExploration();
+        void InitEntryPointGamePlay(IGamePlayUiController gamePlayUiController);
         void CreateNara(NaraMovementController movementController);
         void ResetController();
         void RegisterListeners();

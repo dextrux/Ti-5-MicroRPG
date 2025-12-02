@@ -359,3 +359,42 @@
     border-bottom-width: 3px;
     border-left-width: 3px;
 }
+
+#item-container .unity-text-element {
+}
+
+#item-container .unity-base-popup-field__input {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgb(76, 0, 109);
+    border-right-color: rgb(76, 0, 109);
+    border-top-color: rgb(76, 0, 109);
+    border-bottom-color: rgb(76, 0, 109);
+    border-top-width: 8px;
+    border-right-width: 8px;
+    border-bottom-width: 8px;
+    border-left-width: 8px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+#item-container .unity-base-popup-field__arrow {
+    background-image: url("project://database/Assets/Ui/Images/IconDropDown.png?fileID=2800000&guid=ef650533bc0468e46956b1ed8d5b3deb&type=3#IconDropDown");
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-scale-mode: scale-to-fit;
+    height: 100%;
+    width: 8%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    min-width: 40px;
+}

@@ -3930,7 +3930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1979060493221071873
 Transform:
   m_ObjectHideFlags: 0
@@ -4518,7 +4518,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PortalViews>k__BackingField:
   - {fileID: 3406261795273223451}
-  <Interactableview>k__BackingField:
+  - {fileID: 369740885830210113}
+  <Interactableviews>k__BackingField:
   - {fileID: 8499947776244106464}
   <EchoInteractableview>k__BackingField: []
 --- !u!1 &1245854738011389888
@@ -22768,7 +22769,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6706481574297125713
 Transform:
   m_ObjectHideFlags: 0

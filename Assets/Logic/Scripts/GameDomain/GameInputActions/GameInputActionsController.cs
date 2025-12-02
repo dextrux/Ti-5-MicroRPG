@@ -4,7 +4,6 @@ using Logic.Scripts.Utils;
 using System.Threading;
 using UnityEngine.InputSystem;
 using UnityEngine;
-using System;
 
 namespace Logic.Scripts.GameDomain.GameInputActions {
     public class GameInputActionsController : IGameInputActionsController {
@@ -21,6 +20,16 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _gameInputActions.Enable();
         }
 
+        public void EnableUIInputs() {
+            LogService.LogTopic("EnableUIInputs", LogTopicType.Inputs);
+            _gameInputActions.Enable();
+        }
+
+        public void EnableExplorationInputs() {
+            LogService.LogTopic("EnableExplorationInputs", LogTopicType.Inputs);
+            _gameInputActions.Enable();
+        }
+
         public void DisableInputs() {
             LogService.LogTopic("DisableInputs", LogTopicType.Inputs);
             _gameInputActions.Disable();
@@ -30,41 +39,20 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
             _gameInputActions.Player.ActivateCam.started += OnActivateCamStarted;
             _gameInputActions.Player.ActivateCam.canceled += OnActivateCamCanceled;
-
             _gameInputActions.Player.CreateCopy1.started += OnCreateCopy1Started;
-            _gameInputActions.Player.CreateCopy1.canceled += OnCreateCopy1Canceled;
-
             _gameInputActions.Player.CreateCopy2.started += OnCreateCopy2Started;
-            _gameInputActions.Player.CreateCopy2.canceled += OnCreateCopy2Canceled;
-
-            _gameInputActions.Player.Inspect.started += OnInspectStarted;
-            _gameInputActions.Player.Inspect.canceled += OnInspectCanceled;
-
             _gameInputActions.Player.Interact.started += OnInteractStarted;
-            _gameInputActions.Player.Interact.canceled += OnInteractCanceled;
-
-            //_gameInputActions.Player.Move.started += OnMoveStarted;
             _gameInputActions.Player.Move.performed += OnMovePerformed;
             _gameInputActions.Player.Move.canceled += OnMoveCanceled;
-
             _gameInputActions.Player.PassTurn.started += OnPassTurnStarted;
-            _gameInputActions.Player.PassTurn.canceled += OnPassTurnCanceled;
-
             _gameInputActions.Player.Pause.started += OnPauseStarted;
-            _gameInputActions.Player.Pause.canceled += OnPauseCanceled;
-
-            _gameInputActions.Player.ResetTurn.started += OnResetTurnStarted;
-            _gameInputActions.Player.ResetTurn.canceled += OnResetTurnCanceled;
-
+            _gameInputActions.Player.ResetMovement.started += OnResetMovementStarted;
             _gameInputActions.Player.RotateCam.started += OnRotateCamStarted;
-            _gameInputActions.Player.RotateCam.canceled += OnRotateCamCanceled;
-
             _gameInputActions.Player.UseAbility1.started += OnUseAbility1Started;
             _gameInputActions.Player.UseAbility2.started += OnUseAbility2Started;
             _gameInputActions.Player.UseAbility3.started += OnUseAbility3Started;
-            _gameInputActions.Player.PreviousAbilitySet.started += UseAbility4Started;
-            _gameInputActions.Player.NextAbilitySet.started += UseAbility5Started;
-
+            _gameInputActions.Player.UseAbility4.started += UseAbility4Started;
+            _gameInputActions.Player.UseAbility5.started += UseAbility5Started;
             _gameInputActions.Player.MouseClick.started += OnMouseClickStarted;
         }
 
@@ -89,7 +77,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         private void OnRotateCamStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<RotateCamInputCommand>().Execute();
         }
-        private void OnResetTurnStarted(InputAction.CallbackContext obj) {
+        private void OnResetMovementStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<ResetTurnInputCommand>().Execute();
         }
         private void OnPauseStarted(InputAction.CallbackContext obj) {
@@ -104,9 +92,6 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         private void OnInteractStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<InteractInputCommand>().Execute();
         }
-        private void OnInspectStarted(InputAction.CallbackContext obj) {
-            _commandFactory.CreateCommandVoid<InspectInputCommand>().Execute();
-        }
         private void OnCreateCopy2Started(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<CreateCopy2InputCommand>().Execute();
         }
@@ -116,15 +101,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         private void OnActivateCamStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<ActivateCamInputCommand>().Execute();
         }
-        private void OnRotateCamCanceled(InputAction.CallbackContext context) { }
-        private void OnResetTurnCanceled(InputAction.CallbackContext context) { }
-        private void OnPauseCanceled(InputAction.CallbackContext context) { }
-        private void OnPassTurnCanceled(InputAction.CallbackContext context) { }
         private void OnMoveCanceled(InputAction.CallbackContext context) { _commandFactory.CreateCommandVoid<StopMoveInputCommand>().Execute(); }
-        private void OnInteractCanceled(InputAction.CallbackContext context) { }
-        private void OnInspectCanceled(InputAction.CallbackContext context) { }
-        private void OnCreateCopy2Canceled(InputAction.CallbackContext context) { }
-        private void OnCreateCopy1Canceled(InputAction.CallbackContext context) { }
         private void OnActivateCamCanceled(InputAction.CallbackContext context) { _commandFactory.CreateCommandVoid<DeactivateCamInputCommand>().Execute(); }
 
         public void UnregisterAllInputListeners() {
@@ -133,37 +110,19 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _gameInputActions.Player.ActivateCam.canceled -= OnActivateCamCanceled;
 
             _gameInputActions.Player.CreateCopy1.started -= OnCreateCopy1Started;
-            _gameInputActions.Player.CreateCopy1.canceled -= OnCreateCopy1Canceled;
-
             _gameInputActions.Player.CreateCopy2.started -= OnCreateCopy2Started;
-            _gameInputActions.Player.CreateCopy2.canceled -= OnCreateCopy2Canceled;
-
-            _gameInputActions.Player.Inspect.started -= OnInspectStarted;
-            _gameInputActions.Player.Inspect.canceled -= OnInspectCanceled;
-
             _gameInputActions.Player.Interact.started -= OnInteractStarted;
-            _gameInputActions.Player.Interact.canceled -= OnInteractCanceled;
-
             _gameInputActions.Player.Move.performed -= OnMovePerformed;
             _gameInputActions.Player.Move.canceled -= OnMoveCanceled;
-
             _gameInputActions.Player.PassTurn.started -= OnPassTurnStarted;
-            _gameInputActions.Player.PassTurn.canceled -= OnPassTurnCanceled;
-
             _gameInputActions.Player.Pause.started -= OnPauseStarted;
-            _gameInputActions.Player.Pause.canceled -= OnPauseCanceled;
-
-            _gameInputActions.Player.ResetTurn.started -= OnResetTurnStarted;
-            _gameInputActions.Player.ResetTurn.canceled -= OnResetTurnCanceled;
-
+            _gameInputActions.Player.ResetMovement.started -= OnResetMovementStarted;
             _gameInputActions.Player.RotateCam.started -= OnRotateCamStarted;
-            _gameInputActions.Player.RotateCam.canceled -= OnRotateCamCanceled;
-
             _gameInputActions.Player.UseAbility1.started -= OnUseAbility1Started;
             _gameInputActions.Player.UseAbility2.started -= OnUseAbility2Started;
             _gameInputActions.Player.UseAbility3.started -= OnUseAbility3Started;
-            _gameInputActions.Player.PreviousAbilitySet.started -= UseAbility4Started;
-            _gameInputActions.Player.NextAbilitySet.started -= UseAbility5Started;
+            _gameInputActions.Player.UseAbility4.started -= UseAbility4Started;
+            _gameInputActions.Player.UseAbility5.started -= UseAbility5Started;
 
             _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
         }

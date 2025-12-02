@@ -26,7 +26,10 @@ namespace Logic.Scripts.GameDomain.Commands {
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-            await _commandFactory.CreateCommandAsync<LoadLevelCommand>().SetEnterData(new LoadLevelCommandData(_enterData.LevelNumberToEnter)).Execute(cancellationTokenSource);
+            await _commandFactory.CreateCommandAsync<LoadLevelCommand>()
+                .SetEnterData(new LoadLevelCommandData(_enterData.LevelNumberToEnter))
+                .SetBoss(_enterData.LevelNumberToEnter)
+                .Execute(cancellationTokenSource);
             return;
         }
     }

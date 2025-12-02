@@ -6,7 +6,6 @@ using Logic.Scripts.Services.UpdateService;
 using Logic.Scripts.Turns;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
     public class NaraController : INaraController, IFixedUpdatable, IEffectable, IEffectableAction {
@@ -14,7 +13,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private readonly IAudioService _audioService;
         private readonly ICommandFactory _commandFactory;
         private readonly IResourcesLoaderService _resourcesLoaderService;
-        private readonly IGamePlayUiController _gamePlayUiController;
         private readonly ITurnStateReader _turnStateReader;
         private readonly NaraView _naraViewPrefab;
         private readonly NaraData _naraData;
@@ -23,6 +21,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public Transform NaraSkillSpotTransform => _naraView.transform;
         public NaraMovementController NaraMove => _naraMovementController;
 
+        private IGamePlayUiController _gamePlayUiController;
         private NaraView _naraView;
         private NaraMovementController _naraMovementController;
         private int _debuffStacks;
@@ -34,8 +33,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
-            IResourcesLoaderService resourcesLoaderService, IGamePlayUiController gamePlayUiController, NaraView naraViewPrefab,
-            NaraConfigurationSO naraConfiguration, global::GameInputActions inputActions, ITurnStateReader turnStateReader) {
+            IResourcesLoaderService resourcesLoaderService, NaraView naraViewPrefab,
+            NaraConfigurationSO naraConfiguration, global::GameInputActions inputActions) {
             _naraData = new NaraData(naraConfiguration);
             _naraConfiguration = naraConfiguration;
             _updateSubscriptionService = updateSubscriptionService;
@@ -43,10 +42,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _commandFactory = commandFactory;
             _resourcesLoaderService = resourcesLoaderService;
             _naraViewPrefab = naraViewPrefab;
-            _gamePlayUiController = gamePlayUiController;
             _gameInputActions = new global::GameInputActions();
             _gameInputActions.Enable();
-            _turnStateReader = turnStateReader;
         }
 
         public void RegisterListeners() {
@@ -97,51 +94,19 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             UnityEngine.Object.Destroy(_naraView.gameObject);
         }
 
-        public void InitEntryPoint() {
+        public void InitEntryPointGamePlay(IGamePlayUiController gamePlayUiController) {
+            _gamePlayUiController = gamePlayUiController;
             _gamePlayUiController.SetPlayerValues(_naraData.ActualHealth, _naraData.PreviewHealth);
+            _naraMovementController.InitEntryPoint(_naraView.GetRigidbody(), _naraView.GetCamera());
+        }
+
+        public void InitEntryPointExploration() {
             _naraMovementController.InitEntryPoint(_naraView.GetRigidbody(), _naraView.GetCamera());
         }
 
         public void SetPosition(Vector3 movementCenter) {
             _naraView.GetRigidbody().position = movementCenter;
         }
-
-        //public void RecenterMovementAreaAtTurnStart() {
-        //    _naraMovementController.SetMovementRadiusCenter();
-        //    _naraView.SetNaraMovementAreaAgain(_naraMovementController.GetNaraRadius(), _naraMovementController.GetNaraCenter());
-        //}
-
-        //public void SetMovementCircleVisible(bool visible) {
-        //    if (_naraView != null) {
-        //        _naraView.SetMovementCircleVisible(visible);
-        //    }
-        //}
-
-        //public void SetNewMovementArea() {
-        //    _naraMovementController.RecalculateRadiusAfterAbility();
-        //    RecenterMovementAreaAtTurnStart();
-        //}
-
-        //public void ResetMovementArea() {
-        //    _naraMovementController.ResetMovementRadius();
-        //    RecenterMovementAreaAtTurnStart();
-        //}
-
-        //public void RemoveMovementAreaLimit() {
-        //    _naraMovementController.RemoveMovementRadius();
-        //    RecenterMovementAreaAtTurnStart();
-        //}
-
-        //public void RecenterNara() {
-        //    _naraView.SetPosition();
-        //}
-
-        //Funcao pra setar o raio para zero. Isso zera a movimentacao
-        //To-Do levar isso para o lugar correto
-        //public void CancelMovement() {
-        //    _naraMovementController.SetRadiusToZero();
-        //    _naraView.SetNaraRadiusView(0);
-        //}
 
         #region IEffectable Methods
 

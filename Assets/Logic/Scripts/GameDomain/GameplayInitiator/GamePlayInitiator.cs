@@ -31,7 +31,7 @@ namespace Logic.Scripts.GameDomain.GameplayInitiator {
 
         public Awaitable InitExitPoint(CancellationTokenSource cancellationTokenSource) {
             _sceneInitiatorsService.UnregisterInitiator(this);
-            //_commandFactory.CreateCommandVoid<ExitGamePlayStateCommand>().Execute();
+            _commandFactory.CreateCommandVoid<ExitGamePlayStateCommand>().Execute();
             return AwaitableUtils.CompletedTask;
         }
     }

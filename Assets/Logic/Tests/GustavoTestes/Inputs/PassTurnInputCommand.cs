@@ -13,7 +13,6 @@ public class PassTurnInputCommand : BaseCommand, ICommandVoid {
 
     public void Execute() {
         if (_naraController?.NaraMove is NaraTurnMovementController naraTurnMovement) naraTurnMovement.RemoveMovementRadius();
-        Debug.LogWarning("turn is null " + (_turnFlowController == null));
         _turnFlowController.CompletePlayerAction();
     }
 }

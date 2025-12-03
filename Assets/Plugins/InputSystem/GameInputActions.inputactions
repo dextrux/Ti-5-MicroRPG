@@ -440,69 +440,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CreateCopy1",
-                    "type": "Button",
-                    "id": "ee77c1fd-4eab-4ad3-84c9-c55ea8bea42b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "CreateCopy2",
-                    "type": "Button",
-                    "id": "7db779dc-f772-454b-b3bb-ad0285576792",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UseAbility1",
-                    "type": "Button",
-                    "id": "562a17a5-d018-4724-9815-430989913a37",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UseAbility2",
-                    "type": "Button",
-                    "id": "c5177103-1190-4656-b287-6ecb743473b1",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UseAbility3",
-                    "type": "Button",
-                    "id": "20f2cfc0-8757-4a74-b57a-cb3df67be29f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UseAbility4",
-                    "type": "Button",
-                    "id": "68d89345-d18d-4754-9f6a-e5d3e1234489",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UseAbility5",
-                    "type": "Button",
-                    "id": "25720c72-2680-43c9-a10a-fe7f824715bb",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Pause",
                     "type": "Button",
                     "id": "f0e657df-7891-4420-8d66-73dda549975c",
@@ -533,15 +470,6 @@
                     "name": "ActivateCam",
                     "type": "Button",
                     "id": "5860d5c4-0772-4f2c-a1a4-6f1983c00229",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseClick",
-                    "type": "Button",
-                    "id": "dd81b999-e910-4974-b5b7-ef2c6abd3556",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -661,61 +589,6 @@
                 },
                 {
                     "name": "",
-                    "id": "3f0ae248-f5f4-4ad4-9a08-e32c1994043c",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CreateCopy1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "eef81c20-7386-41f7-afff-414bd89b04b7",
-                    "path": "<Keyboard>/v",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CreateCopy2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fc06401f-9a24-4a72-877f-299a513debdb",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UseAbility1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b0268a36-4421-42c3-904b-30696f80dfe8",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UseAbility2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d9e3e31b-7558-45ff-9ede-c8965a100845",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UseAbility3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "98efd2a6-93b1-4447-8ea7-e448e60631ec",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
@@ -755,39 +628,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "ActivateCam",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cd14a8da-b0dd-4533-bf63-88d8f664cd4f",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseClick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5470959c-df57-47ab-a473-a2e07ac5b88f",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UseAbility5",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e116b3e1-6123-40f9-aee3-257e78316cd4",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UseAbility4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

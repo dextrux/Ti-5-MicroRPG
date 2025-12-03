@@ -1,7 +1,7 @@
 using Logic.Scripts.GameDomain.GameInputActions;
 using Logic.Scripts.Services.CommandFactory;
 
-public class ExitGamePlayStateCommand : BaseCommand, ICommandVoid {
+public class ExitExplorationStateCommand : BaseCommand, ICommandVoid {
 
     private ICommandFactory _commandFactory;
     private IGameInputActionsController _gameInputActionsController;
@@ -13,8 +13,8 @@ public class ExitGamePlayStateCommand : BaseCommand, ICommandVoid {
 
     public void Execute() {
         _commandFactory.CreateCommandVoid<DisposeLevelCommand>().SetShouldReleaseAssetsFromMemory(true).Execute();
-        _gameInputActionsController.UnregisterGameplayInputListeners();
-        _gameInputActionsController.DisableGameplayInputs();
+        _gameInputActionsController.UnregisterExplorationInputListeners();
+        _gameInputActionsController.DisableExplorationInputs();
         _diContainer.Unbind<GameInputActionsController>();
         return;
     }

@@ -29,7 +29,7 @@ public class ExplorationInitiator : ISceneInitiator, IExplorationInitiator {
 
     public Awaitable InitExitPoint(CancellationTokenSource cancellationTokenSource) {
         _sceneInitiatorsService.UnregisterInitiator(this);
-        //_commandFactory.CreateCommandVoid<Exitexpl>().Execute();
+        _commandFactory.CreateCommandVoid<ExitExplorationStateCommand>().Execute();
         return AwaitableUtils.CompletedTask;
     }
 }

@@ -56,8 +56,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public void ManagedFixedUpdate() {
             if (_naraMovementController is NaraTurnMovementController) {
-                if (_turnStateReader != null && _turnStateReader.Active && _turnStateReader.Phase == TurnPhase.PlayerAct) {
-                    Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+                Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+                if (dir != Vector2.zero && _turnStateReader.Phase == TurnPhase.PlayerAct) {
                     _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
                     bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
                     _naraView?.SetMoving(willMove);
@@ -68,7 +68,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
                 }
             }
             else {
-                Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
+                Vector2 dir = _gameInputActions.Exploration.Move.ReadValue<Vector2>();
                 if (dir != Vector2.zero) {
                     _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
                     bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;

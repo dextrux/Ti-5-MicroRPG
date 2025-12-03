@@ -11,6 +11,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void CreateNara(NaraMovementController movementController);
         void ResetController();
         void RegisterListeners();
+        void UnregisterListeners();
         void ManagedFixedUpdate();
         void PlayAttackType(int type);
         void PlayAttackType1();

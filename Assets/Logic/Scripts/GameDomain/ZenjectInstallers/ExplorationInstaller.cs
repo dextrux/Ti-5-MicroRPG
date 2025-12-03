@@ -21,10 +21,9 @@ public class ExplorationInstaller : MonoInstaller {
     }
 
     private void BindControllers() {
-        //To-Do Bindar Controller da Ui de exploração
+        Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<LevelScenarioController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<NaraController>().AsSingle().WithArguments(_naraViewPrefab, _naraConfiguration).NonLazy();
-        Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<PortalController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<InteractableObjectsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<CustomizeUIController>().AsSingle().WithArguments(_customizeUiView).NonLazy();

@@ -47,9 +47,9 @@ public class GamePlayInstaller : MonoInstaller {
     }
 
     private void BindControllers() {
+        Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<GamePlayUiController>().AsSingle().WithArguments(_gamePlayUiView).NonLazy();
         Container.BindInterfacesTo<LevelScenarioController>().AsSingle().NonLazy();
-        Container.BindInterfacesTo<GameInputActionsController>().AsSingle().NonLazy();
         Container.BindInterfacesTo<NaraController>().AsSingle().WithArguments(_naraViewPrefab, _naraConfiguration).NonLazy();
         Container.BindInterfacesTo<CastController>().AsSingle().WithArguments(_skills).NonLazy();
         Container.BindInterfacesTo<EchoController>().AsSingle().WithArguments(_echoviewPrefab).NonLazy();

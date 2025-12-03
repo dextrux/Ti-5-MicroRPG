@@ -1,6 +1,5 @@
 using Logic.Scripts.Core.Mvc.WorldCamera;
 using Logic.Scripts.GameDomain.Commands;
-using Logic.Scripts.GameDomain.GameInputActions;
 using Logic.Scripts.GameDomain.MVC.Boss;
 using Logic.Scripts.GameDomain.MVC.Nara;
 using Logic.Scripts.Services.CommandFactory;
@@ -12,7 +11,6 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
     public class StartLevelCommand : BaseCommand, ICommandAsync {
 
         private INaraController _naraController;
-        private IGameInputActionsController _gameInputActionsController;
         private IWorldCameraController _worldCameraController;
         private IUpdateSubscriptionService _updateSubscriptionService;
         private ICommandFactory _commandFactory;
@@ -21,16 +19,13 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
 
         public override void ResolveDependencies() {
             _naraController = _diContainer.Resolve<INaraController>();
-            _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
             _worldCameraController = _diContainer.Resolve<IWorldCameraController>();
             _updateSubscriptionService = _diContainer.Resolve<IUpdateSubscriptionService>();
             _commandFactory = _diContainer.Resolve<ICommandFactory>();
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-            _gameInputActionsController.RegisterAllInputListeners();
-            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
-            _naraController.RegisterListeners();
+            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform);
             await Awaitable.NextFrameAsync();
             //To-Do Unfreeze movement nara
             //Activate GameplayView se necess�rio

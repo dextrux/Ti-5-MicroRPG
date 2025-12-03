@@ -526,69 +526,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CreateCopy1"",
-                    ""type"": ""Button"",
-                    ""id"": ""ee77c1fd-4eab-4ad3-84c9-c55ea8bea42b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""CreateCopy2"",
-                    ""type"": ""Button"",
-                    ""id"": ""7db779dc-f772-454b-b3bb-ad0285576792"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""UseAbility1"",
-                    ""type"": ""Button"",
-                    ""id"": ""562a17a5-d018-4724-9815-430989913a37"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""UseAbility2"",
-                    ""type"": ""Button"",
-                    ""id"": ""c5177103-1190-4656-b287-6ecb743473b1"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""UseAbility3"",
-                    ""type"": ""Button"",
-                    ""id"": ""20f2cfc0-8757-4a74-b57a-cb3df67be29f"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""UseAbility4"",
-                    ""type"": ""Button"",
-                    ""id"": ""68d89345-d18d-4754-9f6a-e5d3e1234489"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""UseAbility5"",
-                    ""type"": ""Button"",
-                    ""id"": ""25720c72-2680-43c9-a10a-fe7f824715bb"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""f0e657df-7891-4420-8d66-73dda549975c"",
@@ -619,15 +556,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""ActivateCam"",
                     ""type"": ""Button"",
                     ""id"": ""5860d5c4-0772-4f2c-a1a4-6f1983c00229"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MouseClick"",
-                    ""type"": ""Button"",
-                    ""id"": ""dd81b999-e910-4974-b5b7-ef2c6abd3556"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -747,61 +675,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3f0ae248-f5f4-4ad4-9a08-e32c1994043c"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""CreateCopy1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""eef81c20-7386-41f7-afff-414bd89b04b7"",
-                    ""path"": ""<Keyboard>/v"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""CreateCopy2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fc06401f-9a24-4a72-877f-299a513debdb"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UseAbility1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b0268a36-4421-42c3-904b-30696f80dfe8"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UseAbility2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d9e3e31b-7558-45ff-9ede-c8965a100845"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UseAbility3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""98efd2a6-93b1-4447-8ea7-e448e60631ec"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
@@ -841,39 +714,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ActivateCam"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cd14a8da-b0dd-4533-bf63-88d8f664cd4f"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MouseClick"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5470959c-df57-47ab-a473-a2e07ac5b88f"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UseAbility5"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e116b3e1-6123-40f9-aee3-257e78316cd4"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UseAbility4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1481,18 +1321,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Exploration = asset.FindActionMap("Exploration", throwIfNotFound: true);
         m_Exploration_Move = m_Exploration.FindAction("Move", throwIfNotFound: true);
         m_Exploration_Interact = m_Exploration.FindAction("Interact", throwIfNotFound: true);
-        m_Exploration_CreateCopy1 = m_Exploration.FindAction("CreateCopy1", throwIfNotFound: true);
-        m_Exploration_CreateCopy2 = m_Exploration.FindAction("CreateCopy2", throwIfNotFound: true);
-        m_Exploration_UseAbility1 = m_Exploration.FindAction("UseAbility1", throwIfNotFound: true);
-        m_Exploration_UseAbility2 = m_Exploration.FindAction("UseAbility2", throwIfNotFound: true);
-        m_Exploration_UseAbility3 = m_Exploration.FindAction("UseAbility3", throwIfNotFound: true);
-        m_Exploration_UseAbility4 = m_Exploration.FindAction("UseAbility4", throwIfNotFound: true);
-        m_Exploration_UseAbility5 = m_Exploration.FindAction("UseAbility5", throwIfNotFound: true);
         m_Exploration_Pause = m_Exploration.FindAction("Pause", throwIfNotFound: true);
         m_Exploration_RotateCam = m_Exploration.FindAction("RotateCam", throwIfNotFound: true);
         m_Exploration_ZoomingCam = m_Exploration.FindAction("ZoomingCam", throwIfNotFound: true);
         m_Exploration_ActivateCam = m_Exploration.FindAction("ActivateCam", throwIfNotFound: true);
-        m_Exploration_MouseClick = m_Exploration.FindAction("MouseClick", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1850,18 +1682,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private List<IExplorationActions> m_ExplorationActionsCallbackInterfaces = new List<IExplorationActions>();
     private readonly InputAction m_Exploration_Move;
     private readonly InputAction m_Exploration_Interact;
-    private readonly InputAction m_Exploration_CreateCopy1;
-    private readonly InputAction m_Exploration_CreateCopy2;
-    private readonly InputAction m_Exploration_UseAbility1;
-    private readonly InputAction m_Exploration_UseAbility2;
-    private readonly InputAction m_Exploration_UseAbility3;
-    private readonly InputAction m_Exploration_UseAbility4;
-    private readonly InputAction m_Exploration_UseAbility5;
     private readonly InputAction m_Exploration_Pause;
     private readonly InputAction m_Exploration_RotateCam;
     private readonly InputAction m_Exploration_ZoomingCam;
     private readonly InputAction m_Exploration_ActivateCam;
-    private readonly InputAction m_Exploration_MouseClick;
     /// <summary>
     /// Provides access to input actions defined in input action map "Exploration".
     /// </summary>
@@ -1882,34 +1706,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Exploration_Interact;
         /// <summary>
-        /// Provides access to the underlying input action "Exploration/CreateCopy1".
-        /// </summary>
-        public InputAction @CreateCopy1 => m_Wrapper.m_Exploration_CreateCopy1;
-        /// <summary>
-        /// Provides access to the underlying input action "Exploration/CreateCopy2".
-        /// </summary>
-        public InputAction @CreateCopy2 => m_Wrapper.m_Exploration_CreateCopy2;
-        /// <summary>
-        /// Provides access to the underlying input action "Exploration/UseAbility1".
-        /// </summary>
-        public InputAction @UseAbility1 => m_Wrapper.m_Exploration_UseAbility1;
-        /// <summary>
-        /// Provides access to the underlying input action "Exploration/UseAbility2".
-        /// </summary>
-        public InputAction @UseAbility2 => m_Wrapper.m_Exploration_UseAbility2;
-        /// <summary>
-        /// Provides access to the underlying input action "Exploration/UseAbility3".
-        /// </summary>
-        public InputAction @UseAbility3 => m_Wrapper.m_Exploration_UseAbility3;
-        /// <summary>
-        /// Provides access to the underlying input action "Exploration/UseAbility4".
-        /// </summary>
-        public InputAction @UseAbility4 => m_Wrapper.m_Exploration_UseAbility4;
-        /// <summary>
-        /// Provides access to the underlying input action "Exploration/UseAbility5".
-        /// </summary>
-        public InputAction @UseAbility5 => m_Wrapper.m_Exploration_UseAbility5;
-        /// <summary>
         /// Provides access to the underlying input action "Exploration/Pause".
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_Exploration_Pause;
@@ -1925,10 +1721,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Exploration/ActivateCam".
         /// </summary>
         public InputAction @ActivateCam => m_Wrapper.m_Exploration_ActivateCam;
-        /// <summary>
-        /// Provides access to the underlying input action "Exploration/MouseClick".
-        /// </summary>
-        public InputAction @MouseClick => m_Wrapper.m_Exploration_MouseClick;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1961,27 +1753,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
-            @CreateCopy1.started += instance.OnCreateCopy1;
-            @CreateCopy1.performed += instance.OnCreateCopy1;
-            @CreateCopy1.canceled += instance.OnCreateCopy1;
-            @CreateCopy2.started += instance.OnCreateCopy2;
-            @CreateCopy2.performed += instance.OnCreateCopy2;
-            @CreateCopy2.canceled += instance.OnCreateCopy2;
-            @UseAbility1.started += instance.OnUseAbility1;
-            @UseAbility1.performed += instance.OnUseAbility1;
-            @UseAbility1.canceled += instance.OnUseAbility1;
-            @UseAbility2.started += instance.OnUseAbility2;
-            @UseAbility2.performed += instance.OnUseAbility2;
-            @UseAbility2.canceled += instance.OnUseAbility2;
-            @UseAbility3.started += instance.OnUseAbility3;
-            @UseAbility3.performed += instance.OnUseAbility3;
-            @UseAbility3.canceled += instance.OnUseAbility3;
-            @UseAbility4.started += instance.OnUseAbility4;
-            @UseAbility4.performed += instance.OnUseAbility4;
-            @UseAbility4.canceled += instance.OnUseAbility4;
-            @UseAbility5.started += instance.OnUseAbility5;
-            @UseAbility5.performed += instance.OnUseAbility5;
-            @UseAbility5.canceled += instance.OnUseAbility5;
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
@@ -1994,9 +1765,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @ActivateCam.started += instance.OnActivateCam;
             @ActivateCam.performed += instance.OnActivateCam;
             @ActivateCam.canceled += instance.OnActivateCam;
-            @MouseClick.started += instance.OnMouseClick;
-            @MouseClick.performed += instance.OnMouseClick;
-            @MouseClick.canceled += instance.OnMouseClick;
         }
 
         /// <summary>
@@ -2014,27 +1782,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
-            @CreateCopy1.started -= instance.OnCreateCopy1;
-            @CreateCopy1.performed -= instance.OnCreateCopy1;
-            @CreateCopy1.canceled -= instance.OnCreateCopy1;
-            @CreateCopy2.started -= instance.OnCreateCopy2;
-            @CreateCopy2.performed -= instance.OnCreateCopy2;
-            @CreateCopy2.canceled -= instance.OnCreateCopy2;
-            @UseAbility1.started -= instance.OnUseAbility1;
-            @UseAbility1.performed -= instance.OnUseAbility1;
-            @UseAbility1.canceled -= instance.OnUseAbility1;
-            @UseAbility2.started -= instance.OnUseAbility2;
-            @UseAbility2.performed -= instance.OnUseAbility2;
-            @UseAbility2.canceled -= instance.OnUseAbility2;
-            @UseAbility3.started -= instance.OnUseAbility3;
-            @UseAbility3.performed -= instance.OnUseAbility3;
-            @UseAbility3.canceled -= instance.OnUseAbility3;
-            @UseAbility4.started -= instance.OnUseAbility4;
-            @UseAbility4.performed -= instance.OnUseAbility4;
-            @UseAbility4.canceled -= instance.OnUseAbility4;
-            @UseAbility5.started -= instance.OnUseAbility5;
-            @UseAbility5.performed -= instance.OnUseAbility5;
-            @UseAbility5.canceled -= instance.OnUseAbility5;
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
@@ -2047,9 +1794,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @ActivateCam.started -= instance.OnActivateCam;
             @ActivateCam.performed -= instance.OnActivateCam;
             @ActivateCam.canceled -= instance.OnActivateCam;
-            @MouseClick.started -= instance.OnMouseClick;
-            @MouseClick.performed -= instance.OnMouseClick;
-            @MouseClick.canceled -= instance.OnMouseClick;
         }
 
         /// <summary>
@@ -2485,55 +2229,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "CreateCopy1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnCreateCopy1(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "CreateCopy2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnCreateCopy2(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "UseAbility1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseAbility1(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "UseAbility2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseAbility2(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "UseAbility3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseAbility3(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "UseAbility4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseAbility4(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "UseAbility5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseAbility5(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2561,13 +2256,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnActivateCam(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "MouseClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnMouseClick(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

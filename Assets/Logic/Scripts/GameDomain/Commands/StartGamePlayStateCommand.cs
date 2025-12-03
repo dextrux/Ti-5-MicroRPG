@@ -35,8 +35,7 @@ namespace Logic.Scripts.GameDomain.Commands {
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-            _gameInputActionsController.EnableInputs();
-            _gameInputActionsController.RegisterAllInputListeners();
+            _gameInputActionsController.RegisterGameplayInputListeners();
             await _commandFactory.CreateCommandAsync<StartLevelCommand>().StartBoss().Execute(cancellationTokenSource);
             _naraController.InitEntryPointGamePlay(_gamePlayUiController);
         }

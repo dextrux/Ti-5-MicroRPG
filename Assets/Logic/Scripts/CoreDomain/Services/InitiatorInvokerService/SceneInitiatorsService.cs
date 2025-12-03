@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using Logic.Scripts.Core.CoreInitiator.Base;
-using Logic.Scripts.Services.SceneServices;
 using UnityEngine;
 
 namespace Logic.Scripts.Services.InitiatorInvokerService {
@@ -17,8 +16,6 @@ namespace Logic.Scripts.Services.InitiatorInvokerService {
         }
 
         public async Awaitable InvokeInitiatorLoadEntryPoint(SceneType sceneType, IInitiatorEnterData enterData, CancellationTokenSource cancellationTokenSource) {
-            Debug.Log("Chegou no dict");
-            Debug.Log("Is scene on Dictionary: " + (_sceneInitiators.ContainsKey(sceneType)));
             await _sceneInitiators[sceneType].LoadEntryPoint(enterData, cancellationTokenSource);
         }
 

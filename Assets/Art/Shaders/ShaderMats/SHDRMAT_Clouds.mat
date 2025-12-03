@@ -58,12 +58,12 @@ Material:
     - _DistortScale: 60
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WindDensity: 50
-    - _WindPower: 20
+    - _WindDensity: 30
+    - _WindPower: 50
     m_Colors:
-    - _CloudSpeed: {r: 0.009, g: 0.005, b: 0, a: 0}
+    - _CloudSpeed: {r: 0.003, g: 0.003, b: 0, a: 0}
     - _CloudsColor: {r: 84.36339, g: 98.49323, b: 123.3451, a: 1}
-    - _DistortSpeed: {r: 0.01, g: 0.02, b: 0, a: 0}
-    - _WindSpeed: {r: 0.003, g: 0.01, b: 0, a: 0}
+    - _DistortSpeed: {r: 0.02, g: 0.03, b: 0, a: 0}
+    - _WindSpeed: {r: 0.003, g: 0.003, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

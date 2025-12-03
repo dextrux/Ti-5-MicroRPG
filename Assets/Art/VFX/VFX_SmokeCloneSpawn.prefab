@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5187662518420000364}
   - component: {fileID: 3830044307798438197}
   m_Layer: 0
-  m_Name: SmokeBurstVFX
+  m_Name: VFX_SmokeCloneSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

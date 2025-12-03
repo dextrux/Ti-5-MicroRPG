@@ -15,8 +15,7 @@ public class UseAbility4InputCommand : BaseCommand, ICommandVoid
     public void Execute() {
         _castController.CancelAbilityUse();
         if (_castController.TryUseAbility(THREE_INT_CONST, (IEffectable)_naraController)) {
-
+            _naraController.Freeeze();
         }
-        return;
     }
 }

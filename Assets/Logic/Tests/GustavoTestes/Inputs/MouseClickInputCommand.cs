@@ -18,6 +18,7 @@ public class MouseClickInputCommand : BaseCommand, ICommandVoid {
                 naraTurnMovement.SetMovementRadiusCenter();
                 naraTurnMovement.Refresh();
                 _castController.SetCanUseAbility(false);
+                _naraController.Unfreeeze();
             }
         }
     }

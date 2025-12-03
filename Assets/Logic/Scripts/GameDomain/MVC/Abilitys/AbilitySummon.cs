@@ -9,7 +9,6 @@ public class AbilitySummon : MonoBehaviour, IEnvironmentTurnActor {
     [field: SerializeField] public GameObject VisualRoot { get; private set; }
     [SerializeField] private float _radius;
     [SerializeField] private Color _healAreaColor;
-    private bool _removeAfterRun = false;
     private int _duration;
     private int _healAmount;
     private IEffectable _caster;

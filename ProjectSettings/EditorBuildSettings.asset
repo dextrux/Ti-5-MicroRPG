@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GameDesign/Scenes/GameplayScene.unity
     guid: 89d54df087dcd9b44a5daac923adeff5
+  - enabled: 1
+    path: Assets/GameDesign/Scenes/ExplorationScene.unity
+    guid: acf931d507f847249a805ccc104a08b1
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2a8bf0b3e3c4b4042bee0c52030641c9, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

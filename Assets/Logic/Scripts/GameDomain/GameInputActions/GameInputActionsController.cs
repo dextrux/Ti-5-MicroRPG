@@ -4,7 +4,6 @@ using Logic.Scripts.Utils;
 using System.Threading;
 using UnityEngine.InputSystem;
 using UnityEngine;
-using System;
 
 namespace Logic.Scripts.GameDomain.GameInputActions {
     public class GameInputActionsController : IGameInputActionsController {
@@ -16,56 +15,79 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
             _commandFactory = commandFactory;
         }
 
-        public void EnableInputs() {
+        public void EnableGameplayInputs() {
             LogService.LogTopic("EnableInputs", LogTopicType.Inputs);
-            _gameInputActions.Enable();
+            _gameInputActions.Player.Enable();
         }
 
-        public void DisableInputs() {
-            LogService.LogTopic("DisableInputs", LogTopicType.Inputs);
-            _gameInputActions.Disable();
+        public void EnableUIInputs() {
+            LogService.LogTopic("EnableUIInputs", LogTopicType.Inputs);
+            _gameInputActions.UI.Enable();
         }
 
-        public void RegisterAllInputListeners() {
-            LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
-            _gameInputActions.Player.ActivateCam.started += OnActivateCamStarted;
-            _gameInputActions.Player.ActivateCam.canceled += OnActivateCamCanceled;
+        public void EnableExplorationInputs() {
+            LogService.LogTopic("EnableExplorationInputs", LogTopicType.Inputs);
+            _gameInputActions.Exploration.Enable();
+        }
 
+        public void DisableGameplayInputs() {
+            LogService.LogTopic("EnableInputs", LogTopicType.Inputs);
+            _gameInputActions.Player.Disable();
+        }
+
+        public void DisableUIInputs() {
+            LogService.LogTopic("EnableUIInputs", LogTopicType.Inputs);
+            _gameInputActions.UI.Disable();
+        }
+
+        public void DisableExplorationInputs() {
+            LogService.LogTopic("EnableExplorationInputs", LogTopicType.Inputs);
+            _gameInputActions.Exploration.Disable();
+        }
+
+
+        #region gameplayInput
+        public void RegisterGameplayInputListeners() {
+            LogService.LogTopic("Register Gameplay input listeners", LogTopicType.Inputs);
+            _gameInputActions.Player.ActivateCam.started += OnActivateCamAndCancelAbilityStarted;
+            _gameInputActions.Player.ActivateCam.canceled += OnActivateCamAndCancelAbilityCanceled;
             _gameInputActions.Player.CreateCopy1.started += OnCreateCopy1Started;
-            _gameInputActions.Player.CreateCopy1.canceled += OnCreateCopy1Canceled;
-
             _gameInputActions.Player.CreateCopy2.started += OnCreateCopy2Started;
-            _gameInputActions.Player.CreateCopy2.canceled += OnCreateCopy2Canceled;
-
-            _gameInputActions.Player.Inspect.started += OnInspectStarted;
-            _gameInputActions.Player.Inspect.canceled += OnInspectCanceled;
-
             _gameInputActions.Player.Interact.started += OnInteractStarted;
-            _gameInputActions.Player.Interact.canceled += OnInteractCanceled;
-
-            //_gameInputActions.Player.Move.started += OnMoveStarted;
-            _gameInputActions.Player.Move.performed += OnMovePerformed;
+            _gameInputActions.Player.Move.started += OnMoveStarted;
             _gameInputActions.Player.Move.canceled += OnMoveCanceled;
-
             _gameInputActions.Player.PassTurn.started += OnPassTurnStarted;
-            _gameInputActions.Player.PassTurn.canceled += OnPassTurnCanceled;
-
             _gameInputActions.Player.Pause.started += OnPauseStarted;
-            _gameInputActions.Player.Pause.canceled += OnPauseCanceled;
-
-            _gameInputActions.Player.ResetTurn.started += OnResetTurnStarted;
-            _gameInputActions.Player.ResetTurn.canceled += OnResetTurnCanceled;
-
+            _gameInputActions.Player.ResetMovement.started += OnResetMovementStarted;
             _gameInputActions.Player.RotateCam.started += OnRotateCamStarted;
-            _gameInputActions.Player.RotateCam.canceled += OnRotateCamCanceled;
-
             _gameInputActions.Player.UseAbility1.started += OnUseAbility1Started;
             _gameInputActions.Player.UseAbility2.started += OnUseAbility2Started;
             _gameInputActions.Player.UseAbility3.started += OnUseAbility3Started;
-            _gameInputActions.Player.PreviousAbilitySet.started += UseAbility4Started;
-            _gameInputActions.Player.NextAbilitySet.started += UseAbility5Started;
-
+            _gameInputActions.Player.UseAbility4.started += UseAbility4Started;
+            _gameInputActions.Player.UseAbility5.started += UseAbility5Started;
             _gameInputActions.Player.MouseClick.started += OnMouseClickStarted;
+        }
+
+        public void UnregisterGameplayInputListeners() {
+            LogService.LogTopic("Unregister all input listeners", LogTopicType.Inputs);
+            _gameInputActions.Player.ActivateCam.started -= OnActivateCamAndCancelAbilityStarted;
+            _gameInputActions.Player.ActivateCam.canceled -= OnActivateCamAndCancelAbilityCanceled;
+
+            _gameInputActions.Player.CreateCopy1.started -= OnCreateCopy1Started;
+            _gameInputActions.Player.CreateCopy2.started -= OnCreateCopy2Started;
+            _gameInputActions.Player.Move.started -= OnMoveStarted;
+            _gameInputActions.Player.Move.canceled -= OnMoveCanceled;
+            _gameInputActions.Player.PassTurn.started -= OnPassTurnStarted;
+            _gameInputActions.Player.Pause.started -= OnPauseStarted;
+            _gameInputActions.Player.ResetMovement.started -= OnResetMovementStarted;
+            _gameInputActions.Player.RotateCam.started -= OnRotateCamStarted;
+            _gameInputActions.Player.UseAbility1.started -= OnUseAbility1Started;
+            _gameInputActions.Player.UseAbility2.started -= OnUseAbility2Started;
+            _gameInputActions.Player.UseAbility3.started -= OnUseAbility3Started;
+            _gameInputActions.Player.UseAbility4.started -= UseAbility4Started;
+            _gameInputActions.Player.UseAbility5.started -= UseAbility5Started;
+
+            _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
         }
 
         private void OnMouseClickStarted(InputAction.CallbackContext context) {
@@ -89,7 +111,7 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         private void OnRotateCamStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<RotateCamInputCommand>().Execute();
         }
-        private void OnResetTurnStarted(InputAction.CallbackContext obj) {
+        private void OnResetMovementStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<ResetTurnInputCommand>().Execute();
         }
         private void OnPauseStarted(InputAction.CallbackContext obj) {
@@ -98,14 +120,8 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         private void OnPassTurnStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<PassTurnInputCommand>().Execute();
         }
-        private void OnMovePerformed(InputAction.CallbackContext obj) {
+        private void OnMoveStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<MoveInputCommand>().Execute();
-        }
-        private void OnInteractStarted(InputAction.CallbackContext obj) {
-            _commandFactory.CreateCommandVoid<InteractInputCommand>().Execute();
-        }
-        private void OnInspectStarted(InputAction.CallbackContext obj) {
-            _commandFactory.CreateCommandVoid<InspectInputCommand>().Execute();
         }
         private void OnCreateCopy2Started(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<CreateCopy2InputCommand>().Execute();
@@ -113,60 +129,48 @@ namespace Logic.Scripts.GameDomain.GameInputActions {
         private void OnCreateCopy1Started(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<CreateCopy1InputCommand>().Execute();
         }
+        private void OnActivateCamAndCancelAbilityStarted(InputAction.CallbackContext obj) {
+            _commandFactory.CreateCommandVoid<ActivateCamAndCancelAbilityInputCommand>().Execute();
+        }
+        private void OnMoveCanceled(InputAction.CallbackContext context) { _commandFactory.CreateCommandVoid<StopMoveInputCommand>().Execute(); }
+        private void OnActivateCamAndCancelAbilityCanceled(InputAction.CallbackContext context) { _commandFactory.CreateCommandVoid<DeactivateCamInputCommand>().Execute(); }
+        #endregion
+
+        #region explorationInput
+        public void RegisterExplorationInputListeners() {
+            LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
+            _gameInputActions.Exploration.ActivateCam.started += OnActivateCamStarted;
+            _gameInputActions.Exploration.ActivateCam.canceled += OnActivateCamCanceled;
+            _gameInputActions.Exploration.Interact.started += OnInteractStarted;
+            _gameInputActions.Exploration.Move.started += OnMoveStarted;
+            _gameInputActions.Exploration.Move.canceled += OnMoveCanceled;
+            _gameInputActions.Exploration.Pause.started += OnPauseStarted;
+            _gameInputActions.Exploration.RotateCam.started += OnRotateCamStarted;
+        }
+
+        public void UnregisterExplorationInputListeners() {
+            LogService.LogTopic("Register all input listeners", LogTopicType.Inputs);
+            _gameInputActions.Exploration.ActivateCam.started -= OnActivateCamStarted;
+            _gameInputActions.Exploration.ActivateCam.canceled -= OnActivateCamCanceled;
+            _gameInputActions.Exploration.Interact.started -= OnInteractStarted;
+            _gameInputActions.Exploration.Move.started -= OnMoveStarted;
+            _gameInputActions.Exploration.Move.canceled -= OnMoveCanceled;
+            _gameInputActions.Exploration.Pause.started -= OnPauseStarted;
+            _gameInputActions.Exploration.RotateCam.started -= OnRotateCamStarted;
+        }
+
         private void OnActivateCamStarted(InputAction.CallbackContext obj) {
             _commandFactory.CreateCommandVoid<ActivateCamInputCommand>().Execute();
         }
-        private void OnRotateCamCanceled(InputAction.CallbackContext context) { }
-        private void OnResetTurnCanceled(InputAction.CallbackContext context) { }
-        private void OnPauseCanceled(InputAction.CallbackContext context) { }
-        private void OnPassTurnCanceled(InputAction.CallbackContext context) { }
-        private void OnMoveCanceled(InputAction.CallbackContext context) { _commandFactory.CreateCommandVoid<StopMoveInputCommand>().Execute(); }
-        private void OnInteractCanceled(InputAction.CallbackContext context) { }
-        private void OnInspectCanceled(InputAction.CallbackContext context) { }
-        private void OnCreateCopy2Canceled(InputAction.CallbackContext context) { }
-        private void OnCreateCopy1Canceled(InputAction.CallbackContext context) { }
-        private void OnActivateCamCanceled(InputAction.CallbackContext context) { _commandFactory.CreateCommandVoid<DeactivateCamInputCommand>().Execute(); }
 
-        public void UnregisterAllInputListeners() {
-            LogService.LogTopic("Unregister all input listeners", LogTopicType.Inputs);
-            _gameInputActions.Player.ActivateCam.started -= OnActivateCamStarted;
-            _gameInputActions.Player.ActivateCam.canceled -= OnActivateCamCanceled;
-
-            _gameInputActions.Player.CreateCopy1.started -= OnCreateCopy1Started;
-            _gameInputActions.Player.CreateCopy1.canceled -= OnCreateCopy1Canceled;
-
-            _gameInputActions.Player.CreateCopy2.started -= OnCreateCopy2Started;
-            _gameInputActions.Player.CreateCopy2.canceled -= OnCreateCopy2Canceled;
-
-            _gameInputActions.Player.Inspect.started -= OnInspectStarted;
-            _gameInputActions.Player.Inspect.canceled -= OnInspectCanceled;
-
-            _gameInputActions.Player.Interact.started -= OnInteractStarted;
-            _gameInputActions.Player.Interact.canceled -= OnInteractCanceled;
-
-            _gameInputActions.Player.Move.performed -= OnMovePerformed;
-            _gameInputActions.Player.Move.canceled -= OnMoveCanceled;
-
-            _gameInputActions.Player.PassTurn.started -= OnPassTurnStarted;
-            _gameInputActions.Player.PassTurn.canceled -= OnPassTurnCanceled;
-
-            _gameInputActions.Player.Pause.started -= OnPauseStarted;
-            _gameInputActions.Player.Pause.canceled -= OnPauseCanceled;
-
-            _gameInputActions.Player.ResetTurn.started -= OnResetTurnStarted;
-            _gameInputActions.Player.ResetTurn.canceled -= OnResetTurnCanceled;
-
-            _gameInputActions.Player.RotateCam.started -= OnRotateCamStarted;
-            _gameInputActions.Player.RotateCam.canceled -= OnRotateCamCanceled;
-
-            _gameInputActions.Player.UseAbility1.started -= OnUseAbility1Started;
-            _gameInputActions.Player.UseAbility2.started -= OnUseAbility2Started;
-            _gameInputActions.Player.UseAbility3.started -= OnUseAbility3Started;
-            _gameInputActions.Player.PreviousAbilitySet.started -= UseAbility4Started;
-            _gameInputActions.Player.NextAbilitySet.started -= UseAbility5Started;
-
-            _gameInputActions.Player.MouseClick.started -= OnMouseClickStarted;
+        private void OnActivateCamCanceled(InputAction.CallbackContext context) {
+            _commandFactory.CreateCommandVoid<DeactivateCamInputCommand>().Execute();
         }
+
+        private void OnInteractStarted(InputAction.CallbackContext obj) {
+            _commandFactory.CreateCommandVoid<InteractInputCommand>().Execute();
+        }
+        #endregion
 
         public async Awaitable WaitForAnyKeyPressed(CancellationTokenSource cancellationTokenSource, bool canPressOverGui = false) {
             await AwaitableUtils.WaitUntil(() => IsAnyInputPressed(), cancellationTokenSource.Token);

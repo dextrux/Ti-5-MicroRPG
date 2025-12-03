@@ -23,7 +23,6 @@ public class GamePlayState : BaseGameState<GamePlayInitatorEnterData> {
 
     public override async Awaitable StartState(CancellationTokenSource cancellationTokenSource) {
         await base.StartState(cancellationTokenSource);
-        _audio.PlayAudio(AudioClipType.BossTheme, AudioChannelType.Music, AudioPlayType.Loop);
         await _sceneLoaderService.StartScene(SceneType.GamePlayScene, EnterData, cancellationTokenSource);
     }
 

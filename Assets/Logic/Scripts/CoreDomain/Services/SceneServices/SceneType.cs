@@ -1,9 +1,7 @@
-using UnityEngine;
-
-public enum SceneType
-{
+public enum SceneType {
     CoreScene,
     GameScene,
     LobbyScene,
-    GamePlayScene
+    GamePlayScene,
+    ExplorationScene
 }

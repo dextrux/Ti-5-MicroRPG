@@ -10,8 +10,6 @@ using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.Commands {
     public class StartGamePlayStateCommand : BaseCommand, ICommandAsync {
-        //Temporario para tirar os asserts
-
         private IGamePlayUiController _gamePlayUiController;
         private IAudioService _audioService;
         private INaraController _naraController;
@@ -37,9 +35,9 @@ namespace Logic.Scripts.GameDomain.Commands {
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-            _gameInputActionsController.EnableInputs();
-            _gameInputActionsController.RegisterAllInputListeners();
-            await _commandFactory.CreateCommandAsync<StartLevelCommand>().Execute(cancellationTokenSource);
+            _gameInputActionsController.RegisterGameplayInputListeners();
+            await _commandFactory.CreateCommandAsync<StartLevelCommand>().StartBoss().Execute(cancellationTokenSource);
+            _naraController.InitEntryPointGamePlay(_gamePlayUiController);
         }
     }
 }

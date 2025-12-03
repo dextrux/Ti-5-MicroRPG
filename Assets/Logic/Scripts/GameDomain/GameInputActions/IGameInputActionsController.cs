@@ -3,10 +3,16 @@ using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.GameInputActions {
     public interface IGameInputActionsController {
-        void EnableInputs();
-        void DisableInputs();
-        void RegisterAllInputListeners();
-        void UnregisterAllInputListeners();
+        void EnableGameplayInputs();
+        void EnableUIInputs();
+        void EnableExplorationInputs();
+        void DisableGameplayInputs();
+        void DisableUIInputs();
+        void DisableExplorationInputs();
+        void RegisterGameplayInputListeners();
+        void UnregisterGameplayInputListeners();
+        void RegisterExplorationInputListeners();
+        void UnregisterExplorationInputListeners();
         Awaitable WaitForAnyKeyPressed(CancellationTokenSource cancellationTokenSource, bool canPressOverGui);
     }
 }

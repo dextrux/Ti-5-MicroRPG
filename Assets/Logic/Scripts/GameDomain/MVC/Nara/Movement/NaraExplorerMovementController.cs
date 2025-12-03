@@ -6,7 +6,6 @@ public class NaraExplorerMovementController : NaraMovementController {
     public NaraExplorerMovementController(GameInputActions inputActions, IUpdateSubscriptionService updateSubscriptionService,
         NaraConfigurationSO naraConfiguration) : base(inputActions, updateSubscriptionService, naraConfiguration) {
     }
-
     public override void Move(Vector2 direction, float velocity, float rotation) {
         if (NaraRigidbody == null) return;
 
@@ -41,5 +40,9 @@ public class NaraExplorerMovementController : NaraMovementController {
         NaraRigidbody.linearVelocity = new Vector3(vel.x, NaraRigidbody.linearVelocity.y, vel.z);
 
         Rotate(rotation);
+    }
+
+    public override Vector2 ReadInputs() {
+        return GameInputActions.Exploration.Move.ReadValue<Vector2>();
     }
 }

@@ -3,19 +3,12 @@ using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.ResourcesLoaderService;
 using Logic.Scripts.Services.UpdateService;
-using Logic.Scripts.Turns;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
     public class NaraController : INaraController, IFixedUpdatable, IEffectable, IEffectableAction {
         private readonly IUpdateSubscriptionService _updateSubscriptionService;
         private readonly IAudioService _audioService;
-        private readonly ICommandFactory _commandFactory;
-        private readonly IResourcesLoaderService _resourcesLoaderService;
-        private readonly IGamePlayUiController _gamePlayUiController;
-        private readonly ITurnStateReader _turnStateReader;
         private readonly NaraView _naraViewPrefab;
         private readonly NaraData _naraData;
         private readonly NaraConfigurationSO _naraConfiguration;
@@ -23,30 +16,21 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public Transform NaraSkillSpotTransform => _naraView.transform;
         public NaraMovementController NaraMove => _naraMovementController;
 
+        private IGamePlayUiController _gamePlayUiController;
         private NaraView _naraView;
         private NaraMovementController _naraMovementController;
         private int _debuffStacks;
-
-        private readonly global::GameInputActions _gameInputActions;
-
-        //Teste debuffs
-        private List<StatusSO> debuffs;
+        private bool _canMove;
 
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
-            IResourcesLoaderService resourcesLoaderService, IGamePlayUiController gamePlayUiController, NaraView naraViewPrefab,
-            NaraConfigurationSO naraConfiguration, global::GameInputActions inputActions, ITurnStateReader turnStateReader) {
+            IResourcesLoaderService resourcesLoaderService, NaraView naraViewPrefab,
+            NaraConfigurationSO naraConfiguration) {
             _naraData = new NaraData(naraConfiguration);
             _naraConfiguration = naraConfiguration;
             _updateSubscriptionService = updateSubscriptionService;
             _audioService = audioService;
-            _commandFactory = commandFactory;
-            _resourcesLoaderService = resourcesLoaderService;
             _naraViewPrefab = naraViewPrefab;
-            _gamePlayUiController = gamePlayUiController;
-            _gameInputActions = new global::GameInputActions();
-            _gameInputActions.Enable();
-            _turnStateReader = turnStateReader;
         }
 
         public void RegisterListeners() {
@@ -57,30 +41,27 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             _updateSubscriptionService.UnregisterFixedUpdatable(this);
         }
 
+        public void StopMovingAnim() {
+            _naraView?.SetMoving(false);
+        }
+        public void Freeeze() {
+            _canMove = false;
+        }
+
+        public void Unfreeeze() {
+            _canMove = true;
+        }
+
         public void ManagedFixedUpdate() {
-            if (_naraMovementController is NaraTurnMovementController) {
-                if (_turnStateReader != null && _turnStateReader.Active && _turnStateReader.Phase == TurnPhase.PlayerAct) {
-                    Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
-                    _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
-                    bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
-                    _naraView?.SetMoving(willMove);
-                }
-                else {
-                    _naraMovementController.Move(Vector2.zero, 0f, 0f);
-                    _naraView?.SetMoving(false);
-                }
+            Vector2 dir = _naraMovementController.ReadInputs();
+            if (dir == Vector2.zero || _canMove == false) {
+                _naraMovementController.Move(Vector2.zero, 0f, 0f);
+                _naraView?.SetMoving(false);
             }
             else {
-                Vector2 dir = _gameInputActions.Player.Move.ReadValue<Vector2>();
-                if (dir != Vector2.zero) {
-                    _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
-                    bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
-                    _naraView?.SetMoving(willMove);
-                }
-                else {
-                    _naraMovementController.Move(Vector2.zero, 0f, 0f);
-                    _naraView?.SetMoving(false);
-                }
+                _naraMovementController.Move(dir, _naraConfiguration.MoveSpeed, _naraConfiguration.RotationSpeed);
+                bool willMove = dir.sqrMagnitude > 0.0001f && _naraConfiguration.MoveSpeed > 0f;
+                _naraView?.SetMoving(willMove);
             }
         }
 
@@ -97,51 +78,20 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
             UnityEngine.Object.Destroy(_naraView.gameObject);
         }
 
-        public void InitEntryPoint() {
+        public void InitEntryPointGamePlay(IGamePlayUiController gamePlayUiController) {
+            _gamePlayUiController = gamePlayUiController;
             _gamePlayUiController.SetPlayerValues(_naraData.ActualHealth, _naraData.PreviewHealth);
             _naraMovementController.InitEntryPoint(_naraView.GetRigidbody(), _naraView.GetCamera());
+        }
+
+        public void InitEntryPointExploration() {
+            _naraMovementController.InitEntryPoint(_naraView.GetRigidbody(), _naraView.GetCamera());
+            Unfreeeze();
         }
 
         public void SetPosition(Vector3 movementCenter) {
             _naraView.GetRigidbody().position = movementCenter;
         }
-
-        //public void RecenterMovementAreaAtTurnStart() {
-        //    _naraMovementController.SetMovementRadiusCenter();
-        //    _naraView.SetNaraMovementAreaAgain(_naraMovementController.GetNaraRadius(), _naraMovementController.GetNaraCenter());
-        //}
-
-        //public void SetMovementCircleVisible(bool visible) {
-        //    if (_naraView != null) {
-        //        _naraView.SetMovementCircleVisible(visible);
-        //    }
-        //}
-
-        //public void SetNewMovementArea() {
-        //    _naraMovementController.RecalculateRadiusAfterAbility();
-        //    RecenterMovementAreaAtTurnStart();
-        //}
-
-        //public void ResetMovementArea() {
-        //    _naraMovementController.ResetMovementRadius();
-        //    RecenterMovementAreaAtTurnStart();
-        //}
-
-        //public void RemoveMovementAreaLimit() {
-        //    _naraMovementController.RemoveMovementRadius();
-        //    RecenterMovementAreaAtTurnStart();
-        //}
-
-        //public void RecenterNara() {
-        //    _naraView.SetPosition();
-        //}
-
-        //Funcao pra setar o raio para zero. Isso zera a movimentacao
-        //To-Do levar isso para o lugar correto
-        //public void CancelMovement() {
-        //    _naraMovementController.SetRadiusToZero();
-        //    _naraView.SetNaraRadiusView(0);
-        //}
 
         #region IEffectable Methods
 

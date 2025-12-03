@@ -1,5 +1,4 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
-using Logic.Scripts.GameDomain.MVC.Nara;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;

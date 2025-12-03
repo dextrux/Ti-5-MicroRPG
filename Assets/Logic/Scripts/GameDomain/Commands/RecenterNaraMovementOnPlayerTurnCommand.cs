@@ -13,6 +13,7 @@ namespace Logic.Scripts.GameDomain.Commands {
             if (_naraController?.NaraMove is NaraTurnMovementController naraTurnMovement) {
                 naraTurnMovement.ResetMovementArea();
             }
+            _naraController.Unfreeeze();
         }
     }
 }

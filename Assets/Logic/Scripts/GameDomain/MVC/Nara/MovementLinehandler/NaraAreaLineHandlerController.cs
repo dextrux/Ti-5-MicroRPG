@@ -23,7 +23,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         public void InitEntryPoint(Transform referenceTransform) {
             _referenceTransform = referenceTransform;
             _lineHandlerView = Object.Instantiate(_lineHandlerViewPrefab, _referenceTransform).GetComponent<NaraAreaLineHandlerView>();
-            Debug.Log("Isnull: " + (_referenceTransform == null));
             Refresh(_center, _maxRadius, _referenceTransform.position);
             SetVisible(false);
         }

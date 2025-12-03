@@ -2,7 +2,6 @@ using Logic.Scripts.GameDomain.MVC.Nara;
 using UnityEngine;
 using Logic.Scripts.Turns;
 using Logic.Scripts.Services.UpdateService;
-using ModestTree;
 
 public class NaraTurnMovementController : NaraMovementController {
     private Vector3 _movement;
@@ -24,6 +23,9 @@ public class NaraTurnMovementController : NaraMovementController {
         base.InitEntryPoint(rigidbody, camera);
         _movementRadius = _initialMovementRadius;
         LineHandlerController.InitEntryPoint(NaraTransform);
+    }
+    public override Vector2 ReadInputs() {
+        return GameInputActions.Player.Move.ReadValue<Vector2>();
     }
 
     public void SetActionPointsService(ActionPointsService actionPointsService) {
@@ -115,7 +117,6 @@ public class NaraTurnMovementController : NaraMovementController {
 
     public void ResetMovementRadius() {
         _movementRadius = _initialMovementRadius;
-        Debug.Log("Resetou Movimento");
     }
 
     public void RemoveMovementRadius() {
@@ -126,14 +127,12 @@ public class NaraTurnMovementController : NaraMovementController {
         _movementRadius = 0;
     }
 
-    public void ActivateNaraGravity()
-    {
+    public void ActivateNaraGravity() {
         NaraRigidbody.useGravity = true;
         NaraRigidbody.constraints &= ~RigidbodyConstraints.FreezePositionY;
     }
 
-    public void DeactivateNaraGravity()
-    {
+    public void DeactivateNaraGravity() {
         NaraRigidbody.useGravity = false;
         NaraRigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
     }

@@ -26,6 +26,8 @@ public abstract class NaraMovementController : INaraMovementController, IFixedUp
         SetCamera(camera);
     }
 
+    public abstract Vector2 ReadInputs();
+
     public abstract void Move(Vector2 direction, float velocity, float rotation);
     public abstract void MoveToPoint(Vector3 endPosition, float velocity, float rotation);
     protected void Rotate(float rotationForce) {

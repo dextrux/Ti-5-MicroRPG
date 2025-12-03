@@ -24,6 +24,9 @@ public class NaraTurnMovementController : NaraMovementController {
         _movementRadius = _initialMovementRadius;
         LineHandlerController.InitEntryPoint(NaraTransform);
     }
+    public override Vector2 ReadInputs() {
+        return GameInputActions.Player.Move.ReadValue<Vector2>();
+    }
 
     public void SetActionPointsService(ActionPointsService actionPointsService) {
         _actionPointsService = actionPointsService;

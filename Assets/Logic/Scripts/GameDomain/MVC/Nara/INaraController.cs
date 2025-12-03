@@ -10,6 +10,9 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void InitEntryPointGamePlay(IGamePlayUiController gamePlayUiController);
         void CreateNara(NaraMovementController movementController);
         void ResetController();
+        void StopMovingAnim();
+        void Freeeze();
+        void Unfreeeze();
         void RegisterListeners();
         void UnregisterListeners();
         void ManagedFixedUpdate();
@@ -17,7 +20,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         void PlayAttackType1();
         void TriggerExecute();
         void ResetExecuteTrigger();
-		void TriggerCancel();
+        void TriggerCancel();
         void SetPosition(Vector3 movementCenter);
     }
 }

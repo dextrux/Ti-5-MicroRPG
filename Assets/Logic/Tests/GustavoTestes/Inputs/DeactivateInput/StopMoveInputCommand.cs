@@ -12,5 +12,6 @@ public class StopMoveInputCommand : BaseCommand, ICommandVoid {
     public void Execute() {
         _naraController.UnregisterListeners();
         _naraController.NaraMove.Move(Vector2.zero, 0f, 0f);
+        _naraController.StopMovingAnim();
     }
 }

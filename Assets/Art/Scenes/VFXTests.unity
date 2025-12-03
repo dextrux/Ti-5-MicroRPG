@@ -527,14 +527,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 703742392128562523, guid: 3d37fed6f1c2288488eed1da9e0b7de0, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: b56d771656c21f3469827dddeea5a5d9, type: 2}
-    - target: {fileID: 3348389061287920392, guid: 3d37fed6f1c2288488eed1da9e0b7de0, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: b56d771656c21f3469827dddeea5a5d9, type: 2}
     - target: {fileID: 6187678601975380952, guid: 3d37fed6f1c2288488eed1da9e0b7de0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -579,14 +571,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: HOC_Arena_2
       objectReference: {fileID: 0}
-    - target: {fileID: 7765655851404814701, guid: 3d37fed6f1c2288488eed1da9e0b7de0, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8796355508698191158, guid: 3d37fed6f1c2288488eed1da9e0b7de0, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: b56d771656c21f3469827dddeea5a5d9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

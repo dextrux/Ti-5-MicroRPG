@@ -2340,6 +2340,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1878384851653668314, guid: 305f1ad888c435943a02fb861b3b02e3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b56d771656c21f3469827dddeea5a5d9, type: 2}
     - target: {fileID: 2649747071460597094, guid: 305f1ad888c435943a02fb861b3b02e3, type: 3}
       propertyPath: m_Name
       value: MKHOC_Base
@@ -3960,6 +3964,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4689699369919833970}
     m_Modifications:
+    - target: {fileID: 3588647293626267663, guid: f8e89e2e9f0abe04186c2e59c1cb000b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b56d771656c21f3469827dddeea5a5d9, type: 2}
     - target: {fileID: 4014231180007177635, guid: f8e89e2e9f0abe04186c2e59c1cb000b, type: 3}
       propertyPath: m_Name
       value: MKHOC_Arena
@@ -9248,6 +9256,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1878384851653668314, guid: 305f1ad888c435943a02fb861b3b02e3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b56d771656c21f3469827dddeea5a5d9, type: 2}
     - target: {fileID: 2649747071460597094, guid: 305f1ad888c435943a02fb861b3b02e3, type: 3}
       propertyPath: m_Name
       value: MKHOC_Base (1)

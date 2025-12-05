@@ -8,7 +8,6 @@ using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.UpdateService;
 using System.Threading;
 using UnityEngine;
-using Logic.Scripts.Services.Logger.Base;
 
 namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.StartLevel {
     public class StartLevelCommand : BaseCommand, ICommandAsync {
@@ -42,43 +41,28 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
         }
 
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-			// 1) Position player BEFORE listeners/camera to avoid any clamp or unwanted movement overriding spawn
+            _gameInputActionsController.RegisterAllInputListeners();
+            _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
+            _naraController.RegisterListeners();
+            _naraController.InitEntryPoint();
+			// Set initial player position using fixed world position from LevelTurnData -> BossConfiguration
 			try {
-				Vector3 desired = new Vector3(0f, 0f, -10f);
-				var levelData = _levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber);
-				if (levelData is LevelTurnData ltd && ltd.BossConfiguration != null) {
-					LogService.Log($"[StartLevel] Using LevelTurnData.BossConfiguration.InitialPlayerPosition as spawn.");
-					desired = ltd.BossConfiguration.InitialPlayerPosition;
-				} else {
-					LogService.Log($"[StartLevel] Using fallback spawn (0,0,-10). LevelData is not LevelTurnData or BossConfiguration is null.");
-				}
-				LogService.Log($"[StartLevel] Desired player spawn for level {_gamePlayDataService.CurrentLevelNumber}: {desired}");
-				_naraController.SetPosition(desired); // sets Rigidbody.position
-				// Force immediate transform sync and clear motion so we can read exact spawn this frame
-				if (_naraController.NaraViewGO != null) {
-					_naraController.NaraViewGO.transform.position = desired;
-					var rb = _naraController.NaraViewGO.GetComponent<Rigidbody>();
-					if (rb != null) {
-						rb.linearVelocity = Vector3.zero;
-						rb.angularVelocity = Vector3.zero;
+				var naraGO = _naraController.NaraViewGO;
+				if (naraGO != null) {
+					Vector3 desired = new Vector3(0f, 0f, -10f);
+					var levelData = _levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber);
+					if (levelData is LevelTurnData ltd && ltd.BossConfiguration != null) {
+						desired = ltd.BossConfiguration.InitialPlayerPosition;
+					}
+					_naraController.SetPosition(desired);
+					// Align movement center to the new spawn so clamps don't drag Nara elsewhere before PlayerAct
+					if (levelData is LevelTurnData) {
+						if (_naraController.NaraMove is NaraTurnMovementController tm) {
+							tm.SetMovementRadiusCenter();
+						}
 					}
 				}
-				var actualAfterSet = _naraController.NaraViewGO.transform.position;
-				LogService.Log($"[StartLevel] Player position after SetPosition: {actualAfterSet}");
 			} catch { }
-
-			// 2) Initialize Nara movement/camera, then recenter and restore radius to avoid initial clamp
-			_naraController.InitEntryPoint();
-			if (_naraController.NaraMove is NaraTurnMovementController tmInit) {
-				tmInit.SetMovementRadiusCenter();
-				tmInit.ResetMovementRadius();
-				LogService.Log($"[StartLevel] Movement center set to: {tmInit.GetNaraCenter()} | radius: {tmInit.GetNaraRadius()}");
-			}
-
-			// 3) Only after spawn is set and movement initialized, enable inputs, camera follow and listeners
-			_gameInputActionsController.RegisterAllInputListeners();
-			_worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform, _updateSubscriptionService);
-			_naraController.RegisterListeners();
             _customizeUIController.InitEntryPoint();
             await Awaitable.NextFrameAsync();
             //To-Do Unfreeze movement nara

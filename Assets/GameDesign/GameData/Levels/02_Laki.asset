@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3acf87508f8aeef468d77d19c2a466b5, type: 3}
   m_Name: 02_Laki
   m_EditorClassIdentifier: 
-  levelAddress: ArenaHocari
+  levelAddress: ArenaLaki
   naraLevelConfiguration: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}
   controller:
     _typeName: NaraTurnMovementController, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  bossConfiguration: {fileID: 11400000, guid: c53b316a57f027e498cfcd5b31cdc99d, type: 2}
-  bossPrefab: {fileID: 7540813036317866533, guid: 1216dee866539db43b72b19de06389b1, type: 3}
-  bossPhases: {fileID: 11400000, guid: c0d3c4260663b46418565b63471a4e49, type: 2}
+  bossConfiguration: {fileID: 11400000, guid: 42d784a237d02bd469c6dd2b5dc8f998, type: 2}
+  bossPrefab: {fileID: 6143116250716774284, guid: ac27dec7d9c42a441a810c3f4a549619, type: 3}
+  bossPhases: {fileID: 11400000, guid: bc36ee94f7e75904db90fdc4d4eab46f, type: 2}

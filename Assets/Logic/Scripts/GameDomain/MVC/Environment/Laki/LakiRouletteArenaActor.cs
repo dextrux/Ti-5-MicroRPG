@@ -40,6 +40,30 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Laki
 			string applied = _arena.ApplyEffectToPlayer(_caster, _nara, tileIndex, turn);
 			UnityEngine.Debug.Log($"[LakiRouletteArena] Turn={turn} Tile={tileIndex} Type={type} Effect={(applied ?? "None")}");
 
+			try
+			{
+				var echoes = UnityEngine.Object.FindObjectsByType<Logic.Scripts.GameDomain.MVC.Echo.EchoView>(FindObjectsSortMode.None);
+				if (echoes != null && echoes.Length > 0)
+				{
+					System.Collections.Generic.HashSet<int> cloneTiles = new System.Collections.Generic.HashSet<int>();
+					for (int i = 0; i < echoes.Length; i++)
+					{
+						var e = echoes[i];
+						if (e == null) continue;
+						int ct = _arena.ComputeTileIndex(e.transform.position, _centerWorld);
+						if (ct < 0) continue;
+						if (!cloneTiles.Add(ct)) continue;
+					}
+					foreach (int ct in cloneTiles)
+					{
+						var ctype = _arena.GetTileEffect(ct);
+						string capplied = _arena.ApplyEffectToPlayer(_caster, _nara, ct, turn);
+						UnityEngine.Debug.Log($"[LakiRouletteArena][CloneTile] Turn={turn} Tile={ct} Type={ctype} Effect={(capplied ?? "None")}");
+					}
+				}
+			}
+			catch { }
+
 			for (int i = 0; i < 3; i++)
 			{
 				_arena.RandomizeVisualMapping(new System.Random((turn + i + 1) * 104729 + tileIndex));

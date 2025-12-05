@@ -10,11 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3acf87508f8aeef468d77d19c2a466b5, type: 3}
-<<<<<<<< HEAD:Assets/GameDesign/GameData/Levels/Hokari LevelTurnData.asset
-  m_Name: Hokari LevelTurnData
-========
   m_Name: 01_Hokari
->>>>>>>> Development:Assets/GameDesign/GameData/Levels/01_Hokari.asset
   m_EditorClassIdentifier: 
   levelAddress: ArenaHocari
   naraLevelConfiguration: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}

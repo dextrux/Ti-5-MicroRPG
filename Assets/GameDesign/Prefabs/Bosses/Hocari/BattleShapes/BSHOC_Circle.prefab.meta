@@ -1,12 +1,6 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Logic/Scripts/GameDomain/MVC/Boss/Attacks.meta
-guid: c9b1beb74d781fe4b951875f6902c171
-folderAsset: yes
-DefaultImporter:
-========
 guid: ac3d2c7b71f836c48baddfe2b0a87d59
 PrefabImporter:
->>>>>>>> origin/Feature-BossArenaGraybox:Assets/GameDesign/Prefabs/Boss/Hocari/BattleShapes/BSHOC_Circle.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

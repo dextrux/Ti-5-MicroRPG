@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/GameDesign/Prefabs/Boss.meta
-guid: 82e64d91b6e153f4cad51a42a3921e56
-========
 guid: f3b7f72100295eb4aa0e523584f7492a
->>>>>>>> feature-UiAndSkillMerge:Assets/Logic/Scripts/GameDomain/MVC/GamePlayUi.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -4,6 +4,8 @@ using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.ResourcesLoaderService;
 using Logic.Scripts.Services.UpdateService;
 using UnityEngine;
+using Zenject;
+using Logic.Scripts.Turns;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
     public class NaraController : INaraController, IFixedUpdatable, IEffectable, IEffectableAction {
@@ -21,6 +23,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private NaraMovementController _naraMovementController;
         private int _debuffStacks;
         private bool _canMove;
+        private IActionPointsService _actionPointsService;
 
         public NaraController(IUpdateSubscriptionService updateSubscriptionService,
             IAudioService audioService, ICommandFactory commandFactory,
@@ -164,7 +167,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void SubtractActionPoints(int value) {
-
+            var ap = EnsureApService();
+            ap?.Subtract(value);
         }
 
         public void SubtractAllActionPoints(int value) {
@@ -180,7 +184,8 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void AddActionPoints(int valueToIncrease) {
-
+            var ap = EnsureApService();
+            ap?.Add(valueToIncrease);
         }
 
         public void ReduceMovementPerTurn(int valueToSubtract, int duration) {
@@ -191,6 +196,26 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         }
         #endregion
+
+        private IActionPointsService EnsureApService() {
+            if (_actionPointsService != null) return _actionPointsService;
+            try {
+                var sceneCtxs = Object.FindObjectsByType<SceneContext>(FindObjectsSortMode.None);
+                for (int i = 0; i < sceneCtxs.Length; i++) {
+                    var sc = sceneCtxs[i];
+                    if (sc != null) {
+                        _actionPointsService = sc.Container.Resolve<IActionPointsService>();
+                        if (_actionPointsService != null) return _actionPointsService;
+                    }
+                }
+            } catch { }
+            try {
+                if (ProjectContext.Instance != null) {
+                    _actionPointsService = ProjectContext.Instance.Container.Resolve<IActionPointsService>();
+                }
+            } catch { }
+            return _actionPointsService;
+        }
 
         // Debuff API
         public int GetNumberDebuffs() {

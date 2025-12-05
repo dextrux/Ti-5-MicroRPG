@@ -66,8 +66,25 @@ namespace Logic.Scripts.Turns
             PublishChange();
         }
 
+		public void Add(int amount)
+		{
+			if (amount <= 0) return;
+			_current += amount;
+			if (_current > _max) _current = _max;
+			PublishChange();
+		}
+
+		public void Subtract(int amount)
+		{
+			if (amount <= 0) return;
+			_current -= amount;
+			if (_current < 0) _current = 0;
+			PublishChange();
+		}
+
         private void PublishChange()
         {
+			UnityEngine.Debug.Log($"[AP] {_current}/{_max} (gain/turn={_gainPerTurn})");
             _turnStateService.UpdateActionPoints(_current, _max);
         }
     }

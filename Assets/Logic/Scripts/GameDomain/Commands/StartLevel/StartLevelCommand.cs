@@ -27,8 +27,6 @@ namespace CoreDomain.GameDomain.GameStateDomain.GamePlayDomain.Scripts.Commands.
         public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
             _worldCameraController.StartFollowTarget(_naraController.NaraViewGO.transform);
             await Awaitable.NextFrameAsync();
-            //To-Do Unfreeze movement nara
-            //Activate GameplayView se necess�rio
         }
 
         public StartLevelCommand StartBoss() {

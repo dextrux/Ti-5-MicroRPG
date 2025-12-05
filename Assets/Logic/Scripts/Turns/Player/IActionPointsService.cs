@@ -11,5 +11,7 @@ namespace Logic.Scripts.Turns
         void Refill();
         void Reset();
         void Configure(int max, int gainPerTurn);
+			void Add(int amount);
+			void Subtract(int amount);
     }
 }

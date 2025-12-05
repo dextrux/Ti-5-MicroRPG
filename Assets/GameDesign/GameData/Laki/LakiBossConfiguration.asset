@@ -17,4 +17,4 @@ MonoBehaviour:
   <MoveSpeed>k__BackingField: 8
   <RotationSpeed>k__BackingField: 20
   <InitialBossPosition>k__BackingField: {x: 0, y: 12, z: 0}
-  <InitialPlayerPosition>k__BackingField: {x: 0, y: 7.5, z: -20}
+  <InitialPlayerPosition>k__BackingField: {x: 0, y: 7, z: -20}

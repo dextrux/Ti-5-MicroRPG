@@ -23,7 +23,8 @@ public class PortalEnterCommand : BaseCommand, ICommandAsync {
     }
 
     public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
-        _stateMachineService.SwitchState(_gameplayStateFactory.Create(new GamePlayInitatorEnterData(1)));
+        int levelIndex = _portalEnterCommandData != null ? _portalEnterCommandData.LevelToEnter : 1;
+        _stateMachineService.SwitchState(_gameplayStateFactory.Create(new GamePlayInitatorEnterData(levelIndex)));
     }
 
 }

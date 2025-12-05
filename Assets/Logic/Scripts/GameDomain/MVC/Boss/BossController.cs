@@ -169,17 +169,14 @@ namespace Logic.Scripts.GameDomain.MVC.Boss {
         }
 
         public void CreateBoss() {
-            _bossView = Object.Instantiate(_bossViewPrefab);
+			// Instantiate boss directly at configured world position to avoid transient prefab-position frames
+			Vector3 spawnPos = (_bossConfiguration != null) ? _bossConfiguration.InitialBossPosition : Vector3.zero;
+			Quaternion spawnRot = (_bossViewPrefab != null) ? _bossViewPrefab.transform.rotation : Quaternion.identity;
+			_bossView = Object.Instantiate(_bossViewPrefab, spawnPos, spawnRot);
             _bossData.ResetData();
             _bossView.SetupCallbacks(PreviewHeal, PreviewDamage, TakeDamage, Heal);
             _bossRigidbody = _bossView != null ? _bossView.GetRigidbody() : null;
             _bossTransform = _bossView != null ? _bossView.transform : null;
-			// Position boss using fixed world position from BossConfiguration
-			try {
-				if (_bossTransform != null && _bossConfiguration != null) {
-					_bossTransform.position = _bossConfiguration.InitialBossPosition;
-				}
-			} catch { }
             if (_bossView != null) {
                 var relay = _bossView.gameObject.GetComponent<Assets.Logic.Scripts.GameDomain.Effects.EffectableRelay>();
                 if (relay == null) relay = _bossView.gameObject.AddComponent<Assets.Logic.Scripts.GameDomain.Effects.EffectableRelay>();

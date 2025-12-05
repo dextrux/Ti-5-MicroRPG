@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Zenject;
 using Logic.Scripts.Services.AudioService;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -21,6 +20,7 @@ namespace Logic.Scripts.GameDomain.ZenjectInstallers {
             Container.Bind<IGameInitiator>().To<GameInitiator.GameInitiator>().AsSingle().NonLazy();
             Container.BindInterfacesTo<AbilityPointService>().AsSingle().WithArguments(Abilities, PointData).NonLazy();
             Container.BindFactory<GamePlayInitatorEnterData, GamePlayState, GamePlayState.Factory>();
+            Container.BindFactory<ExplorationInitiatorEnterData, ExplorationState, ExplorationState.Factory>();
             Container.BindInterfacesTo<LevelsDataService>().AsSingle().NonLazy();
             Container.BindFactory<LobbyInitiatorEnterData, LobbyState, LobbyState.Factory>().AsSingle().NonLazy();
 

@@ -1,16 +1,13 @@
-using Logic.Scripts.GameDomain.Commands;
+using Logic.Scripts.GameDomain.GameInputActions;
 using Logic.Scripts.GameDomain.MVC.Boss;
 using Logic.Scripts.GameDomain.MVC.Nara;
-using Logic.Scripts.GameDomain.MVC.Ui;
 using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Turns;
-using System;
 using System.Threading;
 using UnityEngine;
 
 public class LoadLevelCommand : BaseCommand, ICommandAsync {
 
-    private IGamePlayUiController _gamePlayUiController;
     private ILevelScenarioController _levelScenarioController;
     private INaraController _naraController;
     private ILevelCancellationTokenService _levelCancellationTokenService;
@@ -18,6 +15,8 @@ public class LoadLevelCommand : BaseCommand, ICommandAsync {
     private INaraMovementControllerFactory _naraMovementControllerFactory;
     private IGamePlayDataService _gamePlayDataService;
     private IPortalController _portalController;
+    private IInteractableObjectsController _interactableObjectsController;
+    private IGameInputActionsController _inputActionsController;
 
     //To-Do adicionar efeitos do cenario
 
@@ -29,8 +28,6 @@ public class LoadLevelCommand : BaseCommand, ICommandAsync {
     }
 
     public override void ResolveDependencies() {
-        Debug.Log("LoadLevelCommand Dependecies");
-        _gamePlayUiController = _diContainer.Resolve<IGamePlayUiController>();
         _levelScenarioController = _diContainer.Resolve<ILevelScenarioController>();
         _naraController = _diContainer.Resolve<INaraController>();
         _levelCancellationTokenService = _diContainer.Resolve<ILevelCancellationTokenService>();
@@ -38,6 +35,8 @@ public class LoadLevelCommand : BaseCommand, ICommandAsync {
         _gamePlayDataService = _diContainer.Resolve<IGamePlayDataService>();
         _naraMovementControllerFactory = _diContainer.Resolve<INaraMovementControllerFactory>();
         _portalController = _diContainer.Resolve<IPortalController>();
+        _interactableObjectsController = _diContainer.Resolve<IInteractableObjectsController>();
+        _inputActionsController = _diContainer.Resolve<IGameInputActionsController>();
     }
 
     public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
@@ -53,14 +52,16 @@ public class LoadLevelCommand : BaseCommand, ICommandAsync {
     private async Awaitable CreateLevelScenario(int levelNumber, CancellationTokenSource cancellationTokenSource) {
         await _levelScenarioController.CreateLevelScenario(levelNumber, cancellationTokenSource);
         _portalController.SetUpPortals(_levelScenarioController.CurrentLevelScenarioView.PortalViews);
+        _interactableObjectsController.SetUpInteractables(_levelScenarioController.CurrentLevelScenarioView.Interactableviews);
         //To-Do adicionar efeitos do cenario
-        if (_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber).ControllerType == typeof(NaraTurnMovementController)) {
-            LevelTurnData levelTurnData = (LevelTurnData)_levelsDataService.GetLevelData(_gamePlayDataService.CurrentLevelNumber);
-            _diContainer.BindInstance(levelTurnData.BossPhases);
-            _diContainer.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments((BossBehaviorSO)null).NonLazy();
-            _diContainer.BindInterfacesTo<BossController>().AsSingle().WithArguments(levelTurnData.BossPrefab, levelTurnData.BossConfiguration, levelTurnData.BossPhases).NonLazy();
-            _diContainer.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();
-        }
     }
 
+    public LoadLevelCommand SetBoss(int levelNumber) {
+        LevelTurnData levelTurnData = (LevelTurnData)_levelsDataService.GetLevelData(levelNumber);
+        _diContainer.BindInstance(levelTurnData.BossPhases);
+        _diContainer.BindInterfacesTo<BossAbilityController>().AsSingle().WithArguments((BossBehaviorSO)null).NonLazy();
+        _diContainer.BindInterfacesTo<BossController>().AsSingle().WithArguments(levelTurnData.BossPrefab, levelTurnData.BossConfiguration, levelTurnData.BossPhases).NonLazy();
+        _diContainer.BindInterfacesAndSelfTo<BossActionService>().AsSingle().NonLazy();
+        return this;
+    }
 }

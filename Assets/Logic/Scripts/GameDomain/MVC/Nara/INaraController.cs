@@ -1,3 +1,4 @@
+using Logic.Scripts.GameDomain.MVC.Ui;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
@@ -5,16 +6,21 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         GameObject NaraViewGO { get; }
         Transform NaraSkillSpotTransform { get; }
         NaraMovementController NaraMove { get; }
-        void InitEntryPoint();
+        void InitEntryPointExploration();
+        void InitEntryPointGamePlay(IGamePlayUiController gamePlayUiController);
         void CreateNara(NaraMovementController movementController);
         void ResetController();
+        void StopMovingAnim();
+        void Freeeze();
+        void Unfreeeze();
         void RegisterListeners();
+        void UnregisterListeners();
         void ManagedFixedUpdate();
         void PlayAttackType(int type);
         void PlayAttackType1();
         void TriggerExecute();
         void ResetExecuteTrigger();
-		void TriggerCancel();
+        void TriggerCancel();
         void SetPosition(Vector3 movementCenter);
     }
 }

@@ -4,18 +4,20 @@ using UnityEngine;
 namespace Logic.Scripts.Core.Mvc.WorldCamera {
     public class WorldCameraController : IUpdatable, IWorldCameraController {
 
+        private readonly WorldCameraView _worldCameraView;
+        private readonly IUpdateSubscriptionService updateSubscriptionService;
         private bool _rotateEnabled;
         private Vector2 _mouseDelta;
         private Transform _target;
-        private readonly WorldCameraView _worldCameraView;
         private IUpdateSubscriptionService _updateSubscriptionService;
         private GameInputActions _gameInputActions;
 
         public bool IsRotateEnabled => _rotateEnabled;
 
-        public WorldCameraController(WorldCameraView worldCameraView, GameInputActions gameInputActions) {
+        public WorldCameraController(WorldCameraView worldCameraView, GameInputActions gameInputActions, IUpdateSubscriptionService updateSubscriptionService) {
             _worldCameraView = worldCameraView;
             _gameInputActions = gameInputActions;
+            _updateSubscriptionService = updateSubscriptionService;
         }
 
         public void UpdateAngles() {
@@ -25,10 +27,9 @@ namespace Logic.Scripts.Core.Mvc.WorldCamera {
             _worldCameraView.UpdateCameraRotation(_mouseDelta.x, Time.deltaTime);
         }
 
-        public void StartFollowTarget(Transform targetTransform, IUpdateSubscriptionService updateSubscriptionService) {
+        public void StartFollowTarget(Transform targetTransform) {
             _target = targetTransform;
             _worldCameraView.SetNewTarget(_target);
-            _updateSubscriptionService = updateSubscriptionService;
             _updateSubscriptionService.RegisterUpdatable(this);
         }
 
@@ -50,8 +51,7 @@ namespace Logic.Scripts.Core.Mvc.WorldCamera {
 
         }
 
-        public void SetMouseDelta(Vector2 delta)
-        {
+        public void SetMouseDelta(Vector2 delta) {
             _mouseDelta = delta;
         }
     }

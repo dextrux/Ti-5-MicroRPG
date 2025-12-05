@@ -1,4 +1,3 @@
-using Logic.Scripts.GameDomain.MVC.Abilitys;
 using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.StateMachineService;
 using UnityEngine;
@@ -6,15 +5,15 @@ using UnityEngine;
 public class LobbyUiController : ILobbyController {
     private readonly LobbyUiView _lobbyView;
     private readonly IStateMachineService _stateMachineService;
-    private readonly GamePlayState.Factory _gamePlayStateFactory;
+    private readonly ExplorationState.Factory _explorationStateFactory;
     private readonly IAudioService _audioService;
     private readonly IAbilityPointService _abilityPointService;
 
-    public LobbyUiController(LobbyUiView lobbyView, IStateMachineService stateMachineService, GamePlayState.Factory gamePlayStateFactory,
+    public LobbyUiController(LobbyUiView lobbyView, IStateMachineService stateMachineService, ExplorationState.Factory explorationStateFactory,
         IAudioService audioService, IAbilityPointService abilityPointService) {
         _lobbyView = lobbyView;
         _stateMachineService = stateMachineService;
-        _gamePlayStateFactory = gamePlayStateFactory;
+        _explorationStateFactory = explorationStateFactory;
         _audioService = audioService;
         _abilityPointService = abilityPointService;
     }
@@ -25,7 +24,7 @@ public class LobbyUiController : ILobbyController {
     }
 
     public void OnClickPlay() {
-        _stateMachineService.SwitchState(_gamePlayStateFactory.Create(new GamePlayInitatorEnterData(0)));
+        _stateMachineService.SwitchState(_explorationStateFactory.Create(new ExplorationInitiatorEnterData(0)));
     }
 
     public void OnClickLoad() {

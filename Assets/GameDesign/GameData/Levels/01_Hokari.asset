@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3acf87508f8aeef468d77d19c2a466b5, type: 3}
+<<<<<<<< HEAD:Assets/GameDesign/GameData/Levels/Hokari LevelTurnData.asset
+  m_Name: Hokari LevelTurnData
+========
+  m_Name: 01_Hokari
+>>>>>>>> Development:Assets/GameDesign/GameData/Levels/01_Hokari.asset
+  m_EditorClassIdentifier: 
+  levelAddress: ArenaHocari
+  naraLevelConfiguration: {fileID: 11400000, guid: 142620ce9bd96e047b9ce17a72cbfe7a, type: 2}
+  controller:
+    _typeName: NaraTurnMovementController, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  bossConfiguration: {fileID: 11400000, guid: c53b316a57f027e498cfcd5b31cdc99d, type: 2}
+  bossPrefab: {fileID: 7540813036317866533, guid: 1216dee866539db43b72b19de06389b1, type: 3}
+  bossPhases: {fileID: 11400000, guid: c0d3c4260663b46418565b63471a4e49, type: 2}

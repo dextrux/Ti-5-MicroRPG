@@ -1,5 +1,4 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
-using UnityEngine;
 
 public class CustomizeUIController : ICustomizeUIController {
     private readonly CustomizeUIView _customizationView;

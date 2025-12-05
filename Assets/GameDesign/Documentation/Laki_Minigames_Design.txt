@@ -1,0 +1,161 @@
+LUTA DA LAKI - ESQUELETO DE INTEGRAÇÃO E MINIGAMES (PROPOSTA)
+
+1) Objetivo e escopo
+- Integrar um sistema de “minigames” à Laki usando a infraestrutura de boss existente, sem impactar Hokari.
+- Laki não sofre dano direto por golpes do jogador; a luta usa “fichas” (integração futura imediatamente abaixo) e minigames por turnos para transferir/ganhar fichas.
+- A arena (roleta) continua rodando normalmente durante os minigames (nestas duas propostas, sem alteração de regras de arena).
+
+2) Integração com o sistema de boss (reuso do pipeline atual)
+- Reuso de BossBehaviorSO + BossAbilityController: cada minigame é um “ataque” próprio da Laki, exposto como prefab no AvailableAttacks do BossBehaviorSO da Laki.
+- Separação Hokari x Laki:
+  - Hokari: mantém prefabs atuais (cone, feather, etc.).
+  - Laki: usa apenas “minigame-attacks” (prefabs distintos), sem referenciar ataques da Hokari.
+- Execução por turno (já existente):
+  - BossController agenda/instancia os ataques conforme TurnPattern do Behavior (QueuePreparedAttackFromBehavior) e executa via Execute/ExecuteAsync.
+  - Cada “minigame-attack” herda de BossAttack (ou wrapper) e delega a um “controller” do minigame que coordena setup/estado/cleanup.
+
+3) Fichas (infra necessária, mas sem bloquear)
+- ChipService (Laki-only, registrado no bootstrap da Laki):
+  - Mantém PlayerChips e BossChips.
+  - API para pagar custos e aplicar deltas de fichas no final do minigame.
+  - Eventos simples para UI (ChipStateService) – UI opcional no HUD.
+- Para estes dois minigames (Diamantes, Dados), o ChipService é consultado no começo (custo) e ao final (deltas para vencedor), mas o core do minigame não depende de vida/dano da Laki (ela não é atingível).
+
+4) Interface base do minigame (estrutura comum)
+- IMinigameRound (controller por minigame):
+  - int ChipCost { get; }
+  - int MaxTurnsToResolve { get; } // 1..N (por asset/versão do minigame)
+  - Task<MinigameResult> StartAsync(ChipService chips, ArenaPosReference arena, INaraController player, IBossController boss)
+  - void Cancel() // cleanup forçado
+- MinigameResult:
+  - bool Completed, bool PlayerWon
+  - int BossChipsDelta, int PlayerChipsDelta
+- LakiMinigameAttack (prefab por minigame; mono compatível com BossAttack):
+  - Campo IMinigameRound (ou referência a um componente/controller específico)
+  - ExecuteAsync:
+    1) (Opcional) Validar/Reservar fichas no ChipService (custo do turno atual).
+    2) await round.StartAsync(...);
+    3) Aplicar deltas de fichas do resultado
+    4) Cleanup e Complete()
+
+5) Diamantes (custo sugerido 1 ficha) – especificação detalhada
+Resumo do comportamento solicitado:
+- Dura 3 rodadas (configurável).
+- A cada rodada, aparece 1 diamante em uma casa aleatória (parâmetros configuráveis: rodadas, número de diamantes por rodada, número exigido de diamantes destruídos).
+- O diamante é:
+  - IEnvironmentTurnActor (atua no EnviromentAct)
+  - IEffectable (tem vida; recebe dano do player via efeitos/hits e pode ser destruído)
+- No EnviromentAct de cada rodada:
+  - Se o diamante não foi destruído até então, ele explode (aplica consequências e se remove).
+  - Contabilize “explosões” ocorridas.
+- Encerramento e vitória/derrota:
+  - Se explodirem 2 diamantes, a mecânica termina com vitória de Laki (Laki ganha as fichas).
+  - Se o número total de rodadas terminar e o “número de diamantes a serem explodidos” (alvo) não for alcançado, o jogador vence (ganha as fichas).
+  - A vitória/derrota é processada no turno da Laki (no turno dela, ela não executa outra ação; apenas a aleatorização normal do chão da arena ocorre).
+
+Arquitetura concreta para Diamantes:
+- Controller: MinigameRound_Diamond (Scriptable/Mono) com parâmetros:
+  - int rounds = 3 (quantas rodadas)
+  - int diamondsPerRound = 1 (quantos por rodada)
+  - int explosionsToWinForBoss = 2 (se 2 explodirem, Laki vence)
+  - int requiredDestroyedToWinForPlayer = [derivado] ou “explosionsTargetToLose” para o inverso
+  - Vida do diamante, dano por explosão, VFX/SFX (ajustável)
+- Por rodada:
+  - Spawn de 1 diamante em tile aleatória (usar arena.ComputeTileIndex + filtro de tiles válidos).
+  - Registrar o diamante como IEnvironmentTurnActor:
+    - ExecuteAsync do diamante: se não destruído, explode, aplica efeito (por ex. dano ou penalidade), RemoveAfterRun=true.
+  - Diamante implementa IEffectable (vida/hit) para receber dano dos ataques do player.
+- Contabilização de estado:
+  - roundState.explodedCount, destroyedCount
+  - Avance turno; ao chegar no turno da Laki ao final do ciclo configurado, compute vencedor:
+    - if explodedCount >= explosionsToWinForBoss ⇒ vitória Laki
+    - else if destroyedCount >= requiredDestroyedToWinForPlayer ⇒ vitória Player
+    - else ⇒ regra final: se rounds esgotaram, comparar contagens (ou usar explícito do design)
+- Aplicação de fichas:
+  - MinigameResult com BossChipsDelta/PlayerChipsDelta conforme vencedor.
+
+Notas:
+- Os valores “3 rodadas”, “1 diamante por rodada”, “2 explosões para vitória da Laki”, “diamantes a serem explodidos/destroçados” devem ficar em um ScriptableObject para gerar variações futuras.
+- Diamantes podem usar materiais/cores diferentes por estado (spawnado, avariado, prestes a explodir) e um VFX simples de explosão no EnviromentAct.
+
+6) Dados (custo sugerido 2 fichas) – especificação detalhada
+Resumo do comportamento solicitado:
+- Por X rodadas (configurável):
+  - No turno do jogador: um dado do jogador é “jogado” para dentro da arena (IEffectable com vida alta, mas não para destruir).
+  - Em algum ponto do ciclo (ex.: turno da Laki ou início da rodada): Laki “joga” seu dado (também IEffectable com vida alta).
+  - Ao levar dano, o dado troca seu valor (1..6). Não é para destruir.
+  - No EnviromentAct de cada rodada, os valores atuais dos dados são somados à pontuação de Laki e do jogador, e então os dados da rodada são destruídos.
+  - A quantidade de dados por rodada e os valores máximos permitidos para cada lado devem ser configuráveis via SO.
+- Encerramento e vitória/derrota:
+  - Ao fim das X rodadas, no começo do turno da Laki, define-se o vencedor comparando as pontuações acumuladas (apenas a aleatorização normal do chão ocorre).
+
+Arquitetura concreta para Dados:
+- Controller: MinigameRound_Dice com parâmetros:
+  - int rounds = X (quantas rodadas)
+  - int bossDicePerRound, int playerDicePerRound (quantos dados por rodada para cada um)
+  - int bossDieMax = 6, int playerDieMax = 6 (máximos por lado, configuráveis)
+  - Regras de “rolagem” (spawn) por turno: por ex., Laki rola no BossAct (spawn do(s) dado(s) da Laki), o jogador rola no PlayerAct (spawn do(s) dado(s) do player)
+- Dado (entidade por rodada):
+  - IEffectable (vida alta, não destruível por dano comum; apenas destruído pelo sistema no EnviromentAct ao final da rodada)
+  - Exibe um valor atual (1..N). Ao receber dano: trocar valor (ex.: +1 wrap 1..N, ou randomizamos 1..N). Deixar parametrizável (modo incremento vs aleatório)
+  - Registrado como IEnvironmentTurnActor apenas para “resolver pontuação” (no EnviromentAct): soma valor à pontuação da Laki ou do Player, depois autodestrói
+- Estado por rodada:
+  - Collections separadas: bossDiceRound[], playerDiceRound[]
+  - Score acumulado: bossScore, playerScore
+  - Ao final do EnviromentAct, destruir os dados da rodada (limpeza garantida)
+- Encerramento:
+  - Após rounds, no início do próximo BossAct: comparar bossScore vs playerScore, gerar MinigameResult (deltas de fichas) e encerrar.
+
+Notas:
+- Parâmetros (quantidade de dados por rodada, max value) ficam no ScriptableObject do minigame.
+- A interação de “bater no dado para alterar valor” funciona naturalmente já que Dado implementa IEffectable e responde a dano.
+- O dado não deve ser destruível por dano; destruição é exclusiva do “fim de rodada” (EnviromentAct).
+
+7) Arena durante os minigames
+- Para “Diamantes” e “Dados”, a arena (roleta) segue o fluxo normal já implementado:
+  - Turno do ambiente aplica efeitos da casa do player e (agora) das casas com clones.
+  - Após aplicar efeitos, há o feedback visual de ênfase e o embaralhamento para a rolagem do próximo turno.
+- Em minigames futuros a arena poderá ser alterada/interagir de forma mais profunda (bloqueio de casas, mudanças de cores, etc.).
+
+8) Minigames futuros (descrição breve)
+- Naipe/Memória (3 fichas):
+  - Mostra sequência de 4 naipes (ordem aleatória) no “telão”.
+  - Player tem 2 turnos para ativar 4 casas na ordem correta.
+  - Controller mantém a sequência e valida ativações por turno; ao término, computa vencedor (fichas).
+- Ache a verdadeira (5 fichas):
+  - Laki desce e instancia ~6 cópias (configurável). 2 turnos para encontrar a verdadeira.
+  - Controller spawna cópias como objetos alvo (possivelmente IEffectable), marca uma como “verdadeira”, valida hits/ativação; computa vencedor.
+- Spotlight/Roleta (8 fichas):
+  - Por 3 turnos, define uma área segura por turno (spotlight); Player deve terminar seu turno dentro dessa área.
+  - Y bolinhas caem em casas aleatórias e bloqueiam movimento (destrutíveis).
+  - Controller registra atores no EnviromentAct (bolinhas e spotlight zones), valida condição no fim de cada turno; ao final, computa vencedor.
+
+9) Organização de arquivos (sugestão)
+- Logic/Scripts/GameDomain/MVC/Boss/Laki/Chips/
+  - ChipService, ChipStateService (Laki only), UI opcional
+- Logic/Scripts/GameDomain/MVC/Boss/Laki/Minigames/
+  - IMinigameRound, MinigameResult (base)
+  - MinigameRound_Diamond, MinigameRound_Dice, MinigameRound_Suits, MinigameRound_FindReal, MinigameRound_Spotlight
+  - Entities dos minigames (diamante, dado, spotlight, bola) como IEffectable e/ou IEnvironmentTurnActor conforme necessário
+- Logic/Scripts/GameDomain/MVC/Boss/Laki/Attacks/
+  - LakiMinigameAttack (base) + subclasses ou prefabs específicos por minigame
+- GameDesign/GameData/Laki/
+  - ScriptableObjects de configuração por minigame (parâmetros expostos)
+
+10) Resumo de fluxo por turno (com minigame-attack)
+- BossAct (Laki):
+  - Se Behavior da Laki agenda um minigame-attack: executar ExecuteAsync do ataque (que chama StartAsync do controller do minigame). Para minigames multi-turnos, o StartAsync pode apenas preparar o estado e retornar imediatamente; a resolução por turno será feita via atores de ambiente/turnos.
+- PlayerAct:
+  - Player interage (ex.: bater no diamante ou no dado), o que é suportado pois as entidades implementam IEffectable.
+- EchoesAct:
+  - Serviço de ecos resolve rotinas e destrói entidades agendadas por ecos se houver.
+- EnviromentAct:
+  - Arena aplica efeitos; em seguida os atores dos minigames executam (ex.: diamante explode se não destruído; dados somam pontos e se removem).
+  - Feedback visual e rolagem da arena já implementados.
+- Próximo BossAct:
+  - Controllers de minigame verificam condições de término/timeout e computam vencedor (aplicam fichas via ChipService). Laki pode “apenas randomizar o chão” neste turno conforme regra e não executar outro ataque adicional.
+
+Observação final
+- Todos os parâmetros-chave (custos, rodadas, contagens, vida dos objetos, efeito de explosão, quantidade de dados e limites) devem estar em ScriptableObjects por minigame para facilitar balanceamento e versões alternativas. A estrutura acima garante isolamento da Hokari, reuso do pipeline de ataques, e evolução incremental dos minigames. 
+
+

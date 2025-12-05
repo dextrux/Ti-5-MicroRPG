@@ -35,38 +35,57 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Laki
 			int turn = _turnState != null ? _turnState.TurnNumber : 0;
 
 			Vector3 playerPos = (_nara != null && _nara.NaraViewGO != null) ? _nara.NaraViewGO.transform.position : Vector3.zero;
-			int tileIndex = _arena.ComputeTileIndex(playerPos, _centerWorld);
-			var type = _arena.GetTileEffect(tileIndex);
-			string applied = _arena.ApplyEffectToPlayer(_caster, _nara, tileIndex, turn);
-			UnityEngine.Debug.Log($"[LakiRouletteArena] Turn={turn} Tile={tileIndex} Type={type} Effect={(applied ?? "None")}");
+			int playerTile = _arena.ComputeTileIndex(playerPos, _centerWorld);
+			System.Collections.Generic.HashSet<int> tilesToEmphasize = new System.Collections.Generic.HashSet<int>();
+			if (playerTile >= 0) tilesToEmphasize.Add(playerTile);
 
 			try
 			{
 				var echoes = UnityEngine.Object.FindObjectsByType<Logic.Scripts.GameDomain.MVC.Echo.EchoView>(FindObjectsSortMode.None);
 				if (echoes != null && echoes.Length > 0)
 				{
-					System.Collections.Generic.HashSet<int> cloneTiles = new System.Collections.Generic.HashSet<int>();
 					for (int i = 0; i < echoes.Length; i++)
 					{
 						var e = echoes[i];
 						if (e == null) continue;
 						int ct = _arena.ComputeTileIndex(e.transform.position, _centerWorld);
 						if (ct < 0) continue;
-						if (!cloneTiles.Add(ct)) continue;
-					}
-					foreach (int ct in cloneTiles)
-					{
-						var ctype = _arena.GetTileEffect(ct);
-						string capplied = _arena.ApplyEffectToPlayer(_caster, _nara, ct, turn);
-						UnityEngine.Debug.Log($"[LakiRouletteArena][CloneTile] Turn={turn} Tile={ct} Type={ctype} Effect={(capplied ?? "None")}");
+						tilesToEmphasize.Add(ct);
 					}
 				}
 			}
 			catch { }
 
+			if (_visual != null && tilesToEmphasize.Count > 0)
+			{
+				int steps = 20;
+				for (int i = 0; i <= steps; i++)
+				{
+					float t = (float)i / steps;
+					_visual.SetEmphasis(tilesToEmphasize, t, 0.85f);
+					await System.Threading.Tasks.Task.Delay(100);
+				}
+			}
+
+			if (playerTile >= 0)
+			{
+				var type = _arena.GetTileEffect(playerTile);
+				string applied = _arena.ApplyEffectToPlayer(_caster, _nara, playerTile, turn);
+				UnityEngine.Debug.Log($"[LakiRouletteArena] Turn={turn} Tile={playerTile} Type={type} Effect={(applied ?? "None")}");
+			}
+			foreach (int ct in tilesToEmphasize)
+			{
+				if (ct == playerTile) continue;
+				var ctype = _arena.GetTileEffect(ct);
+				string capplied = _arena.ApplyEffectToPlayer(_caster, _nara, ct, turn);
+				UnityEngine.Debug.Log($"[LakiRouletteArena][CloneTile] Turn={turn} Tile={ct} Type={ctype} Effect={(capplied ?? "None")}");
+			}
+
+			await System.Threading.Tasks.Task.Delay(1000);
+
 			for (int i = 0; i < 3; i++)
 			{
-				_arena.RandomizeVisualMapping(new System.Random((turn + i + 1) * 104729 + tileIndex));
+				_arena.RandomizeVisualMapping(new System.Random((turn + i + 1) * 104729 + playerTile));
 				_visual?.RefreshFrom(_arena);
 				await System.Threading.Tasks.Task.Delay(150);
 			}

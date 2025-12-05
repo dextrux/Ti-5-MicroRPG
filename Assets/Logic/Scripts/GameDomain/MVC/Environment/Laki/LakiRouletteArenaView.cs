@@ -23,6 +23,7 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Laki
 		[SerializeField] private float _radialGap = 0.05f;
 
 		private readonly List<MeshRenderer> _renderers = new List<MeshRenderer>(32);
+		private readonly List<Color> _baseColors = new List<Color>(32);
 		private Material _matTemplate;
 
 		private void Awake()
@@ -53,6 +54,7 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Laki
 		{
 			for (int i = transform.childCount - 1; i >= 0; i--) Destroy(transform.GetChild(i).gameObject);
 			_renderers.Clear();
+			_baseColors.Clear();
 
 			float sectorAngle = 360f / _sectorCount;
 			float split = _innerRadius + _radialSplit01 * (_outerRadius - _innerRadius);
@@ -81,6 +83,7 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Laki
 					mf.sharedMesh = GenerateRingSectorMesh(rMin, rMax, a0, a1, _angularSmooth);
 
 					_renderers.Add(mr);
+					_baseColors.Add(Color.clear);
 					tileIndex++;
 				}
 			}
@@ -158,6 +161,44 @@ namespace Logic.Scripts.GameDomain.MVC.Environment.Laki
 					default:
 						c = new Color(0.82f, 0.82f, 0.82f, _alphaNeutral);
 						break;
+				}
+				var mat = _renderers[i].sharedMaterial;
+				if (mat != null)
+				{
+					if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
+					else if (mat.HasProperty("_Color")) mat.color = c;
+					_baseColors[i] = c;
+				}
+			}
+		}
+
+		public void SetEmphasis(System.Collections.Generic.ICollection<int> tileIndices, float t01, float extraIntensity = 0.75f)
+		{
+			if (tileIndices == null || _renderers.Count == 0) return;
+			float k = Mathf.Clamp01(t01);
+			for (int i = 0; i < _renderers.Count; i++)
+			{
+				Color baseC = (i < _baseColors.Count) ? _baseColors[i] : Color.white;
+				bool isEmphasized = tileIndices.Contains(i);
+				Color c;
+				if (isEmphasized) {
+					float lighten = Mathf.Lerp(1f, 1.35f, k);
+					float a = baseC.a;
+					c = new Color(
+						Mathf.Clamp01(baseC.r * lighten),
+						Mathf.Clamp01(baseC.g * lighten),
+						Mathf.Clamp01(baseC.b * lighten),
+						a
+					);
+				} else {
+					float darken = Mathf.Lerp(1f, 0.65f, k);
+					float a = Mathf.Clamp01(Mathf.Lerp(baseC.a, baseC.a * 0.9f, k));
+					c = new Color(
+						Mathf.Clamp01(baseC.r * darken),
+						Mathf.Clamp01(baseC.g * darken),
+						Mathf.Clamp01(baseC.b * darken),
+						a
+					);
 				}
 				var mat = _renderers[i].sharedMaterial;
 				if (mat != null)

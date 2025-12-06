@@ -31,6 +31,6 @@ public class StartExplorationStateCommand : BaseCommand, ICommandAsync {
         _gameInputActionsController.RegisterExplorationInputListeners();
         await _commandFactory.CreateCommandAsync<StartLevelCommand>().Execute(cancellationTokenSource);
         _naraController.InitEntryPointExploration();
-        _audioService.PlayAudio(AudioClipType.LobbyTheme, AudioChannelType.Music, AudioPlayType.Loop);
+        //_audioService.PlayAudio(AudioClipType.LobbyTheme, AudioChannelType.Music, AudioPlayType.Loop);
     }
 }

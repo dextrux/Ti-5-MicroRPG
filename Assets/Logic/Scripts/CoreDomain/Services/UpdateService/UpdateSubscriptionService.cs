@@ -15,41 +15,32 @@ namespace Logic.Scripts.Services.UpdateService {
         private static readonly List<ILateUpdatable> _pendingRemoveLateUpdateObservers = new List<ILateUpdatable>();
         private static int _currentUpdateIndex;
         private void Update() {
-            Debug.Log("--------------Inicio Update-----------");
             for (_currentUpdateIndex = _updateObservers.Count - 1; _currentUpdateIndex >= 0; _currentUpdateIndex--) {
                 var observer = _updateObservers[_currentUpdateIndex];
-                Debug.Log("Observer name: " + observer.ToString());
                 observer.ManagedUpdate();
             }
-            Debug.Log("--------------Fim Update-----------");
         }
 
         private void LateUpdate() {
-            Debug.Log("--------------Inicio LateUpdate-----------");
             _lateUpdateObservers.AddRange(_pendingAddLateUpdateObservers);
             _pendingAddLateUpdateObservers.Clear();
             _lateUpdateObservers.RemoveElements(_pendingRemoveLateUpdateObservers);
             _pendingRemoveLateUpdateObservers.Clear();
 
             foreach (var observer in _lateUpdateObservers) {
-                Debug.Log("Observer name: " + observer.ToString());
                 observer.ManagedLateUpdate();
             }
-            Debug.Log("--------------Fim LateUpdate-----------");
         }
 
         private void FixedUpdate() {
-            Debug.Log("--------------Inicio FixedUpdate-----------");
             _fixedUpdateObservers.AddRange(_pendingAddFixedUpdateObservers);
             _pendingAddFixedUpdateObservers.Clear();
             _fixedUpdateObservers.RemoveElements(_pendingRemoveFixedUpdateObservers);
             _pendingRemoveFixedUpdateObservers.Clear();
 
             foreach (var observer in _fixedUpdateObservers) {
-                Debug.Log("Observer name: " + observer.ToString());
                 observer.ManagedFixedUpdate();
             }
-            Debug.Log("--------------Fim FixedUpdate-----------");
         }
 
         public void RegisterUpdatable(IUpdatable observer) {

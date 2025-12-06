@@ -8,14 +8,16 @@ public class LobbyUiController : ILobbyController {
     private readonly ExplorationState.Factory _explorationStateFactory;
     private readonly IAudioService _audioService;
     private readonly IAbilityPointService _abilityPointService;
+    private readonly IUniversalUIController _universalUIController;
 
     public LobbyUiController(LobbyUiView lobbyView, IStateMachineService stateMachineService, ExplorationState.Factory explorationStateFactory,
-        IAudioService audioService, IAbilityPointService abilityPointService) {
+        IAudioService audioService, IAbilityPointService abilityPointService, IUniversalUIController universalUIController) {
         _lobbyView = lobbyView;
         _stateMachineService = stateMachineService;
         _explorationStateFactory = explorationStateFactory;
         _audioService = audioService;
         _abilityPointService = abilityPointService;
+        _universalUIController = universalUIController;
     }
 
     public void InitEntryPoint() {
@@ -28,11 +30,11 @@ public class LobbyUiController : ILobbyController {
     }
 
     public void OnClickLoad() {
-
+        _universalUIController.ShowLoadScreen();
     }
 
     public void OnClickOptions() {
-
+        _universalUIController.ShowCreditsScreen();
     }
 
     public void OnExitPlay() {

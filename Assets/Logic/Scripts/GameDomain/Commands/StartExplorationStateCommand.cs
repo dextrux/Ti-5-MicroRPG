@@ -24,11 +24,13 @@ public class StartExplorationStateCommand : BaseCommand, ICommandAsync {
         _naraController = _diContainer.Resolve<INaraController>();
         _commandFactory = _diContainer.Resolve<ICommandFactory>();
         _gameInputActionsController = _diContainer.Resolve<IGameInputActionsController>();
+        _audioService = _diContainer.Resolve<IAudioService>();
     }
 
     public async Awaitable Execute(CancellationTokenSource cancellationTokenSource) {
         _gameInputActionsController.RegisterExplorationInputListeners();
         await _commandFactory.CreateCommandAsync<StartLevelCommand>().Execute(cancellationTokenSource);
         _naraController.InitEntryPointExploration();
+        _audioService.PlayAudio(AudioClipType.LobbyTheme, AudioChannelType.Music, AudioPlayType.Loop);
     }
 }

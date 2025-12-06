@@ -66,6 +66,9 @@ VisualEffect:
       - m_Value: 0.8
         m_Name: Delay
         m_Overridden: 1
+      - m_Value: 1
+        m_Name: GradientPower
+        m_Overridden: 1
     m_Vector2f:
       m_Array:
       - m_Value: {x: 9, y: 0.36}
@@ -81,7 +84,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 0.35582322, y: 0.54073596, z: 2.4333718, w: 1}
+      - m_Value: {x: 2.4333718, y: 0.9384217, z: 0.35672462, w: 1}
         m_Name: MainColor
         m_Overridden: 1
     m_Uint:
@@ -407,6 +410,377 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
+--- !u!1 &447811875166990347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7878932665791577210}
+  - component: {fileID: 5776156796598287846}
+  - component: {fileID: 2128092028228298251}
+  m_Layer: 0
+  m_Name: SimpleCylinder (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7878932665791577210
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447811875166990347}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2056429116865640680}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!2083052967 &5776156796598287846
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447811875166990347}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: 6d6800ea1fd7e084db8a7dc11d43d687, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 0
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array:
+      - m_Value: 1
+        m_Name: Lifetime
+        m_Overridden: 1
+      - m_Value: 0.7
+        m_Name: AlphaClip
+        m_Overridden: 1
+      - m_Value: 1.2
+        m_Name: Delay
+        m_Overridden: 1
+      - m_Value: 0
+        m_Name: GradientPower
+        m_Overridden: 1
+    m_Vector2f:
+      m_Array:
+      - m_Value: {x: 5, y: 0.5}
+        m_Name: VoronolTilling
+        m_Overridden: 1
+      - m_Value: {x: 1, y: 2}
+        m_Name: VoronolVelocity
+        m_Overridden: 1
+    m_Vector3f:
+      m_Array:
+      - m_Value: {x: 10.2, y: 50, z: 10.2}
+        m_Name: Scale
+        m_Overridden: 1
+    m_Vector4f:
+      m_Array:
+      - m_Value: {x: 0.6790314, y: 2.3811717, z: 0.22913156, w: 1}
+        m_Name: MainColor
+        m_Overridden: 1
+    m_Uint:
+      m_Array: []
+    m_Int:
+      m_Array: []
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array:
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.0446167
+            value: 0.9955406
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: AnimationSizeCurve
+        m_Overridden: 1
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: AnimationSizeCurveY
+        m_Overridden: 0
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 25.997116
+            outSlope: 25.997116
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.036466174
+            value: 0.94801533
+            inSlope: 0.8756515
+            outSlope: 0.8756515
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 1
+            outWeight: 0.31057474
+          - serializedVersion: 3
+            time: 0.21924637
+            value: 0.820841
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.34912664
+            value: 1.0023847
+            inSlope: 0.49543568
+            outSlope: 0.49543568
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.5399805
+            value: 0.81263804
+            inSlope: 0.15553832
+            outSlope: 0.15553832
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.65987355
+            value: 1.014341
+            inSlope: 0.081523985
+            outSlope: 0.081523985
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.47576213
+          - serializedVersion: 3
+            time: 0.8030236
+            value: 0.8140453
+            inSlope: -0.16117653
+            outSlope: -0.16117653
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.4604016
+          - serializedVersion: 3
+            time: 0.9564997
+            value: 0.9364959
+            inSlope: -4.729476
+            outSlope: -4.729476
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.2864241
+            outWeight: 0.77095556
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: -21.52849
+            outSlope: -21.52849
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: AnimationSizeCurveX
+        m_Overridden: 0
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 25.997116
+            outSlope: 25.997116
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.036466174
+            value: 0.94801533
+            inSlope: 0.8756515
+            outSlope: 0.8756515
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 1
+            outWeight: 0.31057474
+          - serializedVersion: 3
+            time: 0.21924637
+            value: 0.820841
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.34912664
+            value: 1.0023847
+            inSlope: 0.49543568
+            outSlope: 0.49543568
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.5399805
+            value: 0.81263804
+            inSlope: 0.15553832
+            outSlope: 0.15553832
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.65987355
+            value: 1.014341
+            inSlope: 0.081523985
+            outSlope: 0.081523985
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.47576213
+          - serializedVersion: 3
+            time: 0.8030236
+            value: 0.8140453
+            inSlope: -0.16117653
+            outSlope: -0.16117653
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.4604016
+          - serializedVersion: 3
+            time: 0.9564997
+            value: 0.9364959
+            inSlope: -4.729476
+            outSlope: -4.729476
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.2864241
+            outWeight: 0.77095556
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: -21.52849
+            outSlope: -21.52849
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: AnimationSizeCurveZ
+        m_Overridden: 0
+    m_Gradient:
+      m_Array: []
+    m_NamedObject:
+      m_Array:
+      - m_Value: {fileID: -3556240187359686432, guid: 23aba39a91715e84ba6bfb165c7527c0, type: 3}
+        m_Name: MainMesh
+        m_Overridden: 1
+    m_Bool:
+      m_Array: []
+--- !u!73398921 &2128092028228298251
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447811875166990347}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
 --- !u!1 &2070338883017161965
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,7 +847,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 4.614557, y: 14.3564, z: 24.48279, w: 1}
+      - m_Value: {x: 5.962891, y: 2.111992, z: 20.351944, w: 1}
         m_Name: MainColor
         m_Overridden: 1
     m_Uint:
@@ -573,6 +947,7 @@ Transform:
   - {fileID: 3690215877109354184}
   - {fileID: 5241499371691780590}
   - {fileID: 7863376714280968536}
+  - {fileID: 7878932665791577210}
   - {fileID: 3566779365947575837}
   - {fileID: 3106197256061191026}
   - {fileID: 736832252336074202}
@@ -647,7 +1022,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 0.23429158, y: 0.41974232, z: 0.764151, w: 0.9372549}
+      - m_Value: {x: 0.08627451, y: 0.12209404, z: 0.41960785, w: 0.9372549}
         m_Name: MainColor
         m_Overridden: 1
     m_Uint:
@@ -820,7 +1195,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 0.65494436, y: 3.80317, z: 10.680627, w: 1}
+      - m_Value: {x: 4.796005, y: 0.67103416, z: 10.680627, w: 1}
         m_Name: MainColor
         m_Overridden: 1
     m_Uint:
@@ -1041,7 +1416,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 1.2175146, y: 10.676557, z: 28.679245, w: 1}
+      - m_Value: {x: 28.679241, y: 10.961153, z: 1.3513771, w: 1}
         m_Name: MainColor
         m_Overridden: 1
     m_Uint:
@@ -1223,7 +1598,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 3.1372547, y: 4.1664915, z: 11.984313, w: 1}
+      - m_Value: {x: 6.809417, y: 3.1372547, z: 11.984314, w: 1}
         m_Name: MainColor
         m_Overridden: 1
     m_Uint:
@@ -1470,6 +1845,9 @@ VisualEffect:
       - m_Value: 0.8
         m_Name: Delay
         m_Overridden: 1
+      - m_Value: 1
+        m_Name: GradientPower
+        m_Overridden: 1
     m_Vector2f:
       m_Array:
       - m_Value: {x: 5, y: 0.5}
@@ -1485,7 +1863,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 0.98899305, y: 2.167739, z: 2.951526, w: 1}
+      - m_Value: {x: 2.0107305, y: 0.9889931, z: 2.9515262, w: 1}
         m_Name: MainColor
         m_Overridden: 1
     m_Uint:
@@ -1847,7 +2225,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 28.14659, y: 40.15061, z: 255.99997, w: 1}
+      - m_Value: {x: 137.24959, y: 28.14659, z: 255.99997, w: 1}
         m_Name: MainColor
         m_Overridden: 1
     m_Uint:

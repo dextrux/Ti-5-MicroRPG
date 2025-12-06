@@ -246,10 +246,10 @@ MonoBehaviour:
     collapsed: 1
   uiBounds:
     serializedVersion: 2
-    x: 237
-    y: -548
-    width: 2849
-    height: 1660
+    x: 0
+    y: -489
+    width: 3061
+    height: 1576
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4544,7 +4544,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614740}
   m_ExposedName: ProjectileBaseColor
   m_Exposed: 1
-  m_Order: 3
+  m_Order: 15
   m_Category: Projcetile
   m_Min:
     m_Type:
@@ -4761,7 +4761,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614746}
   m_ExposedName: ProjectileTopColor
   m_Exposed: 1
-  m_Order: 1
+  m_Order: 10
   m_Category: Projcetile
   m_Min:
     m_Type:
@@ -4978,7 +4978,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614752}
   m_ExposedName: ProjectileBottomColor
   m_Exposed: 1
-  m_Order: 2
+  m_Order: 13
   m_Category: Projcetile
   m_Min:
     m_Type:
@@ -5195,7 +5195,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614758}
   m_ExposedName: Metallic
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 17
   m_Category: Projcetile
   m_Min:
     m_Type:
@@ -5278,7 +5278,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614760}
   m_ExposedName: Smoothness
   m_Exposed: 1
-  m_Order: 5
+  m_Order: 19
   m_Category: Projcetile
   m_Min:
     m_Type:
@@ -5361,7 +5361,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614762}
   m_ExposedName: Top Line
   m_Exposed: 1
-  m_Order: 6
+  m_Order: 21
   m_Category: Projcetile
   m_Min:
     m_Type:
@@ -5444,7 +5444,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614764}
   m_ExposedName: Botton Line
   m_Exposed: 1
-  m_Order: 7
+  m_Order: 23
   m_Category: Projcetile
   m_Min:
     m_Type:
@@ -5527,7 +5527,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614766}
   m_ExposedName: Alpha
   m_Exposed: 1
-  m_Order: 8
+  m_Order: 25
   m_Category: Projcetile
   m_Min:
     m_Type:
@@ -5610,7 +5610,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614768}
   m_ExposedName: SizeCurve
   m_Exposed: 1
-  m_Order: 1
+  m_Order: 11
   m_Category: 
   m_Min:
     m_Type:
@@ -5709,7 +5709,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614770}
   m_ExposedName: WindScale
   m_Exposed: 1
-  m_Order: 3
+  m_Order: 16
   m_Category: InsideWind
   m_Min:
     m_Type:
@@ -5892,7 +5892,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614775}
   m_ExposedName: WindColor
   m_Exposed: 1
-  m_Order: 2
+  m_Order: 14
   m_Category: InsideWind
   m_Min:
     m_Type:
@@ -6109,7 +6109,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614781}
   m_ExposedName: VoronolSpeed
   m_Exposed: 1
-  m_Order: 1
+  m_Order: 12
   m_Category: InsideWind
   m_Min:
     m_Type:
@@ -6258,7 +6258,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614785}
   m_ExposedName: VoronolTilling
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 1
   m_Category: InsideWind
   m_Min:
     m_Type:
@@ -6407,7 +6407,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614789}
   m_ExposedName: AlphaClip
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 18
   m_Category: InsideWind
   m_Min:
     m_Type:
@@ -6490,7 +6490,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614791}
   m_ExposedName: VoronolOffset
   m_Exposed: 1
-  m_Order: 5
+  m_Order: 20
   m_Category: InsideWind
   m_Min:
     m_Type:
@@ -6571,7 +6571,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614793}
   m_ExposedName: VoronolDensity
   m_Exposed: 1
-  m_Order: 6
+  m_Order: 22
   m_Category: InsideWind
   m_Min:
     m_Type:
@@ -6652,7 +6652,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614795}
   m_ExposedName: GradientPower
   m_Exposed: 1
-  m_Order: 7
+  m_Order: 24
   m_Category: InsideWind
   m_Min:
     m_Type:
@@ -8643,7 +8643,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614856}
   m_ExposedName: WindScale 1
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 2
   m_Category: OutsideWind
   m_Min:
     m_Type:
@@ -8826,7 +8826,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614861}
   m_ExposedName: WindColor 1
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 3
   m_Category: OutsideWind
   m_Min:
     m_Type:
@@ -9043,7 +9043,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614867}
   m_ExposedName: VoronolSpeed 1
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 4
   m_Category: OutsideWind
   m_Min:
     m_Type:
@@ -9192,7 +9192,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614871}
   m_ExposedName: VoronolTilling 1
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 5
   m_Category: OutsideWind
   m_Min:
     m_Type:
@@ -9341,7 +9341,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614875}
   m_ExposedName: AlphaClip 1
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 6
   m_Category: OutsideWind
   m_Min:
     m_Type:
@@ -9424,7 +9424,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614877}
   m_ExposedName: VoronolOffset 1
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 7
   m_Category: OutsideWind
   m_Min:
     m_Type:
@@ -9505,7 +9505,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614879}
   m_ExposedName: VoronolDensity 1
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 8
   m_Category: OutsideWind
   m_Min:
     m_Type:
@@ -9586,7 +9586,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614881}
   m_ExposedName: GradientPower 1
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 9
   m_Category: OutsideWind
   m_Min:
     m_Type:

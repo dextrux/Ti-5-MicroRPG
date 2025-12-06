@@ -87,10 +87,10 @@ VisualEffect:
       - m_Value: {x: 3.0048022, y: 3.8037727, z: 0.6372812, w: 1}
         m_Name: ProjectileTopColor
         m_Overridden: 1
-      - m_Value: {x: 1.2831203, y: 2.165231, z: 0.2153895, w: 1}
+      - m_Value: {x: 1.2490237, y: 0.102412775, z: 0.091909155, w: 1}
         m_Name: WindColor
         m_Overridden: 1
-      - m_Value: {x: 0.16287655, y: 3.4566042, z: 2.3536136, w: 1}
+      - m_Value: {x: 6.9132094, y: 0.32575312, z: 1.0483859, w: 1}
         m_Name: WindColor 1
         m_Overridden: 1
     m_Uint:

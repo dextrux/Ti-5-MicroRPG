@@ -167,21 +167,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 392348738162475572, guid: e14dd5af69742b14087b42349ea185fd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1515346411737472382, guid: e14dd5af69742b14087b42349ea185fd, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2866578229477475672, guid: e14dd5af69742b14087b42349ea185fd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6781151657494740370, guid: e14dd5af69742b14087b42349ea185fd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6794054512554421063, guid: e14dd5af69742b14087b42349ea185fd, type: 3}
       propertyPath: m_Name
       value: HOC_Arena
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794054512554421063, guid: e14dd5af69742b14087b42349ea185fd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

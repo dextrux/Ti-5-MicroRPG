@@ -76,6 +76,13 @@
                             <engine:Label text="-" style="width: 10%; -unity-text-align: middle-center; font-size: 30px; -unity-font-definition: url(&quot;project://database/Assets/Ui/UI%20Fonts/Text-Regular.otf?fileID=12800000&amp;guid=605a2da8487491140930e30863d8fb04&amp;type=3#Text-Regular&quot;);" />
                             <engine:Label text="Compositor de Trilha Sonora" style="width: 40%; -unity-text-align: middle-left; -unity-font-definition: url(&quot;project://database/Assets/Ui/UI%20Fonts/Text-Regular.otf?fileID=12800000&amp;guid=605a2da8487491140930e30863d8fb04&amp;type=3#Text-Regular&quot;); font-size: 35px;" />
                         </engine:VisualElement>
+                        <engine:Label text="Conteúdos Externos - SFX" style="-unity-font-definition: url(&quot;project://database/Assets/Ui/UI%20Fonts/SubTitle.ttf?fileID=12800000&amp;guid=b88dc2cdbf2798c4fa1b3984c567e570&amp;type=3#SubTitle&quot;); -unity-text-align: middle-center; font-size: 55px;" />
+                        <engine:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+                            <engine:Label text="https://thesoundrack.itch.io/freemagicspellsfx" name="Label" style="-unity-text-align: middle-right; width: 760px; font-size: 35px; -unity-font-definition: url(&quot;project://database/Assets/Ui/UI%20Fonts/Text-Regular.otf?fileID=12800000&amp;guid=605a2da8487491140930e30863d8fb04&amp;type=3#Text-Regular&quot;);" />
+                        </engine:VisualElement>
+                        <engine:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+                            <engine:Label text="https://timothyadan.itch.io/magic-attacks-bundle" name="Label" style="-unity-text-align: middle-right; width: 796px; font-size: 35px; -unity-font-definition: url(&quot;project://database/Assets/Ui/UI%20Fonts/Text-Regular.otf?fileID=12800000&amp;guid=605a2da8487491140930e30863d8fb04&amp;type=3#Text-Regular&quot;);" />
+                        </engine:VisualElement>
                     </engine:ScrollView>
                 </engine:VisualElement>
                 <engine:VisualElement name="footer-container" class="save-button" style="flex-grow: 1; height: 2%; width: 100%; flex-direction: row; justify-content: center; align-items: center;" />

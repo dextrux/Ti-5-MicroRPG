@@ -1,36 +1,63 @@
 using Logic.Scripts.Core.Mvc.UICamera;
 using Logic.Scripts.GameDomain.States;
 using Logic.Scripts.Services.AudioService;
+using Logic.Scripts.Services.CommandFactory;
 using Logic.Scripts.Services.StateMachineService;
-using System.Diagnostics;
 using System.Threading;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Ui {
     public class GamePlayUiController : IGamePlayUiController {
         private readonly IStateMachineService _stateMachineService;
-        private readonly LobbyState.Factory _lobbyStateFactory;
+        private readonly ExplorationState.Factory _explorationStateFactory;
         private readonly IUICameraController _uiCameraController;
         private readonly IAudioService _audioService;
         private readonly GamePlayUiView _gamePlayView;
         private readonly GamePlayUiBindSO _gamePlayUiBindSO;
+        private readonly PauseUiView _pauseUiView;
+        private readonly IUniversalUIController _universalUIController;
+        private readonly ICommandFactory _commandFactory;
 
-        public GamePlayUiController(IStateMachineService stateMachineService, LobbyState.Factory lobbyStateFactory, IUICameraController uiCameraController,
-            GamePlayUiView gamePlayView, IAudioService audioService) {
+        public GamePlayUiController(IStateMachineService stateMachineService, ExplorationState.Factory explorationStateFactory, IUICameraController uiCameraController,
+            GamePlayUiView gamePlayView, IAudioService audioService, PauseUiView pauseUiView, IUniversalUIController universalUIController, ICommandFactory commandFactory) {
             _stateMachineService = stateMachineService;
-            _lobbyStateFactory = lobbyStateFactory;
+            _explorationStateFactory = explorationStateFactory;
             _uiCameraController = uiCameraController;
             _gamePlayView = gamePlayView;
             _audioService = audioService;
+            _pauseUiView = pauseUiView;
+            _universalUIController = universalUIController;
+            _commandFactory = commandFactory;
         }
 
-        public void SwitchToInGameView() {
+        public void InitEntryPoint() {
+            _pauseUiView.InitEntryPoint();
+            _pauseUiView.RegisterCallbacks(_universalUIController.ShowGuideScreen, _universalUIController.ShowOptionsScreen,
+                _universalUIController.ShowLoadScreen, _universalUIController.ShowCheatsScreen, ResumeGame, BackToLobby);
+        }
+
+        public void InitExitPoint() {
 
         }
 
-        public void SwitchToBeforeGameView() {
-
+        #region Pause
+        public void ShowPauseScreen() {
+            _pauseUiView.Show();
         }
+        public void HidePauseScreen() {
+            _pauseUiView.Hide();
+        }
+        private void ResumeGame() {
+            Debug.LogWarning("Voltando para o Jogo");
+            _commandFactory.CreateCommandVoid<ResumeGameplayInputCommand>().Execute();
+        }
+
+        private void BackToLobby() {
+            Debug.LogWarning("Voltando para o lobby");
+            _commandFactory.CreateCommandVoid<ResumeGameplayInputCommand>().Execute();
+            _stateMachineService.SwitchState(_explorationStateFactory.Create(new ExplorationInitiatorEnterData(0)));
+        }
+        #endregion
 
         public void SetBossValues(int newValue) {
             _gamePlayView.OnActualBossHealthChange(newValue);
@@ -64,7 +91,7 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
             _gamePlayView.OnActualPlayerHealthChange(newActualValue);
         }
 
-        public void SetAbilityValues(int ability1Cost, string ability1Name, 
+        public void SetAbilityValues(int ability1Cost, string ability1Name,
             int ability2Cost, string ability2Name) {
             UnityEngine.Debug.Log("GameplayView: ");
             _gamePlayView.OnSkill1CostChange(ability1Cost);
@@ -83,11 +110,6 @@ namespace Logic.Scripts.GameDomain.MVC.Ui {
         public void ShowGameOverPanel(CancellationTokenSource cancellationTokenSource) {
 
         }
-
-        public void InitExitPoint() {
-
-        }
-
 
         public void OnActualBossHealthChange(int newValue) => _gamePlayView.OnActualBossHealthChange(newValue);
 

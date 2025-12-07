@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02fd617bcf3e6174fac4f95d3839e4aa, type: 3}
   m_Name: 07 Hocari
   m_EditorClassIdentifier: 
-  guideTitle: Aprimoramentos
+  guideTitle: Hocari
   pages:
   - pageSprite: {fileID: 21300000, guid: b0ab71406f1833f4a9e131e597727ede, type: 3}
     descriptionText: "Hocari utiliza diversos golpes com grandes \xE1reas de efeito,

@@ -1,8 +1,5 @@
 namespace Logic.Scripts.GameDomain.MVC.Ui {
     public interface IGamePlayUiController {
-        void InitEntryPoint();
-        void ShowPauseScreen();
-        void HidePauseScreen();
         void SetBossValues(int newValue);
         void SetBossValues(int newPreviewValue, int newActualValue);
         void SetPlayerValues(int newValue);

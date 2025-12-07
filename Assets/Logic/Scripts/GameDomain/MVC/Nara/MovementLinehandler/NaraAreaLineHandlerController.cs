@@ -2,7 +2,7 @@ using Logic.Scripts.Services.UpdateService;
 using UnityEngine;
 
 namespace Logic.Scripts.GameDomain.MVC.Nara {
-    public class NaraAreaLineHandlerController : IUpdatable, System.IDisposable {
+    public class NaraAreaLineHandlerController : IUpdatable {
         private readonly NaraAreaLineHandlerView _lineHandlerViewPrefab;
         private readonly int _segments;
         private readonly IUpdateSubscriptionService _updateSubscriptionService;
@@ -11,7 +11,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         private float _maxRadius;
         private float _radius;
         private Transform _referenceTransform;
-        private bool _listening;
 
         public NaraAreaLineHandlerController(NaraConfigurationSO naraConfiguration,
             IUpdateSubscriptionService updateSubscriptionService, int segments = 100) {
@@ -30,14 +29,10 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
 
         public void RegisterListeners() {
             _updateSubscriptionService.RegisterUpdatable(this);
-            _listening = true;
         }
 
         public void UnregisterListeners() {
-            if (_listening) {
-                try { _updateSubscriptionService.UnregisterUpdatable(this); } catch { }
-                _listening = false;
-            }
+            _updateSubscriptionService.UnregisterUpdatable(this);
         }
 
         public void Refresh(Vector3 center, float radius, Vector3 playerPos) {
@@ -86,12 +81,7 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void ManagedUpdate() {
-            if (_referenceTransform == null || _lineHandlerView == null) return;
             SetResultMoveArea(_referenceTransform.position);
-        }
-
-        public void Dispose() {
-            UnregisterListeners();
         }
     }
 }

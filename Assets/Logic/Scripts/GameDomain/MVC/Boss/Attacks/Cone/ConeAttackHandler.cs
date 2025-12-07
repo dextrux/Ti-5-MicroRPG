@@ -19,18 +19,16 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
             public Mesh Mesh;
         }
 		private ConeSubView[] _views;
-		private readonly Material _lineMaterial;
-		private readonly Material _meshMaterial;
+		private readonly Material _areaMaterial;
 		private Logic.Scripts.GameDomain.MVC.Boss.Telegraph.ITelegraphLayeringService.TelegraphLayer _layer;
 
-		public ConeAttackHandler(float radius, float angleDeg, int sides, float[] yaws, Material lineMaterial, Material meshMaterial)
+		public ConeAttackHandler(float radius, float angleDeg, int sides, float[] yaws, Material areaMaterial)
         {
             _radius = radius;
             _angleDeg = angleDeg;
             _sides = sides;
             _yaws = yaws;
-			_lineMaterial = lineMaterial;
-			_meshMaterial = meshMaterial;
+			_areaMaterial = areaMaterial;
         }
 
         public void PrepareTelegraph(Transform parentTransform)
@@ -47,7 +45,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
 
                 ConeSubView v = new ConeSubView();
                 v.Line = go.AddComponent<LineRenderer>();
-				var lineMat = _lineMaterial != null ? new Material(_lineMaterial) : new Material(Shader.Find("Sprites/Default"));
+				var lineMat = _areaMaterial != null ? new Material(_areaMaterial) : new Material(Shader.Find("Sprites/Default"));
 				lineMat.renderQueue += _layer.QueueAdd;
 				v.Line.material = lineMat;
                 v.Line.useWorldSpace = true;
@@ -57,7 +55,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Attacks.Cone
 
                 v.MeshFilter = go.AddComponent<MeshFilter>();
                 v.MeshRenderer = go.AddComponent<MeshRenderer>();
-				var meshMat = _meshMaterial != null ? new Material(_meshMaterial) : new Material(Shader.Find("Sprites/Default"));
+				var meshMat = _areaMaterial != null ? new Material(_areaMaterial) : new Material(Shader.Find("Sprites/Default"));
 				meshMat.renderQueue += _layer.QueueAdd;
 				v.MeshRenderer.material = meshMat;
                 v.Mesh = new Mesh();

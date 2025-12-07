@@ -104,8 +104,7 @@ namespace Logic.Scripts.GameDomain.MVC.Boss.Laki.Minigames.Dice
 		private void StartMove(Vector3 target, float duration)
 		{
 			if (_moveRoutine != null) StopCoroutine(_moveRoutine);
-			// Keep the arena height from the given target (GetTileWorldCenter supplies correct Y), add +1
-			target.y = target.y + 1f;
+			target.y = 8.2f;
 			_moveRoutine = AnimateMove(target, duration);
 			StartCoroutine(_moveRoutine);
 		}

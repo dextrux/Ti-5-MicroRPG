@@ -5,6 +5,4 @@ public interface IUniversalUIController {
     void ShowLoadScreen();
     void ShowGuideScreen();
     void ShowCreditsScreen();
-    void ShowOptionsScreen();
-    void ShowCheatsScreen();
 }

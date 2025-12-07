@@ -1,34 +1,43 @@
 using Logic.Scripts.GameDomain.MVC.Abilitys;
+using Logic.Scripts.Services.AudioService;
 using Logic.Scripts.Services.UpdateService;
 using UnityEngine;
 using Zenject;
 
-public abstract class ProjectileController : MonoBehaviour, IFixedUpdatable {
+public abstract class ProjectileController : MonoBehaviour, IFixedUpdatable
+{
     [field: SerializeField] public float InitialSpeed { get; protected set; }
     [field: SerializeField] public Rigidbody GetRigidbody { get; protected set; }
+
     protected IEffectable Caster;
     protected AbilityData Data;
-    [Inject]
-    private IUpdateSubscriptionService _subscriptionService;
 
-    public virtual void Initialize(Transform castTransform, IEffectable caster, AbilityData data) {
+    [Inject] private IUpdateSubscriptionService _subscriptionService;
+    [Inject(Optional = true)] private IAudioService _audio;
+
+    public virtual void Initialize(Transform castTransform, IEffectable caster, AbilityData data)
+    {
         Caster = caster;
         Data = data;
     }
 
-    private void UnregisterOnUpdate() {
+    private void UnregisterOnUpdate()
+    {
         _subscriptionService.UnregisterFixedUpdatable(this);
     }
 
     public abstract void ManagedFixedUpdate();
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other)
+    {
         if (other) OnHit();
     }
 
-    public void OnHit() {
+    public void OnHit()
+    {
+        _audio.PlayAudio(AudioClipType.Skill1ImpactSFX, AudioChannelType.Fx, AudioPlayType.OneShot);
+
         UnregisterOnUpdate();
         Destroy(this);
     }
-
 }

@@ -37,5 +37,12 @@ public enum AudioClipType
 
     BossTheme,
     MenuTheme,
-    LobbyTheme
+    LobbyTheme,
+
+    TeleportSFX,
+    TotemSFX,
+    AOEImpact1SFX,
+    AOEImpact2SFX,
+    Skill1ImpactSFX,
+    SkillImpact2SFX
 }

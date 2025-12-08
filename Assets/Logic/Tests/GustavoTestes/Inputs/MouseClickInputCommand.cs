@@ -30,7 +30,6 @@ public class MouseClickInputCommand : BaseCommand, ICommandVoid {
 
     private void PlayAbilityAudio(int ability)
     {
-        Debug.Log("ability index " + ability);
         if(ability <= -1) return;
 
         switch (ability)

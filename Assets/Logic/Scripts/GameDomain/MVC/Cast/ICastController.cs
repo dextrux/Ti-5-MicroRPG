@@ -11,4 +11,5 @@ public interface ICastController {
     public void CancelAbilityUse();
     public bool GetCanUseAbility();
     public void SetCanUseAbility(bool b);
+    public int GetAbilityName();
 }

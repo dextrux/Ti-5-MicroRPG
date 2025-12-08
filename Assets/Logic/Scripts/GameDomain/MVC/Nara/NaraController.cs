@@ -141,7 +141,6 @@ namespace Logic.Scripts.GameDomain.MVC.Nara {
         }
 
         public void TriggerExecute() {
-            _audioService.PlayAudio(AudioClipType.AbilityUsed1SFX, AudioChannelType.Fx);
             _naraView?.TriggerExecute();
         }
 

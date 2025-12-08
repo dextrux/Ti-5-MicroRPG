@@ -19,6 +19,7 @@ public class CastController : ICastController
     private IEffectable _currentCaster;
     private bool _canUseAbility;
     private int _currentAbilityIndex = -1;
+    private string _currentAbilityName;
 
     public Transform PlayerTransform;
 
@@ -72,12 +73,13 @@ public class CastController : ICastController
         _currentAbility?.Cancel();
         _currentAbility = null;
         _currentCaster = null;
-        _currentAbilityIndex = -1;
+        //_currentAbilityIndex = -1;
     }
 
     public void UseAbility(IEffectable caster)
     {
         if (_currentAbility == null) return;
+        PlayUsedSfxByIndex(_currentAbilityIndex);
 
         _canUseAbility = true;
         _actionPointsService.Spend(_currentAbility.GetCost());
@@ -87,7 +89,6 @@ public class CastController : ICastController
             naraController.TriggerExecute();
         }
 
-        PlayUsedSfxByIndex(_currentAbilityIndex);
 
         _currentAbility.Cast(caster);
         CancelAbilityUse();
@@ -116,9 +117,14 @@ public class CastController : ICastController
         {
             case 0: return AudioClipType.AbilityUsed1SFX;
             case 1: return AudioClipType.AbilityUsed2SFX;
-            case 2: return AudioClipType.AbilityUsed3SFX;
-            case 3: return AudioClipType.AbilityUsed4SFX;
-            default: return AudioClipType.AbilityUsed5SFX;
+            case 2: return AudioClipType.Aoe1SFX;
+            case 3: return AudioClipType.Totem;
+            default: return AudioClipType.Teleport;
         }
+    }
+
+    public int GetAbilityName()
+    {
+        return _currentAbilityIndex;
     }
 }
